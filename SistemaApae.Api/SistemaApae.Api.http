@@ -1,0 +1,6 @@
+@SistemaApae.Api_HostAddress = http://localhost:5263
+
+GET {{SistemaApae.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
