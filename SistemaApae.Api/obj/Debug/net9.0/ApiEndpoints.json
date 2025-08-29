@@ -1,0 +1,34 @@
+[
+  {
+    "ContainingType": "SistemaApae.Api.Controllers.PublicController",
+    "Method": "Ping",
+    "RelativePath": "api/Public/ping",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SistemaApae.Api.Controllers.PublicController",
+    "Method": "Version",
+    "RelativePath": "api/Public/version",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
