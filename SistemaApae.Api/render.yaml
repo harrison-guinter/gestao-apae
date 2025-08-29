@@ -8,5 +8,4 @@ services:
     region: oregon
     branch: main
     healthCheckPath: /api/public/ping
-
     autoDeploy: true
