@@ -1,0 +1,28 @@
+# Environment files (global)
+.env
+.env.local
+.env.production
+*.env
+
+# IDE files (global)
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+*~
+
+# OS generated files (global)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Temporary files (global)
+*.tmp
+*.temp
+*~

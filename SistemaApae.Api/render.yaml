@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: sistema-apae-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /api/public/ping
+
+    autoDeploy: true
