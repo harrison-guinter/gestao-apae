@@ -1,9 +1,10 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()">
   <div>
-    <input type="text" formControlName="username" placeholder="Username" />
+    <input class="input-text" type="text" formControlName="username" placeholder="Username" />
   </div>
   <div>
-    <input type="password" formControlName="password" placeholder="Password" />
+    <input class="input-text" type="password" formControlName="password" placeholder="Password" />
   </div>
-  <button type="submit" [disabled]="loginForm.invalid">Login</button>
+  <button class="button button--secondary" type="submit" >Recuperar senha</button>
+  <button class="button button--primary" type="submit" [disabled]="loginForm.invalid">Login</button>
 </form>

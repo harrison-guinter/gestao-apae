@@ -10,8 +10,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  loading = false;
+  protected loginForm: FormGroup;
 
   constructor(
     private router: Router,
@@ -24,16 +23,14 @@ export class LoginComponent {
     });
   }
 
-  async login() {
+  login(): void {
     if (this.loginForm.invalid) return;
-    this.loading = true;
     const { username, password } = this.loginForm.value;
-    const success = await this.authService.login(username, password);
-    this.loading = false;
-    if (success) {
-      this.router.navigate(['/home']);
-    } else {
-      alert('Credenciais inválidas');
-    }
+    this.authService.login(username, password).subscribe(
+            (res) => {
+              this.router.navigate(['/home'])
+            },
+            err => console.log('HTTP Error', err)
+    )
   }
 }
