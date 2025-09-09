@@ -1,0 +1,24 @@
+@import "src/styles/base/variables.less";
+@import "src/styles/base/reset.less";
+
+.input-text {
+  border: 1px solid @color-gray-400;
+  color: @color-text;
+  border-radius: @border-radius;
+  margin: @margin;
+  line-height: @line-height;
+  padding: @padding;
+
+  &:focus {
+    border-color: @color-primary;
+    box-shadow: 0 0 0 3px fade(@color-primary, 30%);
+  }
+
+  &--error {
+    border-color: @color-error;
+  }
+
+  &--success {
+    border-color: @color-success;
+  }
+}

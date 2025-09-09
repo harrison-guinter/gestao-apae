@@ -1,0 +1,52 @@
+@import "../base/variables.less";
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: @padding;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: @border-radius;
+  border: 1px solid transparent;
+  cursor: pointer;
+  margin: @margin;
+
+  &--primary {
+    background-color: @color-primary;
+    color: @color-white;
+
+    &:hover {
+      background-color: darken(@color-primary, 10%);
+    }
+
+    &:active {
+      background-color: darken(@color-primary, 15%);
+    }
+
+    &:disabled {
+      background-color: lighten(@color-primary, 25%);
+      cursor: not-allowed;
+    }
+  }
+
+  &--secondary {
+    background-color: @color-white;
+    color: @color-primary;
+    border-color: @color-primary;
+
+    &:hover {
+      background-color: fade(@color-primary, 10%);
+    }
+
+    &:active {
+      background-color: fade(@color-primary, 20%);
+    }
+
+    &:disabled {
+      color: lighten(@color-primary, 25%);
+      border-color: lighten(@color-primary, 25%);
+      cursor: not-allowed;
+    }
+  }
+}
