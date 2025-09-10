@@ -1,11 +1,16 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()">
-  <div>
-    <input type="text" formControlName="username" placeholder="Username" />
-  </div>
-  <div>
-    <input type="password" formControlName="password" placeholder="Password" />
-  </div>
-  <button type="submit"  matButton="outlined">Recuperar senha</button>
-  
-  <button  [disabled]="loginForm.invalid" matButton="filled">Basic</button>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>E-mail</mat-label>
+    <input matInput placeholder="E-mail" formControlName="username">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Senha</mat-label>
+    <input matInput placeholder="Senha" formControlName="password">
+  </mat-form-field>
+
+  <button mat-button>Recuperar senha</button>
+
+  <button mat-button>Entrar</button>
 </form>
