@@ -1,0 +1,39 @@
+<div class="usuarios-container">
+  <div class="header">
+    <h2>Gestão de Usuários</h2>
+    <button mat-raised-button color="primary" (click)="adicionarUsuario()">
+      <mat-icon>add</mat-icon>
+      Adicionar Usuário
+    </button>
+  </div>
+
+  <div class="usuarios-grid">
+    <mat-card *ngFor="let usuario of usuarios" class="usuario-card">
+      <mat-card-header>
+        <mat-card-title>{{ usuario.nome }}</mat-card-title>
+        <mat-card-subtitle>{{ usuario.email }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>ID: {{ usuario.id }}</p>
+        <p>
+          Status:
+          <span [class]="usuario.ativo ? 'status-ativo' : 'status-inativo'">
+            {{ usuario.ativo ? 'Ativo' : 'Inativo' }}
+          </span>
+        </p>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="editarUsuario(usuario.id)">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button mat-button color="warn" (click)="excluirUsuario(usuario.id)">
+          <mat-icon>delete</mat-icon>
+          Excluir
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

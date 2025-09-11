@@ -1,0 +1,47 @@
+.usuarios-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+
+  h2 {
+    margin: 0;
+    color: #333;
+  }
+}
+
+.usuarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.usuario-card {
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-ativo {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.status-inativo {
+  color: #f44336;
+  font-weight: 500;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 8px;
+}
