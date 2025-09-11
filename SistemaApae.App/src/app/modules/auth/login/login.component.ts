@@ -17,19 +17,23 @@ export class LoginComponent {
 
   constructor(private router: Router, private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
   login(): void {
     if (this.loginForm.invalid) return;
-    const { username, password } = this.loginForm.value;
-    this.authService.login(username, password).subscribe(
+    const { email, password } = this.loginForm.value;
+    this.authService.login(email, password).subscribe(
       (res) => {
         this.router.navigate(['/home']);
       },
       (err) => console.log('HTTP Error', err)
     );
+  }
+
+  goToResetPassword(): void {
+    this.router.navigate(['/reset-password']);
   }
 }

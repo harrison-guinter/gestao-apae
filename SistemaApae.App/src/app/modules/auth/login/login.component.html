@@ -1,15 +1,13 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()">
-  <mat-form-field class="example-full-width">
+  <mat-form-field >
     <mat-label>E-mail</mat-label>
-    <input matInput placeholder="E-mail" formControlName="username" />
+    <input matInput placeholder="E-mail" formControlName="email" />
   </mat-form-field>
 
-  <mat-form-field class="example-full-width">
+  <mat-form-field>
     <mat-label>Senha</mat-label>
     <input matInput placeholder="Senha" formControlName="password" />
   </mat-form-field>
-
-  <button mat-button>Recuperar senha</button>
-
-  <button mat-button>Entrar</button>
+    <button type="button" (click)="goToResetPassword()" mat-button>Recuperar senha</button>
+  <button [disabled]="!loginForm.valid" mat-button>Entrar</button>
 </form>
