@@ -10,19 +10,15 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-login',
   imports: [ReactiveFormsModule, MatButtonModule, MatInputModule, MatIconModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.less']
+  styleUrls: ['./login.component.less'],
 })
 export class LoginComponent {
   protected loginForm: FormGroup;
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private authService: AuthService
-  ) {
+  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -30,10 +26,10 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
     const { username, password } = this.loginForm.value;
     this.authService.login(username, password).subscribe(
-            (res) => {
-              this.router.navigate(['/home'])
-            },
-            err => console.log('HTTP Error', err)
-    )
+      (res) => {
+        this.router.navigate(['/home']);
+      },
+      (err) => console.log('HTTP Error', err)
+    );
   }
 }
