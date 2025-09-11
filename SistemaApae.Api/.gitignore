@@ -26,6 +26,7 @@ project.assets.json
 project.nuget.cache
 *.nuget.props
 *.nuget.targets
+*.nuget.dgspec.json
 *.csproj.user
 *.AssemblyInfo.cs
 *.AssemblyInfoInputs.cache
@@ -36,6 +37,21 @@ project.nuget.cache
 *.staticwebassets.*
 staticwebassets/
 EndpointInfo/
+ApiEndpoints.json
+apphost.exe
+*.Up2Date
+*.assets.cache
+*.csproj.AssemblyReference.cache
+*.csproj.BuildWithSkipAnalyzers
+*.csproj.CoreCompileInputs.cache
+*.csproj.FileListAbsolute.txt
+*.genruntimeconfig.cache
+*.staticwebassets.build.*
+*.staticwebassets.references.upToDateCheck.txt
+*.staticwebassets.removed.txt
+msbuild.build.*.props
+msbuild.buildMultiTargeting.*.props
+msbuild.buildTransitive.*.props
 
 # Visual Studio
 .vs/
