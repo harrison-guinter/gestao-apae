@@ -1,0 +1,29 @@
+<header class="app-header">
+  <div class="header-content">
+    <div class="app-branding">
+      <div class="app-logo">
+        <span class="logo-icon">❤️</span>
+        <span class="app-name">APAE Feliz</span>
+      </div>
+    </div>
+
+    <div class="page-info">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+      <p class="page-subtitle">{{ pageSubtitle }}</p>
+    </div>
+
+    <div class="user-section">
+      <div class="user-info">
+        <div class="user-details">
+          <span class="user-role">{{ userRole }}</span>
+          <span class="user-initials">{{ userInitials }}</span>
+          <span class="user-name">{{ userName }}</span>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Sair">
+          <span class="logout-icon">↗</span>
+          <span class="logout-text">Sair</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
