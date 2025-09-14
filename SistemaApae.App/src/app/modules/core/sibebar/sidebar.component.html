@@ -2,15 +2,19 @@
   <mat-nav-list class="nav-list">
     <ng-container *ngFor="let item of menuItems">
       <a mat-list-item [routerLink]="item.route" *ngIf="!item.children" routerLinkActive="active">
-        <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-        <span>{{ item.label }}</span>
+        <div class="menu-item">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </div>
       </a>
 
       <mat-expansion-panel *ngIf="item.children" class="submenu">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon>{{ item.icon }}</mat-icon>
-            <span>{{ item.label }}</span>
+            <div class="menu-item">
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span>{{ item.label }}</span>
+            </div>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
@@ -20,8 +24,10 @@
             *ngFor="let child of item.children"
             routerLinkActive="active"
           >
-            <mat-icon matListIcon>{{ child.icon }}</mat-icon>
-            <span matLine>{{ child.label }}</span>
+            <div class="menu-item">
+              <mat-icon>{{ child.icon }}</mat-icon>
+              <span>{{ child.label }}</span>
+            </div>
           </a>
         </mat-nav-list>
       </mat-expansion-panel>

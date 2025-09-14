@@ -34,14 +34,14 @@ export class SidebarComponent {
       children: [
         {
           icon: 'assignment',
-          label: 'Relatório de Atendimentos',
+          label: 'Atendimentos',
           route: '/home/relatorios/atendimentos',
         },
-        { icon: 'event_busy', label: 'Relatório de Faltas', route: '/home/relatorios/faltas' },
-        { icon: 'person', label: 'Relatório Individual', route: '/home/relatorios/individual' },
+        { icon: 'event_busy', label: 'Faltas', route: '/home/relatorios/faltas' },
+        { icon: 'person', label: 'Individual', route: '/home/relatorios/individual' },
         {
           icon: 'check_circle',
-          label: 'Relatório de Presenças',
+          label: 'Presenças',
           route: '/home/relatorios/presencas',
         },
       ],

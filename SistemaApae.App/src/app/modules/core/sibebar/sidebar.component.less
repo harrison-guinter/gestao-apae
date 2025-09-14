@@ -9,23 +9,37 @@
   padding-left: 10px;
 }
 
-.sidebar-header {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  font-weight: bold;
-  color: white;
-}
-
 .nav-list {
   flex: 1;
   overflow-y: auto;
+  margin-bottom: 10px !important;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    flex: 1;
+    line-height: 24px;
+  }
 }
 
 .submenu {
-  background: #fafafa;
-  box-shadow: none;
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
   margin: 0;
 }
 
