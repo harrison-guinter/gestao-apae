@@ -4,6 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://*:{port}");
 
+// Registrar Supabase
+builder.Services.AddSingleton<ISupabaseService, SupabaseService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
