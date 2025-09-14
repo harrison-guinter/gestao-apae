@@ -1,10 +1,8 @@
 <header class="app-header">
   <div class="header-content">
     <div class="app-branding">
-      <div class="app-logo">
-        <span class="logo-icon">❤️</span>
-        <span class="app-name">APAE Feliz</span>
-      </div>
+      <span class="logo-icon">❤️</span>
+      <span class="app-name">APAE</span>
     </div>
 
     <div class="page-info">
@@ -12,18 +10,17 @@
       <p class="page-subtitle">{{ pageSubtitle }}</p>
     </div>
 
-    <div class="user-section">
-      <div class="user-info">
-        <div class="user-details">
-          <span class="user-role">{{ userRole }}</span>
-          <span class="user-initials">{{ userInitials }}</span>
-          <span class="user-name">{{ userName }}</span>
-        </div>
-        <button class="logout-btn" (click)="logout()" title="Sair">
-          <span class="logout-icon">↗</span>
-          <span class="logout-text">Sair</span>
-        </button>
+    <div class="user-info">
+      <button class="profile-btn" (click)="onProfileClick()" title="Perfil do usuário">
+        <span class="profile-initials">{{ userInitials }}</span>
+      </button>
+      <div class="user-details">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-role">{{ userRole }}</span>
       </div>
+      <button class="logout-btn" (click)="logout()" title="Sair">
+        <mat-icon class="logout-icon">logout</mat-icon>
+      </button>
     </div>
   </div>
 </header>

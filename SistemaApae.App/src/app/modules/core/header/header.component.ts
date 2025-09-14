@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.less'],
 })
@@ -19,13 +20,11 @@ export class HeaderComponent {
   constructor(private router: Router) {}
 
   logout(): void {
-    // Implementar lógica de logout
     console.log('Logout clicked');
     // this.router.navigate(['/login']);
   }
 
   onProfileClick(): void {
-    // Implementar navegação para perfil do usuário
     console.log('Profile clicked');
   }
 }
