@@ -28,6 +28,7 @@ export class SidebarComponent {
     { icon: 'groups', label: 'Assistidos', route: '/home/assistidos' },
     { icon: 'handshake', label: 'Convênios', route: '/home/convenios' },
     { icon: 'event', label: 'Agendamentos', route: '/home/agendamentos' },
+    { icon: 'medical_services', label: 'Atendimentos', route: '/home/atendimentos' },
     {
       icon: 'bar_chart',
       label: 'Relatórios',
@@ -47,6 +48,6 @@ export class SidebarComponent {
       ],
     },
     { icon: 'person_outline', label: 'Usuários', route: '/home/usuarios' },
-    { icon: 'settings', label: 'Configurações', route: '/home/configuracoes' },
+    // { icon: 'settings', label: 'Configurações', route: '/home/configuracoes' },
   ];
 }
