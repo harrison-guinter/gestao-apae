@@ -48,6 +48,5 @@ export class SidebarComponent {
       ],
     },
     { icon: 'person_outline', label: 'Usuários', route: '/home/usuarios' },
-    // { icon: 'settings', label: 'Configurações', route: '/home/configuracoes' },
   ];
 }
