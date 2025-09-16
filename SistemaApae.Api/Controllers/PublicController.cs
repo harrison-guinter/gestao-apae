@@ -17,6 +17,12 @@ public class PublicController : ControllerBase
     private readonly ILogger<PublicController> _logger;
     private readonly IAuthService _authService;
 
+    /// <summary>
+    /// Inicializa uma nova instância do PublicController
+    /// </summary>
+    /// <param name="supabaseService">Serviço do Supabase</param>
+    /// <param name="logger">Logger para registro de eventos</param>
+    /// <param name="authService">Serviço de autenticação</param>
     public PublicController(ISupabaseService supabaseService, ILogger<PublicController> logger, IAuthService authService)
     {
         _supabaseService = supabaseService;
