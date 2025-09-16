@@ -5,32 +5,48 @@
   border-right: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-}
-
-.sidebar-header {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  font-weight: bold;
-  color: white;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 .nav-list {
   flex: 1;
   overflow-y: auto;
+  margin-bottom: 10px !important;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    flex: 1;
+    line-height: 24px;
+  }
 }
 
 .submenu {
-  background: #fafafa;
-  box-shadow: none;
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
   margin: 0;
 }
 
 .active {
   background-color: rgba(63, 81, 181, 0.1) !important;
   color: #3f51b5 !important;
-  
+
   mat-icon {
     color: #3f51b5 !important;
   }
