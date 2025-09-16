@@ -1,47 +1,98 @@
 .usuarios-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+  padding: 24px;
+  background-color: var(--mat-surface);
+  height: calc(100vh - 150px);
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+  .filters-section {
+    margin-bottom: 12px;
 
-  h2 {
-    margin: 0;
-    color: #333;
+    .filters-card {
+      background-color: var(--surface-container);
+      box-shadow: var(--elevation-1);
+
+      .filters-title {
+        font-size: 24px;
+        font-weight: 500;
+        color: var(--on-surface);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 16px;
+
+        mat-icon {
+          color: var(--primary);
+        }
+      }
+
+      .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        align-items: end;
+
+        mat-form-field {
+          font-size: 14px;
+
+          ::ng-deep {
+            .mat-mdc-form-field-outline {
+              color: var(--outline);
+            }
+
+            .mat-mdc-form-field-focus-overlay {
+              background-color: var(--primary);
+            }
+
+            .mat-mdc-form-field-label {
+              color: var(--on-surface-variant);
+            }
+
+            .mat-mdc-form-field-input {
+              color: var(--on-surface);
+            }
+          }
+        }
+
+        .filter-actions {
+          display: flex;
+          justify-content: flex-end;
+          align-items: end;
+
+          button {
+            height: 40px;
+            min-width: 140px;
+            color: var(--primary);
+            border-color: var(--primary);
+
+            mat-icon {
+              margin-right: 8px;
+            }
+
+            &:hover {
+              background-color: var(--primary-container);
+            }
+          }
+        }
+      }
+
+      @media (max-width: 768px) {
+        .filters-grid {
+          grid-template-columns: 1fr;
+
+          .filter-actions {
+            justify-content: center;
+          }
+        }
+      }
+    }
   }
-}
 
-.usuarios-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
-}
-
-.usuario-card {
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  .table-section {
+    .table-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin: 0 0 16px 0;
+    }
   }
-}
-
-.status-ativo {
-  color: #4caf50;
-  font-weight: 500;
-}
-
-.status-inativo {
-  color: #f44336;
-  font-weight: 500;
-}
-
-mat-card-actions {
-  display: flex;
-  gap: 8px;
 }

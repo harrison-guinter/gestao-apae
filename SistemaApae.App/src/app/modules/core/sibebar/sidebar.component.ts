@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // Para routerLink
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { filter } from 'rxjs/operators';
+import { PageInfoService } from '../services/page-info.service';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true, // se for Angular 15+
+  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
@@ -22,7 +24,19 @@ import { MatExpansionModule } from '@angular/material/expansion';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.less'],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+  constructor(private router: Router, private pageInfoService: PageInfoService) {}
+
+  ngOnInit() {
+    this.pageInfoService.updatePageInfoByRoute(this.router.url);
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.pageInfoService.updatePageInfoByRoute(event.url);
+      });
+  }
+
   menuItems = [
     { icon: 'dashboard', label: 'Dashboard', route: '/home/dashboard' },
     { icon: 'groups', label: 'Assistidos', route: '/home/assistidos' },

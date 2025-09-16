@@ -1,0 +1,50 @@
+<div class="table-container">
+  <table mat-table [dataSource]="data" [class]="'custom-table ' + tableClass">
+    <!-- Colunas dinâmicas -->
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+      <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+      <td mat-cell *matCellDef="let row">
+        <ng-container *ngIf="hasCustomTemplate(column.key); else defaultCell">
+          <ng-container [ngSwitch]="column.key">
+            <span
+              *ngSwitchCase="'tipo'"
+              class="type-badge"
+              [class.coordenador]="getCellValue(row, column) === 'Coordenador'"
+              [class.profissional]="getCellValue(row, column) === 'Profissional'"
+            >
+              {{ getCellValue(row, column) }}
+            </span>
+            <span *ngSwitchCase="'status'" [class]="row.ativo ? 'status-ativo' : 'status-inativo'">
+              {{ row.ativo ? 'ativo' : 'inativo' }}
+            </span>
+            <span *ngSwitchDefault>{{ getCellValue(row, column) }}</span>
+          </ng-container>
+        </ng-container>
+        <ng-template #defaultCell>
+          {{ getCellValue(row, column) }}
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <!-- Coluna de Ações -->
+    <ng-container matColumnDef="actions" *ngIf="showActions && actions.length > 0">
+      <th mat-header-cell *matHeaderCellDef>Ações</th>
+      <td mat-cell *matCellDef="let row">
+        <div class="action-buttons">
+          <button
+            mat-icon-button
+            *ngFor="let action of actions"
+            [color]="action.color || 'primary'"
+            [title]="action.tooltip"
+            (click)="onActionClick(action, row, $event)"
+          >
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClick(row)"></tr>
+  </table>
+</div>

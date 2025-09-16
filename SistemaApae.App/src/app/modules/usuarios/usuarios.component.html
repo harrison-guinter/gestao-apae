@@ -1,39 +1,71 @@
 <div class="usuarios-container">
-  <div class="header">
-    <h2>Gestão de Usuários</h2>
-    <button mat-raised-button color="primary" (click)="adicionarUsuario()">
-      <mat-icon>add</mat-icon>
-      Adicionar Usuário
-    </button>
-  </div>
-
-  <div class="usuarios-grid">
-    <mat-card *ngFor="let usuario of usuarios" class="usuario-card">
-      <mat-card-header>
-        <mat-card-title>{{ usuario.nome }}</mat-card-title>
-        <mat-card-subtitle>{{ usuario.email }}</mat-card-subtitle>
+  <div class="filters-section">
+    <mat-card class="filters-card">
+      <mat-card-header class="filters-title">
+        <mat-card-title> Filtros </mat-card-title>
+        <button mat-raised-button color="primary" class="add-button" (click)="adicionarUsuario()">
+          <mat-icon>add</mat-icon>
+          Novo Usuário
+        </button>
       </mat-card-header>
 
       <mat-card-content>
-        <p>ID: {{ usuario.id }}</p>
-        <p>
-          Status:
-          <span [class]="usuario.ativo ? 'status-ativo' : 'status-inativo'">
-            {{ usuario.ativo ? 'Ativo' : 'Inativo' }}
-          </span>
-        </p>
-      </mat-card-content>
+        <form [formGroup]="filtrosForm" class="filters-grid">
+          <!-- Filtro por Nome -->
+          <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" placeholder="Buscar por nome" />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
 
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="editarUsuario(usuario.id)">
-          <mat-icon>edit</mat-icon>
-          Editar
-        </button>
-        <button mat-button color="warn" (click)="excluirUsuario(usuario.id)">
-          <mat-icon>delete</mat-icon>
-          Excluir
-        </button>
-      </mat-card-actions>
+          <!-- Filtro por E-mail -->
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput formControlName="email" placeholder="Buscar por e-mail" />
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+
+          <!-- Filtro por Tipo -->
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option *ngFor="let tipo of tiposUsuario" [value]="tipo.value">
+                {{ tipo.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Filtro por Status -->
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+                {{ status.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Botão Limpar Filtros -->
+
+          <button mat-stroked-button color="secondary" type="button" (click)="limparFiltros()">
+            <mat-icon>clear</mat-icon>
+            Limpar Filtros
+          </button>
+        </form>
+      </mat-card-content>
     </mat-card>
+  </div>
+
+  <div class="table-section">
+    <app-table
+      [columns]="tableColumns"
+      [data]="usuarios"
+      [actions]="tableActions"
+      [showActions]="true"
+      tableClass="usuarios-table"
+      (rowClick)="onRowClick($event)"
+      (actionClick)="onActionClick($event)"
+    >
+    </app-table>
   </div>
 </div>
