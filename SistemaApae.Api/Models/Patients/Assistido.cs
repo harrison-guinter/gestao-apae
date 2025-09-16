@@ -17,16 +17,16 @@ public class Assistido : BaseModel
     public Guid IdAssistido { get; set; }
 
     /// <summary>
-    /// ID do convênio associado
+    /// ID do convênio CAS associado
     /// </summary>
-    [Column("id_convenio")]
-    public Guid? IdConvenio { get; set; }
+    [Column("id_convenio_cas")]
+    public Guid? IdConvenioCas { get; set; }
 
     /// <summary>
     /// Nome do assistido
     /// </summary>
     [Required]
-    [MaxLength(50)]
+    [MaxLength(150)]
     [Column("nome")]
     public string Nome { get; set; } = string.Empty;
 
@@ -65,6 +65,20 @@ public class Assistido : BaseModel
     public string? NomeTelefone { get; set; }
 
     /// <summary>
+    /// Condição do assistido
+    /// </summary>
+    [MaxLength(150)]
+    [Column("condicao")]
+    public string? Condicao { get; set; }
+
+    /// <summary>
+    /// Número do SUS
+    /// </summary>
+    [MaxLength(15)]
+    [Column("num_sus")]
+    public string? NumSus { get; set; }
+
+    /// <summary>
     /// Observações sobre o assistido
     /// </summary>
     [Column("observacao")]
@@ -84,7 +98,7 @@ public class Assistido : BaseModel
 
     // Navigation properties
     /// <summary>
-    /// Convênio associado ao assistido
+    /// Convênio CAS associado ao assistido
     /// </summary>
-    public Convenio? Convenio { get; set; }
+    public ConvenioCas? ConvenioCas { get; set; }
 }

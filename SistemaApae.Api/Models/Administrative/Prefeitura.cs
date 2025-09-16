@@ -2,28 +2,22 @@ using System.ComponentModel.DataAnnotations;
 using Supabase.Postgrest.Models;
 using Supabase.Postgrest.Attributes;
 
-namespace SistemaApae.Api.Models.Patients;
+namespace SistemaApae.Api.Models.Administrative;
 
 /// <summary>
-/// Modelo de convênio CAS do sistema
+/// Modelo de prefeitura do sistema
 /// </summary>
-[Table("convenio_cas")]
-public class ConvenioCas : BaseModel
+[Table("prefeitura")]
+public class Prefeitura : BaseModel
 {
     /// <summary>
-    /// ID único do convênio CAS
+    /// ID único da prefeitura
     /// </summary>
-    [Column("id_convenio_cas")]
-    public Guid IdConvenioCas { get; set; }
+    [Column("id_prefeitura")]
+    public Guid IdPrefeitura { get; set; }
 
     /// <summary>
-    /// ID da secretaria prefeitura associada
-    /// </summary>
-    [Column("id_secretaria_prefeitura")]
-    public Guid? IdSecretariaPrefeitura { get; set; }
-
-    /// <summary>
-    /// Nome do convênio
+    /// Nome da prefeitura
     /// </summary>
     [Required]
     [MaxLength(150)]
@@ -31,19 +25,27 @@ public class ConvenioCas : BaseModel
     public string Nome { get; set; } = string.Empty;
 
     /// <summary>
-    /// Status do convênio (ativo/inativo)
+    /// Status da prefeitura (ativo/inativo)
     /// </summary>
     [Column("status")]
     public bool Status { get; set; } = true;
 
     /// <summary>
-    /// Indica se é um convênio CAS
+    /// Telefone da prefeitura
     /// </summary>
-    [Column("eh_cas")]
-    public bool EhCas { get; set; } = true;
+    [MaxLength(20)]
+    [Column("telefone")]
+    public string? Telefone { get; set; }
 
     /// <summary>
-    /// Observações sobre o convênio
+    /// CEP da prefeitura
+    /// </summary>
+    [MaxLength(8)]
+    [Column("cep")]
+    public string? Cep { get; set; }
+
+    /// <summary>
+    /// Observações sobre a prefeitura
     /// </summary>
     [Column("observacao")]
     public string? Observacao { get; set; }
@@ -62,12 +64,7 @@ public class ConvenioCas : BaseModel
 
     // Navigation properties
     /// <summary>
-    /// Secretaria prefeitura associada
+    /// Lista de secretarias associadas à prefeitura
     /// </summary>
-    public Administrative.SecretariaPrefeitura? SecretariaPrefeitura { get; set; }
-
-    /// <summary>
-    /// Lista de assistidos associados
-    /// </summary>
-    public List<Assistido>? Assistidos { get; set; }
+    public List<SecretariaPrefeitura>? SecretariaPrefeituras { get; set; }
 }

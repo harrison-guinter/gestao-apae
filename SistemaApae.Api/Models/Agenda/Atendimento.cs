@@ -37,10 +37,10 @@ public class Atendimento : BaseModel
     public StatusAtendimentoEnum? Status { get; set; }
 
     /// <summary>
-    /// Avaliação do atendimento
+    /// Evolução do atendimento
     /// </summary>
-    [Column("avaliacao")]
-    public string? Avaliacao { get; set; }
+    [Column("evolucao")]
+    public string? Evolucao { get; set; }
 
     /// <summary>
     /// Observações sobre o atendimento
