@@ -31,7 +31,7 @@ export class LoginComponent {
         this.snackBar.open('Login realizado com sucesso', '', { duration: 3000 });
         this.router.navigate(['/home']);
       },
-      (err) => this.snackBar.open('Erro ao realizar login' + JSON.stringify(err), '', { duration: 3000 })
+      (err) => this.snackBar.open('Erro ao realizar login: ' + err.error.message, '', { duration: 3000 })
     );
   }
 
