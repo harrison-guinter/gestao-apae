@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { TableComponent, TableColumn, TableAction } from '../core/table/table.component';
+import { SelectComponent, SelectOption } from '../core/select/select.component';
+import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
 
 interface Usuario {
@@ -27,11 +26,10 @@ interface Usuario {
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
     MatCardModule,
     TableComponent,
+    SelectComponent,
+    InputComponent,
   ],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.less'],
@@ -132,14 +130,14 @@ export class UsuariosComponent implements OnInit {
     this.filtrosForm.reset();
   }
 
-  tiposUsuario = [
-    { value: '', label: 'Todos os tipos' },
+  tiposUsuario: SelectOption[] = [
+    { value: '', label: 'Todos' },
     { value: 'Coordenador', label: 'Coordenador' },
     { value: 'Profissional', label: 'Profissional' },
   ];
 
-  statusOptions = [
-    { value: '', label: 'Todos os status' },
+  statusOptions: SelectOption[] = [
+    { value: '', label: 'Todos' },
     { value: 'ativo', label: 'Ativo' },
     { value: 'inativo', label: 'Inativo' },
   ];

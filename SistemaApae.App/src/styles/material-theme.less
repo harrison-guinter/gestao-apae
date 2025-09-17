@@ -93,6 +93,34 @@
   --mat-spacing-md: 16px;
   --mat-spacing-lg: 24px;
   --mat-spacing-xl: 32px;
+
+  /* === TAMANHOS DE CAMPOS === */
+  /* Larguras de campos */
+  --field-width-xs: 80px; /* Para campos muito pequenos (códigos) */
+  --field-width-sm: 120px; /* Para campos pequenos (CEP, CPF) */
+  --field-width-md: 200px; /* Para campos médios (nome curto) */
+  --field-width-lg: 300px; /* Para campos grandes (nome completo, e-mail) */
+  --field-width-xl: 400px; /* Para campos extra grandes (endereço, observações) */
+  --field-width-full: 100%; /* Para campos que ocupam toda largura */
+
+  /* Alturas de campos */
+  --field-height-sm: 32px; /* Para campos compactos */
+  --field-height-md: 40px; /* Para campos padrão */
+  --field-height-lg: 48px; /* Para campos destacados */
+  --field-height-xl: 56px; /* Para campos grandes */
+
+  /* Larguras mínimas e máximas */
+  --field-min-width: 120px; /* Largura mínima para qualquer campo */
+  --field-max-width: 600px; /* Largura máxima para campos */
+
+  /* Tamanhos específicos para diferentes tipos de campo */
+  --field-width-cpf: 140px; /* CPF: 000.000.000-00 */
+  --field-width-cnpj: 160px; /* CNPJ: 00.000.000/0000-00 */
+  --field-width-cep: 100px; /* CEP: 00000-000 */
+  --field-width-phone: 140px; /* Telefone: (00) 0000-0000 */
+  --field-width-date: 120px; /* Data: dd/mm/aaaa */
+  --field-width-time: 100px; /* Hora: hh:mm */
+  --field-width-number: 100px; /* Números em geral */
 }
 
 /* ========================================
@@ -168,4 +196,73 @@
 }
 .mat-spacing-xl {
   margin: var(--mat-spacing-xl);
+}
+
+/* Tamanhos de campos */
+.field-xs {
+  width: var(--field-width-xs);
+  min-width: var(--field-width-xs);
+}
+.field-sm {
+  width: var(--field-width-sm);
+  min-width: var(--field-width-sm);
+}
+.field-md {
+  width: var(--field-width-md);
+  min-width: var(--field-width-md);
+}
+.field-lg {
+  width: var(--field-width-lg);
+  min-width: var(--field-width-lg);
+}
+.field-xl {
+  width: var(--field-width-xl);
+  min-width: var(--field-width-xl);
+}
+.field-full {
+  width: var(--field-width-full);
+}
+
+/* Alturas de campos */
+.field-height-sm {
+  height: var(--field-height-sm);
+}
+.field-height-md {
+  height: var(--field-height-md);
+}
+.field-height-lg {
+  height: var(--field-height-lg);
+}
+.field-height-xl {
+  height: var(--field-height-xl);
+}
+
+/* Tipos específicos de campos */
+.field-cpf {
+  width: var(--field-width-cpf);
+  min-width: var(--field-width-cpf);
+}
+.field-cnpj {
+  width: var(--field-width-cnpj);
+  min-width: var(--field-width-cnpj);
+}
+.field-cep {
+  width: var(--field-width-cep);
+  min-width: var(--field-width-cep);
+}
+.field-phone {
+  width: var(--field-width-phone);
+  min-width: var(--field-width-phone);
+}
+.field-date {
+  width: var(--field-width-date);
+  min-width: var(--field-width-date);
+}
+.field-time {
+  width: var(--field-width-time);
+  min-width: var(--field-width-time);
+}
+.field-number {
+  width: var(--field-width-number);
+  min-width: var(--field-width-number);
 }

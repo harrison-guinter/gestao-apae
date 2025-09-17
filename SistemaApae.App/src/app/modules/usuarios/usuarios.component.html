@@ -5,51 +5,60 @@
         <mat-card-title> Filtros </mat-card-title>
         <button mat-raised-button color="primary" class="add-button" (click)="adicionarUsuario()">
           <mat-icon>add</mat-icon>
-          Novo Usuário
+          Novo
         </button>
       </mat-card-header>
 
       <mat-card-content>
-        <form [formGroup]="filtrosForm" class="filters-grid">
-          <!-- Filtro por Nome -->
-          <mat-form-field appearance="outline">
-            <mat-label>Nome</mat-label>
-            <input matInput formControlName="nome" placeholder="Buscar por nome" />
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
+        <form [formGroup]="filtrosForm" class="filters-container">
+          <app-input
+            label="Nome"
+            formControlName="nome"
+            placeholder="Buscar por nome"
+            suffixIcon="search"
+            appearance="outline"
+            cssClass="mat-spacing-sm field-lg"
+          >
+          </app-input>
 
-          <!-- Filtro por E-mail -->
-          <mat-form-field appearance="outline">
-            <mat-label>E-mail</mat-label>
-            <input matInput formControlName="email" placeholder="Buscar por e-mail" />
-            <mat-icon matSuffix>email</mat-icon>
-          </mat-form-field>
+          <app-input
+            label="E-mail"
+            formControlName="email"
+            placeholder="Buscar por e-mail"
+            suffixIcon="email"
+            appearance="outline"
+            cssClass="mat-spacing-sm field-lg"
+          >
+          </app-input>
 
-          <!-- Filtro por Tipo -->
-          <mat-form-field appearance="outline">
-            <mat-label>Tipo</mat-label>
-            <mat-select formControlName="tipo">
-              <mat-option *ngFor="let tipo of tiposUsuario" [value]="tipo.value">
-                {{ tipo.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <app-select
+            label="Tipo"
+            formControlName="tipo"
+            [options]="tiposUsuario"
+            appearance="outline"
+            cssClass="mat-spacing-sm field-md"
+            clearTooltip="Limpar tipo"
+          >
+          </app-select>
 
-          <!-- Filtro por Status -->
-          <mat-form-field appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status">
-              <mat-option *ngFor="let status of statusOptions" [value]="status.value">
-                {{ status.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <app-select
+            label="Status"
+            formControlName="status"
+            [options]="statusOptions"
+            appearance="outline"
+            cssClass="mat-spacing-sm field-md"
+            clearTooltip="Limpar status"
+          >
+          </app-select>
 
-          <!-- Botão Limpar Filtros -->
-
-          <button mat-stroked-button color="secondary" type="button" (click)="limparFiltros()">
-            <mat-icon>clear</mat-icon>
-            Limpar Filtros
+          <button
+            mat-icon-button
+            class="clear-button"
+            type="button"
+            (click)="limparFiltros()"
+            matTooltip="Limpar"
+          >
+            <mat-icon>close</mat-icon>
           </button>
         </form>
       </mat-card-content>
