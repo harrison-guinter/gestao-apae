@@ -1,0 +1,60 @@
+<div class="assistidos-container">
+  <div class="header">
+    <h2>Gestão de Assistidos</h2>
+    <button mat-raised-button color="primary" (click)="adicionarAssistido()">
+      <mat-icon>person_add</mat-icon>
+      Adicionar Assistido
+    </button>
+  </div>
+
+  <div class="assistidos-grid">
+    <mat-card *ngFor="let assistido of assistidos" class="assistido-card">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <mat-card-title>{{ assistido.nome }}</mat-card-title>
+        <mat-card-subtitle>{{ assistido.idade }} anos</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-section">
+          <p><strong>Responsável:</strong> {{ assistido.responsavel }}</p>
+          <p><strong>Telefone:</strong> {{ assistido.telefone }}</p>
+          <p><strong>Deficiência:</strong> {{ assistido.deficiencia }}</p>
+
+          <div class="status-section">
+            <span [class]="assistido.ativo ? 'status-ativo' : 'status-inativo'">
+              <mat-icon>{{ assistido.ativo ? 'check_circle' : 'cancel' }}</mat-icon>
+              {{ assistido.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+
+          <div class="atividades-section" *ngIf="assistido.atividades.length > 0">
+            <p><strong>Atividades:</strong></p>
+            <mat-chip-set>
+              <mat-chip *ngFor="let atividade of assistido.atividades">
+                {{ atividade }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="verDetalhes(assistido.id)">
+          <mat-icon>visibility</mat-icon>
+          Detalhes
+        </button>
+        <button mat-button color="accent" (click)="editarAssistido(assistido.id)">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button mat-button color="warn" (click)="excluirAssistido(assistido.id)">
+          <mat-icon>delete</mat-icon>
+          Excluir
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

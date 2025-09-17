@@ -1,0 +1,26 @@
+<header class="app-header">
+  <div class="header-content">
+    <div class="app-branding">
+      <span class="logo-icon">❤️</span>
+      <span class="app-name">APAE</span>
+    </div>
+
+    <div class="page-info">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+      <p class="page-subtitle">{{ pageSubtitle }}</p>
+    </div>
+
+    <div class="user-info">
+      <button class="profile-btn" (click)="onProfileClick()" title="Perfil do usuário">
+        <span class="profile-initials">{{ userInitials }}</span>
+      </button>
+      <div class="user-details">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-role">{{ userRole }}</span>
+      </div>
+      <button class="logout-btn" (click)="logout()" title="Sair">
+        <mat-icon class="logout-icon">logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>

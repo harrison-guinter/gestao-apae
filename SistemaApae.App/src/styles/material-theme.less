@@ -1,0 +1,170 @@
+/* ========================================
+   VARIÁVEIS DO TEMA AZURE BLUE - ANGULAR MATERIAL
+   ======================================== */
+
+:root {
+  /* === CORES PRIMÁRIAS (AZURE BLUE) === */
+  --mat-primary-50: #e3f2fd;
+  --mat-primary-100: #bbdefb;
+  --mat-primary-200: #90caf9;
+  --mat-primary-300: #64b5f6;
+  --mat-primary-400: #42a5f5;
+  --mat-primary-500: #2196f3; /* Cor principal */
+  --mat-primary-600: #1e88e5;
+  --mat-primary-700: #1976d2; /* Cor mais escura */
+  --mat-primary-800: #1565c0;
+  --mat-primary-900: #0d47a1;
+  --mat-primary-contrast: #ffffff;
+  --mat-primary-contrast-alpha-70: rgba(255, 255, 255, 0.7);
+
+  /* === CORES ACCENT (PINK) === */
+  --mat-accent-50: #fce4ec;
+  --mat-accent-100: #f8bbd9;
+  --mat-accent-200: #f48fb1;
+  --mat-accent-300: #f06292;
+  --mat-accent-400: #ec407a;
+  --mat-accent-500: #e91e63; /* Cor accent principal */
+  --mat-accent-600: #d81b60;
+  --mat-accent-700: #c2185b;
+  --mat-accent-800: #ad1457;
+  --mat-accent-900: #880e4f;
+  --mat-accent-contrast: #ffffff;
+
+  /* === CORES WARN (RED) === */
+  --mat-warn-50: #ffebee;
+  --mat-warn-100: #ffcdd2;
+  --mat-warn-200: #ef9a9a;
+  --mat-warn-300: #e57373;
+  --mat-warn-400: #ef5350;
+  --mat-warn-500: #f44336; /* Cor warn principal */
+  --mat-warn-600: #e53935;
+  --mat-warn-700: #d32f2f;
+  --mat-warn-800: #c62828;
+  --mat-warn-900: #b71c1c;
+  --mat-warn-contrast: #ffffff;
+
+  /* === CORES NEUTRAS === */
+  --mat-background: #fafafa;
+  --mat-surface: #ffffff;
+  --mat-surface-variant: #f5f5f5;
+  --mat-on-surface: #000000;
+  --mat-on-surface-variant: #757575;
+
+  /* === ELEVAÇÕES (SOMBRAS) === */
+  --mat-elevation-z0: none;
+  --mat-elevation-z1: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  --mat-elevation-z2: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  --mat-elevation-z3: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+    0 1px 8px 0 rgba(0, 0, 0, 0.12);
+  --mat-elevation-z4: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+    0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  --mat-elevation-z6: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  --mat-elevation-z8: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+  /* === TIPOGRAFIA === */
+  --mat-font-family: Roboto, 'Helvetica Neue', sans-serif;
+  --mat-font-size-body: 14px;
+  --mat-font-size-caption: 12px;
+  --mat-font-size-button: 14px;
+  --mat-font-size-title: 20px;
+  --mat-font-size-headline: 24px;
+
+  /* === BORDAS E RAIOS === */
+  --mat-border-radius: 4px;
+  --mat-border-radius-small: 2px;
+  --mat-border-radius-large: 8px;
+
+  /* === ANIMAÇÕES === */
+  --mat-animation-duration-short: 150ms;
+  --mat-animation-duration-standard: 300ms;
+  --mat-animation-duration-long: 500ms;
+  --mat-animation-curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --mat-animation-curve-deceleration: cubic-bezier(0, 0, 0.2, 1);
+  --mat-animation-curve-acceleration: cubic-bezier(0.4, 0, 1, 1);
+
+  /* === ESPAÇAMENTOS === */
+  --mat-spacing-xs: 4px;
+  --mat-spacing-sm: 8px;
+  --mat-spacing-md: 16px;
+  --mat-spacing-lg: 24px;
+  --mat-spacing-xl: 32px;
+}
+
+/* ========================================
+   CLASSES UTILITÁRIAS
+   ======================================== */
+
+/* Cores de texto */
+.text-primary {
+  color: var(--mat-primary-500);
+}
+.text-accent {
+  color: var(--mat-accent-500);
+}
+.text-warn {
+  color: var(--mat-warn-500);
+}
+.text-muted {
+  color: var(--mat-on-surface-variant);
+}
+
+/* Cores de fundo */
+.bg-primary {
+  background-color: var(--mat-primary-500);
+  color: var(--mat-primary-contrast);
+}
+.bg-accent {
+  background-color: var(--mat-accent-500);
+  color: var(--mat-accent-contrast);
+}
+.bg-warn {
+  background-color: var(--mat-warn-500);
+  color: var(--mat-warn-contrast);
+}
+.bg-surface {
+  background-color: var(--mat-surface);
+}
+
+/* Elevações */
+.mat-elevation-z0 {
+  box-shadow: var(--mat-elevation-z0);
+}
+.mat-elevation-z1 {
+  box-shadow: var(--mat-elevation-z1);
+}
+.mat-elevation-z2 {
+  box-shadow: var(--mat-elevation-z2);
+}
+.mat-elevation-z3 {
+  box-shadow: var(--mat-elevation-z3);
+}
+.mat-elevation-z4 {
+  box-shadow: var(--mat-elevation-z4);
+}
+.mat-elevation-z6 {
+  box-shadow: var(--mat-elevation-z6);
+}
+.mat-elevation-z8 {
+  box-shadow: var(--mat-elevation-z8);
+}
+
+/* Espaçamentos */
+.mat-spacing-xs {
+  margin: var(--mat-spacing-xs);
+}
+.mat-spacing-sm {
+  margin: var(--mat-spacing-sm);
+}
+.mat-spacing-md {
+  margin: var(--mat-spacing-md);
+}
+.mat-spacing-lg {
+  margin: var(--mat-spacing-lg);
+}
+.mat-spacing-xl {
+  margin: var(--mat-spacing-xl);
+}

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using SistemaApae.Api.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaApae.Api.Controllers;
 
@@ -11,6 +13,22 @@ namespace SistemaApae.Api.Controllers;
 [Produces("application/json")]
 public class PublicController : ControllerBase
 {
+    private readonly ISupabaseService _supabaseService;
+    private readonly ILogger<PublicController> _logger;
+    private readonly IAuthService _authService;
+
+    /// <summary>
+    /// Inicializa uma nova instância do PublicController
+    /// </summary>
+    /// <param name="supabaseService">Serviço do Supabase</param>
+    /// <param name="logger">Logger para registro de eventos</param>
+    /// <param name="authService">Serviço de autenticação</param>
+    public PublicController(ISupabaseService supabaseService, ILogger<PublicController> logger, IAuthService authService)
+    {
+        _supabaseService = supabaseService;
+        _logger = logger;
+        _authService = authService;
+    }
     /// <summary>
     /// Verifica se a API está funcionando corretamente
     /// </summary>
@@ -54,5 +72,44 @@ public class PublicController : ControllerBase
             Version = version,
             Status = "Online"
         });
+    }
+
+    /// <summary>
+    /// Verifica a conexão com o Supabase
+    /// </summary>
+    /// <remarks>
+    /// Endpoint para verificar se a conexão com o banco de dados Supabase está funcionando.
+    /// Útil para monitoramento da integração com o banco de dados.
+    /// </remarks>
+    /// <returns>Status da conexão com Supabase</returns>
+    /// <response code="200">Status da conexão retornado com sucesso</response>
+    /// <response code="500">Erro interno ao verificar conexão</response>
+    [HttpGet("supabase-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<object>> SupabaseStatus()
+    {
+        try
+        {
+            var isConnected = await _supabaseService.IsConnectedAsync();
+
+            return Ok(new 
+            { 
+                Connected = isConnected,
+                Message = isConnected ? "Conexão com Supabase funcionando" : "Erro na conexão com Supabase",
+                Timestamp = DateTime.UtcNow
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao verificar status do Supabase");
+            return StatusCode(500, new 
+            { 
+                Connected = false,
+                Message = "Erro interno ao verificar conexão com Supabase",
+                Error = ex.Message,
+                Timestamp = DateTime.UtcNow
+            });
+        }
     }
 }

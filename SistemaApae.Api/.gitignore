@@ -53,6 +53,12 @@ msbuild.build.*.props
 msbuild.buildMultiTargeting.*.props
 msbuild.buildTransitive.*.props
 
+# Configuration files
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+
 # Visual Studio
 .vs/
 *.suo

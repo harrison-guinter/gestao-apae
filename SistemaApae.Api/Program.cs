@@ -1,8 +1,47 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using SistemaApae.Api.Repositories;
+using SistemaApae.Api.Services;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurar para usar a porta do Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://*:{port}");
+
+// Registrar Supabase
+builder.Services.AddSingleton<ISupabaseService, SupabaseService>();
+
+// Configurar Autenticação JWT
+var jwtKey = builder.Configuration["JWT:Key"] ?? Environment.GetEnvironmentVariable("JWT_KEY");
+var jwtIssuer = builder.Configuration["JWT:Issuer"] ?? Environment.GetEnvironmentVariable("JWT_ISSUER");
+
+if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
+{
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtIssuer,
+                ValidAudience = jwtIssuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+}
+
+// Registrar repositories
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+// Registrar serviços
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -52,11 +91,9 @@ if (app.Environment.IsDevelopment())
 // Usar CORS
 app.UseCors();
 
-// Remover HTTPS redirect para Render (usa proxy reverso)
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+// Usar autenticação e autorização
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
