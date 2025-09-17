@@ -11,13 +11,13 @@ public class LoginRequest
     /// Email do usuário
     /// </summary>
     [Required(ErrorMessage = "Email é obrigatório")]
-    [EmailAddress(ErrorMessage = "Email deve ter um formato válido")]
+    [EmailAddress(ErrorMessage = "Email incorreto")]
     public string Email { get; set; } = string.Empty;
 
     /// <summary>
     /// Senha do usuário
     /// </summary>
     [Required(ErrorMessage = "Senha é obrigatória")]
-    [MinLength(6, ErrorMessage = "Senha deve ter pelo menos 6 caracteres")]
+    [MinLength(6, ErrorMessage = "Senha incorreta")]
     public string Password { get; set; } = string.Empty;
 }

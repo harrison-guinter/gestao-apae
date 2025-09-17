@@ -77,16 +77,23 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configurar Swagger apenas em Development
-if (app.Environment.IsDevelopment())
+//// Configurar Swagger apenas em Development
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sistema APAE API v1.0.0");
+//        c.RoutePrefix = "docs"; // Acessível em /docs
+//    });
+//}
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sistema APAE API v1.0.0");
-        c.RoutePrefix = "docs"; // Acessível em /docs
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sistema APAE API v1.0.0");
+    c.RoutePrefix = "docs"; // Acessível em /docs
+});
 
 // Usar CORS
 app.UseCors();
