@@ -1,0 +1,26 @@
+<mat-form-field [appearance]="appearance" [class]="cssClass">
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+
+  <mat-select
+    [value]="value"
+    [placeholder]="placeholder"
+    [required]="required"
+    [disabled]="disabled"
+    [multiple]="multiple"
+    (selectionChange)="onSelectionChange($event.value)"
+  >
+    <mat-option *ngFor="let option of options" [value]="option.value" [disabled]="option.disabled">
+      {{ option.label }}
+    </mat-option>
+  </mat-select>
+
+  <mat-icon
+    matSuffix
+    *ngIf="clearable && hasValue() && !disabled"
+    (click)="onClear()"
+    class="clear-icon"
+    [matTooltip]="clearTooltip"
+  >
+    clear
+  </mat-icon>
+</mat-form-field>
