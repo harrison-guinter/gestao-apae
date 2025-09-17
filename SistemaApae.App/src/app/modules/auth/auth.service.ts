@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post<{ token: string }>(`${this.baseUrl}/auth/login`, { email, password }).pipe(
+    return this.http.post<{ token: string }>(`${this.baseUrl}/usuario/login`, { email, password }).pipe(
       map(response => {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   resetPassword(email: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/auth/reset-password`, { email })
+    return this.http.post<void>(`${this.baseUrl}/usuario/forgot-password`, { email })
   }
 
   logout() {

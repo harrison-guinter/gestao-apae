@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PageInfoService } from '../core/services/page-info.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,4 +52,10 @@ import { CommonModule } from '@angular/common';
     `,
   ],
 })
-export class DashboardComponent {}
+export class DashboardComponent implements OnInit {
+  constructor(private pageInfoService: PageInfoService) {}
+
+  ngOnInit() {
+    this.pageInfoService.updatePageInfo('Dashboard', 'Sistema de Gestão de Atendimentos');
+  }
+}

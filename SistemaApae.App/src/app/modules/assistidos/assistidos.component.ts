@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
+import { PageInfoService } from '../core/services/page-info.service';
 
 @Component({
   selector: 'app-assistidos',
@@ -20,7 +21,12 @@ import { MatBadgeModule } from '@angular/material/badge';
   templateUrl: './assistidos.component.html',
   styleUrls: ['./assistidos.component.less'],
 })
-export class AssistidosComponent {
+export class AssistidosComponent implements OnInit {
+  constructor(private pageInfoService: PageInfoService) {}
+
+  ngOnInit() {
+    this.pageInfoService.updatePageInfo('Assistidos', 'Gerenciar assistidos cadastrados');
+  }
   assistidos = [
     {
       id: 1,

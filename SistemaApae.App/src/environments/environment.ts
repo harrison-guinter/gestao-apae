@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://sua-api-url.com/api'
+  apiUrl: 'https://gestao-apae-api.onrender.com/api/'
 };
