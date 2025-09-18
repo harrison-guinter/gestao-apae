@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../core/notification/notification.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -16,7 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ResetPasswordComponent {
   protected resetPasswordForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private notificationService: NotificationService, private router: Router) {
     this.resetPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
@@ -26,7 +26,7 @@ export class ResetPasswordComponent {
     if (this.resetPasswordForm.invalid) return;
     const { email } = this.resetPasswordForm.value;
     this.authService.resetPassword(email).subscribe(res => {
-      this.snackBar.open(res.message, '', { duration: 3000 });
+      this.notificationService.success(res.message);
     });
   }
 

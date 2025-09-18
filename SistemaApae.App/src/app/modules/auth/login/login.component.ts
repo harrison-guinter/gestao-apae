@@ -28,10 +28,10 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).subscribe(
       (res) => {
-        this.snackBar.open('Login realizado com sucesso', '', { duration: 3000 });
+        this.snackBar.open('Login realizado com sucesso', '', { verticalPosition: 'top', panelClass: ['snackbar-success'],  duration: 3000 });
         this.router.navigate(['/home']);
       },
-      (err) => this.snackBar.open('Erro ao realizar login: ' + err.error.message, '', { duration: 3000 })
+      (err) => this.snackBar.open('Erro ao realizar login: ' + err.error.message, '', {  verticalPosition: 'top', panelClass: ['snackbar-error'],  duration: 3000 })
     );
   }
 
