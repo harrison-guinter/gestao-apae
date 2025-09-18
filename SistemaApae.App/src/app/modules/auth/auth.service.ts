@@ -1,7 +1,8 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Usuario } from '../usuarios/usuario';
 
 
 @Injectable({
@@ -13,20 +14,20 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post<{ token: string }>(`${this.baseUrl}/usuario/login`, { email, password }).pipe(
+    return this.http.post<{ message: string, data: { user: Usuario, token: string }}>(`${this.baseUrl}auth/login`, { email, password }).pipe(
       map(response => {
-        if (response && response.token) {
-          localStorage.setItem('token', response.token);
+        if (response && response.data.token) {
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('usuario', JSON.stringify(response.data.user));
           return true;
         }
         return false;
-      }),
-      catchError(() => of(false))
+      })
     );
   }
 
-  resetPassword(email: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/usuario/forgot-password`, { email })
+  resetPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}auth/forgot-password`, { email })
   }
 
   logout() {

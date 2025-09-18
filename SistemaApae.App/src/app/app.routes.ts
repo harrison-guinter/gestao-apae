@@ -6,16 +6,19 @@ import { HomeComponent } from './modules/home/home.component';
 import { UsuariosComponent } from './modules/usuarios/usuarios.component';
 import { AssistidosComponent } from './modules/assistidos/assistidos.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { AuthGuard } from './modules/auth/auth.guard';
+import { NoAuthGuard } from './modules/auth/no-auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [NoAuthGuard] },
   {
     path: 'home',
     component: HomeComponent,
-    //canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'usuarios', component: UsuariosComponent },
       { path: 'assistidos', component: AssistidosComponent },

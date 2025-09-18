@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from '../core/sibebar/sidebar.component';
+import { SidebarComponent } from '../core/sidebar/sidebar.component';
 import { HeaderComponent } from '../core/header/header.component';
 
 @Component({
