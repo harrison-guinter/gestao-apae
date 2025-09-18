@@ -2,7 +2,7 @@ using Supabase;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
 
-namespace SistemaApae.Api.Repositories;
+namespace SistemaApae.Api.Repositories.Users;
 
 /// <summary>
 /// Repositório de usuários usando Supabase como banco de dados
@@ -95,9 +95,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    /// <param name="usuario">Dados do usuário</param>
-    /// <returns>Usuário criado</returns>
-    public async Task<Usuario> CreateAsync(Usuario usuario)
+    public async Task<Usuario> InsertUser(Usuario usuario)
     {
         try
         {
@@ -111,9 +109,8 @@ public class UsuarioRepository : IUsuarioRepository
 
             return response.Models.First();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Erro ao criar usuário: {Email}", usuario.Email);
             throw;
         }
     }

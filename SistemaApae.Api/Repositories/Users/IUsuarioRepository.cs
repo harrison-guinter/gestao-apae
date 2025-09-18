@@ -1,6 +1,6 @@
 using SistemaApae.Api.Models.Users;
 
-namespace SistemaApae.Api.Repositories;
+namespace SistemaApae.Api.Repositories.Users;
 
 /// <summary>
 /// Interface para repositório de usuários
@@ -32,7 +32,7 @@ public interface IUsuarioRepository
     /// </summary>
     /// <param name="usuario">Dados do usuário</param>
     /// <returns>Usuário criado</returns>
-    Task<Usuario> CreateAsync(Usuario usuario);
+    Task<Usuario> InsertUser(Usuario usuario);
 
     /// <summary>
     /// Atualiza um usuário existente

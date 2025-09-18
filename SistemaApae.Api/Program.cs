@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using SistemaApae.Api.Repositories;
+using SistemaApae.Api.Repositories.Users;
 using SistemaApae.Api.Services;
 using System.Text;
 
