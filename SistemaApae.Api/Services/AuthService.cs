@@ -1,6 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Models.Auth;
-using SistemaApae.Api.Repositories;
+using SistemaApae.Api.Repositories.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
