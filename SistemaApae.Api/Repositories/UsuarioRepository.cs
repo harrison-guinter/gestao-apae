@@ -32,21 +32,11 @@ public class UsuarioRepository : IUsuarioRepository
     {
         try
         {
-            _logger.LogInformation("Buscando usuário por email: {Email}", email);
 
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.Email == email)
                 .Single();
-
-            if (usuario == null)
-            {
-                _logger.LogWarning("Usuário não encontrado para o email: {Email}", email);                
-            }
-            else
-            {
-                _logger.LogInformation("Usuário encontrado: {Email} - {Nome} - {Status}", usuario.Email, usuario.Nome, usuario.Status);
-            }
 
             return usuario;
         }
@@ -66,21 +56,11 @@ public class UsuarioRepository : IUsuarioRepository
     {
         try
         {
-            _logger.LogInformation("Buscando usuário por ID: {Id}", id);
 
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.IdUsuario == id)
                 .Single();
-
-            if (usuario == null)
-            {
-                _logger.LogWarning("Usuário não encontrado para o ID: {Id}", id);
-            }
-            else
-            {
-                _logger.LogInformation("Usuário encontrado: {Email} - {Nome} - {Status}", usuario.Email, usuario.Nome, usuario.Status);
-            }
 
             return usuario;
         }
@@ -102,12 +82,6 @@ public class UsuarioRepository : IUsuarioRepository
             var response = await _supabaseService.Client
                 .From<Usuario>()
                 .Get();
-
-            _logger.LogInformation("Total de usuários encontrados: {Count}", response.Models.Count);
-            foreach (var user in response.Models)
-            {
-                _logger.LogInformation("Usuário: {Email} - {Nome} - {Status}", user.Email, user.Nome, user.Status);
-            }
 
             return response.Models;
         }

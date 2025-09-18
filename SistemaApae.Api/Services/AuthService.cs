@@ -45,21 +45,17 @@ public class AuthService : IAuthService
     {
         try
         {
-            _logger.LogInformation("Tentativa de login para o email: {Email}", request.Email);
-
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
             if (user == null || !user.Status)
             {
-                _logger.LogWarning("Usuário não encontrado ou inativo: {Email}", request.Email);
                 return ApiResponse<LoginResponse>.ErrorResponse("Credenciais inválidas");
             }
 
             // Verifica a senha
             if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Senha))
             {
-                _logger.LogWarning("Senha incorreta para o email: {Email}", request.Email);
                 return ApiResponse<LoginResponse>.ErrorResponse("Credenciais inválidas");
             }
 
@@ -86,7 +82,6 @@ public class AuthService : IAuthService
                 }
             };
 
-            _logger.LogInformation("Login realizado com sucesso para o usuário: {UserId}", user.IdUsuario);
             return ApiResponse<LoginResponse>.SuccessResponse(loginResponse, "Login realizado com sucesso");
         }
         catch (Exception ex)
@@ -105,8 +100,6 @@ public class AuthService : IAuthService
     {
         try
         {
-            _logger.LogInformation("Solicitação de recuperação de senha para o email: {Email}", request.Email);
-
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
@@ -126,19 +119,10 @@ public class AuthService : IAuthService
 
                 // Envia email com a nova senha
                 var emailSent = await _emailService.SendNewPasswordEmailAsync(user.Email, user.Nome, newPassword);
-                
-                if (emailSent)
-                {
-                    _logger.LogInformation("Nova senha gerada e enviada por email para: {Email}", request.Email);
-                }
-                else
-                {
-                    _logger.LogWarning("Nova senha gerada mas falha ao enviar email para: {Email}", request.Email);
-                }
+   
             }
 
             // Por segurança, sempre retorna sucesso
-            _logger.LogInformation("Processo de recuperação de senha processado para: {Email}", request.Email);
             return ApiResponse<object>.SuccessResponse(
                 new { }, 
                 "Se o email existir em nosso sistema, você receberá uma nova senha por email."
