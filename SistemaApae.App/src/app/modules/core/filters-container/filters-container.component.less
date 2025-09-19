@@ -1,0 +1,121 @@
+.filters-header {
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 10px 20px;
+  border-bottom: 1px solid var(--mat-divider-color);
+
+  .filters-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .add-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: var(--mat-primary-500) !important;
+      color: var(--mat-primary-contrast) !important;
+
+      &:hover {
+        background-color: var(--mat-primary-600) !important;
+      }
+
+      &:disabled {
+        background-color: var(--mat-on-surface-variant) !important;
+        color: var(--mat-surface) !important;
+      }
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: inherit;
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 500;
+        color: inherit;
+      }
+    }
+  }
+}
+
+.filters-container {
+  padding: 0;
+
+  .filters-fields {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      .clear-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px;
+        height: 40px;
+        width: 40px;
+        border-radius: 8px;
+        background-color: transparent !important;
+        border: 2px solid var(--mat-primary-500) !important;
+        color: var(--mat-primary-500) !important;
+        margin-bottom: 25px;
+
+        &:hover {
+          background-color: var(--mat-primary-50) !important;
+          border-color: var(--mat-primary-600) !important;
+          color: var(--mat-primary-600) !important;
+        }
+
+        &:disabled {
+          background-color: transparent !important;
+          border-color: var(--mat-on-surface-variant) !important;
+          color: var(--mat-on-surface-variant) !important;
+        }
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          color: inherit;
+        }
+
+        span {
+          font-size: 14px;
+          font-weight: 500;
+          color: inherit;
+        }
+      }
+    }
+  }
+}
+
+.mat-mdc-card-content:last-child {
+  padding: 10px;
+}
+
+.filters-card {
+  background-color: var(--mat-surface);
+  box-shadow: var(--elevation-1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}

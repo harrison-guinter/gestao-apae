@@ -1,69 +1,48 @@
 <div class="usuarios-container">
-  <div class="filters-section">
-    <mat-card class="filters-card">
-      <mat-card-header class="filters-title">
-        <mat-card-title> Filtros </mat-card-title>
-        <button mat-raised-button color="primary" class="add-button" (click)="adicionarUsuario()">
-          <mat-icon>add</mat-icon>
-          Novo
-        </button>
-      </mat-card-header>
+  <app-filters-container
+    [formGroup]="filtrosForm"
+    (add)="onAdd()"
+    (clear)="onClear()"
+    title="Lista de Usuários"
+  >
+    <app-input
+      label="Nome"
+      formControlName="nome"
+      placeholder="Buscar por nome"
+      suffixIcon="search"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-input>
 
-      <mat-card-content>
-        <form [formGroup]="filtrosForm" class="filters-container">
-          <app-input
-            label="Nome"
-            formControlName="nome"
-            placeholder="Buscar por nome"
-            suffixIcon="search"
-            appearance="outline"
-            cssClass="mat-spacing-sm field-lg"
-          >
-          </app-input>
+    <app-input
+      label="E-mail"
+      formControlName="email"
+      placeholder="Buscar por e-mail"
+      suffixIcon="email"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-input>
 
-          <app-input
-            label="E-mail"
-            formControlName="email"
-            placeholder="Buscar por e-mail"
-            suffixIcon="email"
-            appearance="outline"
-            cssClass="mat-spacing-sm field-lg"
-          >
-          </app-input>
+    <app-select
+      label="Tipo"
+      formControlName="tipo"
+      [options]="tiposUsuario"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-select>
 
-          <app-select
-            label="Tipo"
-            formControlName="tipo"
-            [options]="tiposUsuario"
-            appearance="outline"
-            cssClass="mat-spacing-sm field-md"
-            clearTooltip="Limpar tipo"
-          >
-          </app-select>
-
-          <app-select
-            label="Status"
-            formControlName="status"
-            [options]="statusOptions"
-            appearance="outline"
-            cssClass="mat-spacing-sm field-md"
-            clearTooltip="Limpar status"
-          >
-          </app-select>
-
-          <button
-            mat-icon-button
-            class="clear-button"
-            type="button"
-            (click)="limparFiltros()"
-            matTooltip="Limpar"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+    <app-select
+      label="Status"
+      formControlName="status"
+      [options]="statusOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-select>
+  </app-filters-container>
 
   <div class="table-section">
     <app-table

@@ -1,0 +1,46 @@
+<mat-form-field [appearance]="appearance" [class]="cssClass">
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+
+  <input
+    matInput
+    [type]="type"
+    [value]="value"
+    [placeholder]="placeholder"
+    [required]="required"
+    [disabled]="disabled"
+    [readonly]="readonly"
+    [attr.maxlength]="maxlength"
+    [attr.minlength]="minlength"
+    [pattern]="pattern"
+    [autocomplete]="autocomplete"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    (focus)="onFocus()"
+  />
+
+  <mat-icon matPrefix *ngIf="prefixIcon" [class]="prefixIconClass">
+    {{ prefixIcon }}
+  </mat-icon>
+
+  <mat-icon
+    matSuffix
+    *ngIf="suffixIcon && !clearable"
+    [class]="suffixIconClass"
+    (click)="onSuffixIconClick()"
+  >
+    {{ suffixIcon }}
+  </mat-icon>
+
+  <mat-icon
+    matSuffix
+    *ngIf="clearable && hasValue() && !disabled && !readonly"
+    (click)="onClear()"
+    class="clear-icon"
+    [matTooltip]="clearTooltip"
+  >
+    clear
+  </mat-icon>
+
+  <mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+  <mat-error *ngIf="error">{{ error }}</mat-error>
+</mat-form-field>
