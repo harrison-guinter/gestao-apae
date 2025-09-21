@@ -184,7 +184,7 @@ export class UsuariosComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Editar',
       color: 'primary',
-      action: (row) => this.editarUsuario(row.id),
+      action: (row) => this.editarUsuario(row),
     },
   ];
 
@@ -194,10 +194,9 @@ export class UsuariosComponent implements OnInit {
     this.modalService
       .openModal({
         component: ModalUsuariosComponent,
-        title: 'Novo Usuário',
         width: '60%',
         height: 'auto',
-        disableClose: false,
+        disableClose: true,
         data: { isEdit: false },
         element: null,
       })
@@ -206,23 +205,19 @@ export class UsuariosComponent implements OnInit {
       });
   }
 
-  editarUsuario(id: number) {
-    console.log(`Editar usuário com ID: ${id}`);
-  }
-
-  excluirUsuario(id: number) {
-    console.log(`Excluir usuário com ID: ${id}`);
-  }
-
-  reativarUsuario(id: number) {
-    console.log(`Reativar usuário com ID: ${id}`);
-  }
-
-  onRowClick(row: any) {
-    console.log('Linha clicada:', row);
-  }
-
-  onActionClick(event: { action: string; row: any }) {
-    console.log('Ação executada:', event.action, 'Linha:', event.row);
+  editarUsuario(element: CadastroUsuario) {
+    console.log(`Elemento: ${element}`);
+    this.modalService
+      .openModal({
+        component: ModalUsuariosComponent,
+        width: '60%',
+        height: 'auto',
+        disableClose: true,
+        data: { isEdit: true },
+        element: element,
+      })
+      .subscribe((result) => {
+        console.log('Modal fechada com resultado:', result);
+      });
   }
 }

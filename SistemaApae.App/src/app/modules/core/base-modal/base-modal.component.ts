@@ -1,11 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { ModalData } from '../services/modal.service';
 
 @Component({
   selector: 'app-base-modal',
@@ -22,36 +21,24 @@ import { ModalData } from '../services/modal.service';
   styleUrls: ['./base-modal.component.less'],
 })
 export class BaseModalComponent implements OnInit {
-  confirmButtonText: string = 'Confirmar';
+  @Input() modalTitle!: string;
+  @Input() confirmButtonText: string = 'Confirmar';
+  @Input() formInvalid: boolean = false;
 
-  constructor(
-    public dialogRef: MatDialogRef<BaseModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ModalData
-  ) {}
+  @Output() onConfirmClick = new EventEmitter<void>();
+  @Output() onCancelClick = new EventEmitter<void>();
 
-  ngOnInit(): void {
-    this.initFormCadastro();
-  }
+  constructor(public dialogRef: MatDialogRef<BaseModalComponent>) {}
+
+  ngOnInit(): void {}
 
   onCancel(): void {
-    this.dialogRef.close(null);
+    this.onCancelClick.emit();
+    this.dialogRef.close(false);
   }
 
   onConfirm(): void {
-    if (this.data.element?.valid) {
-      this.dialogRef.close(this.data.element.value);
-    } else {
-      this.dialogRef.close(this.data.element);
-    }
+    this.onConfirmClick.emit();
+    this.dialogRef.close(true);
   }
-
-  isFormInvalid(): boolean {
-    return true;
-  }
-
-  getElement(): any {
-    return this.data.element || null;
-  }
-
-  protected initFormCadastro(): void {}
 }

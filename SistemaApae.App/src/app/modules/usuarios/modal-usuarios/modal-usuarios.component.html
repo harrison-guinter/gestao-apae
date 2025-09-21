@@ -1,11 +1,10 @@
-<div class="modal-header">
-  <h2 mat-dialog-title>{{ data.title || 'Cadastro de Usuário' }}</h2>
-  <button mat-icon-button class="close-button" (click)="onCancel()" aria-label="Fechar modal">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
-
-<mat-dialog-content class="modal-content">
+<app-base-modal
+  [modalTitle]="'Novo Usuário'"
+  [confirmButtonText]="'Salvar'"
+  [formInvalid]="isFormInvalid()"
+  (onConfirmClick)="onConfirm()"
+  (onCancelClick)="onCancel()"
+>
   <form [formGroup]="formCadastro" class="usuario-form">
     <div class="form-row">
       <app-input
@@ -62,19 +61,4 @@
       ></app-input>
     </div>
   </form>
-</mat-dialog-content>
-
-<mat-dialog-actions class="modal-actions" align="end">
-  <button mat-stroked-button color="primary" (click)="onCancel()" class="cancel-button">
-    Cancelar
-  </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onConfirm()"
-    [disabled]="formCadastro.invalid"
-    class="confirm-button"
-  >
-    {{ confirmButtonText }}
-  </button>
-</mat-dialog-actions>
+</app-base-modal>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -26,11 +26,12 @@ import { SelectComponent, SelectOption } from '../../core/select/select.componen
     MatDialogModule,
     SelectComponent,
     InputComponent,
+    BaseModalComponent,
   ],
   templateUrl: './modal-usuarios.component.html',
   styleUrls: ['./modal-usuarios.component.less'],
 })
-export class ModalUsuariosComponent extends BaseModalComponent implements OnInit {
+export class ModalUsuariosComponent implements OnInit {
   protected formCadastro!: FormGroup;
 
   protected tiposUsuario: SelectOption[] = [
@@ -45,15 +46,19 @@ export class ModalUsuariosComponent extends BaseModalComponent implements OnInit
 
   constructor(
     private formBuilder: UntypedFormBuilder,
-    public override dialogRef: MatDialogRef<BaseModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public override data: ModalData
+    public dialogRef: MatDialogRef<ModalUsuariosComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ModalData
   ) {
-    super(dialogRef, data);
     console.log('Dados recebidos no modal:', data);
   }
 
-  override initFormCadastro() {
+  ngOnInit(): void {
+    this.initFormCadastro();
+  }
+
+  initFormCadastro() {
     const object = this.data.element;
+    console.log('Elemento recebido no modal:', object);
 
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
@@ -65,14 +70,19 @@ export class ModalUsuariosComponent extends BaseModalComponent implements OnInit
     });
   }
 
-  override onConfirm(): void {
-    //Chamar aqui o endpoint de salvar
+  onConfirm(): void {
+    console.log('Formulário enviado:', this.formCadastro.value);
     if (this.formCadastro.valid) {
       this.dialogRef.close(this.formCadastro.value);
     }
   }
 
-  override isFormInvalid(): boolean {
+  onCancel(): void {
+    console.log('Cancel clicked');
+    this.dialogRef.close(null);
+  }
+
+  isFormInvalid(): boolean {
     return this.formCadastro ? this.formCadastro.invalid : false;
   }
 }
