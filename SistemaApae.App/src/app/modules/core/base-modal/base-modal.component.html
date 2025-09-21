@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h2 mat-dialog-title>{{ data.title || 'Modal' }}</h2>
+  <button mat-icon-button class="close-button" (click)="onCancel()" aria-label="Fechar modal">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="modal-content">
+  <ng-content></ng-content>
+</mat-dialog-content>
+
+<mat-dialog-actions class="modal-actions" align="end">
+  <button mat-stroked-button color="primary" (click)="onCancel()" class="cancel-button">
+    Cancelar
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onConfirm()"
+    [disabled]="isFormInvalid()"
+    class="confirm-button"
+  >
+    {{ confirmButtonText }}
+  </button>
+</mat-dialog-actions>

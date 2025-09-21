@@ -1,0 +1,124 @@
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--mat-divider-color, rgba(0, 0, 0, 0.12));
+  background-color: var(--mat-surface);
+
+  h2[mat-dialog-title] {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--mat-on-surface);
+  }
+
+  .close-button {
+    width: 32px;
+    height: 32px;
+    color: var(--mat-on-surface-variant);
+
+    &:hover {
+      background-color: var(--mat-action-hover);
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.modal-content {
+  padding: 24px;
+  min-height: 100px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color: var(--mat-surface);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--mat-surface-variant);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--mat-on-surface-variant);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--mat-on-surface);
+    }
+  }
+}
+
+.modal-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--mat-divider-color, rgba(0, 0, 0, 0.12));
+  background-color: var(--mat-surface);
+  gap: 12px;
+  justify-content: flex-end;
+
+  .cancel-button {
+    height: 40px;
+    min-width: 80px;
+  }
+
+  .confirm-button {
+    height: 40px;
+    min-width: 80px;
+  }
+}
+
+// Estilos globais para o painel da modal
+:host ::ng-deep .custom-modal-panel {
+  .mat-mdc-dialog-container {
+    border-radius: 12px;
+    box-shadow: var(--mat-elevation-z8);
+    overflow: hidden;
+  }
+
+  .mat-mdc-dialog-surface {
+    background-color: var(--mat-surface);
+    color: var(--mat-on-surface);
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .modal-header {
+    padding: 12px 16px;
+
+    h2[mat-dialog-title] {
+      font-size: 18px;
+    }
+  }
+
+  .modal-content {
+    padding: 16px;
+    max-height: 50vh;
+  }
+
+  .modal-actions {
+    padding: 12px 16px;
+    flex-direction: column-reverse;
+    gap: 8px;
+
+    .cancel-button,
+    .confirm-button {
+      width: 100%;
+    }
+  }
+
+  :host ::ng-deep .custom-modal-panel {
+    .mat-mdc-dialog-container {
+      margin: 16px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 32px);
+    }
+  }
+}

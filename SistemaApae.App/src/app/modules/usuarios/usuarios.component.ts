@@ -12,15 +12,9 @@ import { SelectComponent, SelectOption } from '../core/select/select.component';
 import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
-
-interface Usuario {
-  id: number;
-  nome: string;
-  email: string;
-  tipo: 'Coordenador' | 'Profissional';
-  especialidade: string;
-  ativo: boolean;
-}
+import { ModalService } from '../core/services/modal.service';
+import { CadastroUsuario } from './cadastro-usuario.interface';
+import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
 
 @Component({
   selector: 'app-usuarios',
@@ -45,9 +39,9 @@ interface Usuario {
 export class UsuariosComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
-  todosUsuarios: Usuario[] = [
+  todosUsuarios: CadastroUsuario[] = [
     {
-      id: 1,
+      id: '1',
       nome: 'Luana Marini',
       email: 'luana@apae.com',
       tipo: 'Coordenador',
@@ -55,7 +49,7 @@ export class UsuariosComponent implements OnInit {
       ativo: true,
     },
     {
-      id: 2,
+      id: '2',
       nome: 'Dra. Maria Santos',
       email: 'maria@apae.com',
       tipo: 'Profissional',
@@ -63,7 +57,7 @@ export class UsuariosComponent implements OnInit {
       ativo: true,
     },
     {
-      id: 3,
+      id: '3',
       nome: 'Dr. João Silva',
       email: 'joao@apae.com',
       tipo: 'Profissional',
@@ -71,7 +65,7 @@ export class UsuariosComponent implements OnInit {
       ativo: true,
     },
     {
-      id: 4,
+      id: '4',
       nome: 'Dra. Ana Costa',
       email: 'ana@apae.com',
       tipo: 'Profissional',
@@ -79,7 +73,7 @@ export class UsuariosComponent implements OnInit {
       ativo: false,
     },
     {
-      id: 5,
+      id: '5',
       nome: 'Dr. Carlos Oliveira',
       email: 'carlos@apae.com',
       tipo: 'Profissional',
@@ -87,7 +81,7 @@ export class UsuariosComponent implements OnInit {
       ativo: true,
     },
     {
-      id: 6,
+      id: '6',
       nome: 'Luana Marini',
       email: 'luana@apae.com',
       tipo: 'Coordenador',
@@ -95,42 +89,22 @@ export class UsuariosComponent implements OnInit {
       ativo: true,
     },
     {
-      id: 7,
+      id: '7',
       nome: 'Dra. Maria Santos',
       email: 'maria@apae.com',
       tipo: 'Profissional',
       especialidade: 'Fonoaudióloga',
-      ativo: true,
-    },
-    {
-      id: 8,
-      nome: 'Dr. João Silva',
-      email: 'joao@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fisioterapeuta',
-      ativo: true,
-    },
-    {
-      id: 9,
-      nome: 'Dra. Ana Costa',
-      email: 'ana@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Psicóloga',
-      ativo: false,
-    },
-    {
-      id: 10,
-      nome: 'Dr. Carlos Oliveira',
-      email: 'carlos@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Terapeuta Ocupacional',
       ativo: true,
     },
   ];
 
-  usuarios: Usuario[] = [];
+  usuarios: CadastroUsuario[] = [];
 
-  constructor(private formBuilder: UntypedFormBuilder, private pageInfoService: PageInfoService) {}
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private pageInfoService: PageInfoService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
     // Atualizar informações da página
@@ -216,6 +190,20 @@ export class UsuariosComponent implements OnInit {
 
   adicionarUsuario() {
     console.log('Adicionar novo usuário');
+
+    this.modalService
+      .openModal({
+        component: ModalUsuariosComponent,
+        title: 'Novo Usuário',
+        width: '60%',
+        height: 'auto',
+        disableClose: false,
+        data: { isEdit: false },
+        element: null,
+      })
+      .subscribe((result) => {
+        console.log('Modal fechada com resultado:', result);
+      });
   }
 
   editarUsuario(id: number) {

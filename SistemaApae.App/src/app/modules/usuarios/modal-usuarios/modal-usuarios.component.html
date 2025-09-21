@@ -1,0 +1,53 @@
+<form [formGroup]="formCadastro" class="usuario-form">
+  <div class="form-row">
+    <app-input
+      label="Nome"
+      formControlName="nome"
+      placeholder="Digite o nome completo"
+      appearance="outline"
+      cssClass="field-full"
+      [required]="true"
+    ></app-input>
+  </div>
+
+  <div class="form-row">
+    <app-input
+      label="E-mail"
+      formControlName="email"
+      placeholder="Digite o e-mail"
+      appearance="outline"
+      cssClass="field-full"
+      [required]="true"
+      type="email"
+    ></app-input>
+  </div>
+
+  <div class="form-row">
+    <app-select
+      label="Tipo"
+      formControlName="tipo"
+      [options]="tiposUsuario"
+      appearance="outline"
+      cssClass="field-full"
+      [required]="true"
+    ></app-select>
+    <app-select
+      label="Status"
+      formControlName="ativo"
+      [options]="statusOptions"
+      appearance="outline"
+      cssClass="field-full"
+      [required]="true"
+    ></app-select>
+  </div>
+
+  <div class="form-row">
+    <app-input
+      label="Especialidade"
+      formControlName="especialidade"
+      placeholder="Digite a especialidade (opcional)"
+      appearance="outline"
+      cssClass="field-full"
+    ></app-input>
+  </div>
+</form>
