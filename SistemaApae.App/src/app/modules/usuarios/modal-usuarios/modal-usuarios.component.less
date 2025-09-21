@@ -1,0 +1,77 @@
+.modal-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0px 24px;
+  border-bottom: 1px solid var(--mat-divider-color, rgba(0, 0, 0, 0.12));
+  background-color: var(--mat-surface);
+  flex-wrap: nowrap !important;
+  min-height: 64px;
+
+  h2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--mat-on-surface);
+    flex: 1 !important;
+    line-height: 32px;
+    display: block !important;
+  }
+
+  .close-button {
+    width: 32px !important;
+    height: 32px !important;
+    color: var(--mat-on-surface-variant);
+    flex-shrink: 0 !important;
+    margin-left: 16px;
+
+    &:hover {
+      background-color: var(--mat-action-hover);
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.usuario-form {
+  .form-row {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    app-input,
+    app-select {
+      flex: 1;
+    }
+  }
+}
+
+.modal-content {
+  padding: 24px;
+  min-height: 100px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--mat-divider-color, rgba(0, 0, 0, 0.12));
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  .cancel-button,
+  .confirm-button {
+    height: 40px;
+    min-width: 80px;
+  }
+}

@@ -1,22 +1,30 @@
 .modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   padding: 16px 24px;
-  border-bottom: 1px solid var(--mat-divider-color, rgba(0, 0, 0, 0.12));
+  border-bottom: 1px solid var(--mat-divider-color);
   background-color: var(--mat-surface);
+  flex-wrap: nowrap !important;
+  min-height: 64px;
 
-  h2[mat-dialog-title] {
-    margin: 0;
+  h2 {
+    margin: 0 !important;
+    padding: 0 !important;
     font-size: 20px;
     font-weight: 500;
     color: var(--mat-on-surface);
+    flex: 1 !important;
+    line-height: 32px;
+    display: block !important;
   }
 
   .close-button {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
     color: var(--mat-on-surface-variant);
+    flex-shrink: 0 !important;
+    margin-left: 16px;
 
     &:hover {
       background-color: var(--mat-action-hover);
@@ -85,6 +93,27 @@
   .mat-mdc-dialog-surface {
     background-color: var(--mat-surface);
     color: var(--mat-on-surface);
+  }
+
+  // Força o alinhamento correto do header
+  .modal-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+
+    h2 {
+      margin: 0 !important;
+      padding: 0 !important;
+      flex: 1 !important;
+      line-height: 32px !important;
+      display: block !important;
+    }
+
+    .close-button {
+      flex-shrink: 0 !important;
+      margin-left: 16px !important;
+    }
   }
 }
 

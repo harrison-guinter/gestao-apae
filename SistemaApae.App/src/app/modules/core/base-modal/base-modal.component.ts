@@ -46,7 +46,7 @@ export class BaseModalComponent implements OnInit {
   }
 
   isFormInvalid(): boolean {
-    return this.data.element && this.data.element.invalid ? this.data.element.invalid : false;
+    return true;
   }
 
   getElement(): any {

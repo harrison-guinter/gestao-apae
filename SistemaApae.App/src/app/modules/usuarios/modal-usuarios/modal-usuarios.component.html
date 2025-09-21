@@ -1,53 +1,80 @@
-<form [formGroup]="formCadastro" class="usuario-form">
-  <div class="form-row">
-    <app-input
-      label="Nome"
-      formControlName="nome"
-      placeholder="Digite o nome completo"
-      appearance="outline"
-      cssClass="field-full"
-      [required]="true"
-    ></app-input>
-  </div>
+<div class="modal-header">
+  <h2 mat-dialog-title>{{ data.title || 'Cadastro de Usuário' }}</h2>
+  <button mat-icon-button class="close-button" (click)="onCancel()" aria-label="Fechar modal">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 
-  <div class="form-row">
-    <app-input
-      label="E-mail"
-      formControlName="email"
-      placeholder="Digite o e-mail"
-      appearance="outline"
-      cssClass="field-full"
-      [required]="true"
-      type="email"
-    ></app-input>
-  </div>
+<mat-dialog-content class="modal-content">
+  <form [formGroup]="formCadastro" class="usuario-form">
+    <div class="form-row">
+      <app-input
+        label="Nome"
+        formControlName="nome"
+        placeholder="Digite o nome completo"
+        appearance="outline"
+        cssClass="field-full"
+        [required]="true"
+      ></app-input>
+    </div>
 
-  <div class="form-row">
-    <app-select
-      label="Tipo"
-      formControlName="tipo"
-      [options]="tiposUsuario"
-      appearance="outline"
-      cssClass="field-full"
-      [required]="true"
-    ></app-select>
-    <app-select
-      label="Status"
-      formControlName="ativo"
-      [options]="statusOptions"
-      appearance="outline"
-      cssClass="field-full"
-      [required]="true"
-    ></app-select>
-  </div>
+    <div class="form-row">
+      <app-input
+        label="E-mail"
+        formControlName="email"
+        placeholder="Digite o e-mail"
+        appearance="outline"
+        cssClass="field-full"
+        [required]="true"
+        type="email"
+      ></app-input>
+    </div>
 
-  <div class="form-row">
-    <app-input
-      label="Especialidade"
-      formControlName="especialidade"
-      placeholder="Digite a especialidade (opcional)"
-      appearance="outline"
-      cssClass="field-full"
-    ></app-input>
-  </div>
-</form>
+    <div class="form-row">
+      <app-select
+        label="Tipo"
+        formControlName="tipo"
+        [options]="tiposUsuario"
+        appearance="outline"
+        cssClass="field-full"
+        [required]="true"
+      ></app-select>
+    </div>
+
+    <div class="form-row">
+      <app-select
+        label="Status"
+        formControlName="status"
+        [options]="statusOptions"
+        appearance="outline"
+        cssClass="field-full"
+        [required]="true"
+      ></app-select>
+    </div>
+
+    <div class="form-row">
+      <app-input
+        label="Especialidade"
+        formControlName="especialidade"
+        placeholder="Digite a especialidade (opcional)"
+        appearance="outline"
+        cssClass="field-full"
+      ></app-input>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="modal-actions" align="end">
+  <button mat-stroked-button color="primary" (click)="onCancel()" class="cancel-button">
+    Cancelar
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onConfirm()"
+    [disabled]="formCadastro.invalid"
+    class="confirm-button"
+  >
+    {{ confirmButtonText }}
+  </button>
+</mat-dialog-actions>

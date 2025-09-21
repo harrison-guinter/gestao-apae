@@ -23,6 +23,7 @@ import { SelectComponent, SelectOption } from '../../core/select/select.componen
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     SelectComponent,
     InputComponent,
   ],
@@ -58,9 +59,20 @@ export class ModalUsuariosComponent extends BaseModalComponent implements OnInit
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       email: [object?.email || '', [Validators.required, Validators.email]],
-      tipo: [object?.tipo || 'ativo', Validators.required],
-      status: [object?.status || 'Profissional', Validators.required],
+      tipo: [object?.tipo || 'Profissional', Validators.required],
+      status: [object?.status || 'ativo', Validators.required],
       especialidade: [object?.especialidade || ''],
     });
+  }
+
+  override onConfirm(): void {
+    //Chamar aqui o endpoint de salvar
+    if (this.formCadastro.valid) {
+      this.dialogRef.close(this.formCadastro.value);
+    }
+  }
+
+  override isFormInvalid(): boolean {
+    return this.formCadastro ? this.formCadastro.invalid : false;
   }
 }
