@@ -24,15 +24,13 @@ public class UsuarioRepository : IUsuarioRepository
     }
 
     /// <summary>
-    /// Busca usuário por email usando filtro PostgREST
+    /// Busca um usuário por email
     /// </summary>
-    /// <param name="email">Email do usuário</param>
-    /// <returns>Usuário encontrado ou null</returns>
+    /// <returns> Usuário do email </returns>
     public async Task<Usuario?> GetByEmailAsync(string email)
     {
         try
         {
-
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.Email == email)
@@ -48,15 +46,13 @@ public class UsuarioRepository : IUsuarioRepository
     }
 
     /// <summary>
-    /// Busca usuário por ID
+    /// Busca um usuário por id
     /// </summary>
-    /// <param name="id">ID do usuário</param>
-    /// <returns>Usuário encontrado ou null</returns>
+    /// <returns> Usuário do id </returns>
     public async Task<Usuario?> GetByIdAsync(Guid id)
     {
         try
         {
-
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.IdUsuario == id)
@@ -66,7 +62,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuário por ID: {Id}", id);
+            _logger.LogError(ex, "Erro ao buscar usuário por Id: {Id}", id);
             return null;
         }
     }
@@ -74,7 +70,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    /// <returns>Lista de usuários</returns>
+    /// <returns> Lista de usuários </returns>
     public async Task<IEnumerable<Usuario>> GetAllAsync()
     {
         try
@@ -95,7 +91,8 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    public async Task<Usuario> InsertUser(Usuario usuario)
+    /// <returns> Usuário criado </returns>
+    public async Task<Usuario> CreateAsync(Usuario usuario)
     {
         try
         {
@@ -109,8 +106,9 @@ public class UsuarioRepository : IUsuarioRepository
 
             return response.Models.First();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Erro ao criar usuário: {Email}", usuario.Email);
             throw;
         }
     }
@@ -118,8 +116,6 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
-    /// <param name="usuario">Dados do usuário</param>
-    /// <returns>Usuário atualizado</returns>
     public async Task<Usuario> UpdateAsync(Usuario usuario)
     {
         try
@@ -150,8 +146,6 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Remove um usuário
     /// </summary>
-    /// <param name="id">ID do usuário</param>
-    /// <returns>True se removido com sucesso</returns>
     public async Task<bool> DeleteAsync(Guid id)
     {
         try

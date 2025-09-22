@@ -29,13 +29,91 @@ public class UsuarioController : ControllerBase
     }
 
     /// <summary>
-    /// Criar usuário
+    /// Buscar um usuário por e-mail
     /// </summary>
-    [HttpPost]
+    /// <returns> Usuário do email </returns>
+    [HttpGet("search")]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<object>>> GetUserByEmail([FromQuery] string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
+
+        var result = await _usuarioService.GetUserByEmail(email);
+
+        if (!result.Success)
+        {
+            if (result.Message.Contains("Usuário não foi encontrado"))
+                return NotFound();
+
+            return StatusCode(500, result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Buscar um usuário por id
+    /// </summary>
+    /// <returns> Usuário do id </returns>
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<object>>> GetUserById([FromRoute] Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
+
+        var result = await _usuarioService.GetUserById(id);
+
+        if (!result.Success)
+        {
+            if (result.Message.Contains("Usuário não foi encontrado"))
+                return NotFound();
+
+            return StatusCode(500, result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Lista todos os usuários
+    /// </summary>
+    /// <returns> Lista de usuários </returns>
+    [HttpGet("all")]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<object>>> GetAllUsers()
+    {
+        var result = await _usuarioService.GetAllUsers();
+
+        if (!result.Success)
+        {
+            if (result.Message.Contains("Usuários não foram encontrados"))
+                return NotFound();
+
+            return StatusCode(500, result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Criar um usuário
+    /// </summary>
+    [HttpPost("create"!)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> CreateUser([FromBody] Usuario request)
+    public async Task<ActionResult<ApiResponse<object>>> CreateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -47,7 +125,7 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        var result = await _usuarioService.CreateUser(request);
+        var result = await _usuarioService.CreateUser(user);
 
         if (!result.Success)
         {
@@ -57,6 +135,39 @@ public class UsuarioController : ControllerBase
             return StatusCode(500, result);
         }
 
-        return Created($"/usuario/{result.Data!.IdUsuario}", result);
+        return Created();
+    }
+
+    /// <summary>
+    /// Atualiza um usuário existente
+    /// </summary>
+    [HttpPut("update")]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<object>>> UpdateUser([FromBody] Usuario user)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
+        }
+
+        var result = await _usuarioService.UpdateUser(user);
+
+        if (!result.Success)
+        {
+            if (result.Message.Contains("Usuário não foi atualizado"))
+                return NoContent();
+
+            return StatusCode(500, result);
+        }
+
+        return Ok();
     }
 }
