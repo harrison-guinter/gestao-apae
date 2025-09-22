@@ -31,18 +31,6 @@ public class AgendamentoAssistido : BaseModel
     [Column("id_assistido")]
     public Guid IdAssistido { get; set; }
 
-    /// <summary>
-    /// Data de criação
-    /// </summary>
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    /// <summary>
-    /// Data da última atualização
-    /// </summary>
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
     // Navigation properties
     /// <summary>
     /// Agendamento associado

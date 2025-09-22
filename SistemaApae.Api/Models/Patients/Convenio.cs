@@ -1,26 +1,28 @@
 using System.ComponentModel.DataAnnotations;
 using Supabase.Postgrest.Models;
 using Supabase.Postgrest.Attributes;
+using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Administrative;
 
 namespace SistemaApae.Api.Models.Patients;
 
 /// <summary>
-/// Modelo de convênio CAS do sistema
+/// Modelo de Convênio do sistema
 /// </summary>
-[Table("convenio_cas")]
-public class ConvenioCas : BaseModel
+[Table("convenio")]
+public class Convenio : BaseModel
 {
     /// <summary>
-    /// ID único do convênio CAS
+    /// ID único do convênio
     /// </summary>
-    [Column("id_convenio_cas")]
-    public Guid IdConvenioCas { get; set; }
+    [Column("id_convenio")]
+    public Guid IdConvenio { get; set; }
 
     /// <summary>
-    /// ID da secretaria prefeitura associada
+    /// ID do município associado
     /// </summary>
-    [Column("id_secretaria_prefeitura")]
-    public Guid? IdSecretariaPrefeitura { get; set; }
+    [Column("id_municipio")]
+    public Guid? IdMunicipio { get; set; }
 
     /// <summary>
     /// Nome do convênio
@@ -31,16 +33,10 @@ public class ConvenioCas : BaseModel
     public string Nome { get; set; } = string.Empty;
 
     /// <summary>
-    /// Status do convênio (ativo/inativo)
+    /// Indica se o convênio está ativo
     /// </summary>
-    [Column("status")]
-    public bool Status { get; set; } = true;
-
-    /// <summary>
-    /// Indica se é um convênio CAS
-    /// </summary>
-    [Column("eh_cas")]
-    public bool EhCas { get; set; } = true;
+    [Column("ativo")]
+    public bool Ativo { get; set; } = true;
 
     /// <summary>
     /// Observações sobre o convênio
@@ -49,22 +45,16 @@ public class ConvenioCas : BaseModel
     public string? Observacao { get; set; }
 
     /// <summary>
-    /// Data de criação
+    /// Tipo do convênio CAS
     /// </summary>
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    /// <summary>
-    /// Data da última atualização
-    /// </summary>
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    [Column("tipo_convenio")]
+    public TipoConvenioEnum? TipoConvenio { get; set; }
 
     // Navigation properties
     /// <summary>
-    /// Secretaria prefeitura associada
+    /// Município associado
     /// </summary>
-    public Administrative.SecretariaPrefeitura? SecretariaPrefeitura { get; set; }
+    public Municipio? Municipio { get; set; }
 
     /// <summary>
     /// Lista de assistidos associados

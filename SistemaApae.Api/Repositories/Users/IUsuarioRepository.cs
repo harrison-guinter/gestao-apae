@@ -8,14 +8,14 @@ namespace SistemaApae.Api.Repositories.Users;
 public interface IUsuarioRepository
 {
     /// <summary>
-    /// Busca usuário por email
+    /// Busca um usuário por email
     /// </summary>
     /// <param name="email">Email do usuário</param>
     /// <returns>Usuário encontrado ou null</returns>
     Task<Usuario?> GetByEmailAsync(string email);
 
     /// <summary>
-    /// Busca usuário por ID
+    /// Busca um usuário por Id
     /// </summary>
     /// <param name="id">ID do usuário</param>
     /// <returns>Usuário encontrado ou null</returns>
@@ -32,7 +32,7 @@ public interface IUsuarioRepository
     /// </summary>
     /// <param name="usuario">Dados do usuário</param>
     /// <returns>Usuário criado</returns>
-    Task<Usuario> InsertUser(Usuario usuario);
+    Task<Usuario> CreateAsync(Usuario usuario);
 
     /// <summary>
     /// Atualiza um usuário existente

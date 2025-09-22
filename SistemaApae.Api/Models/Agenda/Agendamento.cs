@@ -55,18 +55,6 @@ public class Agendamento : BaseModel
     [Column("ativo")]
     public bool Ativo { get; set; } = true;
 
-    /// <summary>
-    /// Data de criação
-    /// </summary>
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    /// <summary>
-    /// Data da última atualização
-    /// </summary>
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
     // Navigation properties
     /// <summary>
     /// Profissional responsável pelo agendamento
