@@ -272,7 +272,7 @@ public class Assistido : BaseModel
 
     // Navigation properties
     /// <summary>
-    /// Convênio CAS associado ao assistido
+    /// Convênio associado ao assistido
     /// </summary>
-    public ConvenioCas? ConvenioCas { get; set; }
+    public Convenio? Convenio { get; set; }
 }
