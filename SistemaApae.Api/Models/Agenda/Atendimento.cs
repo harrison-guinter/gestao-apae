@@ -37,10 +37,10 @@ public class Atendimento : BaseModel
     public StatusAtendimentoEnum? Status { get; set; }
 
     /// <summary>
-    /// Evolução do atendimento
+    /// Avaliação do atendimento
     /// </summary>
-    [Column("evolucao")]
-    public string? Evolucao { get; set; }
+    [Column("avaliacao")]
+    public string? Avaliacao { get; set; }
 
     /// <summary>
     /// Observações sobre o atendimento
@@ -49,16 +49,10 @@ public class Atendimento : BaseModel
     public string? Observacao { get; set; }
 
     /// <summary>
-    /// Data de criação
+    /// Indica se o atendimento está ativo
     /// </summary>
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    /// <summary>
-    /// Data da última atualização
-    /// </summary>
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    [Column("ativo")]
+    public bool Ativo { get; set; } = true;
 
     // Navigation properties
     /// <summary>
