@@ -13,7 +13,7 @@ import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
 import { ModalService } from '../core/services/modal.service';
-import { CadastroUsuario } from './cadastro-usuario.interface';
+import { CadastroUsuario, OrgaoClasse } from './cadastro-usuario.interface';
 import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
 
 @Component({
@@ -45,7 +45,6 @@ export class UsuariosComponent implements OnInit {
       nome: 'Luana Marini',
       email: 'luana@apae.com',
       tipo: 'Coordenador',
-      especialidade: '-',
       ativo: true,
     },
     {
@@ -55,46 +54,8 @@ export class UsuariosComponent implements OnInit {
       tipo: 'Profissional',
       especialidade: 'Fonoaudióloga',
       ativo: true,
-    },
-    {
-      id: '3',
-      nome: 'Dr. João Silva',
-      email: 'joao@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fisioterapeuta',
-      ativo: true,
-    },
-    {
-      id: '4',
-      nome: 'Dra. Ana Costa',
-      email: 'ana@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Psicóloga',
-      ativo: false,
-    },
-    {
-      id: '5',
-      nome: 'Dr. Carlos Oliveira',
-      email: 'carlos@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Terapeuta Ocupacional',
-      ativo: true,
-    },
-    {
-      id: '6',
-      nome: 'Luana Marini',
-      email: 'luana@apae.com',
-      tipo: 'Coordenador',
-      especialidade: '-',
-      ativo: true,
-    },
-    {
-      id: '7',
-      nome: 'Dra. Maria Santos',
-      email: 'maria@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fonoaudióloga',
-      ativo: true,
+      orgaoClasse: OrgaoClasse.CRM,
+      registroProfissional: '43512',
     },
   ];
 
