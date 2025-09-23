@@ -49,5 +49,5 @@ public class UserInfo
     /// <summary>
     /// Roles/permissões do usuário
     /// </summary>
-    public List<string> Roles { get; set; } = new();
+    public List<string> Perfil { get; set; } = new();
 }

@@ -14,6 +14,7 @@ public class Usuario : BaseModel
     /// <summary>
     /// ID único do usuário
     /// </summary>
+    [PrimaryKey("id_usuario", true)]
     [Column("id_usuario")]
     public Guid IdUsuario { get; set; }
 
@@ -21,7 +22,7 @@ public class Usuario : BaseModel
     /// Nome do usuário
     /// </summary>
     [Required]
-    [MaxLength(50)]
+    [MaxLength(150)]
     [Column("nome")]
     public string Nome { get; set; } = string.Empty;
 
@@ -30,7 +31,7 @@ public class Usuario : BaseModel
     /// </summary>
     [Required]
     [EmailAddress]
-    [MaxLength(50)]
+    [MaxLength(150)]
     [Column("email")]
     public string Email { get; set; } = string.Empty;
 

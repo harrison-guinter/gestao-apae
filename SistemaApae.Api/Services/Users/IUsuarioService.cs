@@ -11,25 +11,25 @@ public interface IUsuarioService
     /// <summary>
     /// Busca um usuário por email
     /// </summary>
-    Task<ApiResponse<Usuario>> GetUserByEmail(string email);
+    Task<ApiResponse<UsuarioDto>> GetUserByEmail(string email);
 
     /// <summary>
     /// Busca um usuário por Id
     /// </summary>
-    Task<ApiResponse<Usuario>> GetUserById(Guid id);
+    Task<ApiResponse<UsuarioDto>> GetUserById(Guid id);
 
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    Task<ApiResponse<IEnumerable<Usuario>>> GetAllUsers();
+    Task<ApiResponse<IEnumerable<UsuarioDto>>> GetAllUsers();
 
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    Task<ApiResponse<Usuario>> CreateUser(Usuario request);
+    Task<ApiResponse<UsuarioDto>> CreateUser(Usuario request);
 
     /// <summary>
     /// Atualiza um novo usuário existente
     /// </summary>
-    Task<ApiResponse<Usuario>> UpdateUser(Usuario request);
+    Task<ApiResponse<UsuarioDto>> UpdateUser(Usuario request);
 }

@@ -78,7 +78,7 @@ public class AuthService : IAuthService
                     Id = user.IdUsuario.ToString(),
                     Name = user.Nome,
                     Email = user.Email,
-                    Roles = roles
+                    Perfil = roles
                 }
             };
 

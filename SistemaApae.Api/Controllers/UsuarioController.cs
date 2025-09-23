@@ -33,11 +33,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Usuário do email </returns>
     [HttpGet("search")]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> GetUserByEmail([FromQuery] string email)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserByEmail([FromQuery] string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -60,11 +60,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Usuário do id </returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> GetUserById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -87,10 +87,10 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Lista de usuários </returns>
     [HttpGet("all")]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<UsuarioDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> GetAllUsers()
+    public async Task<ActionResult<ApiResponse<IEnumerable<UsuarioDto>>>> GetAllUsers()
     {
         var result = await _usuarioService.GetAllUsers();
 
@@ -109,11 +109,11 @@ public class UsuarioController : ControllerBase
     /// Criar um usuário
     /// </summary>
     [HttpPost("create"!)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> CreateUser([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> CreateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -142,11 +142,11 @@ public class UsuarioController : ControllerBase
     /// Atualiza um usuário existente
     /// </summary>
     [HttpPut("update")]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> UpdateUser([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> UpdateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
