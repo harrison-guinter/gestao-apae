@@ -49,10 +49,10 @@ public class Assistido : BaseModel
     public Guid? IdConvenio { get; set; }
 
     /// <summary>
-    /// Indica se o assistido está ativo
+    /// Indica se o assistido está ativo/inativo
     /// </summary>
-    [Column("ativo")]
-    public bool? Ativo { get; set; }
+    [Column("status")]
+    public bool? Status { get; set; }
 
     /// <summary>
     /// Data de cadastro do assistido

@@ -58,7 +58,7 @@ public class Usuario : BaseModel
     public PerfilEnum Perfil { get; set; }
 
     /// <summary>
-    /// Indica se o usuário está ativo
+    /// Indica se o usuário está ativo/inativo
     /// </summary>
     [Column("ativo")]
     public bool Ativo { get; set; } = true;
