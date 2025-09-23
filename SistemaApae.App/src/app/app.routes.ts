@@ -17,13 +17,12 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, CoordenadorGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
       { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
-      // Adicione outras rotas aqui conforme necessário
     ],
   },
   { path: '**', redirectTo: 'login' },
