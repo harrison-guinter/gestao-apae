@@ -14,6 +14,7 @@ import { BaseModalComponent } from '../../core/base-modal/base-modal.component';
 import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
+import { OrgaoClasse } from '../cadastro-usuario.interface';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -44,6 +45,16 @@ export class ModalUsuariosComponent implements OnInit {
     { value: 'inativo', label: 'Inativo' },
   ];
 
+  protected orgaoClasseOptions: SelectOption[] = [
+    { value: OrgaoClasse.CRP, label: 'CRP' },
+    { value: OrgaoClasse.CREFITO, label: 'CREFITO' },
+    { value: OrgaoClasse.CFM, label: 'CFM' },
+    { value: OrgaoClasse.CRO, label: 'CRO' },
+    { value: OrgaoClasse.CRM, label: 'CRM' },
+    { value: OrgaoClasse.COREME, label: 'COREME' },
+    { value: OrgaoClasse.CRN, label: 'CRN' },
+  ];
+
   constructor(
     private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<ModalUsuariosComponent>,
@@ -66,11 +77,17 @@ export class ModalUsuariosComponent implements OnInit {
       email: [object?.email || '', [Validators.required, Validators.email]],
       tipo: [object?.tipo || 'Profissional', Validators.required],
       status: [object?.status || 'ativo', Validators.required],
-      especialidade: [object?.especialidade || ''],
+      especialidade: [object?.especialidade],
+      orgaoClasse: [object?.orgaoClasse],
+      registroProfissional: [object?.registroProfissional],
     });
   }
 
   onConfirm(): void {
+    if (this.formCadastro.invalid) {
+      this.formCadastro.markAllAsTouched();
+      return;
+    }
     console.log('Formulário enviado:', this.formCadastro.value);
     if (this.formCadastro.valid) {
       this.dialogRef.close(this.formCadastro.value);
@@ -80,9 +97,5 @@ export class ModalUsuariosComponent implements OnInit {
   onCancel(): void {
     console.log('Cancel clicked');
     this.dialogRef.close(null);
-  }
-
-  isFormInvalid(): boolean {
-    return this.formCadastro ? this.formCadastro.invalid : false;
   }
 }

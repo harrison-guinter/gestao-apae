@@ -30,11 +30,12 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.baseUrl}auth/forgot-password`, { email })
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
   }
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
   }
+
 }

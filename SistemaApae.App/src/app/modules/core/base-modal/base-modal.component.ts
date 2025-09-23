@@ -34,11 +34,9 @@ export class BaseModalComponent implements OnInit {
 
   onCancel(): void {
     this.onCancelClick.emit();
-    this.dialogRef.close(false);
   }
 
   onConfirm(): void {
     this.onConfirmClick.emit();
-    this.dialogRef.close(true);
   }
 }

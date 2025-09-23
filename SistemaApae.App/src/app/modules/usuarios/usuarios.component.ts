@@ -13,8 +13,9 @@ import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
 import { ModalService } from '../core/services/modal.service';
-import { CadastroUsuario } from './cadastro-usuario.interface';
 import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
+import { Usuario } from './usuario';
+import { Roles } from '../auth/roles.enum';
 
 @Component({
   selector: 'app-usuarios',
@@ -37,68 +38,15 @@ import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.componen
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
-  protected filtrosForm!: UntypedFormGroup;
 
-  todosUsuarios: CadastroUsuario[] = [
-    {
-      id: '1',
-      nome: 'Luana Marini',
-      email: 'luana@apae.com',
-      tipo: 'Coordenador',
-      especialidade: '-',
-      ativo: true,
-    },
-    {
-      id: '2',
-      nome: 'Dra. Maria Santos',
-      email: 'maria@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fonoaudióloga',
-      ativo: true,
-    },
-    {
-      id: '3',
-      nome: 'Dr. João Silva',
-      email: 'joao@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fisioterapeuta',
-      ativo: true,
-    },
-    {
-      id: '4',
-      nome: 'Dra. Ana Costa',
-      email: 'ana@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Psicóloga',
-      ativo: false,
-    },
-    {
-      id: '5',
-      nome: 'Dr. Carlos Oliveira',
-      email: 'carlos@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Terapeuta Ocupacional',
-      ativo: true,
-    },
-    {
-      id: '6',
-      nome: 'Luana Marini',
-      email: 'luana@apae.com',
-      tipo: 'Coordenador',
-      especialidade: '-',
-      ativo: true,
-    },
-    {
-      id: '7',
-      nome: 'Dra. Maria Santos',
-      email: 'maria@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fonoaudióloga',
-      ativo: true,
-    },
+  protected perfisUsuario: SelectOption[] = [
+    { value: Roles.COORDENADOR, label: 'Coordenador' },
+    { value: Roles.PROFISSIONAL, label: 'Profissional' },
   ];
 
-  usuarios: CadastroUsuario[] = [];
+  protected filtrosForm!: UntypedFormGroup;
+
+  usuarios: Usuario[] = [];
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -120,9 +68,9 @@ export class UsuariosComponent implements OnInit {
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-      nome: [''],
+      name: [''],
       email: [''],
-      tipo: [''],
+      perfil: [''],
       status: [''],
     });
   }
@@ -130,21 +78,21 @@ export class UsuariosComponent implements OnInit {
   aplicarFiltros() {
     const filtros = this.filtrosForm.value;
 
-    this.usuarios = this.todosUsuarios.filter((usuario) => {
-      const nomeMatch =
-        !filtros.nome || usuario.nome.toLowerCase().includes(filtros.nome.toLowerCase());
+    this.usuarios = this.usuarios.filter((usuario) => {
+      const nameMatch =
+        !filtros.name || usuario.name.toLowerCase().includes(filtros.name.toLowerCase());
 
       const emailMatch =
         !filtros.email || usuario.email.toLowerCase().includes(filtros.email.toLowerCase());
 
-      const tipoMatch = !filtros.tipo || usuario.tipo === filtros.tipo;
+      const perfilMatch = !filtros.perfil || usuario.perfil === filtros.perfil;
 
       const statusMatch =
         !filtros.status ||
         (filtros.status === 'ativo' && usuario.ativo) ||
         (filtros.status === 'inativo' && !usuario.ativo);
 
-      return nomeMatch && emailMatch && tipoMatch && statusMatch;
+      return nameMatch && emailMatch && perfilMatch && statusMatch;
     });
   }
 
@@ -160,10 +108,10 @@ export class UsuariosComponent implements OnInit {
     this.limparFiltros();
   }
 
-  tiposUsuario: SelectOption[] = [
+  perfilsUsuario: SelectOption[] = [
     { value: '', label: 'Todos' },
-    { value: 'Coordenador', label: 'Coordenador' },
-    { value: 'Profissional', label: 'Profissional' },
+    { value: Roles.COORDENADOR, label: 'Coordenador' },
+    { value: Roles.PROFISSIONAL, label: 'Profissional' },
   ];
 
   statusOptions: SelectOption[] = [
@@ -173,9 +121,9 @@ export class UsuariosComponent implements OnInit {
   ];
 
   tableColumns: TableColumn[] = [
-    { key: 'nome', label: 'Nome', width: 'large', align: 'left' },
+    { key: 'name', label: 'Nome', width: 'large', align: 'left' },
     { key: 'email', label: 'E-mail', width: 'xlarge', align: 'left' },
-    { key: 'tipo', label: 'Tipo', width: 'medium', align: 'center' },
+    { key: 'perfil', label: 'Tipo', width: 'medium', align: 'center' },
     { key: 'status', label: 'Status', width: 'small', align: 'center' },
   ];
 
@@ -205,7 +153,7 @@ export class UsuariosComponent implements OnInit {
       });
   }
 
-  editarUsuario(element: CadastroUsuario) {
+  editarUsuario(element: Usuario) {
     console.log(`Elemento: ${element}`);
     this.modalService
       .openModal({

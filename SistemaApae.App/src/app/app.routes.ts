@@ -8,6 +8,7 @@ import { AssistidosComponent } from './modules/assistidos/assistidos.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { NoAuthGuard } from './modules/auth/no-auth.guard';
+import { CoordenadorGuard } from './modules/auth/coordenador.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,13 +17,12 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, CoordenadorGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'usuarios', component: UsuariosComponent },
-      { path: 'assistidos', component: AssistidosComponent },
-      // Adicione outras rotas aqui conforme necessário
+      { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
+      { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
     ],
   },
   { path: '**', redirectTo: 'login' },
