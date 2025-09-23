@@ -55,12 +55,6 @@ public class Agendamento : BaseModel
     [Column("ativo")]
     public bool Ativo { get; set; } = true;
 
-    // Navigation properties
-    /// <summary>
-    /// Profissional responsável pelo agendamento
-    /// </summary>
-    public Profissional? Profissional { get; set; }
-
     /// <summary>
     /// Lista de assistidos associados ao agendamento
     /// </summary>
