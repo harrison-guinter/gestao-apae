@@ -60,8 +60,8 @@ public class Usuario : BaseModel
     /// <summary>
     /// Indica se o usuário está ativo/inativo
     /// </summary>
-    [Column("ativo")]
-    public bool Ativo { get; set; } = true;
+    [Column("status")]
+    public bool Status { get; set; } = true;
 
     /// <summary>
     /// Registro profissional

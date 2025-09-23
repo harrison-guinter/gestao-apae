@@ -19,7 +19,7 @@ public static class UsuarioExtensions
             Email = usuario.Email,
             Telefone = usuario.Telefone,
             Perfil = usuario.Perfil,
-            Status = usuario.Ativo,
+            Status = usuario.Status,
             Observacao = usuario.Observacao,
             RegistroProfissional = usuario.RegistroProfissional,
             Especialidade = usuario.Especialidade
