@@ -39,7 +39,7 @@ import { Roles } from '../auth/roles.enum';
 })
 export class UsuariosComponent implements OnInit {
 
-  tiposUsuario: SelectOption[] = [
+  protected perfisUsuario: SelectOption[] = [
     { value: Roles.COORDENADOR, label: 'Coordenador' },
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
   ];
