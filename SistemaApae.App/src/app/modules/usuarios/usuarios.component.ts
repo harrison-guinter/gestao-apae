@@ -4,19 +4,18 @@ import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angu
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { TableComponent, TableColumn, TableAction } from '../core/table/table.component';
 import { SelectComponent, SelectOption } from '../core/select/select.component';
 import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
-
-interface Usuario {
-  id: number;
-  nome: string;
-  email: string;
-  tipo: 'Coordenador' | 'Profissional';
-  especialidade: string;
-  ativo: boolean;
-}
+import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
+import { ModalService } from '../core/services/modal.service';
+import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
+import { Usuario } from './usuario';
+import { Roles } from '../auth/roles.enum';
 
 @Component({
   selector: 'app-usuarios',
@@ -27,62 +26,27 @@ interface Usuario {
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     TableComponent,
     SelectComponent,
     InputComponent,
+    FiltersContainerComponent,
   ],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
-  filtrosForm!: UntypedFormGroup;
-
-  todosUsuarios: Usuario[] = [
-    {
-      id: 1,
-      nome: 'Luana Marini',
-      email: 'luana@apae.com',
-      tipo: 'Coordenador',
-      especialidade: '-',
-      ativo: true,
-    },
-    {
-      id: 2,
-      nome: 'Dra. Maria Santos',
-      email: 'maria@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fonoaudióloga',
-      ativo: true,
-    },
-    {
-      id: 3,
-      nome: 'Dr. João Silva',
-      email: 'joao@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Fisioterapeuta',
-      ativo: true,
-    },
-    {
-      id: 4,
-      nome: 'Dra. Ana Costa',
-      email: 'ana@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Psicóloga',
-      ativo: false,
-    },
-    {
-      id: 5,
-      nome: 'Dr. Carlos Oliveira',
-      email: 'carlos@apae.com',
-      tipo: 'Profissional',
-      especialidade: 'Terapeuta Ocupacional',
-      ativo: true,
-    },
-  ];
+  protected filtrosForm!: UntypedFormGroup;
 
   usuarios: Usuario[] = [];
 
-  constructor(private formBuilder: UntypedFormBuilder, private pageInfoService: PageInfoService) {}
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private pageInfoService: PageInfoService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
     // Atualizar informações da página
@@ -98,9 +62,9 @@ export class UsuariosComponent implements OnInit {
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-      nome: [''],
+      name: [''],
       email: [''],
-      tipo: [''],
+      perfil: [''],
       status: [''],
     });
   }
@@ -108,21 +72,21 @@ export class UsuariosComponent implements OnInit {
   aplicarFiltros() {
     const filtros = this.filtrosForm.value;
 
-    this.usuarios = this.todosUsuarios.filter((usuario) => {
-      const nomeMatch =
-        !filtros.nome || usuario.nome.toLowerCase().includes(filtros.nome.toLowerCase());
+    this.usuarios = this.usuarios.filter((usuario) => {
+      const nameMatch =
+        !filtros.name || usuario.name.toLowerCase().includes(filtros.name.toLowerCase());
 
       const emailMatch =
         !filtros.email || usuario.email.toLowerCase().includes(filtros.email.toLowerCase());
 
-      const tipoMatch = !filtros.tipo || usuario.tipo === filtros.tipo;
+      const perfilMatch = !filtros.perfil || usuario.perfil === filtros.perfil;
 
       const statusMatch =
         !filtros.status ||
         (filtros.status === 'ativo' && usuario.ativo) ||
         (filtros.status === 'inativo' && !usuario.ativo);
 
-      return nomeMatch && emailMatch && tipoMatch && statusMatch;
+      return nameMatch && emailMatch && perfilMatch && statusMatch;
     });
   }
 
@@ -130,10 +94,18 @@ export class UsuariosComponent implements OnInit {
     this.filtrosForm.reset();
   }
 
-  tiposUsuario: SelectOption[] = [
+  onAdd() {
+    this.adicionarUsuario();
+  }
+
+  onClear() {
+    this.limparFiltros();
+  }
+
+  perfilsUsuario: SelectOption[] = [
     { value: '', label: 'Todos' },
-    { value: 'Coordenador', label: 'Coordenador' },
-    { value: 'Profissional', label: 'Profissional' },
+    { value: Roles.COORDENADOR, label: 'Coordenador' },
+    { value: Roles.PROFISSIONAL, label: 'Profissional' },
   ];
 
   statusOptions: SelectOption[] = [
@@ -143,10 +115,10 @@ export class UsuariosComponent implements OnInit {
   ];
 
   tableColumns: TableColumn[] = [
-    { key: 'nome', label: 'Nome' },
-    { key: 'email', label: 'E-mail' },
-    { key: 'tipo', label: 'Tipo' },
-    { key: 'status', label: 'Status' },
+    { key: 'name', label: 'Nome', width: 'large', align: 'left' },
+    { key: 'email', label: 'E-mail', width: 'xlarge', align: 'left' },
+    { key: 'perfil', label: 'Tipo', width: 'medium', align: 'center' },
+    { key: 'status', label: 'Status', width: 'small', align: 'center' },
   ];
 
   tableActions: TableAction[] = [
@@ -154,31 +126,40 @@ export class UsuariosComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Editar',
       color: 'primary',
-      action: (row) => this.editarUsuario(row.id),
+      action: (row) => this.editarUsuario(row),
     },
   ];
 
   adicionarUsuario() {
     console.log('Adicionar novo usuário');
+
+    this.modalService
+      .openModal({
+        component: ModalUsuariosComponent,
+        width: '60%',
+        height: 'auto',
+        disableClose: true,
+        data: { isEdit: false },
+        element: null,
+      })
+      .subscribe((result) => {
+        console.log('Modal fechada com resultado:', result);
+      });
   }
 
-  editarUsuario(id: number) {
-    console.log(`Editar usuário com ID: ${id}`);
-  }
-
-  excluirUsuario(id: number) {
-    console.log(`Excluir usuário com ID: ${id}`);
-  }
-
-  reativarUsuario(id: number) {
-    console.log(`Reativar usuário com ID: ${id}`);
-  }
-
-  onRowClick(row: any) {
-    console.log('Linha clicada:', row);
-  }
-
-  onActionClick(event: { action: string; row: any }) {
-    console.log('Ação executada:', event.action, 'Linha:', event.row);
+  editarUsuario(element: Usuario) {
+    console.log(`Elemento: ${element}`);
+    this.modalService
+      .openModal({
+        component: ModalUsuariosComponent,
+        width: '60%',
+        height: 'auto',
+        disableClose: true,
+        data: { isEdit: true },
+        element: element,
+      })
+      .subscribe((result) => {
+        console.log('Modal fechada com resultado:', result);
+      });
   }
 }

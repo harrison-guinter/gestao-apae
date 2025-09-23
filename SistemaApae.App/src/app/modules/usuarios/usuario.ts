@@ -5,12 +5,16 @@ export class Usuario {
   name: string;
   email: string;
   perfil: Roles;
+  especialidade: string;
+  ativo: boolean;
 
-  constructor(id: string, name: string, email: string, perfil: Roles) {
+  constructor(id: string, name: string, email: string, perfil: Roles, especialidade: string, ativo: boolean) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.perfil = perfil;
+    this.especialidade = especialidade;
+    this.ativo = ativo;
   }
 
   hasRole(role: Roles): boolean {
@@ -26,7 +30,12 @@ export class Usuario {
       jsonParsed.id,
       jsonParsed.name,
       jsonParsed.email,
-      jsonParsed.roles
+      jsonParsed.roles,
+      jsonParsed.especialidade,
+      jsonParsed.ativo
     );
   }
 }
+
+//apae@apae
+//paulo1234

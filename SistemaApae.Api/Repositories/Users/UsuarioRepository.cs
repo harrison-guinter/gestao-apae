@@ -2,7 +2,7 @@ using Supabase;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
 
-namespace SistemaApae.Api.Repositories;
+namespace SistemaApae.Api.Repositories.Users;
 
 /// <summary>
 /// Repositório de usuários usando Supabase como banco de dados
@@ -24,29 +24,17 @@ public class UsuarioRepository : IUsuarioRepository
     }
 
     /// <summary>
-    /// Busca usuário por email usando filtro PostgREST
+    /// Busca um usuário por email
     /// </summary>
-    /// <param name="email">Email do usuário</param>
-    /// <returns>Usuário encontrado ou null</returns>
+    /// <returns> Usuário do email </returns>
     public async Task<Usuario?> GetByEmailAsync(string email)
     {
         try
         {
-            _logger.LogInformation("Buscando usuário por email: {Email}", email);
-
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.Email == email)
                 .Single();
-
-            if (usuario == null)
-            {
-                _logger.LogWarning("Usuário não encontrado para o email: {Email}", email);                
-            }
-            else
-            {
-                _logger.LogInformation("Usuário encontrado: {Email} - {Nome} - {Status}", usuario.Email, usuario.Nome, usuario.Status);
-            }
 
             return usuario;
         }
@@ -58,35 +46,23 @@ public class UsuarioRepository : IUsuarioRepository
     }
 
     /// <summary>
-    /// Busca usuário por ID
+    /// Busca um usuário por id
     /// </summary>
-    /// <param name="id">ID do usuário</param>
-    /// <returns>Usuário encontrado ou null</returns>
+    /// <returns> Usuário do id </returns>
     public async Task<Usuario?> GetByIdAsync(Guid id)
     {
         try
         {
-            _logger.LogInformation("Buscando usuário por ID: {Id}", id);
-
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.IdUsuario == id)
                 .Single();
 
-            if (usuario == null)
-            {
-                _logger.LogWarning("Usuário não encontrado para o ID: {Id}", id);
-            }
-            else
-            {
-                _logger.LogInformation("Usuário encontrado: {Email} - {Nome} - {Status}", usuario.Email, usuario.Nome, usuario.Status);
-            }
-
             return usuario;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuário por ID: {Id}", id);
+            _logger.LogError(ex, "Erro ao buscar usuário por Id: {Id}", id);
             return null;
         }
     }
@@ -94,7 +70,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    /// <returns>Lista de usuários</returns>
+    /// <returns> Lista de usuários </returns>
     public async Task<IEnumerable<Usuario>> GetAllAsync()
     {
         try
@@ -102,12 +78,6 @@ public class UsuarioRepository : IUsuarioRepository
             var response = await _supabaseService.Client
                 .From<Usuario>()
                 .Get();
-
-            _logger.LogInformation("Total de usuários encontrados: {Count}", response.Models.Count);
-            foreach (var user in response.Models)
-            {
-                _logger.LogInformation("Usuário: {Email} - {Nome} - {Status}", user.Email, user.Nome, user.Status);
-            }
 
             return response.Models;
         }
@@ -121,14 +91,12 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    /// <param name="usuario">Dados do usuário</param>
-    /// <returns>Usuário criado</returns>
+    /// <returns> Usuário criado </returns>
     public async Task<Usuario> CreateAsync(Usuario usuario)
     {
         try
         {
             usuario.IdUsuario = Guid.NewGuid();
-            usuario.CreatedAt = DateTime.UtcNow;
             usuario.UpdatedAt = DateTime.UtcNow;
 
             var response = await _supabaseService.Client
@@ -147,8 +115,6 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
-    /// <param name="usuario">Dados do usuário</param>
-    /// <returns>Usuário atualizado</returns>
     public async Task<Usuario> UpdateAsync(Usuario usuario)
     {
         try
@@ -162,7 +128,7 @@ public class UsuarioRepository : IUsuarioRepository
                 .Set(x => x.Email, usuario.Email)
                 .Set(x => x.Telefone, usuario.Telefone ?? string.Empty)
                 .Set(x => x.Senha, usuario.Senha)
-                .Set(x => x.Status, usuario.Status)
+                .Set(x => x.Ativo, usuario.Ativo)
                 .Set(x => x.Observacao, usuario.Observacao ?? string.Empty)
                 .Set(x => x.UpdatedAt, usuario.UpdatedAt)
                 .Update();
@@ -179,8 +145,6 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Remove um usuário
     /// </summary>
-    /// <param name="id">ID do usuário</param>
-    /// <returns>True se removido com sucesso</returns>
     public async Task<bool> DeleteAsync(Guid id)
     {
         try

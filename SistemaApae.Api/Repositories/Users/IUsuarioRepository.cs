@@ -1,6 +1,6 @@
 using SistemaApae.Api.Models.Users;
 
-namespace SistemaApae.Api.Repositories;
+namespace SistemaApae.Api.Repositories.Users;
 
 /// <summary>
 /// Interface para repositório de usuários
@@ -8,14 +8,14 @@ namespace SistemaApae.Api.Repositories;
 public interface IUsuarioRepository
 {
     /// <summary>
-    /// Busca usuário por email
+    /// Busca um usuário por email
     /// </summary>
     /// <param name="email">Email do usuário</param>
     /// <returns>Usuário encontrado ou null</returns>
     Task<Usuario?> GetByEmailAsync(string email);
 
     /// <summary>
-    /// Busca usuário por ID
+    /// Busca um usuário por Id
     /// </summary>
     /// <param name="id">ID do usuário</param>
     /// <returns>Usuário encontrado ou null</returns>

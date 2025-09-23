@@ -1,33 +1,130 @@
 .table-container {
   width: 100%;
-  overflow-x: auto;
+  background-color: var(--mat-background);
+  height: calc(100vh - 300px);
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+
+  .table-wrapper {
+    flex: 1;
+    overflow: auto;
+    background-color: var(--mat-surface);
+    box-shadow: var(--elevation-1);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
 
   .custom-table {
     width: 100%;
-    background-color: var(--surface);
-    box-shadow: var(--elevation-1);
-    border-radius: 8px;
-    overflow: hidden;
+    background-color: transparent;
+    table-layout: fixed; // Força larguras fixas
+
+    th,
+    td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    // Larguras por tipo de dados (genéricas)
+    .column-small {
+      width: 80px;
+      min-width: 80px;
+      max-width: 80px;
+    }
+
+    .column-medium {
+      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
+    }
+
+    .column-large {
+      width: 200px;
+      min-width: 200px;
+      max-width: 200px;
+    }
+
+    .column-xlarge {
+      width: 250px;
+      min-width: 250px;
+      max-width: 250px;
+    }
+
+    .column-auto {
+      width: auto;
+      min-width: 100px;
+    }
+
+    // Alinhamentos por tipo de conteúdo
+    .column-center {
+      text-align: center;
+
+      th,
+      td {
+        text-overflow: clip;
+        white-space: normal;
+      }
+    }
+
+    .column-right {
+      text-align: right;
+    }
+
+    .column-left {
+      text-align: left;
+    }
+
+    // Larguras específicas para ações (sempre presente)
+    .mat-column-actions {
+      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
+      text-align: center;
+
+      th,
+      td {
+        text-overflow: clip;
+        white-space: normal;
+      }
+    }
 
     th {
-      background-color: var(--surface-variant);
-      color: var(--on-surface-variant);
+      background-color: var(--mat-surface-variant);
+      color: var(--mat-on-surface);
       font-weight: 600;
       font-size: 14px;
-      padding: 16px;
-      border-bottom: 1px solid var(--outline-variant);
+      padding: 16px 12px;
+      border-bottom: 2px solid var(--mat-primary-50);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      text-align: left;
     }
 
     td {
-      padding: 16px;
-      border-bottom: 1px solid var(--outline-variant);
-      color: var(--on-surface);
+      padding: 16px 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      color: var(--mat-on-surface);
       font-size: 14px;
     }
 
     tr:hover {
-      background-color: var(--surface-container-highest);
+      background-color: rgba(0, 0, 0, 0.04);
       cursor: pointer;
+    }
+
+    // Melhorias para o scroll
+    .mat-header-row {
+      background-color: var(--mat-primary-600);
+      box-shadow: var(--mat-elevation-z2);
+    }
+
+    .mat-row {
+      &:last-child td {
+        border-bottom: none;
+      }
     }
 
     .type-badge {
@@ -37,24 +134,24 @@
       font-weight: 500;
 
       &.coordenador {
-        background-color: var(--tertiary-container);
-        color: var(--on-tertiary-container);
+        background-color: var(--mat-accent-100);
+        color: var(--mat-accent-800);
       }
 
       &.profissional {
-        background-color: var(--secondary-container);
-        color: var(--on-secondary-container);
+        background-color: var(--mat-primary-100);
+        color: var(--mat-primary-800);
       }
     }
 
     .status-ativo {
-      color: var(--success);
+      color: #4caf50;
       font-weight: 500;
       text-transform: capitalize;
     }
 
     .status-inativo {
-      color: var(--error);
+      color: var(--mat-warn-500);
       font-weight: 500;
       text-transform: capitalize;
     }
@@ -63,6 +160,7 @@
       display: flex;
       gap: 4px;
       align-items: center;
+      justify-content: center;
 
       button {
         width: 32px;
@@ -74,6 +172,43 @@
           height: 18px;
         }
       }
+    }
+
+    // Estilos especiais para colunas específicas
+    .mat-column-actions {
+      text-align: center;
+
+      th,
+      td {
+        text-overflow: clip;
+        white-space: normal;
+      }
+    }
+
+    .mat-column-tipo {
+      text-align: center;
+
+      th,
+      td {
+        text-overflow: clip;
+        white-space: normal;
+      }
+    }
+
+    .mat-column-status {
+      text-align: center;
+
+      th,
+      td {
+        text-overflow: clip;
+        white-space: normal;
+      }
+    }
+
+    // Tooltip para células com texto cortado
+    th[title],
+    td[title] {
+      cursor: help;
     }
   }
 }

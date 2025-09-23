@@ -57,22 +57,16 @@ public class Usuario : BaseModel
     public PerfilEnum Perfil { get; set; }
 
     /// <summary>
-    /// Status do usuário (ativo/inativo)
+    /// Indica se o usuário está ativo
     /// </summary>
-    [Column("status")]
-    public bool Status { get; set; } = true;
+    [Column("ativo")]
+    public bool Ativo { get; set; } = true;
 
     /// <summary>
     /// Observações sobre o usuário
     /// </summary>
     [Column("observacao")]
     public string? Observacao { get; set; }
-
-    /// <summary>
-    /// Data de criação do usuário
-    /// </summary>
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Data da última atualização

@@ -9,6 +9,8 @@ export interface TableColumn {
   label: string;
   sortable?: boolean;
   template?: TemplateRef<any>;
+  width?: 'small' | 'medium' | 'large' | 'xlarge' | 'auto';
+  align?: 'left' | 'center' | 'right';
 }
 
 export interface TableAction {
@@ -57,6 +59,20 @@ export class TableComponent {
 
   getCellValue(row: any, column: TableColumn): any {
     return this.getNestedProperty(row, column.key);
+  }
+
+  getColumnClass(column: TableColumn): string {
+    const classes = [`mat-column-${column.key}`];
+
+    if (column.width) {
+      classes.push(`column-${column.width}`);
+    }
+
+    if (column.align) {
+      classes.push(`column-${column.align}`);
+    }
+
+    return classes.join(' ');
   }
 
   hasCustomTemplate(columnKey: string): boolean {
