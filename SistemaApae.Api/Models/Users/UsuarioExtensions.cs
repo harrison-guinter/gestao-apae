@@ -21,6 +21,8 @@ public static class UsuarioExtensions
             Perfil = usuario.Perfil,
             Status = usuario.Ativo,
             Observacao = usuario.Observacao,
+            RegistroProfissional = usuario.RegistroProfissional,
+            Especialidade = usuario.Especialidade
         };
     }
 

@@ -64,6 +64,20 @@ public class Usuario : BaseModel
     public bool Ativo { get; set; } = true;
 
     /// <summary>
+    /// Registro profissional
+    /// </summary>
+    [MaxLength(50)]
+    [Column("registro_profissional")]
+    public string? RegistroProfissional { get; set; }
+
+    /// <summary>
+    /// Especialidade do profissional
+    /// </summary>
+    [MaxLength(50)]
+    [Column("especialidade")]
+    public string? Especialidade { get; set; }
+
+    /// <summary>
     /// Observações sobre o usuário
     /// </summary>
     [Column("observacao")]

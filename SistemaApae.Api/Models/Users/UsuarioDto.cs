@@ -38,6 +38,16 @@ public class UsuarioDto
     public bool Status { get; set; }
 
     /// <summary>
+    /// Registro profissional
+    /// </summary>
+    public string? RegistroProfissional { get; set; }
+
+    /// <summary>
+    /// Especialidade do profissional
+    /// </summary>
+    public string? Especialidade { get; set; }
+
+    /// <summary>
     /// Observações sobre o usuário
     /// </summary>
     public string? Observacao { get; set; }
