@@ -38,6 +38,12 @@ import { Roles } from '../auth/roles.enum';
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
+
+  tiposUsuario: SelectOption[] = [
+    { value: Roles.COORDENADOR, label: 'Coordenador' },
+    { value: Roles.PROFISSIONAL, label: 'Profissional' },
+  ];
+
   protected filtrosForm!: UntypedFormGroup;
 
   usuarios: Usuario[] = [];
