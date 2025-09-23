@@ -62,11 +62,11 @@ public class AuthService : IAuthService
             // Atualiza último login
             await _usuarioRepository.UpdateAsync(user);
 
-            // Obtém roles do usuário
-            var roles = new List<string> { user.Perfil.ToString() };
+            // Obtém perfil do usuário
+            var perfil = new List<string> { user.Perfil.ToString() };
 
             // Gera token JWT
-            var token = GenerateJwtToken(user.IdUsuario.ToString(), user.Email, roles);
+            var token = GenerateJwtToken(user.IdUsuario.ToString(), user.Email, perfil);
 
             var loginResponse = new LoginResponse
             {
@@ -78,7 +78,7 @@ public class AuthService : IAuthService
                     Id = user.IdUsuario.ToString(),
                     Name = user.Nome,
                     Email = user.Email,
-                    Perfil = roles
+                    Perfil = user.Perfil
                 }
             };
 
