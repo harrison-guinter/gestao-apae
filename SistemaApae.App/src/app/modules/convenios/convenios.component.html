@@ -1,0 +1,38 @@
+<div class="usuarios-container">
+  <app-filters-container
+    [formGroup]="filtrosForm"
+    (add)="onAdd()"
+    (clear)="onClear()"
+    title="Lista de Convênios"
+  >
+    <app-input
+      label="Nome"
+      formControlName="name"
+      placeholder="Buscar por nome"
+      suffixIcon="search"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-input>
+
+    <app-select
+      label="Status"
+      formControlName="status"
+      [options]="statusOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-select>
+  </app-filters-container>
+
+  <div class="table-section">
+    <app-table
+      [columns]="tableColumns"
+      [data]="convenios"
+      [actions]="tableActions"
+      [showActions]="true"
+      tableClass="convenios-table"
+    >
+    </app-table>
+  </div>
+</div>

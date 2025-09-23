@@ -8,7 +8,7 @@ export class NotificationService {
   success(message: string) {
     this.snackBar.open(message, "", {
       panelClass: ['snackbar-success'],
-      duration: 30000,
+      duration: 300,
       verticalPosition: 'top'
     });
   }
@@ -16,7 +16,7 @@ export class NotificationService {
   fail(message: string) {
     this.snackBar.open(message, "", {
       panelClass: ['snackbar-error'],
-      duration: 30000,
+      duration: 300,
       verticalPosition: 'top'
     });
   }
