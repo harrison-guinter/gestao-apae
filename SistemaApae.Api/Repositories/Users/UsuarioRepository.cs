@@ -128,7 +128,7 @@ public class UsuarioRepository : IUsuarioRepository
                 .Set(x => x.Email, usuario.Email)
                 .Set(x => x.Telefone, usuario.Telefone ?? string.Empty)
                 .Set(x => x.Senha, usuario.Senha)
-                .Set(x => x.Ativo, usuario.Ativo)
+                .Set(x => x.Status, usuario.Status)
                 .Set(x => x.Observacao, usuario.Observacao ?? string.Empty)
                 .Set(x => x.UpdatedAt, usuario.UpdatedAt)
                 .Update();

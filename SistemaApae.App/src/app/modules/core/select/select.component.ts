@@ -23,87 +23,8 @@ export interface SelectOption {
     MatIconModule,
     MatTooltipModule,
   ],
-  template: `
-    <mat-form-field [appearance]="appearance" [class]="cssClass">
-      <mat-label *ngIf="label">{{ label }}</mat-label>
-
-      <mat-select
-        [value]="value"
-        [placeholder]="placeholder"
-        [required]="required"
-        [disabled]="disabled"
-        [multiple]="multiple"
-        (selectionChange)="onSelectionChange($event.value)"
-      >
-        <mat-option
-          *ngFor="let option of options"
-          [value]="option.value"
-          [disabled]="option.disabled"
-        >
-          {{ option.label }}
-        </mat-option>
-      </mat-select>
-
-      <mat-icon
-        matSuffix
-        *ngIf="clearable && hasValue() && !disabled"
-        (click)="onClear()"
-        class="clear-icon"
-        [matTooltip]="clearTooltip"
-      >
-        clear
-      </mat-icon>
-    </mat-form-field>
-  `,
-  styles: [
-    `
-      mat-form-field {
-        width: 100%;
-
-        .clear-icon {
-          cursor: pointer;
-          color: var(--mat-on-surface-variant);
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-          transition: color 0.2s ease;
-
-          &:hover {
-            color: var(--mat-primary-500);
-          }
-        }
-
-        &.field-xs {
-          width: var(--field-width-xs);
-          min-width: var(--field-width-xs);
-        }
-
-        &.field-sm {
-          width: var(--field-width-sm);
-          min-width: var(--field-width-sm);
-        }
-
-        &.field-md {
-          width: var(--field-width-md);
-          min-width: var(--field-width-md);
-        }
-
-        &.field-lg {
-          width: var(--field-width-lg);
-          min-width: var(--field-width-lg);
-        }
-
-        &.field-xl {
-          width: var(--field-width-xl);
-          min-width: var(--field-width-xl);
-        }
-
-        &.field-full {
-          width: var(--field-width-full);
-        }
-      }
-    `,
-  ],
+  templateUrl: './select.component.html',
+  styleUrls: ['./select.component.less'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

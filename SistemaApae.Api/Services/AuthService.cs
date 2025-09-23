@@ -48,7 +48,7 @@ public class AuthService : IAuthService
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
-            if (user == null || !user.Ativo)
+            if (user == null || !user.Status)
             {
                 return ApiResponse<LoginResponse>.ErrorResponse("Credenciais inválidas");
             }
@@ -62,11 +62,11 @@ public class AuthService : IAuthService
             // Atualiza último login
             await _usuarioRepository.UpdateAsync(user);
 
-            // Obtém roles do usuário
-            var roles = new List<string> { user.Perfil.ToString() };
+            // Obtém perfil do usuário
+            var perfil = new List<string> { user.Perfil.ToString() };
 
             // Gera token JWT
-            var token = GenerateJwtToken(user.IdUsuario.ToString(), user.Email, roles);
+            var token = GenerateJwtToken(user.IdUsuario.ToString(), user.Email, perfil);
 
             var loginResponse = new LoginResponse
             {
@@ -78,7 +78,7 @@ public class AuthService : IAuthService
                     Id = user.IdUsuario.ToString(),
                     Name = user.Nome,
                     Email = user.Email,
-                    Roles = roles
+                    Perfil = user.Perfil
                 }
             };
 
@@ -103,7 +103,7 @@ public class AuthService : IAuthService
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
-            if (user != null && user.Ativo)
+            if (user != null && user.Status)
             {
                 // Gera nova senha aleatória
                 var newPassword = GenerateRandomPassword();

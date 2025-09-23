@@ -30,7 +30,7 @@ public class UsuarioService : IUsuarioService
     /// Busca um usuario por e-mail
     /// </summary>
     /// <returns> Usuário do email </returns>
-    public async Task<ApiResponse<Usuario>> GetUserByEmail(string email)
+    public async Task<ApiResponse<UsuarioDto>> GetUserByEmail(string email)
     {
         try
         {
@@ -40,15 +40,15 @@ public class UsuarioService : IUsuarioService
             if (response == null)
             {
                 _logger.LogWarning("Usuário não encontrado por e-mail: {Email}", email);
-                return ApiResponse<Usuario>.ErrorResponse("Usuário não foi encontrado");
+                return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi encontrado");
             }
 
-            return ApiResponse<Usuario>.SuccessResponse(response);
+            return ApiResponse<UsuarioDto>.SuccessResponse(response.ToDto());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao buscar usuário por e-mail: {Email}", email);
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao buscar usuário");
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao buscar usuário");
         }
     }
 
@@ -56,7 +56,7 @@ public class UsuarioService : IUsuarioService
     /// Busca um usuario por id
     /// </summary>
     /// <returns> Usuário do id </returns>
-    public async Task<ApiResponse<Usuario>> GetUserById(Guid id)
+    public async Task<ApiResponse<UsuarioDto>> GetUserById(Guid id)
     {
         try
         {
@@ -66,15 +66,15 @@ public class UsuarioService : IUsuarioService
             if (response == null)
             {
                 _logger.LogWarning("Usuário não encontrado por id: {Id}", id);
-                return ApiResponse<Usuario>.ErrorResponse("Usuário não foi encontrado");
+                return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi encontrado");
             }
 
-            return ApiResponse<Usuario>.SuccessResponse(response);
+            return ApiResponse<UsuarioDto>.SuccessResponse(response.ToDto());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao buscar usuário por id: {Id}", id);
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao buscar usuário");
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao buscar usuário");
         }
     }
 
@@ -82,7 +82,7 @@ public class UsuarioService : IUsuarioService
     /// Lista todos os usuários
     /// </summary>
     /// <returns> Lista de usuários </returns>
-    public async Task<ApiResponse<IEnumerable<Usuario>>> GetAllUsers()
+    public async Task<ApiResponse<IEnumerable<UsuarioDto>>> GetAllUsers()
     {
         try
         {
@@ -92,15 +92,15 @@ public class UsuarioService : IUsuarioService
             if (response == null)
             {
                 _logger.LogWarning("Usuário não encontrados");
-                return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Usuário não foram encontrados");
+                return ApiResponse<IEnumerable<UsuarioDto>>.ErrorResponse("Usuário não foram encontrados");
             }
 
-            return ApiResponse<IEnumerable<Usuario>>.SuccessResponse(response);
+            return ApiResponse<IEnumerable<UsuarioDto>>.SuccessResponse(response.ToDto());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao listar usuários");
-            return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Erro interno ao listar usuários");
+            return ApiResponse<IEnumerable<UsuarioDto>>.ErrorResponse("Erro interno ao listar usuários");
         }
     }
 
@@ -108,7 +108,7 @@ public class UsuarioService : IUsuarioService
     /// Cria um novo usuario
     /// </summary>
     /// <returns> Usuário criado </returns>
-    public async Task<ApiResponse<Usuario>> CreateUser(Usuario user)
+    public async Task<ApiResponse<UsuarioDto>> CreateUser(Usuario user)
     {
         try
         {
@@ -118,22 +118,22 @@ public class UsuarioService : IUsuarioService
             if (response == null)
             {
                 _logger.LogWarning("Usuário não adicionado: {Nome}", user.Nome);
-                return ApiResponse<Usuario>.ErrorResponse("Usuário não foi adicionado");
+                return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi adicionado");
             }
 
-            return ApiResponse<Usuario>.SuccessResponse(response);
+            return ApiResponse<UsuarioDto>.SuccessResponse(response.ToDto());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao adicionar usuário: {Nome}", user.Nome);
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao adicionar usuário");
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao adicionar usuário");
         }
     }
 
     /// <summary>
     /// Atualiza um novo usuario existente
     /// </summary>
-    public async Task<ApiResponse<Usuario>> UpdateUser(Usuario user)
+    public async Task<ApiResponse<UsuarioDto>> UpdateUser(Usuario user)
     {
         try
         {
@@ -143,15 +143,15 @@ public class UsuarioService : IUsuarioService
             if (response == null)
             {
                 _logger.LogWarning("Usuário não atualizado: {Nome}", user.Nome);
-                return ApiResponse<Usuario>.ErrorResponse("Usuário não foi atualizado");
+                return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi atualizado");
             }
 
-            return ApiResponse<Usuario>.SuccessResponse(response);
+            return ApiResponse<UsuarioDto>.SuccessResponse(response.ToDto());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao atualizar usuário: {Nome}", user.Nome);
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao atualizar usuário");
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao atualizar usuário");
         }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Repositories.Users;
 using SistemaApae.Api.Services;
+using SistemaApae.Api.Services.Users;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

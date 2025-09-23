@@ -14,6 +14,7 @@ public class Usuario : BaseModel
     /// <summary>
     /// ID único do usuário
     /// </summary>
+    [PrimaryKey("id_usuario", true)]
     [Column("id_usuario")]
     public Guid IdUsuario { get; set; }
 
@@ -21,7 +22,7 @@ public class Usuario : BaseModel
     /// Nome do usuário
     /// </summary>
     [Required]
-    [MaxLength(50)]
+    [MaxLength(150)]
     [Column("nome")]
     public string Nome { get; set; } = string.Empty;
 
@@ -30,7 +31,7 @@ public class Usuario : BaseModel
     /// </summary>
     [Required]
     [EmailAddress]
-    [MaxLength(50)]
+    [MaxLength(150)]
     [Column("email")]
     public string Email { get; set; } = string.Empty;
 
@@ -57,10 +58,24 @@ public class Usuario : BaseModel
     public PerfilEnum Perfil { get; set; }
 
     /// <summary>
-    /// Indica se o usuário está ativo
+    /// Indica se o usuário está ativo/inativo
     /// </summary>
-    [Column("ativo")]
-    public bool Ativo { get; set; } = true;
+    [Column("status")]
+    public bool Status { get; set; } = true;
+
+    /// <summary>
+    /// Registro profissional
+    /// </summary>
+    [MaxLength(50)]
+    [Column("registro_profissional")]
+    public string? RegistroProfissional { get; set; }
+
+    /// <summary>
+    /// Especialidade do profissional
+    /// </summary>
+    [MaxLength(50)]
+    [Column("especialidade")]
+    public string? Especialidade { get; set; }
 
     /// <summary>
     /// Observações sobre o usuário

@@ -33,8 +33,8 @@ public class Atendimento : BaseModel
     /// <summary>
     /// Status do atendimento
     /// </summary>
-    [Column("status")]
-    public StatusAtendimentoEnum? Status { get; set; }
+    [Column("presenca")]
+    public StatusAtendimentoEnum? Presenca { get; set; }
 
     /// <summary>
     /// Avaliação do atendimento
@@ -49,10 +49,10 @@ public class Atendimento : BaseModel
     public string? Observacao { get; set; }
 
     /// <summary>
-    /// Indica se o atendimento está ativo
+    /// Indica se o atendimento está ativo/inativo
     /// </summary>
-    [Column("ativo")]
-    public bool Ativo { get; set; } = true;
+    [Column("status")]
+    public bool Status { get; set; } = true;
 
     // Navigation properties
     /// <summary>

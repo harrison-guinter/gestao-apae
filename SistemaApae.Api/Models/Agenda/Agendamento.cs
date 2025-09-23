@@ -50,16 +50,10 @@ public class Agendamento : BaseModel
     public string? Observacao { get; set; }
 
     /// <summary>
-    /// Indica se o agendamento está ativo
+    /// Indica se o agendamento está ativo/inativo
     /// </summary>
-    [Column("ativo")]
-    public bool Ativo { get; set; } = true;
-
-    // Navigation properties
-    /// <summary>
-    /// Profissional responsável pelo agendamento
-    /// </summary>
-    public Profissional? Profissional { get; set; }
+    [Column("status")]
+    public bool Status { get; set; } = true;
 
     /// <summary>
     /// Lista de assistidos associados ao agendamento

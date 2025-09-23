@@ -38,7 +38,6 @@ import { Roles } from '../auth/roles.enum';
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
-
   protected perfisUsuario: SelectOption[] = [
     { value: Roles.COORDENADOR, label: 'Coordenador' },
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
@@ -59,11 +58,6 @@ export class UsuariosComponent implements OnInit {
     this.pageInfoService.updatePageInfo('Usuários', 'Gerenciar usuários do sistema');
 
     this.initFiltrosForm();
-    this.aplicarFiltros();
-
-    this.filtrosForm.valueChanges.subscribe(() => {
-      this.aplicarFiltros();
-    });
   }
 
   initFiltrosForm() {
@@ -72,27 +66,6 @@ export class UsuariosComponent implements OnInit {
       email: [''],
       perfil: [''],
       status: [''],
-    });
-  }
-
-  aplicarFiltros(): void {
-    const filtros = this.filtrosForm.value;
-
-    this.usuarios = this.usuarios.filter((usuario) => {
-      const nameMatch =
-        !filtros.name || usuario.name.toLowerCase().includes(filtros.name.toLowerCase());
-
-      const emailMatch =
-        !filtros.email || usuario.email.toLowerCase().includes(filtros.email.toLowerCase());
-
-      const perfilMatch = !filtros.perfil || usuario.perfil === filtros.perfil;
-
-      const statusMatch =
-        !filtros.status ||
-        (filtros.status == true && usuario.ativo) ||
-        (filtros.status == false && !usuario.ativo);
-
-      return nameMatch && emailMatch && perfilMatch && statusMatch;
     });
   }
 

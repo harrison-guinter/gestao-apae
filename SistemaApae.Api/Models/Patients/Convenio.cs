@@ -33,10 +33,10 @@ public class Convenio : BaseModel
     public string Nome { get; set; } = string.Empty;
 
     /// <summary>
-    /// Indica se o convênio está ativo
+    /// Indica se o convênio está ativo/inativo
     /// </summary>
-    [Column("ativo")]
-    public bool Ativo { get; set; } = true;
+    [Column("status")]
+    public bool Status { get; set; } = true;
 
     /// <summary>
     /// Observações sobre o convênio
