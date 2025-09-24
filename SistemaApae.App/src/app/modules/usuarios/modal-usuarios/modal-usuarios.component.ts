@@ -14,7 +14,6 @@ import { BaseModalComponent } from '../../core/base-modal/base-modal.component';
 import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-import { OrgaoClasse } from '../cadastro-usuario.interface';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -36,23 +35,13 @@ export class ModalUsuariosComponent implements OnInit {
   protected formCadastro!: FormGroup;
 
   protected tiposUsuario: SelectOption[] = [
-    { value: 'Coordenador', label: 'Coordenador' },
-    { value: 'Profissional', label: 'Profissional' },
+    { value: 1, label: 'Coordenador' },
+    { value: 2, label: 'Profissional' },
   ];
 
   statusOptions: SelectOption[] = [
-    { value: 'ativo', label: 'Ativo' },
-    { value: 'inativo', label: 'Inativo' },
-  ];
-
-  protected orgaoClasseOptions: SelectOption[] = [
-    { value: OrgaoClasse.CRP, label: 'CRP' },
-    { value: OrgaoClasse.CREFITO, label: 'CREFITO' },
-    { value: OrgaoClasse.CFM, label: 'CFM' },
-    { value: OrgaoClasse.CRO, label: 'CRO' },
-    { value: OrgaoClasse.CRM, label: 'CRM' },
-    { value: OrgaoClasse.COREME, label: 'COREME' },
-    { value: OrgaoClasse.CRN, label: 'CRN' },
+    { value: true, label: 'Ativo' },
+    { value: false, label: 'Inativo' },
   ];
 
   constructor(
@@ -71,14 +60,17 @@ export class ModalUsuariosComponent implements OnInit {
     const object = this.data.element;
     console.log('Elemento recebido no modal:', object);
 
+    const statusDefault = typeof object?.ativo === 'boolean' ? object.ativo : true;
+
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
-      nome: [object?.nome || '', Validators.required],
+      name: [object?.nome || '', Validators.required],
       email: [object?.email || '', [Validators.required, Validators.email]],
-      tipo: [object?.tipo || 'Profissional', Validators.required],
-      status: [object?.status || 'ativo', Validators.required],
+      perfil: [object?.tipo || 2, Validators.required],
       especialidade: [object?.especialidade],
-      orgaoClasse: [object?.orgaoClasse],
+      ativo: [statusDefault, Validators.required],
+      observacoes: [object?.observacoes],
+      telefone: [object?.telefone],
       registroProfissional: [object?.registroProfissional],
     });
   }
