@@ -8,7 +8,7 @@
     <div class="form-row">
       <app-input
         label="Nome"
-        formControlName="nome"
+        formControlName="name"
         placeholder="Digite o nome completo"
         appearance="outline"
         [required]="true"
@@ -16,13 +16,33 @@
     </div>
 
     <div class="form-row">
+      <div class="form-row-half">
+        <app-input
+          label="E-mail"
+          formControlName="email"
+          placeholder="Digite o e-mail"
+          appearance="outline"
+          [required]="true"
+          type="email"
+        ></app-input>
+
+        <app-input
+          label="Telefone (opcional)"
+          formControlName="telefone"
+          placeholder="(99) 99999-9999"
+          appearance="outline"
+          type="tel"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="form-row">
       <app-input
-        label="E-mail"
-        formControlName="email"
-        placeholder="Digite o e-mail"
+        label="Registro Profissional"
+        formControlName="registroProfissional"
+        placeholder="CRM 53241"
         appearance="outline"
-        [required]="true"
-        type="email"
+        cssClass="field-full"
       ></app-input>
     </div>
 
@@ -30,7 +50,7 @@
       <div class="form-row-half">
         <app-select
           label="Tipo"
-          formControlName="tipo"
+          formControlName="perfil"
           [options]="tiposUsuario"
           appearance="outline"
           [required]="true"
@@ -38,7 +58,7 @@
 
         <app-select
           label="Status"
-          formControlName="status"
+          formControlName="ativo"
           [options]="statusOptions"
           appearance="outline"
           [required]="true"
@@ -46,28 +66,30 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="form-row-half">
-        <app-select
-          label="Orgão de Classe"
-          formControlName="orgaoClasse"
-          [options]="orgaoClasseOptions"
-          appearance="outline"
-        ></app-select>
-
-        <app-input
-          label="Registro profissional"
-          formControlName="registroProfissional"
-          placeholder="Digite o registro profissional"
-          appearance="outline"
-          cssClass="field-full"
-        ></app-input>
-      </div>
-    </div>
-    <div class="form-row">
       <app-input
         label="Especialidade"
         formControlName="especialidade"
         placeholder="Digite a especialidade (opcional)"
+        appearance="outline"
+        cssClass="field-full"
+      ></app-input>
+    </div>
+
+    <div class="form-row">
+      <app-input
+        label="Registro Profissional"
+        formControlName="registroProfissional"
+        placeholder="CRM 53241"
+        appearance="outline"
+        cssClass="field-full"
+      ></app-input>
+    </div>
+
+    <div class="form-row">
+      <app-input
+        label="Observações"
+        formControlName="observacoes"
+        placeholder="Observações (opcional)"
         appearance="outline"
         cssClass="field-full"
       ></app-input>

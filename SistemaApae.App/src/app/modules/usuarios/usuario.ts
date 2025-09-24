@@ -5,22 +5,22 @@ export class Usuario {
   name: string;
   email: string;
   perfil: Roles;
-  especialidade?: string;
   ativo: boolean;
+  especialidade?: string;
   observacoes?: string;
-  orgaoClasse?: OrgaoClasse;
   registroProfissional?: string;
+  telefone?: string;
 
   constructor(
     id: string,
     name: string,
     email: string,
     perfil: Roles,
-    especialidade: string,
     ativo: boolean,
+    especialidade?: string,
     observacoes?: string,
-    orgaoClasse?: OrgaoClasse,
-    registroProfissional?: string
+    registroProfissional?: string,
+    telefone?: string
   ) {
     this.id = id;
     this.name = name;
@@ -29,8 +29,8 @@ export class Usuario {
     this.especialidade = especialidade;
     this.ativo = ativo;
     this.observacoes = observacoes;
-    this.orgaoClasse = orgaoClasse;
-    this.registroProfissional = registroProfissional;
+    this.registroProfissional = registroProfissional; // orgão classe + número do registro
+    this.telefone = telefone;
   }
 
   hasRole(role: Roles): boolean {
@@ -50,20 +50,10 @@ export class Usuario {
       jsonParsed.especialidade,
       jsonParsed.ativo,
       jsonParsed.observacoes,
-      jsonParsed.orgaoClasse,
-      jsonParsed.registroProfissional
+      jsonParsed.registroProfissional,
+      jsonParsed.telefone
     );
   }
-}
-
-export enum OrgaoClasse {
-  CRP = 'CRP',
-  CREFITO = 'CREFITO',
-  CFM = 'CFM',
-  CRO = 'CRO',
-  CRM = 'CRM',
-  COREME = 'COREME',
-  CRN = 'CRN',
 }
 
 //apae@apae
