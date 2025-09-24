@@ -1,8 +1,7 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
-  FormBuilder,
   FormGroup,
   Validators,
   UntypedFormBuilder,
@@ -14,10 +13,6 @@ import { BaseModalComponent } from '../../core/base-modal/base-modal.component';
 import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-<<<<<<< HEAD
-import { OrgaoClasse } from '../usuario';
-=======
->>>>>>> 47aa8fb13e2b1dae369ccf07eb37f025ccb6375f
 
 @Component({
   selector: 'app-modal-usuarios',
