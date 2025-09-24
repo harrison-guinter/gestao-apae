@@ -10,8 +10,9 @@
         <app-input
           label="Nome"
           formControlName="nome"
-          placeholder="Digite o nome completo"
+          placeholder="Digite o nome"
           appearance="outline"
+          [required]="true"
         ></app-input>
 
         <app-select
@@ -33,6 +34,14 @@
           [required]="true"
         ></app-select>
       </div>
+    </div>
+    <div class="form-row">
+      <app-input
+        label="Observações"
+        formControlName="observacoes"
+        placeholder="Digite as observações"
+        appearance="outline"
+      ></app-input>
     </div>
   </form>
 </app-base-modal>

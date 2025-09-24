@@ -14,7 +14,7 @@ import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
 import { CidadesService } from '../../cidades/cidades.service';
-import { map, Observable, of } from 'rxjs';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -43,7 +43,7 @@ export class ModalConveniosComponent implements OnInit {
   ];
 
   cidades$ = this.cidadesService.listarCidades().pipe(
-    map(cidades => cidades.map(cidade => ({ value: cidade.id, label: cidade.nome })))
+    map(cidades => cidades.map(cidade => ({ value: cidade.idMunicipio, label: cidade.nome })))
   );
 
   constructor(

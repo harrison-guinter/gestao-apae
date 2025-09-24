@@ -54,6 +54,7 @@ export class SelectComponent implements ControlValueAccessor {
   private onTouched = () => {};
 
   writeValue(value: any): void {
+    console.log('writeValue chamado com:', value);
     this.value = value || '';
   }
 
