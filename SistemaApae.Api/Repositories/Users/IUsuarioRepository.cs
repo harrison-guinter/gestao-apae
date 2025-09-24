@@ -11,40 +11,46 @@ public interface IUsuarioRepository
     /// Busca um usuário por email
     /// </summary>
     /// <param name="email">Email do usuário</param>
-    /// <returns>Usuário encontrado ou null</returns>
+    /// <returns> Usuario do email ou nulo </returns>
     Task<Usuario?> GetByEmailAsync(string email);
 
     /// <summary>
-    /// Busca um usuário por Id
+    /// Lista usuários por filtros de pesquisa
     /// </summary>
-    /// <param name="id">ID do usuário</param>
-    /// <returns>Usuário encontrado ou null</returns>
-    Task<Usuario?> GetByIdAsync(Guid id);
+    /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
+    Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filtros);
+
+    /// <summary>
+    /// Busca um usuário por id
+    /// </summary>
+    /// <param name="idUsuario">ID do usuário</param>
+    /// <returns> Usuario do id ou nulo </returns>
+    Task<Usuario?> GetByIdAsync(Guid idUsuario);
 
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    /// <returns>Lista de usuários</returns>
+    /// <returns> Lista de Usuario </returns>
     Task<IEnumerable<Usuario>> GetAllAsync();
 
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
     /// <param name="usuario">Dados do usuário</param>
-    /// <returns>Usuário criado</returns>
+    /// <returns> Usuario criado </returns>
     Task<Usuario> CreateAsync(Usuario usuario);
 
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
     /// <param name="usuario">Dados do usuário</param>
-    /// <returns>Usuário atualizado</returns>
+    /// <returns> Usuario atualizado </returns>
     Task<Usuario> UpdateAsync(Usuario usuario);
 
     /// <summary>
-    /// Remove um usuário
+    /// Inativa um usuário
     /// </summary>
-    /// <param name="id">ID do usuário</param>
-    /// <returns>True se removido com sucesso</returns>
-    Task<bool> DeleteAsync(Guid id);
+    /// <param name="idUsuario">ID do usuário</param>
+    /// <returns> Usuario inativado </returns>
+    Task<Usuario> DeleteAsync(Guid idUsuario);
 }

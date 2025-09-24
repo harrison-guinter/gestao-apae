@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Supabase.Postgrest.Models;
 using Supabase.Postgrest.Attributes;
 using SistemaApae.Api.Models.Enums;
+using System.Text.Json.Serialization;
 
 namespace SistemaApae.Api.Models.Users;
 
@@ -51,11 +52,25 @@ public class Usuario : BaseModel
     public string Senha { get; set; } = string.Empty;
 
     /// <summary>
-    /// Perfil do usuário
+    /// Perfil usado no código
+    /// </summary>
+    [JsonIgnore]
+    public PerfilEnum Perfil { get; set; }
+
+    /// <summary>
+    /// Perfil do usuário no banco de dados
     /// </summary>
     [Required]
     [Column("perfil")]
-    public PerfilEnum Perfil { get; set; }
+    public string PerfilDb 
+    {
+        get => Perfil.ToString();
+        set 
+        {
+            if (Enum.TryParse<PerfilEnum>(value, out var parsed))
+                Perfil = parsed;
+        }
+    }
 
     /// <summary>
     /// Indica se o usuário está ativo/inativo

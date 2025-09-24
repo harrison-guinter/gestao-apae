@@ -1,3 +1,5 @@
+using SistemaApae.Api.Models.Enums;
+
 namespace SistemaApae.Api.Models.Auth;
 
 /// <summary>
@@ -49,5 +51,5 @@ public class UserInfo
     /// <summary>
     /// Roles/permissões do usuário
     /// </summary>
-    public List<string> Perfil { get; set; } = new();
+    public PerfilEnum Perfil { get; set; } = PerfilEnum.Coordenador;
 }

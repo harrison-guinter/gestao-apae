@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Repositories.Users;
+using SistemaApae.Api.Repositories.Administrative;
 using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Users;
+using SistemaApae.Api.Services.Administrative;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,12 +41,14 @@ if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
 
 // Registrar repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IMunicipioService, MunicipioService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

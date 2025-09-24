@@ -1,11 +1,12 @@
-using Supabase;
+using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
+using Supabase.Postgrest;
 
 namespace SistemaApae.Api.Repositories.Users;
 
 /// <summary>
-/// Repositório de usuários usando Supabase como banco de dados
+/// Repositório de usuários
 /// </summary>
 public class UsuarioRepository : IUsuarioRepository
 {
@@ -26,7 +27,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Busca um usuário por email
     /// </summary>
-    /// <returns> Usuário do email </returns>
+    /// <returns> Usuario do email ou nulo </returns>
     public async Task<Usuario?> GetByEmailAsync(string email)
     {
         try
@@ -41,36 +42,69 @@ public class UsuarioRepository : IUsuarioRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao buscar usuário por email: {Email}", email);
-            return null;
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Lista usuários por filtros de pesquisa
+    /// </summary>
+    /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
+    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filtros)
+    {
+        try
+        {
+            var query = _supabaseService.Client
+                .From<Usuario>()
+                .Where(u => u.Status == filtros.Status)
+                .Select("");
+
+            if (!string.IsNullOrEmpty(filtros.Email))
+                query = query.Filter(u => u.Email, Constants.Operator.ILike, $"%{filtros.Email}%");
+
+            if (!string.IsNullOrEmpty(filtros.Nome))
+                query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
+
+            if (filtros.Perfil != null)
+                query = query.Filter(u => u.Perfil, Constants.Operator.Equals, filtros.Perfil);
+
+            var response = await query.Get();
+
+            return response.Models;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar usuários por filtros");
+            throw;
         }
     }
 
     /// <summary>
     /// Busca um usuário por id
     /// </summary>
-    /// <returns> Usuário do id </returns>
-    public async Task<Usuario?> GetByIdAsync(Guid id)
+    /// <returns> Usuario do id ou nulo </returns>
+    public async Task<Usuario?> GetByIdAsync(Guid idUsuario)
     {
         try
         {
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.IdUsuario == id)
+                .Where(u => u.IdUsuario == idUsuario)
                 .Single();
 
             return usuario;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuário por Id: {Id}", id);
-            return null;
+            _logger.LogError(ex, "Erro ao buscar usuário por Id: {Id}", idUsuario);
+            throw;
         }
     }
 
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    /// <returns> Lista de usuários </returns>
+    /// <returns> Lista de Usuario </returns>
     public async Task<IEnumerable<Usuario>> GetAllAsync()
     {
         try
@@ -84,14 +118,14 @@ public class UsuarioRepository : IUsuarioRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao listar usuários");
-            return new List<Usuario>();
+            throw;
         }
     }
 
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    /// <returns> Usuário criado </returns>
+    /// <returns> Usuario criado </returns>
     public async Task<Usuario> CreateAsync(Usuario usuario)
     {
         try
@@ -115,6 +149,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
+    /// <returns> Usuario atualizado </returns>
     public async Task<Usuario> UpdateAsync(Usuario usuario)
     {
         try
@@ -123,14 +158,14 @@ public class UsuarioRepository : IUsuarioRepository
 
             var response = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(x => x.IdUsuario == usuario.IdUsuario)
-                .Set(x => x.Nome, usuario.Nome)
-                .Set(x => x.Email, usuario.Email)
-                .Set(x => x.Telefone, usuario.Telefone ?? string.Empty)
-                .Set(x => x.Senha, usuario.Senha)
-                .Set(x => x.Status, usuario.Status)
-                .Set(x => x.Observacao, usuario.Observacao ?? string.Empty)
-                .Set(x => x.UpdatedAt, usuario.UpdatedAt)
+                .Where(u => u.IdUsuario == usuario.IdUsuario)
+                .Set(u => u.Nome, usuario.Nome)
+                .Set(u => u.Email, usuario.Email)
+                .Set(u => u.Telefone!, usuario.Telefone ?? string.Empty)
+                .Set(u => u.Senha, usuario.Senha)
+                .Set(u => u.Status, usuario.Status)
+                .Set(u => u.Observacao!, usuario.Observacao ?? string.Empty)
+                .Set(u => u.UpdatedAt, usuario.UpdatedAt)
                 .Update();
 
             return response.Models.First();
@@ -143,23 +178,25 @@ public class UsuarioRepository : IUsuarioRepository
     }
 
     /// <summary>
-    /// Remove um usuário
+    /// Inativa um usuário
     /// </summary>
-    public async Task<bool> DeleteAsync(Guid id)
+    /// <returns> Usuario inativado </returns>
+    public async Task<Usuario> DeleteAsync(Guid idUsuario)
     {
         try
         {
-            await _supabaseService.Client
+            var response = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(x => x.IdUsuario == id)
-                .Delete();
+                .Where(u => u.IdUsuario == idUsuario)
+                .Set(u => u.Status, false)
+                .Update();
 
-            return true;
+            return response.Models.First();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao remover usuário: {Id}", id);
-            return false;
+            _logger.LogError(ex, "Erro ao inativar usuário: {Id}", idUsuario);
+            throw;
         }
     }
 }
