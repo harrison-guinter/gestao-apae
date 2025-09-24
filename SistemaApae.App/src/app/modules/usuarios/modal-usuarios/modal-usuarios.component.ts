@@ -14,7 +14,7 @@ import { BaseModalComponent } from '../../core/base-modal/base-modal.component';
 import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-import { OrgaoClasse } from '../cadastro-usuario.interface';
+import { OrgaoClasse } from '../usuario';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -88,7 +88,7 @@ export class ModalUsuariosComponent implements OnInit {
       this.formCadastro.markAllAsTouched();
       return;
     }
-    console.log('Formulário enviado:', this.formCadastro.value);
+
     if (this.formCadastro.valid) {
       this.dialogRef.close(this.formCadastro.value);
     }

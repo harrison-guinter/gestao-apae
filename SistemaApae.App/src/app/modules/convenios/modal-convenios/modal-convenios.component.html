@@ -1,25 +1,38 @@
 <app-base-modal
-  [modalTitle]="'Novo Usuário'"
+  [modalTitle]="'Novo convênio'"
   [confirmButtonText]="'Salvar'"
   (onConfirmClick)="onConfirm()"
   (onCancelClick)="onCancel()"
 >
   <form [formGroup]="formCadastro" class="convenio-form">
     <div class="form-row">
-      <app-input
-        label="Nome"
-        formControlName="nome"
-        placeholder="Digite o nome completo"
-        appearance="outline"
-      ></app-input>
+      <div class="form-row-half">
+        <app-input
+          label="Nome"
+          formControlName="nome"
+          placeholder="Digite o nome completo"
+          appearance="outline"
+        ></app-input>
 
-    <app-select
-      label="Status"
-      formControlName="status"
-      [options]="statusOptions"
-      appearance="outline"
-    >
-    </app-select>
+        <app-select
+          label="Status"
+          formControlName="status"
+          [options]="statusOptions"
+          appearance="outline"
+          [required]="true"
+        ></app-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-row-half">
+        <app-select
+          label="Cidade"
+          formControlName="cidade"
+          [options]="(cidades$ | async) || []"
+          appearance="outline"
+          [required]="true"
+        ></app-select>
+      </div>
     </div>
   </form>
 </app-base-modal>

@@ -54,7 +54,6 @@ export class UsuariosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Atualizar informações da página
     this.pageInfoService.updatePageInfo('Usuários', 'Gerenciar usuários do sistema');
 
     this.initFiltrosForm();

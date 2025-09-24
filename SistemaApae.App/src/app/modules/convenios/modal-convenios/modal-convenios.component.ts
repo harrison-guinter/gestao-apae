@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -13,6 +13,8 @@ import { BaseModalComponent } from '../../core/base-modal/base-modal.component';
 import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
+import { CidadesService } from '../../cidades/cidades.service';
+import { map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -33,10 +35,16 @@ import { SelectComponent, SelectOption } from '../../core/select/select.componen
 export class ModalConveniosComponent implements OnInit {
   protected formCadastro!: FormGroup;
 
+  private cidadesService: CidadesService = inject(CidadesService);
+
   statusOptions: SelectOption[] = [
     { value: true, label: 'Ativo' },
     { value: false, label: 'Inativo' },
   ];
+
+  cidades$ = this.cidadesService.listarCidades().pipe(
+    map(cidades => cidades.map(cidade => ({ value: cidade.id, label: cidade.nome })))
+  );
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -57,6 +65,8 @@ export class ModalConveniosComponent implements OnInit {
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       status: [object?.status, Validators.required],
+      cidade: [object?.cidade || '', Validators.required],
+      observacoes: [object?.observacoes || ''],
     });
   }
 
@@ -72,7 +82,6 @@ export class ModalConveniosComponent implements OnInit {
   }
 
   onCancel(): void {
-  
-    this.dialogRef.close(null);
+    this.dialogRef.close();
   }
 }
