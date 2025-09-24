@@ -29,20 +29,17 @@ public class UsuarioController : ControllerBase
     }
 
     /// <summary>
-    /// Buscar um usuário por e-mail
+    /// Lista usuários por filtros de pesquisa
     /// </summary>
-    /// <returns> Usuário do email </returns>
-    [HttpGet("search")]
+    /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
+    [HttpGet("filter")]
     [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserByEmail([FromQuery] string email)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
     {
-        if (string.IsNullOrWhiteSpace(email))
-            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
-
-        var result = await _usuarioService.GetUserByEmail(email);
+        var result = await _usuarioService.GetUserByFilters(request);
 
         if (!result.Success)
         {
@@ -58,7 +55,7 @@ public class UsuarioController : ControllerBase
     /// <summary>
     /// Buscar um usuário por id
     /// </summary>
-    /// <returns> Usuário do id </returns>
+    /// <returns> Usuario do id </returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
@@ -85,8 +82,8 @@ public class UsuarioController : ControllerBase
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    /// <returns> Lista de usuários </returns>
-    [HttpGet("all")]
+    /// <returns> Lista de Usuario </returns>
+    [HttpGet]
     [ProducesResponseType(typeof(ApiResponse<IEnumerable<UsuarioDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
@@ -108,12 +105,12 @@ public class UsuarioController : ControllerBase
     /// <summary>
     /// Criar um usuário
     /// </summary>
-    [HttpPost("create"!)]
-    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status201Created)]
+    [HttpPost]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> CreateUser([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<object>>> CreateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -141,12 +138,12 @@ public class UsuarioController : ControllerBase
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
-    [HttpPut("update")]
-    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status201Created)]
+    [HttpPut]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> UpdateUser([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<object>>> UpdateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -163,6 +160,32 @@ public class UsuarioController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("Usuário não foi atualizado"))
+                return NoContent();
+
+            return StatusCode(500, result);
+        }
+
+        return Ok();
+    }
+
+    /// <summary>
+    /// Inativa um usuário existente
+    /// </summary>
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<object>>> DeleteUser([FromBody] Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
+
+        var result = await _usuarioService.DeleteUser(id);
+
+        if (!result.Success)
+        {
+            if (result.Message.Contains("Usuário não foi inativado"))
                 return NoContent();
 
             return StatusCode(500, result);

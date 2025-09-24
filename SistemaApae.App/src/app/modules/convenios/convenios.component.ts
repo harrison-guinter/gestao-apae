@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -13,12 +13,11 @@ import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
 import { ModalService } from '../core/services/modal.service';
-import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
-import { Usuario } from './usuario';
-import { Roles } from '../auth/roles.enum';
+import { Convenio } from './convenio';
+import { ModalConveniosComponent } from './modal-convenios/modal-convenios.component';
 
 @Component({
-  selector: 'app-usuarios',
+  selector: 'app-convenios',
   standalone: true,
   imports: [
     CommonModule,
@@ -34,18 +33,13 @@ import { Roles } from '../auth/roles.enum';
     InputComponent,
     FiltersContainerComponent,
   ],
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.less'],
+  templateUrl: './convenios.component.html',
+  styleUrls: ['./convenios.component.less'],
 })
-export class UsuariosComponent implements OnInit {
-  protected perfisUsuario: SelectOption[] = [
-    { value: Roles.COORDENADOR, label: 'Coordenador' },
-    { value: Roles.PROFISSIONAL, label: 'Profissional' },
-  ];
-
+export class ConveniosComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
-  usuarios: Usuario[] = [];
+  convenios: Convenio[] = [];
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -54,18 +48,15 @@ export class UsuariosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Atualizar informações da página
-    this.pageInfoService.updatePageInfo('Usuários', 'Gerenciar usuários do sistema');
+    this.pageInfoService.updatePageInfo('Convênios', 'Gerenciar convênios do sistema');
 
     this.initFiltrosForm();
   }
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-      name: [''],
-      email: [''],
-      perfil: [''],
-      status: [''],
+        name: [],
+        status: []
     });
   }
 
@@ -74,18 +65,12 @@ export class UsuariosComponent implements OnInit {
   }
 
   onAdd() {
-    this.adicionarUsuario();
+    this.adicionarConvenio();
   }
 
   onClear() {
     this.limparFiltros();
   }
-
-  perfilsUsuario: SelectOption[] = [
-    { value: '', label: 'Todos' },
-    { value: Roles.COORDENADOR, label: 'Coordenador' },
-    { value: Roles.PROFISSIONAL, label: 'Profissional' },
-  ];
 
   statusOptions: SelectOption[] = [
     { value: '', label: 'Todos' },
@@ -95,9 +80,6 @@ export class UsuariosComponent implements OnInit {
 
   tableColumns: TableColumn[] = [
     { key: 'name', label: 'Nome', width: 'large', align: 'left' },
-    { key: 'email', label: 'E-mail', width: 'xlarge', align: 'left' },
-    { key: 'perfil', label: 'Tipo', width: 'medium', align: 'center' },
-    { key: 'status', label: 'Status', width: 'small', align: 'center' },
   ];
 
   tableActions: TableAction[] = [
@@ -105,15 +87,15 @@ export class UsuariosComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Editar',
       color: 'primary',
-      action: (row) => this.editarUsuario(row),
+      action: (row) => this.editarConvenio(row),
     },
   ];
 
-  adicionarUsuario() {
+  adicionarConvenio(): void {
 
     this.modalService
       .openModal({
-        component: ModalUsuariosComponent,
+        component: ModalConveniosComponent,
         width: '60%',
         height: 'auto',
         disableClose: true,
@@ -123,11 +105,10 @@ export class UsuariosComponent implements OnInit {
       .subscribe();
   }
 
-  editarUsuario(element: Usuario) {
-
+  editarConvenio(element: Convenio) {
     this.modalService
       .openModal({
-        component: ModalUsuariosComponent,
+        component: ModalConveniosComponent,
         width: '60%',
         height: 'auto',
         disableClose: true,

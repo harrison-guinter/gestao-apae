@@ -9,27 +9,38 @@ namespace SistemaApae.Api.Services.Users;
 public interface IUsuarioService
 {
     /// <summary>
-    /// Busca um usuário por email
+    /// Lista usuários por filtros de pesquisa
     /// </summary>
-    Task<ApiResponse<UsuarioDto>> GetUserByEmail(string email);
+    /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
+    Task<ApiResponse<IEnumerable<UsuarioDto>>> GetUserByFilters(UsuarioFiltroRequest filters);
 
     /// <summary>
     /// Busca um usuário por Id
     /// </summary>
-    Task<ApiResponse<UsuarioDto>> GetUserById(Guid id);
+    /// <returns> Usuario do id </returns>
+    Task<ApiResponse<UsuarioDto>> GetUserById(Guid idUsuario);
 
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
+    /// <returns> Lista de Usuario </returns>
     Task<ApiResponse<IEnumerable<UsuarioDto>>> GetAllUsers();
 
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
+    /// <returns> Usuario criado </returns>
     Task<ApiResponse<UsuarioDto>> CreateUser(Usuario request);
 
     /// <summary>
     /// Atualiza um novo usuário existente
     /// </summary>
+    /// <returns> Usuario atualizado </returns>
     Task<ApiResponse<UsuarioDto>> UpdateUser(Usuario request);
+
+    /// <summary>
+    /// Inativa um novo usuário existente
+    /// </summary>
+    /// <returns> Usuario inativado </returns>
+    Task<ApiResponse<UsuarioDto>> DeleteUser(Guid idUsuario);
 }

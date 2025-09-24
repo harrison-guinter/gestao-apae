@@ -4,7 +4,7 @@ using SistemaApae.Api.Repositories.Users;
 
 namespace SistemaApae.Api.Services.Users;
 /// <summary>
-/// Serviço de CRUD da entidade Usuario
+/// Serviço de usuários
 /// </summary>
 public class UsuarioService : IUsuarioService
 {
@@ -13,7 +13,7 @@ public class UsuarioService : IUsuarioService
     private readonly ILogger<UsuarioService> _logger;
 
     /// <summary>
-    /// Inicializa uma nova instancia do UsuarioService
+    /// Inicializa uma nova instância do UsuarioService
     /// </summary>
     public UsuarioService(
         IUsuarioRepository usuarioRepository,
@@ -27,45 +27,45 @@ public class UsuarioService : IUsuarioService
     }
 
     /// <summary>
-    /// Busca um usuario por e-mail
+    /// Lista usuários por filtros de pesquisa
     /// </summary>
-    /// <returns> Usuário do email </returns>
-    public async Task<ApiResponse<UsuarioDto>> GetUserByEmail(string email)
+    /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
+    public async Task<ApiResponse<IEnumerable<UsuarioDto>>> GetUserByFilters(UsuarioFiltroRequest filters)
     {
         try
         {
-            // Busca registro na entidade Usuario com parâmetro Email
-            var response = await _usuarioRepository.GetByEmailAsync(email);
+            // Busca registro na entidade Usuario com parâmetros do filtro de pesquisa
+            var response = await _usuarioRepository.GetByFiltersAsync(filters);
 
             if (response == null)
             {
-                _logger.LogWarning("Usuário não encontrado por e-mail: {Email}", email);
-                return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi encontrado");
+                _logger.LogWarning("Usuário não encontrado por filtros de pesquisa");
+                return ApiResponse<IEnumerable<UsuarioDto>>.ErrorResponse("Usuário não foi encontrado");
             }
 
-            return ApiResponse<UsuarioDto>.SuccessResponse(response.ToDto());
+            return ApiResponse<IEnumerable<UsuarioDto>>.SuccessResponse(response.ToDto());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuário por e-mail: {Email}", email);
-            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao buscar usuário");
+            _logger.LogError(ex, "Erro ao buscar usuário por filtros de pesquisa");
+            return ApiResponse<IEnumerable<UsuarioDto>>.ErrorResponse("Erro interno ao buscar usuário");
         }
     }
 
     /// <summary>
-    /// Busca um usuario por id
+    /// Busca um usuário por id
     /// </summary>
-    /// <returns> Usuário do id </returns>
-    public async Task<ApiResponse<UsuarioDto>> GetUserById(Guid id)
+    /// <returns> Usuario do id </returns>
+    public async Task<ApiResponse<UsuarioDto>> GetUserById(Guid idUsuario)
     {
         try
         {
             // Busca registro na entidade Usuario com parâmetro Id
-            var response = await _usuarioRepository.GetByIdAsync(id);
+            var response = await _usuarioRepository.GetByIdAsync(idUsuario);
 
             if (response == null)
             {
-                _logger.LogWarning("Usuário não encontrado por id: {Id}", id);
+                _logger.LogWarning("Usuário não encontrado por id: {Id}", idUsuario);
                 return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi encontrado");
             }
 
@@ -73,7 +73,7 @@ public class UsuarioService : IUsuarioService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuário por id: {Id}", id);
+            _logger.LogError(ex, "Erro ao buscar usuário por id: {Id}", idUsuario);
             return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao buscar usuário");
         }
     }
@@ -81,7 +81,7 @@ public class UsuarioService : IUsuarioService
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
-    /// <returns> Lista de usuários </returns>
+    /// <returns> Lista de Usuario </returns>
     public async Task<ApiResponse<IEnumerable<UsuarioDto>>> GetAllUsers()
     {
         try
@@ -105,9 +105,9 @@ public class UsuarioService : IUsuarioService
     }
 
     /// <summary>
-    /// Cria um novo usuario
+    /// Cria um novo usuário
     /// </summary>
-    /// <returns> Usuário criado </returns>
+    /// <returns> Usuario criado </returns>
     public async Task<ApiResponse<UsuarioDto>> CreateUser(Usuario user)
     {
         try
@@ -131,8 +131,9 @@ public class UsuarioService : IUsuarioService
     }
 
     /// <summary>
-    /// Atualiza um novo usuario existente
+    /// Atualiza um novo usuário existente
     /// </summary>
+    /// <returns> Usuario atualizado </returns>
     public async Task<ApiResponse<UsuarioDto>> UpdateUser(Usuario user)
     {
         try
@@ -152,6 +153,32 @@ public class UsuarioService : IUsuarioService
         {
             _logger.LogError(ex, "Erro ao atualizar usuário: {Nome}", user.Nome);
             return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao atualizar usuário");
+        }
+    }
+
+    /// <summary>
+    /// Inativa um novo usuário existente
+    /// </summary>
+    /// <returns> Usuario inativado </returns>
+    public async Task<ApiResponse<UsuarioDto>> DeleteUser(Guid idUsuario)
+    {
+        try
+        {
+            // Inativa registro existente na entidade Usuario
+            var response = await _usuarioRepository.DeleteAsync(idUsuario);
+
+            if (response == null)
+            {
+                _logger.LogWarning("Usuário não inativado: {Id}", idUsuario);
+                return ApiResponse<UsuarioDto>.ErrorResponse("Usuário não foi inativado");
+            }
+
+            return ApiResponse<UsuarioDto>.SuccessResponse(response.ToDto());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao inativar usuário: {Id}", idUsuario);
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao inativar usuário");
         }
     }
 }

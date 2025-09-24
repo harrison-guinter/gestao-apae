@@ -1,0 +1,25 @@
+<app-base-modal
+  [modalTitle]="'Novo Usuário'"
+  [confirmButtonText]="'Salvar'"
+  (onConfirmClick)="onConfirm()"
+  (onCancelClick)="onCancel()"
+>
+  <form [formGroup]="formCadastro" class="convenio-form">
+    <div class="form-row">
+      <app-input
+        label="Nome"
+        formControlName="nome"
+        placeholder="Digite o nome completo"
+        appearance="outline"
+      ></app-input>
+
+    <app-select
+      label="Status"
+      formControlName="status"
+      [options]="statusOptions"
+      appearance="outline"
+    >
+    </app-select>
+    </div>
+  </form>
+</app-base-modal>

@@ -9,6 +9,7 @@ import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { NoAuthGuard } from './modules/auth/no-auth.guard';
 import { CoordenadorGuard } from './modules/auth/coordenador.guard';
+import { ConveniosComponent } from './modules/convenios/convenios.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,6 +24,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
       { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
+       { path: 'convenios', canActivate: [CoordenadorGuard], component: ConveniosComponent },
     ],
   },
   { path: '**', redirectTo: 'login' },
