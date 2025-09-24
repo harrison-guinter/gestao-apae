@@ -15,13 +15,13 @@ namespace SistemaApae.Api.Controllers.Users;
 public class UsuarioController : ControllerBase
 {
     private readonly ISupabaseService _supabaseService;
-    private readonly ILogger<PublicController> _logger;
+    private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioService _usuarioService;
 
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(ISupabaseService supabaseService, ILogger<PublicController> logger, IUsuarioService usuarioService)
+    public UsuarioController(ISupabaseService supabaseService, ILogger<UsuarioController> logger, IUsuarioService usuarioService)
     {
         _supabaseService = supabaseService;
         _logger = logger;
