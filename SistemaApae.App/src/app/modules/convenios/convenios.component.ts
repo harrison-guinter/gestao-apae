@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,8 @@ import { FiltersContainerComponent } from '../core/filters-container/filters-con
 import { ModalService } from '../core/services/modal.service';
 import { Convenio } from './convenio';
 import { ModalConveniosComponent } from './modal-convenios/modal-convenios.component';
+import { Observable } from 'rxjs';
+import { ConvenioService } from './convenio.service';
 
 @Component({
   selector: 'app-convenios',
@@ -39,7 +41,9 @@ import { ModalConveniosComponent } from './modal-convenios/modal-convenios.compo
 export class ConveniosComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
-  convenios: Convenio[] = [];
+  private convenioService = inject(ConvenioService);
+
+  convenios$: Observable<Convenio[]> = this.convenioService.listarConvenios();
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -79,7 +83,7 @@ export class ConveniosComponent implements OnInit {
   ];
 
   tableColumns: TableColumn[] = [
-    { key: 'name', label: 'Nome', width: 'large', align: 'left' },
+    { key: 'nome', label: 'Nome', width: 'large', align: 'left' },
   ];
 
   tableActions: TableAction[] = [

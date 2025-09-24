@@ -7,6 +7,7 @@
     [required]="required"
     [disabled]="disabled"
     [multiple]="multiple"
+    [compareWith]="compareWith"
     (selectionChange)="onSelectionChange($event.value)"
   >
     <mat-option *ngFor="let option of options" [value]="option.value" [disabled]="option.disabled">

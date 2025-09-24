@@ -48,13 +48,17 @@ export class SelectComponent implements ControlValueAccessor {
   @Output() selectionChange = new EventEmitter<any>();
   @Output() clear = new EventEmitter<void>();
 
+  compareWith = (o1: SelectOption | null, o2: SelectOption | null): boolean => {
+    console.log('Comparing', o1, o2);
+    return o1?.value === o2?.value;
+  };
+
   value: any = '';
 
   private onChange = (value: any) => {};
   private onTouched = () => {};
 
   writeValue(value: any): void {
-    console.log('writeValue chamado com:', value);
     this.value = value || '';
   }
 

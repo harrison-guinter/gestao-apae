@@ -27,7 +27,7 @@
   <div class="table-section">
     <app-table
       [columns]="tableColumns"
-      [data]="convenios"
+      [data]="(convenios$ | async) || []"
       [actions]="tableActions"
       [showActions]="true"
       tableClass="convenios-table"

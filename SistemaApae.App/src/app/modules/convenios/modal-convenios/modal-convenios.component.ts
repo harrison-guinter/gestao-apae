@@ -61,11 +61,13 @@ export class ModalConveniosComponent implements OnInit {
   initFormCadastro() {
     const object = this.data.element;
 
+    console.log('Elemento recebido no modal:', object);
+
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       status: [object?.status, Validators.required],
-      cidade: [object?.cidade || '', Validators.required],
+      cidade: [object?.cidade ? [{value: object.cidade.idMunicipio, label: object.cidade.nome}] : null, Validators.required],
       observacoes: [object?.observacoes || ''],
     });
   }
