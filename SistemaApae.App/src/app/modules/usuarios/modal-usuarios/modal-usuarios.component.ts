@@ -30,8 +30,8 @@ export class ModalUsuariosComponent implements OnInit {
   protected formCadastro!: FormGroup;
 
   protected tiposUsuario: SelectOption[] = [
-    { value: Roles.COORDENADOR, label: 'Coordenador' },
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
+    { value: Roles.COORDENADOR, label: 'Coordenador' },
   ];
 
   statusOptions: SelectOption[] = [
@@ -61,7 +61,7 @@ export class ModalUsuariosComponent implements OnInit {
       idUsuario: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       email: [object?.email || '', [Validators.required, Validators.email]],
-      perfil: [object?.tipo || 2, Validators.required],
+      perfil: [object?.tipo, Validators.required],
       especialidade: [object?.especialidade],
       status: [statusDefault, Validators.required],
       observacao: [object?.observacao],

@@ -39,11 +39,6 @@ import { UsuarioService, UsuarioFiltro } from './usuario.service';
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
-  protected perfisUsuario: SelectOption[] = [
-    { value: Roles.COORDENADOR, label: 'Coordenador' },
-    { value: Roles.PROFISSIONAL, label: 'Profissional' },
-  ];
-
   protected filtrosForm!: UntypedFormGroup;
 
   usuarios: Usuario[] = [];
@@ -104,7 +99,7 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
-  perfilsUsuario: SelectOption[] = [
+  perfisUsuario: SelectOption[] = [
     { value: '', label: 'Todos' },
     { value: Roles.COORDENADOR, label: 'Coordenador' },
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
@@ -119,8 +114,26 @@ export class UsuariosComponent implements OnInit {
   tableColumns: TableColumn[] = [
     { key: 'nome', label: 'Nome', width: 'large', align: 'left' },
     { key: 'email', label: 'E-mail', width: 'xlarge', align: 'left' },
-    { key: 'perfil', label: 'Tipo', width: 'medium', align: 'center' },
-    { key: 'status', label: 'Status', width: 'small', align: 'center' },
+    {
+      key: 'perfil',
+      label: 'Tipo',
+      width: 'medium',
+      align: 'left',
+      getCellValue: (row) =>
+        row.perfil === Roles.PROFISSIONAL
+          ? 'Profissional'
+          : row.perfil === Roles.COORDENADOR
+          ? 'Coordenador'
+          : row.perfil,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      width: 'small',
+      align: 'center',
+      getCellValue: (row) => (row.status ? 'Ativo' : 'Inativo'),
+      getClass: (row) => (row.status ? 'status-ativo' : 'status-inativo'),
+    },
   ];
 
   tableActions: TableAction[] = [
