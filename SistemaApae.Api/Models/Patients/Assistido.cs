@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Supabase.Postgrest.Models;
 using Supabase.Postgrest.Attributes;
 using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Administrative;
 
 namespace SistemaApae.Api.Models.Patients;
 
@@ -49,7 +50,7 @@ public class Assistido : BaseModel
     public Guid? IdConvenio { get; set; }
 
     /// <summary>
-    /// Indica se o assistido está ativo/inativo
+    /// Status do assistido
     /// </summary>
     [Column("status")]
     public bool? Status { get; set; }
@@ -61,70 +62,16 @@ public class Assistido : BaseModel
     public DateOnly? DataCadastro { get; set; }
 
     /// <summary>
-    /// Situação do assistido
-    /// </summary>
-    [Column("situacao")]
-    public SituacaoEnum? Situacao { get; set; }
-
-    /// <summary>
-    /// Área de atendimento do assistido
-    /// </summary>
-    [Column("area_atendimento")]
-    public AreaAtendimentoEnum? AreaAtendimento { get; set; }
-
-    /// <summary>
-    /// RG do assistido
-    /// </summary>
-    [Column("rg")]
-    public string? Rg { get; set; }
-
-    /// <summary>
-    /// Data de emissão do RG
-    /// </summary>
-    [Column("data_emissao_rg")]
-    public DateOnly? DataEmissaoRg { get; set; }
-
-    /// <summary>
-    /// Número da certidão
-    /// </summary>
-    [Column("certidao_numero")]
-    public string? CertidaoNumero { get; set; }
-
-    /// <summary>
-    /// Livro e folha da certidão
-    /// </summary>
-    [Column("certidao_livro_folha")]
-    public string? CertidaoLivroFolha { get; set; }
-
-    /// <summary>
-    /// Cartório da certidão
-    /// </summary>
-    [Column("certidao_cartorio")]
-    public string? CertidaoCartorio { get; set; }
-
-    /// <summary>
     /// Naturalidade do assistido
     /// </summary>
     [Column("naturalidade")]
     public string? Naturalidade { get; set; }
 
     /// <summary>
-    /// Sexo do assistido
+    /// Sexo do assistido (M/F)
     /// </summary>
     [Column("sexo")]
     public SexoEnum? Sexo { get; set; }
-
-    /// <summary>
-    /// Número da carteira PCD
-    /// </summary>
-    [Column("carteira_pcd")]
-    public string? CarteiraPcd { get; set; }
-
-    /// <summary>
-    /// Número do NIS
-    /// </summary>
-    [Column("nis")]
-    public string? Nis { get; set; }
 
     /// <summary>
     /// Tipo de deficiência
@@ -133,22 +80,10 @@ public class Assistido : BaseModel
     public TipoDeficienciaEnum? TipoDeficiencia { get; set; }
 
     /// <summary>
-    /// CID (Classificação Internacional de Doenças)
+    /// CID do assistido
     /// </summary>
     [Column("cid")]
     public string? Cid { get; set; }
-
-    /// <summary>
-    /// CBDF
-    /// </summary>
-    [Column("cbdf")]
-    public string? Cbdf { get; set; }
-
-    /// <summary>
-    /// Informações sobre mobilidade
-    /// </summary>
-    [Column("mobilidade")]
-    public string? Mobilidade { get; set; }
 
     /// <summary>
     /// Indica se faz uso de medicamentos
@@ -163,22 +98,40 @@ public class Assistido : BaseModel
     public string? MedicamentosQuais { get; set; }
 
     /// <summary>
-    /// Alergias do assistido
+    /// Nome do responsável
     /// </summary>
-    [Column("alergias")]
-    public string? Alergias { get; set; }
+    [Column("nome_responsavel")]
+    public string? NomeResponsavel { get; set; }
 
     /// <summary>
-    /// Comorbidades do assistido
+    /// Telefone do responsável
     /// </summary>
-    [Column("comorbidades")]
-    public string? Comorbidades { get; set; }
+    [Column("telefone_responsavel")]
+    public string? TelefoneResponsavel { get; set; }
 
     /// <summary>
-    /// Indica se está liberado para atividade física
+    /// CPF do assistido
     /// </summary>
-    [Column("liberado_atividade_fisica")]
-    public bool? LiberadoAtividadeFisica { get; set; }
+    [Column("cpf")]
+    public string? Cpf { get; set; }
+
+    /// <summary>
+    /// Bairro do endereço
+    /// </summary>
+    [Column("bairro")]
+    public string? Bairro { get; set; }
+
+    /// <summary>
+    /// ID do município
+    /// </summary>
+    [Column("id_municipio")]
+    public Guid? IdMunicipio { get; set; }
+
+    /// <summary>
+    /// CEP do endereço
+    /// </summary>
+    [Column("cep")]
+    public string? Cep { get; set; }
 
     /// <summary>
     /// Nome da mãe
@@ -187,92 +140,241 @@ public class Assistido : BaseModel
     public string? NomeMae { get; set; }
 
     /// <summary>
-    /// CPF da mãe
-    /// </summary>
-    [Column("cpf_mae")]
-    public string? CpfMae { get; set; }
-
-    /// <summary>
-    /// Telefone da mãe
-    /// </summary>
-    [Column("telefone_mae")]
-    public string? TelefoneMae { get; set; }
-
-    /// <summary>
-    /// Email da mãe
-    /// </summary>
-    [Column("email_mae")]
-    public string? EmailMae { get; set; }
-
-    /// <summary>
     /// Nome do pai
     /// </summary>
     [Column("nome_pai")]
     public string? NomePai { get; set; }
 
     /// <summary>
-    /// CPF do pai
+    /// Descrição da demanda
     /// </summary>
-    [Column("cpf_pai")]
-    public string? CpfPai { get; set; }
+    [Column("descricao_demanda")]
+    public string? DescricaoDemanda { get; set; }
 
     /// <summary>
-    /// Telefone do pai
+    /// Benefício de Prestação Continuada (BPC)
     /// </summary>
-    [Column("telefone_pai")]
-    public string? TelefonePai { get; set; }
+    [Column("bpc")]
+    public bool? Bpc { get; set; }
 
     /// <summary>
-    /// Email do pai
+    /// Indica se possui Bolsa Família
     /// </summary>
-    [Column("email_pai")]
-    public string? EmailPai { get; set; }
+    [Column("bolsa_familia")]
+    public bool? BolsaFamilia { get; set; }
 
     /// <summary>
-    /// Nome do responsável legal
+    /// Possui passe livre estadual
     /// </summary>
-    [Column("responsavel_legal_nome")]
-    public string? ResponsavelLegalNome { get; set; }
+    [Column("passe_livre_estadual")]
+    public bool? PasseLivreEstadual { get; set; }
 
     /// <summary>
-    /// CPF do responsável legal
+    /// Possui passe livre municipal
     /// </summary>
-    [Column("responsavel_legal_cpf")]
-    public string? ResponsavelLegalCpf { get; set; }
+    [Column("passe_livre_municipal")]
+    public bool? PasseLivreMunicipal { get; set; }
 
     /// <summary>
-    /// Telefone do responsável legal
+    /// Composição familiar
     /// </summary>
-    [Column("responsavel_legal_telefone")]
-    public string? ResponsavelLegalTelefone { get; set; }
+    [Column("composicao_familiar")]
+    public string? ComposicaoFamiliar { get; set; }
 
     /// <summary>
-    /// Email do responsável legal
+    /// Plano de saúde
     /// </summary>
-    [Column("responsavel_legal_email")]
-    public string? ResponsavelLegalEmail { get; set; }
+    [Column("plano_saude")]
+    public SaudeEnum? PlanoSaude { get; set; }
 
     /// <summary>
-    /// Indica se deseja receber notificações
+    /// Descrição da gestação
     /// </summary>
-    [Column("receber_notificacoes")]
-    public bool ReceberNotificacoes { get; set; } = false;
+    [Column("descricao_gestacao")]
+    public string? DescricaoGestacao { get; set; }
 
     /// <summary>
-    /// Autorização para uso de imagem
+    /// Uso de medicação pela mãe
     /// </summary>
-    [Column("autorizacao_imagem")]
-    public bool AutorizacaoImagem { get; set; } = false;
+    [Column("uso_medicacao_mae")]
+    public string? UsoMedicacaoMae { get; set; }
 
     /// <summary>
-    /// CPF do assistido
+    /// Semanas de gestação
     /// </summary>
-    [Column("cpf")]
-    public string? Cpf { get; set; }
+    [Column("gestacao_semanas")]
+    public short? GestacaoSemanas { get; set; }
+
+    /// <summary>
+    /// Teve internação pós-nascimento
+    /// </summary>
+    [Column("internacao_pos_nascimento")]
+    public bool? InternacaoPosNascimento { get; set; }
+
+    /// <summary>
+    /// Médico responsável
+    /// </summary>
+    [Column("medico_responsavel")]
+    public string? MedicoResponsavel { get; set; }
+
+    /// <summary>
+    /// Exames realizados
+    /// </summary>
+    [Column("exames_realizados")]
+    public string? ExamesRealizados { get; set; }
+
+    /// <summary>
+    /// Doenças físicas
+    /// </summary>
+    [Column("doencas_fisicas")]
+    public string? DoencasFisicas { get; set; }
+
+    /// <summary>
+    /// Qualidade do sono
+    /// </summary>
+    [Column("qualidade_sono")]
+    public string? QualidadeSono { get; set; }
+
+    /// <summary>
+    /// Cirurgias realizadas
+    /// </summary>
+    [Column("cirurgias_realizadas")]
+    public string? CirurgiasRealizadas { get; set; }
+
+    /// <summary>
+    /// Doenças neurológicas
+    /// </summary>
+    [Column("doencas_neurologicas")]
+    public string? DoencasNeurologicas { get; set; }
+
+    /// <summary>
+    /// Histórico familiar de doenças
+    /// </summary>
+    [Column("historico_familiar_doencas")]
+    public string? HistoricoFamiliarDoencas { get; set; }
+
+    /// <summary>
+    /// Características marcantes
+    /// </summary>
+    [Column("caracteristicas_marcantes")]
+    public string? CaracteristicasMarcantes { get; set; }
+
+    /// <summary>
+    /// Boa socialização
+    /// </summary>
+    [Column("boa_socializacao")]
+    public bool? BoaSocializacao { get; set; }
+
+    /// <summary>
+    /// Boa adaptação
+    /// </summary>
+    [Column("boa_adaptacao")]
+    public bool? BoaAdaptacao { get; set; }
+
+    /// <summary>
+    /// Comportamento agressivo
+    /// </summary>
+    [Column("comportamento_agressivo")]
+    public bool? ComportamentoAgressivo { get; set; }
+
+    /// <summary>
+    /// Controle dos esfíncteres
+    /// </summary>
+    [Column("controle_esfincteres")]
+    public bool? ControleEsfincteres { get; set; }
+
+    /// <summary>
+    /// Apego familiar
+    /// </summary>
+    [Column("apego_familiar")]
+    public string? ApegoFamiliar { get; set; }
+
+    /// <summary>
+    /// Atraso em alimentação
+    /// </summary>
+    [Column("atraso_alimentacao")]
+    public bool? AtrasoAlimentacao { get; set; }
+
+    /// <summary>
+    /// Atraso em higiene
+    /// </summary>
+    [Column("atraso_higiene")]
+    public bool? AtrasoHigiene { get; set; }
+
+    /// <summary>
+    /// Atraso em vestuário
+    /// </summary>
+    [Column("atraso_vestuario")]
+    public bool? AtrasoVestuario { get; set; }
+
+    /// <summary>
+    /// Atraso em locomoção
+    /// </summary>
+    [Column("atraso_locomocao")]
+    public bool? AtrasoLocomocao { get; set; }
+
+    /// <summary>
+    /// Atraso em comunicação
+    /// </summary>
+    [Column("atraso_comunicacao")]
+    public bool? AtrasoComunicacao { get; set; }
+
+    /// <summary>
+    /// Possui acompanhamento especializado
+    /// </summary>
+    [Column("acompanhamento_especializado")]
+    public bool? AcompanhamentoEspecializado { get; set; }
+
+    /// <summary>
+    /// Nome da escola
+    /// </summary>
+    [Column("nome_escola")]
+    public string? NomeEscola { get; set; }
+
+    /// <summary>
+    /// Ano escolar
+    /// </summary>
+    [Column("ano_escola")]
+    public string? AnoEscola { get; set; }
+
+    /// <summary>
+    /// Turno escolar
+    /// </summary>
+    [Column("turno_escola")]
+    public TurnoEscolaEnum? TurnoEscola { get; set; }
+
+    /// <summary>
+    /// Pais casados
+    /// </summary>
+    [Column("pais_casados")]
+    public bool? PaisCasados { get; set; }
+
+    /// <summary>
+    /// Paternidade registrada
+    /// </summary>
+    [Column("paternidade_registrada")]
+    public bool? PaternidadeRegistrada { get; set; }
+
+    /// <summary>
+    /// Quem é o responsável pela busca
+    /// </summary>
+    [Column("responsavel_busca")]
+    public string? ResponsavelBusca { get; set; }
+
+    /// <summary>
+    /// Consentimento de uso de imagem
+    /// </summary>
+    [Column("consentimento_imagem")]
+    public bool? ConsentimentoImagem { get; set; }
 
     // Navigation properties
     /// <summary>
     /// Convênio associado ao assistido
     /// </summary>
     public Convenio? Convenio { get; set; }
+
+    /// <summary>
+    /// Município associado ao assistido
+    /// </summary>
+    public Municipio? Municipio { get; set; }
 }
