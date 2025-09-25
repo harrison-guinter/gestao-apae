@@ -12,35 +12,35 @@ public interface IUsuarioService
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    Task<ApiResponse<IEnumerable<UsuarioDto>>> GetUserByFilters(UsuarioFiltroRequest filters);
+    Task<ApiResponse<IEnumerable<Usuario>>> GetUserByFilters(UsuarioFiltroRequest filters);
 
     /// <summary>
     /// Busca um usuário por Id
     /// </summary>
     /// <returns> Usuario do id </returns>
-    Task<ApiResponse<UsuarioDto>> GetUserById(Guid idUsuario);
+    Task<ApiResponse<Usuario>> GetUserById(Guid idUsuario);
 
     /// <summary>
     /// Lista todos os usuários
     /// </summary>
     /// <returns> Lista de Usuario </returns>
-    Task<ApiResponse<IEnumerable<UsuarioDto>>> GetAllUsers();
+    Task<ApiResponse<IEnumerable<Usuario>>> GetAllUsers();
 
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
     /// <returns> Usuario criado </returns>
-    Task<ApiResponse<UsuarioDto>> CreateUser(Usuario request);
+    Task<ApiResponse<Usuario>> CreateUser(Usuario request);
 
     /// <summary>
     /// Atualiza um novo usuário existente
     /// </summary>
     /// <returns> Usuario atualizado </returns>
-    Task<ApiResponse<UsuarioDto>> UpdateUser(Usuario request);
+    Task<ApiResponse<Usuario>> UpdateUser(Usuario request);
 
     /// <summary>
     /// Inativa um novo usuário existente
     /// </summary>
     /// <returns> Usuario inativado </returns>
-    Task<ApiResponse<UsuarioDto>> DeleteUser(Guid idUsuario);
+    Task<ApiResponse<Usuario>> DeleteUser(Guid idUsuario);
 }

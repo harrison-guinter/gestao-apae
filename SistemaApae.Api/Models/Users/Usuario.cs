@@ -10,15 +10,8 @@ namespace SistemaApae.Api.Models.Users;
 /// Modelo de usuário do sistema
 /// </summary>
 [Table("usuario")]
-public class Usuario : BaseModel
+public class Usuario : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do usuário
-    /// </summary>
-    [PrimaryKey("id_usuario", true)]
-    [Column("id_usuario")]
-    public Guid IdUsuario { get; set; }
-
     /// <summary>
     /// Nome do usuário
     /// </summary>
@@ -76,7 +69,7 @@ public class Usuario : BaseModel
     /// Indica se o usuário está ativo/inativo
     /// </summary>
     [Column("status")]
-    public bool Status { get; set; } = true;
+    public StatusEntidadeEnum Status { get; set; }
 
     /// <summary>
     /// Registro profissional

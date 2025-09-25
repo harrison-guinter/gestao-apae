@@ -25,6 +25,6 @@ public class AssistidoFiltroRequest
     /// <summary>
     /// Status do usuário (ativo/inativo)
     /// </summary>
-    public bool Status { get; set; } = true;
+    public StatusEntidadeEnum Status { get; set; }
 }
 

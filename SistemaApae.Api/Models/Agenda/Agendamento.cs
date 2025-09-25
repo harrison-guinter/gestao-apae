@@ -10,13 +10,8 @@ namespace SistemaApae.Api.Models.Agenda;
 /// Modelo de agendamento do sistema
 /// </summary>
 [Table("agendamento")]
-public class Agendamento : BaseModel
+public class Agendamento : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do agendamento
-    /// </summary>
-    [Column("id_agendamento")]
-    public Guid IdAgendamento { get; set; }
 
     /// <summary>
     /// ID do profissional responsável
@@ -53,7 +48,7 @@ public class Agendamento : BaseModel
     /// Indica se o agendamento está ativo/inativo
     /// </summary>
     [Column("status")]
-    public bool Status { get; set; } = true;
+    public StatusEntidadeEnum Status { get; set; }
 
     /// <summary>
     /// Lista de assistidos associados ao agendamento

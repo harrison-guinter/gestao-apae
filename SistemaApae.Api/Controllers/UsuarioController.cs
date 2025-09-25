@@ -33,11 +33,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
     [HttpGet("filter")]
-    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Usuario>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
     {
         var result = await _usuarioService.GetUserByFilters(request);
 
@@ -57,11 +57,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Usuario do id </returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Usuario>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -84,10 +84,10 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Lista de Usuario </returns>
     [HttpGet]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<UsuarioDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Usuario>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<UsuarioDto>>>> GetAllUsers()
+    public async Task<ActionResult<ApiResponse<IEnumerable<Usuario>>>> GetAllUsers()
     {
         var result = await _usuarioService.GetAllUsers();
 

@@ -89,7 +89,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.IdUsuario == idUsuario)
+                .Where(u => u.Id == idUsuario)
                 .Single();
 
             return usuario;
@@ -130,7 +130,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         try
         {
-            usuario.IdUsuario = Guid.NewGuid();
+            usuario.Id = Guid.NewGuid();
             usuario.UpdatedAt = DateTime.UtcNow;
 
             var response = await _supabaseService.Client
@@ -158,7 +158,7 @@ public class UsuarioRepository : IUsuarioRepository
 
             var response = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.IdUsuario == usuario.IdUsuario)
+                .Where(u => u.Id == usuario.Id)
                 .Set(u => u.Nome, usuario.Nome)
                 .Set(u => u.Email, usuario.Email)
                 .Set(u => u.Telefone!, usuario.Telefone ?? string.Empty)
@@ -172,7 +172,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao atualizar usuário: {Id}", usuario.IdUsuario);
+            _logger.LogError(ex, "Erro ao atualizar usuário: {Id}", usuario.Id);
             throw;
         }
     }
@@ -187,7 +187,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             var response = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.IdUsuario == idUsuario)
+                .Where(u => u.Id == idUsuario)
                 .Set(u => u.Status, false)
                 .Update();
 

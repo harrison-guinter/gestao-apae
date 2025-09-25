@@ -18,54 +18,54 @@ public class MunicipioService : IMunicipioService
         _logger = logger;
     }
 
-    public async Task<ApiResponse<IEnumerable<MunicipioDto>>> GetAll()
+    public async Task<ApiResponse<IEnumerable<Municipio>>> GetAll()
     {
         try
         {
             var municipios = await _municipioRepository.GetAllAsync();
             if (municipios == null || !municipios.Any())
-                return ApiResponse<IEnumerable<MunicipioDto>>.ErrorResponse("Municípios não foram encontrados");
+                return ApiResponse<IEnumerable<Municipio>>.ErrorResponse("Municípios não foram encontrados");
 
-            return ApiResponse<IEnumerable<MunicipioDto>>.SuccessResponse(municipios.ToDto());
+            return ApiResponse<IEnumerable<Municipio>>.SuccessResponse(municipios);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao listar municípios");
-            return ApiResponse<IEnumerable<MunicipioDto>>.ErrorResponse("Erro interno ao listar municípios");
+            return ApiResponse<IEnumerable<Municipio>>.ErrorResponse("Erro interno ao listar municípios");
         }
     }
 
-    public async Task<ApiResponse<MunicipioDto>> GetById(Guid id)
+    public async Task<ApiResponse<Municipio>> GetById(Guid id)
     {
         try
         {
             var municipio = await _municipioRepository.GetByIdAsync(id);
             if (municipio == null)
-                return ApiResponse<MunicipioDto>.ErrorResponse("Município não foi encontrado");
+                return ApiResponse<Municipio>.ErrorResponse("Município não foi encontrado");
 
-            return ApiResponse<MunicipioDto>.SuccessResponse(municipio.ToDto());
+            return ApiResponse<Municipio>.SuccessResponse(municipio);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao buscar município por id: {Id}", id);
-            return ApiResponse<MunicipioDto>.ErrorResponse("Erro interno ao buscar município");
+            return ApiResponse<Municipio>.ErrorResponse("Erro interno ao buscar município");
         }
     }
 
-    public async Task<ApiResponse<IEnumerable<MunicipioDto>>> GetByName(string nome)
+    public async Task<ApiResponse<IEnumerable<Municipio>>> GetByName(string nome)
     {
         try
         {
             var municipios = await _municipioRepository.GetByNameAsync(nome);
             if (municipios == null || !municipios.Any())
-                return ApiResponse<IEnumerable<MunicipioDto>>.ErrorResponse("Municípios não foram encontrados");
+                return ApiResponse<IEnumerable<Municipio>>.ErrorResponse("Municípios não foram encontrados");
 
-            return ApiResponse<IEnumerable<MunicipioDto>>.SuccessResponse(municipios.ToDto());
+            return ApiResponse<IEnumerable<Municipio>>.SuccessResponse(municipios);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao buscar municípios por nome: {Nome}", nome);
-            return ApiResponse<IEnumerable<MunicipioDto>>.ErrorResponse("Erro interno ao buscar municípios");
+            return ApiResponse<IEnumerable<Municipio>>.ErrorResponse("Erro interno ao buscar municípios");
         }
     }
 }

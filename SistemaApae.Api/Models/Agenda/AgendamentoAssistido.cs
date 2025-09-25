@@ -9,13 +9,8 @@ namespace SistemaApae.Api.Models.Agenda;
 /// Modelo de relacionamento entre agendamento e assistido (tabela de junção)
 /// </summary>
 [Table("agendamento_assistido")]
-public class AgendamentoAssistido : BaseModel
+public class AgendamentoAssistido : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do relacionamento
-    /// </summary>
-    [Column("id_agendamento_assistido")]
-    public Guid IdAgendamentoAssistido { get; set; }
 
     /// <summary>
     /// ID do agendamento

@@ -5,9 +5,9 @@ namespace SistemaApae.Api.Services.Administrative;
 
 public interface IMunicipioService
 {
-    Task<ApiResponse<IEnumerable<MunicipioDto>>> GetAll();
-    Task<ApiResponse<MunicipioDto>> GetById(Guid id);
-    Task<ApiResponse<IEnumerable<MunicipioDto>>> GetByName(string nome);
+    Task<ApiResponse<IEnumerable<Municipio>>> GetAll();
+    Task<ApiResponse<Municipio>> GetById(Guid id);
+    Task<ApiResponse<IEnumerable<Municipio>>> GetByName(string nome);
 }
 
 

@@ -10,13 +10,8 @@ namespace SistemaApae.Api.Models.Patients;
 /// Modelo de Convênio do sistema
 /// </summary>
 [Table("convenio")]
-public class Convenio : BaseModel
+public class Convenio : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do convênio
-    /// </summary>
-    [Column("id_convenio")]
-    public Guid IdConvenio { get; set; }
 
     /// <summary>
     /// ID do município associado
@@ -36,7 +31,7 @@ public class Convenio : BaseModel
     /// Indica se o convênio está ativo/inativo
     /// </summary>
     [Column("status")]
-    public bool Status { get; set; } = true;
+    public StatusEntidadeEnum Status { get; set; }
 
     /// <summary>
     /// Observações sobre o convênio

@@ -9,13 +9,8 @@ namespace SistemaApae.Api.Models.Agenda;
 /// Modelo de atendimento do sistema
 /// </summary>
 [Table("atendimento")]
-public class Atendimento : BaseModel
+public class Atendimento : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do atendimento
-    /// </summary>
-    [Column("id_atendimento")]
-    public Guid IdAtendimento { get; set; }
 
     /// <summary>
     /// ID do agendamento associado
@@ -52,7 +47,7 @@ public class Atendimento : BaseModel
     /// Indica se o atendimento está ativo/inativo
     /// </summary>
     [Column("status")]
-    public bool Status { get; set; } = true;
+    public StatusEntidadeEnum Status { get; set; }
 
     // Navigation properties
     /// <summary>

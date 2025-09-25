@@ -27,10 +27,10 @@ public class MunicipioController : ControllerBase
     /// </summary>
     /// <returns> Lista de municípios </returns>
     [HttpGet("all")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<MunicipioDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Municipio>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<MunicipioDto>>>> GetAll()
+    public async Task<ActionResult<ApiResponse<IEnumerable<Municipio>>>> GetAll()
     {
         var result = await _municipioService.GetAll();
 
@@ -50,11 +50,11 @@ public class MunicipioController : ControllerBase
     /// </summary>
     /// <returns> Município do id </returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<MunicipioDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Municipio>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<MunicipioDto>>> GetById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<Municipio>>> GetById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -77,11 +77,11 @@ public class MunicipioController : ControllerBase
     /// </summary>
     /// <returns> Lista de municípios que correspondem ao nome informado </returns>
     [HttpGet("search")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<MunicipioDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Municipio>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<MunicipioDto>>>> GetByName([FromQuery] string nome)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Municipio>>>> GetByName([FromQuery] string nome)
     {
         if (string.IsNullOrWhiteSpace(nome))
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));

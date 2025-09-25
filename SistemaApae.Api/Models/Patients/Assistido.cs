@@ -10,13 +10,8 @@ namespace SistemaApae.Api.Models.Patients;
 /// Modelo de assistido do sistema
 /// </summary>
 [Table("assistido")]
-public class Assistido : BaseModel
+public class Assistido : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do assistido
-    /// </summary>
-    [Column("id_assistido")]
-    public Guid IdAssistido { get; set; }
 
     /// <summary>
     /// Nome do assistido
@@ -50,10 +45,10 @@ public class Assistido : BaseModel
     public Guid? IdConvenio { get; set; }
 
     /// <summary>
-    /// Status do assistido
+    /// Status do assistido ativo/inativo
     /// </summary>
     [Column("status")]
-    public bool? Status { get; set; }
+    public StatusEntidadeEnum Status { get; set; }
 
     /// <summary>
     /// Data de cadastro do assistido

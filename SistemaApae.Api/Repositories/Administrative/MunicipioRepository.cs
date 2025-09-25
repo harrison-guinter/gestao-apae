@@ -24,7 +24,7 @@ public class MunicipioRepository : IMunicipioRepository
         {
             var municipio = await _supabaseService.Client
                 .From<Municipio>()
-                .Where(m => m.IdMunicipio == id)
+                .Where(m => m.Id == id)
                 .Single();
 
             return municipio;
