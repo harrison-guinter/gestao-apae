@@ -16,6 +16,7 @@ import { ModalService } from '../core/services/modal.service';
 import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
 import { Usuario } from './usuario';
 import { Roles } from '../auth/roles.enum';
+import { UsuarioService, UsuarioFiltro } from './usuario.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -38,11 +39,6 @@ import { Roles } from '../auth/roles.enum';
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
-  protected perfisUsuario: SelectOption[] = [
-    { value: Roles.COORDENADOR, label: 'Coordenador' },
-    { value: Roles.PROFISSIONAL, label: 'Profissional' },
-  ];
-
   protected filtrosForm!: UntypedFormGroup;
 
   usuarios: Usuario[] = [];
@@ -50,7 +46,8 @@ export class UsuariosComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private usuarioService: UsuarioService
   ) {}
 
   ngOnInit() {
@@ -61,7 +58,7 @@ export class UsuariosComponent implements OnInit {
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-      name: [''],
+      nome: [''],
       email: [''],
       perfil: [''],
       status: [''],
@@ -80,7 +77,29 @@ export class UsuariosComponent implements OnInit {
     this.limparFiltros();
   }
 
-  perfilsUsuario: SelectOption[] = [
+  pesquisarUsuarios() {
+    const filtros: UsuarioFiltro = {
+      nome: this.filtrosForm.get('nome')?.value || undefined,
+      email: this.filtrosForm.get('email')?.value || undefined,
+      perfil: this.filtrosForm.get('perfil')?.value || undefined,
+      status:
+        this.filtrosForm.get('status')?.value !== ''
+          ? this.filtrosForm.get('status')?.value
+          : undefined,
+    };
+
+    this.usuarioService.listarUsuarios(filtros).subscribe({
+      next: (usuarios) => {
+        this.usuarios = usuarios;
+      },
+      error: (error) => {
+        console.error('Erro ao buscar usuários:', error);
+        // Aqui você pode adicionar uma notificação de erro
+      },
+    });
+  }
+
+  perfisUsuario: SelectOption[] = [
     { value: '', label: 'Todos' },
     { value: Roles.COORDENADOR, label: 'Coordenador' },
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
@@ -93,10 +112,28 @@ export class UsuariosComponent implements OnInit {
   ];
 
   tableColumns: TableColumn[] = [
-    { key: 'name', label: 'Nome', width: 'large', align: 'left' },
+    { key: 'nome', label: 'Nome', width: 'large', align: 'left' },
     { key: 'email', label: 'E-mail', width: 'xlarge', align: 'left' },
-    { key: 'perfil', label: 'Tipo', width: 'medium', align: 'center' },
-    { key: 'status', label: 'Status', width: 'small', align: 'center' },
+    {
+      key: 'perfil',
+      label: 'Tipo',
+      width: 'medium',
+      align: 'left',
+      getCellValue: (row) =>
+        row.perfil === Roles.PROFISSIONAL
+          ? 'Profissional'
+          : row.perfil === Roles.COORDENADOR
+          ? 'Coordenador'
+          : row.perfil,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      width: 'small',
+      align: 'center',
+      getCellValue: (row) => (row.status ? 'Ativo' : 'Inativo'),
+      getClass: (row) => (row.status ? 'status-ativo' : 'status-inativo'),
+    },
   ];
 
   tableActions: TableAction[] = [
@@ -109,7 +146,6 @@ export class UsuariosComponent implements OnInit {
   ];
 
   adicionarUsuario() {
-
     this.modalService
       .openModal({
         component: ModalUsuariosComponent,
@@ -123,7 +159,6 @@ export class UsuariosComponent implements OnInit {
   }
 
   editarUsuario(element: Usuario) {
-
     this.modalService
       .openModal({
         component: ModalUsuariosComponent,

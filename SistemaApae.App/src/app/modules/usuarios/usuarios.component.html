@@ -3,11 +3,12 @@
     [formGroup]="filtrosForm"
     (add)="onAdd()"
     (clear)="onClear()"
+    (search)="pesquisarUsuarios()"
     title="Lista de Usuários"
   >
     <app-input
       label="Nome"
-      formControlName="name"
+      formControlName="nome"
       placeholder="Buscar por nome"
       suffixIcon="search"
       appearance="outline"

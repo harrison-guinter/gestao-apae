@@ -1,8 +1,9 @@
 <app-base-modal
-  [modalTitle]="'Novo convênio'"
+  [modalTitle]="'Convênio'"
   [confirmButtonText]="'Salvar'"
   (onConfirmClick)="onConfirm()"
   (onCancelClick)="onCancel()"
+  [isVisualizacao]="data.isVisualizacao"
 >
   <form [formGroup]="formCadastro" class="convenio-form">
     <div class="form-row">

@@ -8,7 +8,7 @@
     <div class="form-row">
       <app-input
         label="Nome"
-        formControlName="name"
+        formControlName="nome"
         placeholder="Digite o nome completo"
         appearance="outline"
         [required]="true"
@@ -37,16 +37,6 @@
     </div>
 
     <div class="form-row">
-      <app-input
-        label="Registro Profissional"
-        formControlName="registroProfissional"
-        placeholder="CRM 53241"
-        appearance="outline"
-        cssClass="field-full"
-      ></app-input>
-    </div>
-
-    <div class="form-row">
       <div class="form-row-half">
         <app-select
           label="Tipo"
@@ -58,12 +48,21 @@
 
         <app-select
           label="Status"
-          formControlName="ativo"
+          formControlName="status"
           [options]="statusOptions"
           appearance="outline"
           [required]="true"
         ></app-select>
       </div>
+    </div>
+    <div class="form-row">
+      <app-input
+        label="Registro Profissional"
+        formControlName="registroProfissional"
+        placeholder="CRM 53241"
+        appearance="outline"
+        cssClass="field-full"
+      ></app-input>
     </div>
     <div class="form-row">
       <app-input
@@ -88,7 +87,7 @@
     <div class="form-row">
       <app-input
         label="Observações"
-        formControlName="observacoes"
+        formControlName="observacao"
         placeholder="Observações (opcional)"
         appearance="outline"
         cssClass="field-full"

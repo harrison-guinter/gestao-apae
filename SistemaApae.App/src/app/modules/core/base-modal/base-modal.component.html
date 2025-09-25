@@ -9,7 +9,7 @@
   <ng-content></ng-content>
 </mat-dialog-content>
 
-<mat-dialog-actions class="modal-actions" align="end">
+<mat-dialog-actions *ngIf="!isVisualizacao" class="modal-actions" align="end">
   <button mat-stroked-button color="primary" (click)="onCancel()" class="cancel-button">
     Cancelar
   </button>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Roles } from '../../auth/roles.enum';
 
 export interface TableColumn {
   key: string;
@@ -11,6 +12,8 @@ export interface TableColumn {
   template?: TemplateRef<any>;
   width?: 'small' | 'medium' | 'large' | 'xlarge' | 'auto';
   align?: 'left' | 'center' | 'right';
+  getClass?: (row: any) => string;
+  getCellValue?: (row: any) => any;
 }
 
 export interface TableAction {

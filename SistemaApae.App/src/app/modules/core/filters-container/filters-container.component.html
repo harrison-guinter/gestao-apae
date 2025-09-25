@@ -23,13 +23,23 @@
         <ng-content></ng-content>
         <div class="action-buttons">
           <button
+            mat-raised-button
+            class="search-button"
+            type="button"
+            (click)="onSearch()"
+            [disabled]="disabled"
+            [matTooltip]="'Pesquisar'"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+          <button
             *ngIf="formGroup.dirty"
             mat-stroked-button
-            color="primary"
             class="clear-button"
             type="button"
             (click)="onClear()"
             [disabled]="disabled"
+            [matTooltip]="'Limpar filtros'"
           >
             <mat-icon>clear</mat-icon>
           </button>

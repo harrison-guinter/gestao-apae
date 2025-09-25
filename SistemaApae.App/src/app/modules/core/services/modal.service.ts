@@ -10,12 +10,14 @@ export interface ModalConfig {
   maxHeight?: string;
   element?: any;
   data?: any;
+  isVisualizacao?: boolean;
   disableClose?: boolean;
 }
 
 export interface ModalData {
   element?: any;
   data?: any;
+  isVisualizacao?: boolean;
 }
 
 @Injectable({
@@ -25,7 +27,6 @@ export class ModalService {
   constructor(private dialog: MatDialog) {}
 
   openModal<T = any, R = any>(config: ModalConfig): Observable<R | undefined> {
-    console.log('config', config);
     const dialogConfig: MatDialogConfig = {
       width: config.width || '50%',
       height: config.height || 'auto',
@@ -33,6 +34,7 @@ export class ModalService {
       maxHeight: config.maxHeight || '90vh',
       disableClose: config.disableClose || false,
       data: {
+        isVisualizacao: config.isVisualizacao || false,
         element: config.element,
         data: config.data,
       } as ModalData,

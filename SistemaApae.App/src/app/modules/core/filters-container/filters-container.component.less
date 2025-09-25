@@ -59,27 +59,53 @@
   .filters-fields {
     display: flex;
     align-items: center;
-    gap: 16px;
     flex-wrap: wrap;
 
     .action-buttons {
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      gap: 8px;
 
+      .search-button,
       .clear-button {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        padding: 8px;
+        padding: 0;
         height: 40px;
         width: 40px;
+        min-width: 40px;
         border-radius: 8px;
-        background-color: transparent !important;
+        margin-bottom: 25px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          color: inherit;
+        }
+      }
+
+      .search-button {
+        background-color: var(--mat-primary-500) !important;
+        color: white !important;
+        border: none !important;
+
+        &:hover {
+          background-color: var(--mat-primary-600) !important;
+        }
+
+        &:disabled {
+          background-color: var(--mat-on-surface-variant) !important;
+          color: var(--mat-surface) !important;
+        }
+      }
+
+      .clear-button {
+        background-color: white !important;
         border: 2px solid var(--mat-primary-500) !important;
         color: var(--mat-primary-500) !important;
-        margin-bottom: 25px;
 
         &:hover {
           background-color: var(--mat-primary-50) !important;
@@ -88,22 +114,9 @@
         }
 
         &:disabled {
-          background-color: transparent !important;
+          background-color: white !important;
           border-color: var(--mat-on-surface-variant) !important;
           color: var(--mat-on-surface-variant) !important;
-        }
-
-        mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-          color: inherit;
-        }
-
-        span {
-          font-size: 14px;
-          font-weight: 500;
-          color: inherit;
         }
       }
     }
@@ -118,4 +131,12 @@
   background-color: var(--mat-surface);
   box-shadow: var(--elevation-1);
   border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mat-mdc-raised-button > .mat-icon {
+  margin: 0 !important;
+}
+
+.mat-mdc-outlined-button > .mat-icon {
+  margin: 0 !important;
 }
