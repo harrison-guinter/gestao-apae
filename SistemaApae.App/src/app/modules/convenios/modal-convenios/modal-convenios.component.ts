@@ -61,8 +61,6 @@ export class ModalConveniosComponent implements OnInit {
   initFormCadastro() {
     const object = this.data.element;
 
-    console.log('Elemento recebido no modal:', object);
-
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
@@ -70,6 +68,10 @@ export class ModalConveniosComponent implements OnInit {
       cidade: [object?.cidade ? [{value: object.cidade.idMunicipio, label: object.cidade.nome}] : null, Validators.required],
       observacoes: [object?.observacoes || ''],
     });
+
+    if (this.data.isVisualizacao) {
+      this.formCadastro.disable();
+    }
   }
 
   onConfirm(): void {

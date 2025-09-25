@@ -17,6 +17,7 @@ import { Convenio } from './convenio';
 import { ModalConveniosComponent } from './modal-convenios/modal-convenios.component';
 import { Observable } from 'rxjs';
 import { ConvenioService } from './convenio.service';
+import { Usuario } from '../usuarios/usuario';
 
 @Component({
   selector: 'app-convenios',
@@ -93,6 +94,12 @@ export class ConveniosComponent implements OnInit {
       color: 'primary',
       action: (row) => this.editarConvenio(row),
     },
+     {
+      icon: 'visibility',
+      tooltip: 'Visualizar',
+      color: 'primary',
+      action: (row) => this.visualizarConvenio(row),
+    },
   ];
 
   adicionarConvenio(): void {
@@ -118,6 +125,20 @@ export class ConveniosComponent implements OnInit {
         disableClose: true,
         data: { isEdit: true },
         element: element,
+      })
+      .subscribe();
+  }
+
+  visualizarConvenio(element: Convenio) {
+    this.modalService
+      .openModal({
+        component: ModalConveniosComponent,
+        width: '60%',
+        height: 'auto',
+        disableClose: true,
+        data: { isEdit: true },
+        element: element,
+        isVisualizacao: true
       })
       .subscribe();
   }

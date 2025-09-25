@@ -24,6 +24,7 @@ export class BaseModalComponent implements OnInit {
   @Input() modalTitle!: string;
   @Input() confirmButtonText: string = 'Confirmar';
   @Input() formInvalid: boolean = false;
+  @Input() isVisualizacao?: boolean = false;
 
   @Output() onConfirmClick = new EventEmitter<void>();
   @Output() onCancelClick = new EventEmitter<void>();
