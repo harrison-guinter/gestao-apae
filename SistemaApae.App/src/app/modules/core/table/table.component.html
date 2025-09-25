@@ -9,7 +9,7 @@
           <ng-container *ngIf="hasCustomTemplate(column.key); else defaultCell">
             <ng-container [ngSwitch]="column.key">
               <span
-                *ngSwitchCase="'tipo'"
+                *ngSwitchCase="'perfil'"
                 class="type-badge"
                 [class.coordenador]="getCellValue(row, column) === 'Coordenador'"
                 [class.profissional]="getCellValue(row, column) === 'Profissional'"

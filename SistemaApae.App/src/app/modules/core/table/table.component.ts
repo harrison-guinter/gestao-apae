@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Roles } from '../../auth/roles.enum';
 
 export interface TableColumn {
   key: string;
@@ -58,6 +59,12 @@ export class TableComponent {
   }
 
   getCellValue(row: any, column: TableColumn): any {
+    console.log('Getting cell value for column:', column.key, 'Row:', row);
+    if (column.key === 'perfil') {
+      if (row.perfil === Roles.PROFISSIONAL) return 'Profissional';
+      if (row.perfil === Roles.COORDENADOR) return 'Coordenador';
+      return row.perfil;
+    }
     return this.getNestedProperty(row, column.key);
   }
 

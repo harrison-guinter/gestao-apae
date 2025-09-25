@@ -1,34 +1,34 @@
 import { Roles } from '../auth/roles.enum';
 
 export class Usuario {
-  id: string;
-  name: string;
+  idUsuario: string;
+  nome: string;
   email: string;
   perfil: Roles;
-  ativo: boolean;
+  status: boolean;
   especialidade?: string;
-  observacoes?: string;
+  observacao?: string;
   registroProfissional?: string;
   telefone?: string;
 
   constructor(
-    id: string,
-    name: string,
+    idUsuario: string,
+    nome: string,
     email: string,
     perfil: Roles,
-    ativo: boolean,
+    status: boolean,
     especialidade?: string,
-    observacoes?: string,
+    observacao?: string,
     registroProfissional?: string,
     telefone?: string
   ) {
-    this.id = id;
-    this.name = name;
+    this.idUsuario = idUsuario;
+    this.nome = nome;
     this.email = email;
     this.perfil = perfil;
     this.especialidade = especialidade;
-    this.ativo = ativo;
-    this.observacoes = observacoes;
+    this.status = status;
+    this.observacao = observacao;
     this.registroProfissional = registroProfissional; // orgão classe + número do registro
     this.telefone = telefone;
   }
@@ -49,7 +49,7 @@ export class Usuario {
       jsonParsed.roles,
       jsonParsed.especialidade,
       jsonParsed.ativo,
-      jsonParsed.observacoes,
+      jsonParsed.observacao,
       jsonParsed.registroProfissional,
       jsonParsed.telefone
     );

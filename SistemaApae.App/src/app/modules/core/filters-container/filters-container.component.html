@@ -23,6 +23,17 @@
         <ng-content></ng-content>
         <div class="action-buttons">
           <button
+            mat-raised-button
+            color="primary"
+            class="search-button"
+            type="button"
+            (click)="onSearch()"
+            [disabled]="disabled"
+          >
+            <mat-icon>search</mat-icon>
+            <span>Pesquisar</span>
+          </button>
+          <button
             *ngIf="formGroup.dirty"
             mat-stroked-button
             color="primary"

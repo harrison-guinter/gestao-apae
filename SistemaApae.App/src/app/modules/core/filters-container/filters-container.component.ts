@@ -30,6 +30,7 @@ export class FiltersContainerComponent {
 
   @Output() clear = new EventEmitter<void>();
   @Output() add = new EventEmitter<void>();
+  @Output() search = new EventEmitter<void>();
 
   onClear(): void {
     this.clear.emit();
@@ -37,5 +38,9 @@ export class FiltersContainerComponent {
 
   onAdd(): void {
     this.add.emit();
+  }
+
+  onSearch(): void {
+    this.search.emit();
   }
 }
