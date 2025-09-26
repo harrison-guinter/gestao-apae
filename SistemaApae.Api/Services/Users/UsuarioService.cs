@@ -155,30 +155,4 @@ public class UsuarioService : IUsuarioService
             return ApiResponse<Usuario>.ErrorResponse("Erro interno ao atualizar usuário");
         }
     }
-
-    /// <summary>
-    /// Inativa um novo usuário existente
-    /// </summary>
-    /// <returns> Usuario inativado </returns>
-    public async Task<ApiResponse<Usuario>> DeleteUser(Guid idUsuario)
-    {
-        try
-        {
-            // Inativa registro existente na entidade Usuario
-            var response = await _usuarioRepository.DeleteAsync(idUsuario);
-
-            if (response == null)
-            {
-                _logger.LogWarning("Usuário não inativado: {Id}", idUsuario);
-                return ApiResponse<Usuario>.ErrorResponse("Usuário não foi inativado");
-            }
-
-            return ApiResponse<Usuario>.SuccessResponse(response);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao inativar usuário: {Id}", idUsuario);
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao inativar usuário");
-        }
-    }
 }

@@ -37,10 +37,4 @@ public interface IUsuarioService
     /// </summary>
     /// <returns> Usuario atualizado </returns>
     Task<ApiResponse<Usuario>> UpdateUser(Usuario request);
-
-    /// <summary>
-    /// Inativa um novo usuário existente
-    /// </summary>
-    /// <returns> Usuario inativado </returns>
-    Task<ApiResponse<Usuario>> DeleteUser(Guid idUsuario);
 }

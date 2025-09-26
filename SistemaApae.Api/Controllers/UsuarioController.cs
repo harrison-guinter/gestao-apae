@@ -167,30 +167,4 @@ public class UsuarioController : ControllerBase
 
         return Ok();
     }
-
-    /// <summary>
-    /// Inativa um usuário existente
-    /// </summary>
-    [HttpPut("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> DeleteUser([FromBody] Guid id)
-    {
-        if (id == Guid.Empty)
-            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
-
-        var result = await _usuarioService.DeleteUser(id);
-
-        if (!result.Success)
-        {
-            if (result.Message.Contains("Usuário não foi inativado"))
-                return NoContent();
-
-            return StatusCode(500, result);
-        }
-
-        return Ok();
-    }
 }

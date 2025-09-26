@@ -66,7 +66,10 @@ public class UsuarioRepository : IUsuarioRepository
                 query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
 
             if (filtros.Perfil != null)
-                query = query.Filter(u => u.Perfil, Constants.Operator.Equals, filtros.Perfil);
+            {
+                var perfilDb = filtros.Perfil.ToString(); 
+                query = query.Where(u => u.Perfil == filtros.Perfil);
+            }
 
             var response = await query.Get();
 
@@ -159,43 +162,13 @@ public class UsuarioRepository : IUsuarioRepository
             var response = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.Id == usuario.Id)
-                .Set(u => u.Nome, usuario.Nome)
-                .Set(u => u.Email, usuario.Email)
-                .Set(u => u.Telefone!, usuario.Telefone ?? string.Empty)
-                .Set(u => u.Senha, usuario.Senha)
-                .Set(u => u.Status, usuario.Status)
-                .Set(u => u.Observacao!, usuario.Observacao ?? string.Empty)
-                .Set(u => u.UpdatedAt, usuario.UpdatedAt)
-                .Update();
+                .Update(usuario);
 
             return response.Models.First();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao atualizar usuário: {Id}", usuario.Id);
-            throw;
-        }
-    }
-
-    /// <summary>
-    /// Inativa um usuário
-    /// </summary>
-    /// <returns> Usuario inativado </returns>
-    public async Task<Usuario> DeleteAsync(Guid idUsuario)
-    {
-        try
-        {
-            var response = await _supabaseService.Client
-                .From<Usuario>()
-                .Where(u => u.Id == idUsuario)
-                .Set(u => u.Status, false)
-                .Update();
-
-            return response.Models.First();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao inativar usuário: {Id}", idUsuario);
             throw;
         }
     }

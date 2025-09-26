@@ -46,11 +46,4 @@ public interface IUsuarioRepository
     /// <param name="usuario">Dados do usuário</param>
     /// <returns> Usuario atualizado </returns>
     Task<Usuario> UpdateAsync(Usuario usuario);
-
-    /// <summary>
-    /// Inativa um usuário
-    /// </summary>
-    /// <param name="idUsuario">ID do usuário</param>
-    /// <returns> Usuario inativado </returns>
-    Task<Usuario> DeleteAsync(Guid idUsuario);
 }

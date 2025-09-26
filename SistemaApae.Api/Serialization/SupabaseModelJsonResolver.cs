@@ -1,10 +1,6 @@
+using Supabase.Postgrest.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
-using Supabase.Postgrest.Models;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SistemaApae.Api.Serialization;
 

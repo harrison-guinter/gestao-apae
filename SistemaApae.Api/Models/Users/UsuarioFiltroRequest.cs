@@ -25,6 +25,6 @@ public class UsuarioFiltroRequest
     /// <summary>
     /// Status do usuário (ativo/inativo)
     /// </summary>
-    public StatusEntidadeEnum Status { get; set; }
+    public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.ATIVO;
 }
 
