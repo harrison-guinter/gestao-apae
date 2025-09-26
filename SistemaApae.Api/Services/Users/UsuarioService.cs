@@ -112,6 +112,8 @@ public class UsuarioService : IUsuarioService
     {
         try
         {
+            user.Senha = BCrypt.Net.BCrypt.HashPassword(user.Senha);
+
             // Insere novo registro na entidade Usuario
             var response = await _usuarioRepository.CreateAsync(user);
 
