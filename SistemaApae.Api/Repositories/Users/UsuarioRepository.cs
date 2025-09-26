@@ -66,10 +66,7 @@ public class UsuarioRepository : IUsuarioRepository
                 query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
 
             if (filtros.Perfil != null)
-            {
-                var perfilDb = filtros.Perfil.ToString(); 
                 query = query.Where(u => u.Perfil == filtros.Perfil);
-            }
 
             var response = await query.Get();
 
