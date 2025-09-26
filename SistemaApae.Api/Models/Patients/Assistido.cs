@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using Supabase.Postgrest.Models;
-using Supabase.Postgrest.Attributes;
-using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Administrative;
+using SistemaApae.Api.Models.Agreements;
+using SistemaApae.Api.Models.Enums;
+using Supabase.Postgrest.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaApae.Api.Models.Patients;
 

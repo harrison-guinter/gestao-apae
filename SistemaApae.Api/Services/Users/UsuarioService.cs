@@ -37,7 +37,7 @@ public class UsuarioService : IUsuarioService
             // Busca registro na entidade Usuario com parâmetros do filtro de pesquisa
             var response = await _usuarioRepository.GetByFiltersAsync(filters);
 
-            if (response == null)
+            if (!response.Any())
             {
                 _logger.LogWarning("Usuário não encontrado por filtros de pesquisa");
                 return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Usuário não foi encontrado");
@@ -86,13 +86,13 @@ public class UsuarioService : IUsuarioService
     {
         try
         {
-            // Busca todos os registro na entidade Usuario
+            // Busca todos os registros na entidade Usuario
             var response = await _usuarioRepository.GetAllAsync();
 
-            if (response == null)
+            if (!response.Any())
             {
-                _logger.LogWarning("Usuário não encontrados");
-                return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Usuário não foram encontrados");
+                _logger.LogWarning("Usuários não encontrados");
+                return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Usuários não foram encontrados");
             }
 
             return ApiResponse<IEnumerable<Usuario>>.SuccessResponse(response);

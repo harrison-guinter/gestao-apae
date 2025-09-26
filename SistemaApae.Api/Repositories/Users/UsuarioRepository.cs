@@ -50,23 +50,23 @@ public class UsuarioRepository : IUsuarioRepository
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filtros)
+    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filters)
     {
         try
         {
             var query = _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.Status == filtros.Status)
+                .Where(u => u.Status == filters.Status)
                 .Select("");
 
-            if (!string.IsNullOrEmpty(filtros.Email))
-                query = query.Filter(u => u.Email, Constants.Operator.ILike, $"%{filtros.Email}%");
+            if (!string.IsNullOrEmpty(filters.Email))
+                query = query.Filter(u => u.Email, Constants.Operator.ILike, $"%{filters.Email}%");
 
-            if (!string.IsNullOrEmpty(filtros.Nome))
-                query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
+            if (!string.IsNullOrEmpty(filters.Nome))
+                query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filters.Nome}%");
 
-            if (filtros.Perfil != null)
-                query = query.Where(u => u.Perfil == filtros.Perfil);
+            if (filters.Perfil != null)
+                query = query.Where(u => u.Perfil == filters.Perfil);
 
             var response = await query.Get();
 
@@ -83,20 +83,20 @@ public class UsuarioRepository : IUsuarioRepository
     /// Busca um usuário por id
     /// </summary>
     /// <returns> Usuario do id ou nulo </returns>
-    public async Task<Usuario?> GetByIdAsync(Guid idUsuario)
+    public async Task<Usuario?> GetByIdAsync(Guid idUser)
     {
         try
         {
             var usuario = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.Id == idUsuario)
+                .Where(u => u.Id == idUser)
                 .Single();
 
             return usuario;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuário por Id: {Id}", idUsuario);
+            _logger.LogError(ex, "Erro ao buscar usuário por Id: {Id}", idUser);
             throw;
         }
     }
@@ -126,22 +126,22 @@ public class UsuarioRepository : IUsuarioRepository
     /// Cria um novo usuário
     /// </summary>
     /// <returns> Usuario criado </returns>
-    public async Task<Usuario> CreateAsync(Usuario usuario)
+    public async Task<Usuario> CreateAsync(Usuario user)
     {
         try
         {
-            usuario.Id = Guid.NewGuid();
-            usuario.UpdatedAt = DateTime.UtcNow;
+            user.Id = Guid.NewGuid();
+            user.UpdatedAt = DateTime.UtcNow;
 
             var response = await _supabaseService.Client
                 .From<Usuario>()
-                .Insert(usuario);
+                .Insert(user);
 
             return response.Models.First();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao criar usuário: {Email}", usuario.Email);
+            _logger.LogError(ex, "Erro ao criar usuário: {Id}", user.Id);
             throw;
         }
     }
@@ -150,22 +150,22 @@ public class UsuarioRepository : IUsuarioRepository
     /// Atualiza um usuário existente
     /// </summary>
     /// <returns> Usuario atualizado </returns>
-    public async Task<Usuario> UpdateAsync(Usuario usuario)
+    public async Task<Usuario> UpdateAsync(Usuario user)
     {
         try
         {
-            usuario.UpdatedAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.UtcNow;
 
             var response = await _supabaseService.Client
                 .From<Usuario>()
-                .Where(u => u.Id == usuario.Id)
-                .Update(usuario);
+                .Where(u => u.Id == user.Id)
+                .Update(user);
 
             return response.Models.First();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao atualizar usuário: {Id}", usuario.Id);
+            _logger.LogError(ex, "Erro ao atualizar usuário: {Id}", user.Id);
             throw;
         }
     }

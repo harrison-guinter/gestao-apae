@@ -1,10 +1,12 @@
-using System.ComponentModel.DataAnnotations;
-using Supabase.Postgrest.Models;
-using Supabase.Postgrest.Attributes;
-using SistemaApae.Api.Models.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SistemaApae.Api.Models.Administrative;
+using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Patients;
+using Supabase.Postgrest.Attributes;
+using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Patients;
+namespace SistemaApae.Api.Models.Agreements;
 
 /// <summary>
 /// Modelo de Convênio do sistema
@@ -12,7 +14,6 @@ namespace SistemaApae.Api.Models.Patients;
 [Table("convenio")]
 public class Convenio : ApiBaseModel
 {
-
     /// <summary>
     /// ID do município associado
     /// </summary>
@@ -31,7 +32,8 @@ public class Convenio : ApiBaseModel
     /// Indica se o convênio está ativo/inativo
     /// </summary>
     [Column("status")]
-    public StatusEntidadeEnum Status { get; set; }
+    [JsonConverter(typeof(StringEnumConverter))]
+    public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.ATIVO;
 
     /// <summary>
     /// Observações sobre o convênio
@@ -42,17 +44,18 @@ public class Convenio : ApiBaseModel
     /// <summary>
     /// Tipo do convênio CAS
     /// </summary>
-    [Column("tipo_convenio")]
+    [Column("tipo_convenio_cas")]
+    [JsonConverter(typeof(StringEnumConverter))]
     public TipoConvenioEnum? TipoConvenio { get; set; }
 
-    // Navigation properties
-    /// <summary>
-    /// Município associado
-    /// </summary>
-    public Municipio? Municipio { get; set; }
+    //// Navigation properties
+    ///// <summary>
+    ///// Município associado
+    ///// </summary>
+    //public Municipio? Municipio { get; set; }
 
-    /// <summary>
-    /// Lista de assistidos associados
-    /// </summary>
-    public List<Assistido>? Assistidos { get; set; }
+    ///// <summary>
+    ///// Lista de assistidos associados
+    ///// </summary>
+    //public List<Assistido>? Assistidos { get; set; }
 }

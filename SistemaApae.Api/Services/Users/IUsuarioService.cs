@@ -30,11 +30,11 @@ public interface IUsuarioService
     /// Cria um novo usuário
     /// </summary>
     /// <returns> Usuario criado </returns>
-    Task<ApiResponse<Usuario>> CreateUser(Usuario request);
+    Task<ApiResponse<Usuario>> CreateUser(Usuario user);
 
     /// <summary>
     /// Atualiza um novo usuário existente
     /// </summary>
     /// <returns> Usuario atualizado </returns>
-    Task<ApiResponse<Usuario>> UpdateUser(Usuario request);
+    Task<ApiResponse<Usuario>> UpdateUser(Usuario user);
 }

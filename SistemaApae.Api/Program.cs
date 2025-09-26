@@ -8,6 +8,8 @@ using SistemaApae.Api.Services.Administrative;
 using System.Text;
 using System.Text.Json.Serialization;
 using SistemaApae.Api.Serialization;
+using SistemaApae.Api.Repositories.Agreements;
+using SistemaApae.Api.Services.Agreements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,13 +46,14 @@ if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
 // Registrar repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
+builder.Services.AddScoped<IConvenioRepository, ConvenioRepository>();
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IMunicipioService, MunicipioService>();
+builder.Services.AddScoped<IConvenioService, ConvenioService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
