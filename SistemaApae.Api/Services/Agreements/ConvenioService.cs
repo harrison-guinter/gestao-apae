@@ -28,6 +28,32 @@ public class ConvenioService : IConvenioService
     }
 
     /// <summary>
+    /// Lista convênios por filtros de pesquisa
+    /// </summary>
+    /// <returns> Lista de Convenio dos filtros de pesquisa </returns>
+    public async Task<ApiResponse<IEnumerable<Convenio>>> GetAgreementByFilters(ConvenioFiltroRequest filters)
+    {
+        try
+        {
+            // Busca registro na entidade Convenio com parâmetros do filtro de pesquisa
+            var response = await _convenioRepository.GetByFiltersAsync(filters);
+
+            if (!response.Any())
+            {
+                _logger.LogWarning("Convênio não encontrado por filtros de pesquisa");
+                return ApiResponse<IEnumerable<Convenio>>.ErrorResponse("Convênio não foi encontrado");
+            }
+
+            return ApiResponse<IEnumerable<Convenio>>.SuccessResponse(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar convênio por filtros de pesquisa");
+            return ApiResponse<IEnumerable<Convenio>>.ErrorResponse("Erro interno ao buscar convênio");
+        }
+    }
+
+    /// <summary>
     /// Lista todos os convênios
     /// </summary>
     /// <returns> Lista de Convenio </returns>

@@ -8,6 +8,12 @@ namespace SistemaApae.Api.Repositories.Agreements;
 public interface IConvenioRepository
 {
     /// <summary>
+    /// Lista convênios por filtros de pesquisa
+    /// </summary>
+    /// <returns> Lista de Convenio dos filtros de pesquisa </returns>
+    Task<IEnumerable<Convenio>> GetByFiltersAsync(ConvenioFiltroRequest filters);
+
+    /// <summary>
     /// Lista todos os convênios
     /// </summary>
     /// <returns> Lista de Convenio </returns>

@@ -1,5 +1,6 @@
 ﻿using SistemaApae.Api.Models.Agreements;
 using SistemaApae.Api.Services;
+using Supabase.Postgrest;
 
 namespace SistemaApae.Api.Repositories.Agreements;
 
@@ -18,6 +19,35 @@ public class ConvenioRepository : IConvenioRepository
     {
         _supabaseService = supabaseService;
         _logger = logger;
+    }
+
+    /// <summary>
+    /// Lista convênios por filtros de pesquisa
+    /// </summary>
+    /// <returns> Lista de Convenio dos filtros de pesquisa </returns>
+    public async Task<IEnumerable<Convenio>> GetByFiltersAsync(ConvenioFiltroRequest filters)
+    {
+        try
+        {
+            var query = _supabaseService.Client
+                .From<Convenio>()
+                .Select("");
+
+            if (!string.IsNullOrEmpty(filters.Nome))
+                query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filters.Nome}%");
+
+            if (!string.IsNullOrEmpty(filters.Municipio))
+                query = query.Filter(u => u.Municipio!.Nome, Constants.Operator.ILike, $"%{filters.Municipio}%");
+
+            var response = await query.Get();
+
+            return response.Models;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar convênios por filtros de pesquisa");
+            throw;
+        }
     }
 
     /// <summary>

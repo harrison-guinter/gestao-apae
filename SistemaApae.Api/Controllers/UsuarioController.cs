@@ -33,11 +33,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
     [HttpGet("filter")]
-    [ProducesResponseType(typeof(ApiResponse<Usuario>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Usuario>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] ConvenioFiltroRequest request)
     {
         var result = await _usuarioService.GetUserByFilters(request);
 

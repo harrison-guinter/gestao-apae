@@ -29,6 +29,30 @@ public class ConvenioController : ControllerBase
     }
 
     /// <summary>
+    /// Lista convênos por filtros de pesquisa
+    /// </summary>
+    /// <returns> Lista de Convenio dos filtros de pesquisa </returns>
+    [HttpGet("filter")]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Convenio>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<Convenio>>> GetAgreementByFilters([FromQuery] ConvenioFiltroRequest request)
+    {
+        var result = await _convenioService.GetAgreementByFilters(request);
+
+        if (!result.Success)
+        {
+            if (result.Message.Contains("Convênio não foi encontrado"))
+                return NotFound();
+
+            return StatusCode(500, result);
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Lista todos os convênios
     /// </summary>
     /// <returns> Lista de Convenio </returns>

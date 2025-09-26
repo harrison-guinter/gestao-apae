@@ -50,7 +50,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filters)
+    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(ConvenioFiltroRequest filters)
     {
         try
         {
@@ -74,7 +74,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao buscar usuários por filtros");
+            _logger.LogError(ex, "Erro ao buscar usuários por filtros de pesquisa");
             throw;
         }
     }

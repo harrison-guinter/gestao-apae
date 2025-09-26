@@ -5,7 +5,7 @@ namespace SistemaApae.Api.Models.Users;
 /// <summary>
 /// Modelo para requisição de usuário por filtros de pesquisa
 /// </summary>
-public class UsuarioFiltroRequest
+public class ConvenioFiltroRequest
 {
     /// <summary>
     /// Nome do usuário
