@@ -63,7 +63,7 @@ export class UsuariosComponent implements OnInit {
       nome: [''],
       email: [''],
       perfil: [''],
-      status: [''],
+      status: [StatusUsuarioEnum.ATIVO],
     });
     this.pesquisarUsuarios();
   }
@@ -107,7 +107,6 @@ export class UsuariosComponent implements OnInit {
   ];
 
   statusOptions: SelectOption[] = [
-    { value: '', label: 'Todos' },
     { value: StatusUsuarioEnum.ATIVO, label: 'Ativo' },
     { value: StatusUsuarioEnum.INATIVO, label: 'Inativo' },
   ];

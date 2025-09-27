@@ -48,9 +48,26 @@ export class SelectComponent implements ControlValueAccessor {
   @Output() selectionChange = new EventEmitter<any>();
   @Output() clear = new EventEmitter<void>();
 
-  compareWith = (o1: SelectOption | null, o2: SelectOption | null): boolean => {
+  compareWith = (o1: any, o2: any): boolean => {
     console.log('Comparing', o1, o2);
-    return o1?.value === o2?.value;
+
+    // Se são objetos SelectOption
+    if (o1 && o2 && typeof o1 === 'object' && typeof o2 === 'object') {
+      return o1.value === o2.value;
+    }
+
+    // Se o1 é um SelectOption e o2 é um valor primitivo
+    if (o1 && typeof o1 === 'object' && o1.value !== undefined) {
+      return o1.value === o2;
+    }
+
+    // Se o2 é um SelectOption e o1 é um valor primitivo
+    if (o2 && typeof o2 === 'object' && o2.value !== undefined) {
+      return o1 === o2.value;
+    }
+
+    // Comparação direta para valores primitivos
+    return o1 === o2;
   };
 
   value: any = '';

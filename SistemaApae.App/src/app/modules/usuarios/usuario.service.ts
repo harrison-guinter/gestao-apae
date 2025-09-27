@@ -29,6 +29,22 @@ export class UsuarioService {
       .pipe(map((response) => response.data || []));
   }
 
+  salvarUsuario(usuario: Usuario): Observable<Usuario> {
+    const payload = this.buildUsuarioPayload(usuario, true);
+
+    return this.http
+      .post<ApiResponse<Usuario>>(`${this.baseUrl}Usuario`, payload)
+      .pipe(map((response) => response.data));
+  }
+
+  editarUsuario(usuario: Usuario): Observable<Usuario> {
+    const payload = this.buildUsuarioPayload(usuario, false);
+
+    return this.http
+      .put<ApiResponse<Usuario>>(`${this.baseUrl}Usuario`, payload)
+      .pipe(map((response) => response.data));
+  }
+
   private buildValidParams(filtros: UsuarioFiltro): any {
     const params: any = {};
 
@@ -49,5 +65,39 @@ export class UsuarioService {
     }
 
     return params;
+  }
+
+  private buildUsuarioPayload(usuario: Usuario, isCreating: boolean): any {
+    const payload: any = {
+      nome: usuario.nome?.trim() || '',
+      email: usuario.email?.trim() || '',
+      perfil: usuario.perfil || Roles.PROFISSIONAL,
+      status: usuario.status || StatusUsuarioEnum.ATIVO,
+      lockscreen: true, // Sempre adiciona lockscreen na requisição
+    };
+
+    // Campos opcionais
+    if (usuario.telefone && usuario.telefone.trim()) {
+      payload.telefone = usuario.telefone.trim();
+    }
+
+    if (usuario.registroProfissional && usuario.registroProfissional.trim()) {
+      payload.registroProfissional = usuario.registroProfissional.trim();
+    }
+
+    if (usuario.especialidade && usuario.especialidade.trim()) {
+      payload.especialidade = usuario.especialidade.trim();
+    }
+
+    if (usuario.observacao && usuario.observacao.trim()) {
+      payload.observacao = usuario.observacao.trim();
+    }
+
+    // Se está editando, inclui o ID
+    if (!isCreating && usuario.id) {
+      payload.id = usuario.id;
+    }
+
+    return payload;
   }
 }
