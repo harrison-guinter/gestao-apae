@@ -8,7 +8,6 @@ namespace SistemaApae.Api.Services.Users;
 /// </summary>
 public class UsuarioService : IUsuarioService
 {
-    private readonly IAuthService _authService;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IConfiguration _configuration;
     private readonly ILogger<UsuarioService> _logger;
@@ -17,13 +16,11 @@ public class UsuarioService : IUsuarioService
     /// Inicializa uma nova instância do UsuarioService
     /// </summary>
     public UsuarioService(
-        IAuthService authService,
         IUsuarioRepository usuarioRepository,
         IConfiguration configuration,
         ILogger<UsuarioService> logger
     )
     {
-        _authService = authService;
         _usuarioRepository = usuarioRepository;
         _configuration = configuration;
         _logger = logger;
@@ -46,13 +43,7 @@ public class UsuarioService : IUsuarioService
                 return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Usuário não foi encontrado");
             }
 
-            var responseUpdated = response.Select(u =>
-            {
-                u.Senha = null;
-                return u;
-            });
-
-            return ApiResponse<IEnumerable<Usuario>>.SuccessResponse(responseUpdated);
+            return ApiResponse<IEnumerable<Usuario>>.SuccessResponse(response);
         }
         catch (Exception ex)
         {
@@ -77,8 +68,6 @@ public class UsuarioService : IUsuarioService
                 _logger.LogWarning("Usuário não encontrado por id: {Id}", idUsuario);
                 return ApiResponse<Usuario>.ErrorResponse("Usuário não foi encontrado");
             }
-
-            response.Senha = null;
 
             return ApiResponse<Usuario>.SuccessResponse(response);
         }
@@ -106,13 +95,7 @@ public class UsuarioService : IUsuarioService
                 return ApiResponse<IEnumerable<Usuario>>.ErrorResponse("Usuários não foram encontrados");
             }
 
-            var responseUpdated = response.Select(u =>
-            {
-                u.Senha = null;
-                return u;
-            });
-
-            return ApiResponse<IEnumerable<Usuario>>.SuccessResponse(responseUpdated);
+            return ApiResponse<IEnumerable<Usuario>>.SuccessResponse(response);
         }
         catch (Exception ex)
         {
@@ -129,12 +112,10 @@ public class UsuarioService : IUsuarioService
     {
         try
         {
-            var newPassword = _authService.GenerateRandomPassword();
-
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            user.Senha = BCrypt.Net.BCrypt.HashPassword(user.Senha);
 
             // Insere novo registro na entidade Usuario
-            var response = await _usuarioRepository.CreateAsync(user, hashedPassword);
+            var response = await _usuarioRepository.CreateAsync(user);
 
             if (response == null)
             {

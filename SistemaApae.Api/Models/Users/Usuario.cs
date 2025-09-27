@@ -39,8 +39,11 @@ public class Usuario : ApiBaseModel
     /// <summary>
     /// Senha hasheada do usuário
     /// </summary>
+    [Required]
+    [MaxLength(150)]
+    [JsonIgnore]
     [Column("senha")]
-    public string? Senha { get; set; }
+    public string Senha { get; set; } = string.Empty;
 
     /// <summary>
     /// Perfil do usuário
