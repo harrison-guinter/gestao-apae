@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,32 +25,24 @@ export interface SelectOption {
   ],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.less'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectComponent),
-      multi: true,
-    },
-  ],
 })
-export class SelectComponent implements ControlValueAccessor {
+export class SelectComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() options: SelectOption[] = [];
   @Input() appearance: 'fill' | 'outline' = 'outline';
-  @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() multiple: boolean = false;
   @Input() clearable: boolean = true;
   @Input() clearTooltip: string = 'Limpar';
   @Input() cssClass: string = '';
+  @Input() prefixIcon: string = '';
+  @Input() suffixIcon: string = '';
+  @Input() control!: FormControl;
 
   @Output() selectionChange = new EventEmitter<any>();
   @Output() clear = new EventEmitter<void>();
+  @Output() suffixIconClick = new EventEmitter<void>();
 
   compareWith = (o1: any, o2: any): boolean => {
-    console.log('Comparing', o1, o2);
-
     // Se são objetos SelectOption
     if (o1 && o2 && typeof o1 === 'object' && typeof o2 === 'object') {
       return o1.value === o2.value;
@@ -70,42 +62,38 @@ export class SelectComponent implements ControlValueAccessor {
     return o1 === o2;
   };
 
-  value: any = '';
-
-  private onChange = (value: any) => {};
-  private onTouched = () => {};
-
-  writeValue(value: any): void {
-    this.value = value || '';
-  }
-
-  registerOnChange(fn: (value: any) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
   onSelectionChange(value: any): void {
-    this.value = value;
-    this.onChange(value);
-    this.onTouched();
     this.selectionChange.emit(value);
   }
 
   onClear(): void {
-    this.value = '';
-    this.onChange('');
-    this.onTouched();
+    this.control.setValue(null);
     this.clear.emit();
   }
 
+  onSuffixIconClick(): void {
+    this.suffixIconClick.emit();
+  }
+
   hasValue(): boolean {
-    return this.value !== '' && this.value !== null && this.value !== undefined;
+    const value = this.control.value;
+    return value !== '' && value !== null && value !== undefined;
+  }
+
+  get hasError(): boolean {
+    return this.control ? !!(this.control.invalid && this.control.touched) : false;
+  }
+
+  get errorMessage(): string {
+    if (!this.control?.errors) return '';
+
+    const errors = this.control.errors;
+    if (errors['required']) return `${this.label || 'Campo'} é obrigatório`;
+    if (errors['minlength']) return `Mínimo ${errors['minlength'].requiredLength} caracteres`;
+    if (errors['maxlength']) return `Máximo ${errors['maxlength'].requiredLength} caracteres`;
+    if (errors['email']) return 'E-mail inválido';
+    if (errors['pattern']) return 'Formato inválido';
+
+    return Object.keys(errors)[0] || '';
   }
 }

@@ -54,6 +54,7 @@ export class ModalUsuariosComponent implements OnInit {
   ngOnInit(): void {
     this.initFormCadastro();
     this.isEdit = !!this.data?.data.isEdit;
+    this.setupConditionalValidation();
   }
 
   initFormCadastro() {
@@ -79,6 +80,7 @@ export class ModalUsuariosComponent implements OnInit {
     if (this.formCadastro.invalid) {
       this.formCadastro.markAllAsTouched();
       this.formCadastro.updateValueAndValidity();
+
       this.notificationService.showWarning(
         'Campos obrigatórios não preenchidos. Verifique os campos destacados.'
       );
@@ -97,7 +99,36 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   onCancel(): void {
-    console.log('Cancel clicked');
     this.dialogRef.close(null);
+  }
+
+  private setupConditionalValidation(): void {
+    // Configurar validação condicional inicialmente
+    this.updateConditionalValidation();
+
+    // Escutar mudanças no campo perfil
+    this.formCadastro.get('perfil')?.valueChanges.subscribe(() => {
+      this.updateConditionalValidation();
+    });
+  }
+
+  private updateConditionalValidation(): void {
+    const perfilControl = this.formCadastro.get('perfil');
+    const especialidadeControl = this.formCadastro.get('especialidade');
+    const registroProfissionalControl = this.formCadastro.get('registroProfissional');
+
+    if (perfilControl?.value === Roles.PROFISSIONAL) {
+      // Tornar campos obrigatórios para profissionais
+      especialidadeControl?.setValidators([Validators.required]);
+      registroProfissionalControl?.setValidators([Validators.required]);
+    } else {
+      // Remover validação obrigatória para coordenadores
+      especialidadeControl?.clearValidators();
+      registroProfissionalControl?.clearValidators();
+    }
+
+    // Atualizar a validação dos campos
+    especialidadeControl?.updateValueAndValidity();
+    registroProfissionalControl?.updateValueAndValidity();
   }
 }

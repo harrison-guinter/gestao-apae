@@ -8,10 +8,9 @@
     <div class="form-row">
       <app-input
         label="Nome"
-        formControlName="nome"
+        [control]="$any(formCadastro.get('nome'))"
         placeholder="Digite o nome completo"
         appearance="outline"
-        [required]="true"
       ></app-input>
     </div>
 
@@ -19,16 +18,15 @@
       <div class="form-row-half">
         <app-input
           label="E-mail"
-          formControlName="email"
+          [control]="$any(formCadastro.get('email'))"
           placeholder="Digite o e-mail"
           appearance="outline"
-          [required]="true"
           type="email"
         ></app-input>
 
         <app-input
-          label="Telefone (opcional)"
-          formControlName="telefone"
+          label="Telefone"
+          [control]="$any(formCadastro.get('telefone'))"
           placeholder="(99) 99999-9999"
           appearance="outline"
           type="tel"
@@ -40,26 +38,24 @@
       <div class="form-row-half">
         <app-select
           label="Tipo"
-          formControlName="perfil"
+          [control]="$any(formCadastro.get('perfil'))"
           [options]="tiposUsuario"
           appearance="outline"
-          [required]="true"
         ></app-select>
 
         <app-select
           label="Status"
-          formControlName="status"
+          [control]="$any(formCadastro.get('status'))"
           [options]="statusOptions"
           appearance="outline"
-          [required]="true"
         ></app-select>
       </div>
     </div>
     <div class="form-row">
       <app-input
         label="Registro Profissional"
-        formControlName="registroProfissional"
-        placeholder="CRM 53241"
+        [control]="$any(formCadastro.get('registroProfissional'))"
+        placeholder="Ex: CRM 53241, CRF 12345"
         appearance="outline"
         cssClass="field-full"
       ></app-input>
@@ -67,18 +63,8 @@
     <div class="form-row">
       <app-input
         label="Especialidade"
-        formControlName="especialidade"
-        placeholder="Digite a especialidade (opcional)"
-        appearance="outline"
-        cssClass="field-full"
-      ></app-input>
-    </div>
-
-    <div class="form-row">
-      <app-input
-        label="Registro Profissional"
-        formControlName="registroProfissional"
-        placeholder="CRM 53241"
+        [control]="$any(formCadastro.get('especialidade'))"
+        placeholder="Ex: Fisioterapia, Psicologia"
         appearance="outline"
         cssClass="field-full"
       ></app-input>
@@ -87,7 +73,7 @@
     <div class="form-row">
       <app-input
         label="Observações"
-        formControlName="observacao"
+        [control]="$any(formCadastro.get('observacao'))"
         placeholder="Observações (opcional)"
         appearance="outline"
         cssClass="field-full"

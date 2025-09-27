@@ -7,7 +7,7 @@
   >
     <app-input
       label="Nome"
-      formControlName="name"
+      [control]="$any(filtrosForm.get('name'))"
       placeholder="Buscar por nome"
       suffixIcon="search"
       appearance="outline"
@@ -17,7 +17,7 @@
 
     <app-select
       label="Status"
-      formControlName="status"
+      [control]="$any(filtrosForm.get('status'))"
       [options]="statusOptions"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"

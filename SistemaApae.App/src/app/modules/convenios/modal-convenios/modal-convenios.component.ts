@@ -1,11 +1,6 @@
 import { Component, OnInit, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  Validators,
-  UntypedFormBuilder,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -42,17 +37,17 @@ export class ModalConveniosComponent implements OnInit {
     { value: false, label: 'Inativo' },
   ];
 
-  cidades$ = this.cidadesService.listarCidades().pipe(
-    map(cidades => cidades.map(cidade => ({ value: cidade.idMunicipio, label: cidade.nome })))
-  );
+  cidades$ = this.cidadesService
+    .listarCidades()
+    .pipe(
+      map((cidades) => cidades.map((cidade) => ({ value: cidade.idMunicipio, label: cidade.nome })))
+    );
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<ModalConveniosComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ModalData
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initFormCadastro();
@@ -65,7 +60,10 @@ export class ModalConveniosComponent implements OnInit {
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       status: [object?.status, Validators.required],
-      cidade: [object?.cidade ? [{value: object.cidade.idMunicipio, label: object.cidade.nome}] : null, Validators.required],
+      cidade: [
+        object?.cidade ? [{ value: object.cidade.idMunicipio, label: object.cidade.nome }] : null,
+        Validators.required,
+      ],
       observacoes: [object?.observacoes || ''],
     });
 
@@ -77,6 +75,7 @@ export class ModalConveniosComponent implements OnInit {
   onConfirm(): void {
     if (this.formCadastro.invalid) {
       this.formCadastro.markAllAsTouched();
+      this.formCadastro.updateValueAndValidity();
       return;
     }
 
