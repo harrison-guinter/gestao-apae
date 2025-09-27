@@ -73,7 +73,6 @@ export class UsuarioService {
       email: usuario.email?.trim() || '',
       perfil: usuario.perfil || Roles.PROFISSIONAL,
       status: usuario.status || StatusUsuarioEnum.ATIVO,
-      lockscreen: true, // Sempre adiciona lockscreen na requisição
     };
 
     // Campos opcionais
