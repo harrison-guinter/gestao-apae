@@ -15,6 +15,7 @@ export class Usuario {
   observacao?: string;
   registroProfissional?: string;
   telefone?: string;
+  UpdatedAt?: Date;
 
   constructor(
     id: string,

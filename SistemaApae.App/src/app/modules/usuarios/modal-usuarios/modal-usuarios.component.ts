@@ -73,6 +73,7 @@ export class ModalUsuariosComponent implements OnInit {
       observacao: [object?.observacao],
       telefone: [object?.telefone],
       registroProfissional: [object?.registroProfissional],
+      UpdatedAt: [{ value: object?.UpdatedAt || null, disabled: true }],
     });
   }
 
@@ -87,12 +88,16 @@ export class ModalUsuariosComponent implements OnInit {
       return;
     }
 
+    this.formCadastro.get('UpdatedAt')?.setValue(new Date(), { emitEvent: false });
+
     if (this.isEdit) {
       this.usuarioService.editarUsuario(this.formCadastro.value).subscribe((val) => {
+        this.notificationService.showSuccess('Usuário editado com sucesso!');
         this.dialogRef.close(this.formCadastro.value);
       });
     } else {
       this.usuarioService.salvarUsuario(this.formCadastro.value).subscribe((val) => {
+        this.notificationService.showSuccess('Usuário salvo com sucesso!');
         this.dialogRef.close(this.formCadastro.value);
       });
     }

@@ -157,7 +157,7 @@ export class UsuariosComponent implements OnInit {
         data: { isEdit: false },
         element: null,
       })
-      .subscribe();
+      .subscribe((val) => this.pesquisarUsuarios());
   }
 
   editarUsuario(element: Usuario) {
@@ -170,6 +170,6 @@ export class UsuariosComponent implements OnInit {
         data: { isEdit: true },
         element: element,
       })
-      .subscribe();
+      .subscribe((val) => this.pesquisarUsuarios());
   }
 }
