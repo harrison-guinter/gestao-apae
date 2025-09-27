@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { ErrorInterceptor } from './modules/core/interceptors/error.interceptor';
 import { ResponseInterceptor } from './modules/core/interceptors/response.interceptor';
+import { RequestInterceptor } from './modules/core/interceptors/request.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,11 @@ export const appConfig: ApplicationConfig = {
       MatSnackBarModule,
       BrowserAnimationsModule
     ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ResponseInterceptor,

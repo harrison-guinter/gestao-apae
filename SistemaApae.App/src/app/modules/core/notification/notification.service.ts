@@ -9,8 +9,8 @@ export class NotificationService {
     this.snackBar.open(message, 'Fechar', {
       panelClass: ['snackbar-success', 'success-snackbar'],
       duration,
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
     });
   }
 
@@ -18,8 +18,8 @@ export class NotificationService {
     this.snackBar.open(message, 'Fechar', {
       panelClass: ['snackbar-error', 'error-snackbar'],
       duration,
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
     });
   }
 
@@ -36,8 +36,8 @@ export class NotificationService {
     this.snackBar.open(message, 'Fechar', {
       panelClass: ['warning-snackbar'],
       duration,
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
     });
   }
 
@@ -45,8 +45,8 @@ export class NotificationService {
     this.snackBar.open(message, 'Fechar', {
       panelClass: ['info-snackbar'],
       duration,
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
     });
   }
 }

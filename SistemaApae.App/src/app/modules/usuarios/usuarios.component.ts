@@ -14,7 +14,7 @@ import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
 import { ModalService } from '../core/services/modal.service';
 import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
-import { Usuario } from './usuario';
+import { Usuario, StatusUsuarioEnum } from './usuario';
 import { Roles } from '../auth/roles.enum';
 import { UsuarioService, UsuarioFiltro } from './usuario.service';
 import { NotificationService } from '../core/notification/notification.service';
@@ -108,8 +108,8 @@ export class UsuariosComponent implements OnInit {
 
   statusOptions: SelectOption[] = [
     { value: '', label: 'Todos' },
-    { value: true, label: 'Ativo' },
-    { value: false, label: 'Inativo' },
+    { value: StatusUsuarioEnum.ATIVO, label: 'Ativo' },
+    { value: StatusUsuarioEnum.INATIVO, label: 'Inativo' },
   ];
 
   tableColumns: TableColumn[] = [
@@ -120,6 +120,7 @@ export class UsuariosComponent implements OnInit {
       label: 'Tipo',
       width: 'medium',
       align: 'left',
+      getClass: (row) => (row.perfil === Roles.PROFISSIONAL ? 'profissional' : 'coordenador'),
       getCellValue: (row) =>
         row.perfil === Roles.PROFISSIONAL
           ? 'Profissional'
@@ -132,8 +133,9 @@ export class UsuariosComponent implements OnInit {
       label: 'Status',
       width: 'small',
       align: 'center',
-      getCellValue: (row) => (row.status ? 'Ativo' : 'Inativo'),
-      getClass: (row) => (row.status ? 'status-ativo' : 'status-inativo'),
+      getCellValue: (row) => (row.status === StatusUsuarioEnum.ATIVO ? 'Ativo' : 'Inativo'),
+      getClass: (row) =>
+        row.status === StatusUsuarioEnum.ATIVO ? 'status-ativo' : 'status-inativo',
     },
   ];
 
