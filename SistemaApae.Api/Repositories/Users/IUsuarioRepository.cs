@@ -36,9 +36,8 @@ public interface IUsuarioRepository
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    /// <param name="user">Dados do usuário</param>
     /// <returns> Usuario criado </returns>
-    Task<Usuario> CreateAsync(Usuario user);
+    Task<Usuario> CreateAsync(Usuario user, string hashedPassword);
 
     /// <summary>
     /// Atualiza um usuário existente

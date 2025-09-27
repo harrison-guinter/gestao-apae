@@ -32,4 +32,9 @@ public interface IAuthService
     /// <returns>Token JWT</returns>
     string GenerateJwtToken(string userId, string email, List<string> roles);
 
+    /// <summary>
+    /// Gera uma senha aleatória segura
+    /// </summary>
+    /// <returns>Senha aleatória de 12 caracteres</returns>
+    public string GenerateRandomPassword();
 }
