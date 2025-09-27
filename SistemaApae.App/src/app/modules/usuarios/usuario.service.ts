@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Usuario } from './usuario';
 import { Roles } from '../auth/roles.enum';
+import { ApiResponse } from '../core/models/api-response.model';
 
 export interface UsuarioFiltro {
   nome?: string;
@@ -22,7 +23,7 @@ export class UsuarioService {
 
   listarUsuarios(filtros: UsuarioFiltro): Observable<Usuario[]> {
     return this.http
-      .get<{ data: Usuario[] }>(`${this.baseUrl}Usuario/`, { params: filtros as any })
-      .pipe(map((r) => r.data));
+      .get<ApiResponse<Usuario[]>>(`${this.baseUrl}Usuario/`, { params: filtros as any })
+      .pipe(map((response) => response.data || []));
   }
 }
