@@ -17,6 +17,7 @@ import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.componen
 import { Usuario } from './usuario';
 import { Roles } from '../auth/roles.enum';
 import { UsuarioService, UsuarioFiltro } from './usuario.service';
+import { NotificationService } from '../core/notification/notification.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -47,7 +48,8 @@ export class UsuariosComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
     private modalService: ModalService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -88,14 +90,12 @@ export class UsuariosComponent implements OnInit {
           : undefined,
     };
 
-    this.usuarioService.listarUsuarios(filtros).subscribe({
-      next: (usuarios) => {
-        this.usuarios = usuarios;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar usuários:', error);
-        // Aqui você pode adicionar uma notificação de erro
-      },
+    // Com o interceptor, agora podemos usar subscribe simples
+    this.usuarioService.listarUsuarios(filtros).subscribe((usuarios) => {
+      this.usuarios = usuarios;
+      if (usuarios.length === 0) {
+        this.notificationService.showInfo('Nenhum usuário encontrado com os filtros aplicados');
+      }
     });
   }
 

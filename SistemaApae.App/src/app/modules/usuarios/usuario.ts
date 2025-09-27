@@ -1,7 +1,7 @@
 import { Roles } from '../auth/roles.enum';
 
 export class Usuario {
-  idUsuario: string;
+  id: string;
   nome: string;
   email: string;
   perfil: Roles;
@@ -12,7 +12,7 @@ export class Usuario {
   telefone?: string;
 
   constructor(
-    idUsuario: string,
+    id: string,
     nome: string,
     email: string,
     perfil: Roles,
@@ -22,7 +22,7 @@ export class Usuario {
     registroProfissional?: string,
     telefone?: string
   ) {
-    this.idUsuario = idUsuario;
+    this.id = id;
     this.nome = nome;
     this.email = email;
     this.perfil = perfil;
