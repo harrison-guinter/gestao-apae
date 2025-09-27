@@ -41,6 +41,7 @@ public class Usuario : ApiBaseModel
     /// </summary>
     [Required]
     [MaxLength(150)]
+    [JsonIgnore]
     [Column("senha")]
     public string Senha { get; set; } = string.Empty;
 
