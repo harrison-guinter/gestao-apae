@@ -65,6 +65,7 @@ export class UsuariosComponent implements OnInit {
       perfil: [''],
       status: [''],
     });
+    this.pesquisarUsuarios();
   }
 
   limparFiltros() {

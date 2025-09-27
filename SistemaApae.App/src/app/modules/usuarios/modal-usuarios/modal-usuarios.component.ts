@@ -58,7 +58,7 @@ export class ModalUsuariosComponent implements OnInit {
     const statusDefault = typeof object?.ativo === 'boolean' ? object.ativo : true;
 
     this.formCadastro = this.formBuilder.group({
-      idUsuario: [object?.id || null],
+      id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       email: [object?.email || '', [Validators.required, Validators.email]],
       perfil: [object?.tipo, Validators.required],
