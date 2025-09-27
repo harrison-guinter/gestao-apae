@@ -12,7 +12,7 @@ public interface IUsuarioService
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    Task<ApiResponse<IEnumerable<Usuario>>> GetUserByFilters(ConvenioFiltroRequest filters);
+    Task<ApiResponse<IEnumerable<Usuario>>> GetUserByFilters(UsuarioFiltroRequest filters);
 
     /// <summary>
     /// Busca um usuário por Id

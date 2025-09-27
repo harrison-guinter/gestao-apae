@@ -29,7 +29,7 @@ public class ConvenioController : ControllerBase
     }
 
     /// <summary>
-    /// Lista convênos por filtros de pesquisa
+    /// Lista convênios por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Convenio dos filtros de pesquisa </returns>
     [HttpGet("filter")]

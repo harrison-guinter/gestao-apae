@@ -30,7 +30,7 @@ public class UsuarioService : IUsuarioService
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    public async Task<ApiResponse<IEnumerable<Usuario>>> GetUserByFilters(ConvenioFiltroRequest filters)
+    public async Task<ApiResponse<IEnumerable<Usuario>>> GetUserByFilters(UsuarioFiltroRequest filters)
     {
         try
         {

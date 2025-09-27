@@ -50,7 +50,7 @@ public class UsuarioRepository : IUsuarioRepository
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(ConvenioFiltroRequest filters)
+    public async Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filters)
     {
         try
         {

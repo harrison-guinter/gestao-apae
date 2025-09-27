@@ -37,7 +37,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] ConvenioFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
     {
         var result = await _usuarioService.GetUserByFilters(request);
 
