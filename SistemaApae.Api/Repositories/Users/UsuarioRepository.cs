@@ -126,12 +126,13 @@ public class UsuarioRepository : IUsuarioRepository
     /// Cria um novo usuário
     /// </summary>
     /// <returns> Usuario criado </returns>
-    public async Task<Usuario> CreateAsync(Usuario user)
+    public async Task<Usuario> CreateAsync(Usuario user, string hashedPassword)
     {
         try
         {
             user.Id = Guid.NewGuid();
             user.UpdatedAt = DateTime.UtcNow;
+            user.Senha = hashedPassword;
 
             var response = await _supabaseService.Client
                 .From<Usuario>()
@@ -154,12 +155,17 @@ public class UsuarioRepository : IUsuarioRepository
     {
         try
         {
-            user.UpdatedAt = DateTime.UtcNow;
-
             var response = await _supabaseService.Client
                 .From<Usuario>()
                 .Where(u => u.Id == user.Id)
-                .Update(user);
+                .Set(u => u.Nome, user.Nome)
+                .Set(u => u.Email, user.Email)
+                .Set(u => u.Telefone!, user.Telefone)
+                .Set(u => u.RegistroProfissional!, user.RegistroProfissional)
+                .Set(u => u.Especialidade!, user.Especialidade)
+                .Set(u => u.Observacao!, user.Observacao)
+                .Set(u => u.UpdatedAt, DateTime.UtcNow)
+                .Update();
 
             return response.Models.First();
         }
