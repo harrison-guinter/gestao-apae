@@ -187,7 +187,7 @@ public class AuthService : IAuthService
     /// Gera uma senha aleatória segura
     /// </summary>
     /// <returns>Senha aleatória de 12 caracteres</returns>
-    private string GenerateRandomPassword()
+    public string GenerateRandomPassword()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
         var random = new Random();
