@@ -45,15 +45,24 @@ if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
 
 // Registrar repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
 builder.Services.AddScoped<IConvenioRepository, ConvenioRepository>();
+
+// Registro de genéricos e filtros
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+builder.Services.AddScoped(typeof(IRepositoryFilter<,>), typeof(DefaultRepositoryFilter<,>));
+
+builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFiltroRequest>, AssistidoFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFiltroRequest>, MunicipioFilter>();
+
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IMunicipioService, MunicipioService>();
 builder.Services.AddScoped<IConvenioService, ConvenioService>();
+
+// Registrar service genérico
+builder.Services.AddScoped(typeof(IService<,>), typeof(Service<,>));
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
@@ -95,6 +104,8 @@ builder.Services.AddSwaggerGen(c =>
 
     // Adiciona o SchemaFilter para remover propriedades internas do BaseModel
     c.SchemaFilter<RemoveSupabaseBasePropertiesFilter>();
+    // Adiciona o SchemaFilter para descrever enums com nome e número
+    c.SchemaFilter<EnumDescriptionsSchemaFilter>();
 });
 
 var app = builder.Build();

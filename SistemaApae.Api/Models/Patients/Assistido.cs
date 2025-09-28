@@ -362,14 +362,4 @@ public class Assistido : ApiBaseModel
     [Column("consentimento_imagem")]
     public bool? ConsentimentoImagem { get; set; }
 
-    // Navigation properties
-    /// <summary>
-    /// Convênio associado ao assistido
-    /// </summary>
-    public Convenio? Convenio { get; set; }
-
-    /// <summary>
-    /// Município associado ao assistido
-    /// </summary>
-    public Municipio? Municipio { get; set; }
 }
