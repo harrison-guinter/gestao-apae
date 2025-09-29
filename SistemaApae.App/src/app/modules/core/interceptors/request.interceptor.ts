@@ -5,14 +5,25 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Adicionar token de autenticação se existir
+    const token = localStorage.getItem('token');
+    let authReq = req;
+
+    if (token) {
+      authReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
     // Normalizar parâmetros de query (GET requests)
-    if (req.method === 'GET' && req.params.keys().length > 0) {
-      let normalizedParams = req.params;
+    if (authReq.method === 'GET' && authReq.params.keys().length > 0) {
+      let normalizedParams = authReq.params;
 
       // Converter cada parâmetro de camelCase para PascalCase
-      req.params.keys().forEach((key) => {
+      authReq.params.keys().forEach((key) => {
         const pascalKey = this.toPascalCase(key);
-        const value = req.params.get(key);
+        const value = authReq.params.get(key);
 
         if (pascalKey !== key && value !== null) {
           // Remove o parâmetro com chave original
@@ -23,31 +34,31 @@ export class RequestInterceptor implements HttpInterceptor {
       });
 
       // Cria uma nova requisição com parâmetros normalizados
-      const normalizedRequest = req.clone({
+      const normalizedRequest = authReq.clone({
         params: normalizedParams,
       });
 
-      console.log('Request params original:', this.paramsToObject(req.params));
+      console.log('Request params original:', this.paramsToObject(authReq.params));
       console.log('Request params normalizado:', this.paramsToObject(normalizedParams));
 
       return next.handle(normalizedRequest);
     }
 
     // Normalizar body de requisições POST/PUT
-    if ((req.method === 'POST' || req.method === 'PUT') && req.body) {
-      const normalizedBody = this.normalizeKeysForBackend(req.body);
+    if ((authReq.method === 'POST' || authReq.method === 'PUT') && authReq.body) {
+      const normalizedBody = this.normalizeKeysForBackend(authReq.body);
 
-      const normalizedRequest = req.clone({
+      const normalizedRequest = authReq.clone({
         body: normalizedBody,
       });
 
-      console.log('Request body original:', req.body);
+      console.log('Request body original:', authReq.body);
       console.log('Request body normalizado:', normalizedBody);
 
       return next.handle(normalizedRequest);
     }
 
-    return next.handle(req);
+    return next.handle(authReq);
   }
 
   /**
