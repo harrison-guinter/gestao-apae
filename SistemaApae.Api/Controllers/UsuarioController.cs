@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
@@ -11,6 +12,7 @@ namespace SistemaApae.Api.Controllers.Users;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
@@ -33,11 +35,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
     [HttpGet("filter")]
-    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Usuario>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
     {
         var result = await _usuarioService.GetUserByFilters(request);
 
@@ -57,11 +59,11 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Usuario do id </returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Usuario>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -84,10 +86,10 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Lista de Usuario </returns>
     [HttpGet]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<UsuarioDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Usuario>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<UsuarioDto>>>> GetAllUsers()
+    public async Task<ActionResult<ApiResponse<IEnumerable<Usuario>>>> GetAllUsers()
     {
         var result = await _usuarioService.GetAllUsers();
 
@@ -160,32 +162,6 @@ public class UsuarioController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("Usuário não foi atualizado"))
-                return NoContent();
-
-            return StatusCode(500, result);
-        }
-
-        return Ok();
-    }
-
-    /// <summary>
-    /// Inativa um usuário existente
-    /// </summary>
-    [HttpPut("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> DeleteUser([FromBody] Guid id)
-    {
-        if (id == Guid.Empty)
-            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
-
-        var result = await _usuarioService.DeleteUser(id);
-
-        if (!result.Success)
-        {
-            if (result.Message.Contains("Usuário não foi inativado"))
                 return NoContent();
 
             return StatusCode(500, result);

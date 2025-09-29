@@ -14,9 +14,10 @@ import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
 import { ModalService } from '../core/services/modal.service';
 import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.component';
-import { Usuario } from './usuario';
+import { Usuario, StatusUsuarioEnum } from './usuario';
 import { Roles } from '../auth/roles.enum';
 import { UsuarioService, UsuarioFiltro } from './usuario.service';
+import { NotificationService } from '../core/notification/notification.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -39,11 +40,6 @@ import { UsuarioService, UsuarioFiltro } from './usuario.service';
   styleUrls: ['./usuarios.component.less'],
 })
 export class UsuariosComponent implements OnInit {
-  protected perfisUsuario: SelectOption[] = [
-    { value: Roles.COORDENADOR, label: 'Coordenador' },
-    { value: Roles.PROFISSIONAL, label: 'Profissional' },
-  ];
-
   protected filtrosForm!: UntypedFormGroup;
 
   usuarios: Usuario[] = [];
@@ -52,7 +48,8 @@ export class UsuariosComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
     private modalService: ModalService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -66,8 +63,9 @@ export class UsuariosComponent implements OnInit {
       nome: [''],
       email: [''],
       perfil: [''],
-      status: [''],
+      status: [StatusUsuarioEnum.ATIVO],
     });
+    this.pesquisarUsuarios();
   }
 
   limparFiltros() {
@@ -93,34 +91,51 @@ export class UsuariosComponent implements OnInit {
           : undefined,
     };
 
-    this.usuarioService.listarUsuarios(filtros).subscribe({
-      next: (usuarios) => {
-        this.usuarios = usuarios;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar usuários:', error);
-        // Aqui você pode adicionar uma notificação de erro
-      },
+    // Com o interceptor, agora podemos usar subscribe simples
+    this.usuarioService.listarUsuarios(filtros).subscribe((usuarios) => {
+      this.usuarios = usuarios;
+      if (usuarios.length === 0) {
+        this.notificationService.showInfo('Nenhum usuário encontrado com os filtros aplicados');
+      }
     });
   }
 
-  perfilsUsuario: SelectOption[] = [
+  perfisUsuario: SelectOption[] = [
     { value: '', label: 'Todos' },
     { value: Roles.COORDENADOR, label: 'Coordenador' },
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
   ];
 
   statusOptions: SelectOption[] = [
-    { value: '', label: 'Todos' },
-    { value: true, label: 'Ativo' },
-    { value: false, label: 'Inativo' },
+    { value: StatusUsuarioEnum.ATIVO, label: 'Ativo' },
+    { value: StatusUsuarioEnum.INATIVO, label: 'Inativo' },
   ];
 
   tableColumns: TableColumn[] = [
     { key: 'nome', label: 'Nome', width: 'large', align: 'left' },
     { key: 'email', label: 'E-mail', width: 'xlarge', align: 'left' },
-    { key: 'perfil', label: 'Tipo', width: 'medium', align: 'center' },
-    { key: 'status', label: 'Status', width: 'small', align: 'center' },
+    {
+      key: 'perfil',
+      label: 'Tipo',
+      width: 'medium',
+      align: 'left',
+      getClass: (row) => (row.perfil === Roles.PROFISSIONAL ? 'profissional' : 'coordenador'),
+      getCellValue: (row) =>
+        row.perfil === Roles.PROFISSIONAL
+          ? 'Profissional'
+          : row.perfil === Roles.COORDENADOR
+          ? 'Coordenador'
+          : row.perfil,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      width: 'small',
+      align: 'center',
+      getCellValue: (row) => (row.status === StatusUsuarioEnum.ATIVO ? 'Ativo' : 'Inativo'),
+      getClass: (row) =>
+        row.status === StatusUsuarioEnum.ATIVO ? 'status-ativo' : 'status-inativo',
+    },
   ];
 
   tableActions: TableAction[] = [
@@ -142,7 +157,7 @@ export class UsuariosComponent implements OnInit {
         data: { isEdit: false },
         element: null,
       })
-      .subscribe();
+      .subscribe((val) => this.pesquisarUsuarios());
   }
 
   editarUsuario(element: Usuario) {
@@ -155,6 +170,6 @@ export class UsuariosComponent implements OnInit {
         data: { isEdit: true },
         element: element,
       })
-      .subscribe();
+      .subscribe((val) => this.pesquisarUsuarios());
   }
 }

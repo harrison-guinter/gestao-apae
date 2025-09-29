@@ -1,11 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SistemaApae.Api.Models.Administrative;
+using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Repositories;
+using SistemaApae.Api.Repositories.Admistrative;
+using SistemaApae.Api.Repositories.Agreements;
+using SistemaApae.Api.Repositories.Patients;
 using SistemaApae.Api.Repositories.Users;
-using SistemaApae.Api.Repositories.Administrative;
+using SistemaApae.Api.Serialization;
 using SistemaApae.Api.Services;
+using SistemaApae.Api.Services.Agreements;
 using SistemaApae.Api.Services.Users;
-using SistemaApae.Api.Services.Administrative;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,16 +48,33 @@ if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
 
 // Registrar repositories
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
+builder.Services.AddScoped<IConvenioRepository, ConvenioRepository>();
+
+// Registro de genéricos e filtros
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+builder.Services.AddScoped(typeof(IRepositoryFilter<,>), typeof(DefaultRepositoryFilter<,>));
+
+builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFiltroRequest>, AssistidoFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFiltroRequest>, MunicipioFilter>();
+
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IMunicipioService, MunicipioService>();
+builder.Services.AddScoped<IConvenioService, ConvenioService>();
 
-builder.Services.AddControllers();
+// Registrar service genérico
+builder.Services.AddScoped(typeof(IService<,>), typeof(Service<,>));
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+        opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        opt.JsonSerializerOptions.TypeInfoResolverChain.Insert(0, new SupabaseModelJsonResolver());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 
 // Configurar CORS para produção
@@ -72,7 +96,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1.0.0",
         Description = "API para gerenciamento do Sistema APAE"
     });
-    
+
     // Incluir comentários XML na documentação
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -80,6 +104,11 @@ builder.Services.AddSwaggerGen(c =>
     {
         c.IncludeXmlComments(xmlPath);
     }
+
+    // Adiciona o SchemaFilter para remover propriedades internas do BaseModel
+    c.SchemaFilter<RemoveSupabaseBasePropertiesFilter>();
+    // Adiciona o SchemaFilter para descrever enums com nome e número
+    c.SchemaFilter<EnumDescriptionsSchemaFilter>();
 });
 
 var app = builder.Build();

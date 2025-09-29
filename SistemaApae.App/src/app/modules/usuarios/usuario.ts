@@ -1,28 +1,34 @@
 import { Roles } from '../auth/roles.enum';
 
+export enum StatusUsuarioEnum {
+  ATIVO = 1,
+  INATIVO = 2,
+}
+
 export class Usuario {
-  idUsuario: string;
+  id: string;
   nome: string;
   email: string;
   perfil: Roles;
-  status: boolean;
+  status: StatusUsuarioEnum;
   especialidade?: string;
   observacao?: string;
   registroProfissional?: string;
   telefone?: string;
+  UpdatedAt?: Date;
 
   constructor(
-    idUsuario: string,
+    id: string,
     nome: string,
     email: string,
     perfil: Roles,
-    status: boolean,
+    status: StatusUsuarioEnum,
     especialidade?: string,
     observacao?: string,
     registroProfissional?: string,
     telefone?: string
   ) {
-    this.idUsuario = idUsuario;
+    this.id = id;
     this.nome = nome;
     this.email = email;
     this.perfil = perfil;
@@ -37,6 +43,14 @@ export class Usuario {
     // TODO
     return true;
     return this.perfil == role;
+  }
+
+  isActive(): boolean {
+    return this.status === StatusUsuarioEnum.ATIVO;
+  }
+
+  getStatusLabel(): string {
+    return this.status === StatusUsuarioEnum.ATIVO ? 'Ativo' : 'Inativo';
   }
 
   static getCurrentUser(): Usuario {

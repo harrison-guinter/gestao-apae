@@ -8,13 +8,8 @@ namespace SistemaApae.Api.Models.Administrative;
 /// Modelo de município do sistema
 /// </summary>
 [Table("municipio")]
-public class Municipio : BaseModel
+public class Municipio : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do município
-    /// </summary>
-    [Column("id_municipio")]
-    public Guid IdMunicipio { get; set; }
 
     /// <summary>
     /// Nome do município

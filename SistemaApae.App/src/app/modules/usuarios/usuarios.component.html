@@ -8,7 +8,7 @@
   >
     <app-input
       label="Nome"
-      formControlName="nome"
+      [control]="$any(filtrosForm.get('nome'))"
       placeholder="Buscar por nome"
       suffixIcon="search"
       appearance="outline"
@@ -18,7 +18,7 @@
 
     <app-input
       label="E-mail"
-      formControlName="email"
+      [control]="$any(filtrosForm.get('email'))"
       placeholder="Buscar por e-mail"
       suffixIcon="email"
       appearance="outline"
@@ -28,7 +28,7 @@
 
     <app-select
       label="Tipo"
-      formControlName="perfil"
+      [control]="$any(filtrosForm.get('perfil'))"
       [options]="perfisUsuario"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
@@ -37,7 +37,7 @@
 
     <app-select
       label="Status"
-      formControlName="status"
+      [control]="$any(filtrosForm.get('status'))"
       [options]="statusOptions"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"

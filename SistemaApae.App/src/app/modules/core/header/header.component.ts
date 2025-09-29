@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { PageInfoService, PageInfo } from '../services/page-info.service';
+import { AuthService } from '../../auth/auth.service';
+import { NotificationService } from '../notification/notification.service';
+import { Roles } from '../../auth/roles.enum';
 
 @Component({
   selector: 'app-header',
@@ -13,21 +16,80 @@ import { PageInfoService, PageInfo } from '../services/page-info.service';
   styleUrls: ['./header.component.less'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  userName: string = 'Luana Marini';
-  userRole: string = 'Coordenador';
-  userInitials: string = 'LM';
+  userName: string = 'Usuário';
+  userRole: string = 'Perfil';
+  userInitials: string = 'U';
   pageTitle: string = 'Dashboard';
   pageSubtitle: string = 'Sistema de Gestão de Atendimentos';
 
   private pageInfoSubscription?: Subscription;
 
-  constructor(private router: Router, private pageInfoService: PageInfoService) {}
+  constructor(
+    private router: Router,
+    private pageInfoService: PageInfoService,
+    private authService: AuthService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
+    this.loadUserInfo();
+
     this.pageInfoSubscription = this.pageInfoService.pageInfo$.subscribe((pageInfo: PageInfo) => {
       this.pageTitle = pageInfo.title;
       this.pageSubtitle = pageInfo.subtitle;
     });
+  }
+
+  private loadUserInfo(): void {
+    try {
+      const userString = localStorage.getItem('usuario');
+      if (userString) {
+        const user = JSON.parse(userString);
+
+        this.userName = user.nome || user.name || 'Usuário';
+
+        switch (user.perfil) {
+          case Roles.COORDENADOR:
+            this.userRole = 'Coordenador';
+            break;
+          case Roles.PROFISSIONAL:
+            this.userRole = 'Profissional';
+            break;
+          default:
+            if (user.perfil === 1) {
+              this.userRole = 'Coordenador';
+            } else if (user.perfil === 2) {
+              this.userRole = 'Profissional';
+            }
+        }
+
+        this.generateUserInitials();
+      } else {
+        console.log('Nenhum usuário encontrado no localStorage');
+      }
+    } catch (error) {
+      this.userName = 'Usuário';
+      this.userRole = 'Perfil';
+      this.userInitials = 'U';
+    }
+  }
+
+  private generateUserInitials(): void {
+    const names = this.userName
+      .trim()
+      .split(' ')
+      .filter((name) => name.length > 0);
+
+    if (names.length >= 2) {
+      this.userInitials = names[0][0] + names[names.length - 1][0];
+    } else if (names.length === 1) {
+      const name = names[0];
+      this.userInitials = name.length > 1 ? name[0] + name[1] : name[0] + name[0];
+    } else {
+      this.userInitials = 'U';
+    }
+
+    this.userInitials = this.userInitials.toUpperCase();
   }
 
   ngOnDestroy() {
@@ -37,11 +99,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    console.log('Logout clicked');
-    // this.router.navigate(['/login']);
+    const confirmLogout = confirm('Tem certeza que deseja sair do sistema?');
+
+    if (confirmLogout) {
+      try {
+        this.authService.logout();
+        this.notificationService.success('Logout realizado com sucesso!');
+        this.router.navigate(['/login']);
+      } catch (error) {
+        console.error('Erro durante logout:', error);
+        this.notificationService.fail('Erro ao realizar logout');
+      }
+    }
   }
 
   onProfileClick(): void {
-    console.log('Profile clicked');
+    this.loadUserInfo();
   }
 }

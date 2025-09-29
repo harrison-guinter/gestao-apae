@@ -12,6 +12,8 @@ export interface TableColumn {
   template?: TemplateRef<any>;
   width?: 'small' | 'medium' | 'large' | 'xlarge' | 'auto';
   align?: 'left' | 'center' | 'right';
+  getClass?: (row: any) => string;
+  getCellValue?: (row: any) => any;
 }
 
 export interface TableAction {
@@ -59,12 +61,6 @@ export class TableComponent {
   }
 
   getCellValue(row: any, column: TableColumn): any {
-    console.log('Getting cell value for column:', column.key, 'Row:', row);
-    if (column.key === 'perfil') {
-      if (row.perfil === Roles.PROFISSIONAL) return 'Profissional';
-      if (row.perfil === Roles.COORDENADOR) return 'Coordenador';
-      return row.perfil;
-    }
     return this.getNestedProperty(row, column.key);
   }
 

@@ -4,11 +4,8 @@
   <input
     matInput
     [type]="type"
-    [value]="value"
+    [formControl]="control"
     [placeholder]="placeholder"
-    [required]="required"
-    [disabled]="disabled"
-    [readonly]="readonly"
     [attr.maxlength]="maxlength"
     [attr.minlength]="minlength"
     [pattern]="pattern"
@@ -18,22 +15,17 @@
     (focus)="onFocus()"
   />
 
-  <mat-icon matPrefix *ngIf="prefixIcon" [class]="prefixIconClass">
+  <mat-icon matPrefix *ngIf="prefixIcon">
     {{ prefixIcon }}
   </mat-icon>
 
-  <mat-icon
-    matSuffix
-    *ngIf="suffixIcon && !clearable"
-    [class]="suffixIconClass"
-    (click)="onSuffixIconClick()"
-  >
+  <mat-icon matSuffix *ngIf="suffixIcon && !clearable" (click)="onSuffixIconClick()">
     {{ suffixIcon }}
   </mat-icon>
 
   <mat-icon
     matSuffix
-    *ngIf="clearable && hasValue() && !disabled && !readonly"
+    *ngIf="clearable && hasValue() && !control.disabled"
     (click)="onClear()"
     class="clear-icon"
     [matTooltip]="clearTooltip"
@@ -41,6 +33,5 @@
     clear
   </mat-icon>
 
-  <mat-hint *ngIf="hint">{{ hint }}</mat-hint>
-  <mat-error *ngIf="error">{{ error }}</mat-error>
+  <mat-error *ngIf="hasError">{{ errorMessage }}</mat-error>
 </mat-form-field>

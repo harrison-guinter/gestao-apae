@@ -1,5 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Repositories.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -48,7 +49,7 @@ public class AuthService : IAuthService
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
-            if (user == null || !user.Status)
+            if (user == null || user.Status == StatusEntidadeEnum.INATIVO)
             {
                 return ApiResponse<LoginResponse>.ErrorResponse("Credenciais inválidas");
             }
@@ -66,7 +67,7 @@ public class AuthService : IAuthService
             var perfil = new List<string> { user.Perfil.ToString() };
 
             // Gera token JWT
-            var token = GenerateJwtToken(user.IdUsuario.ToString(), user.Email, perfil);
+            var token = GenerateJwtToken(user.Id.ToString(), user.Email, perfil);
 
             var loginResponse = new LoginResponse
             {
@@ -75,7 +76,7 @@ public class AuthService : IAuthService
                 ExpiresIn = 3600, // 1 hora
                 User = new UserInfo
                 {
-                    Id = user.IdUsuario.ToString(),
+                    Id = user.Id.ToString(),
                     Name = user.Nome,
                     Email = user.Email,
                     Perfil = user.Perfil
@@ -103,7 +104,7 @@ public class AuthService : IAuthService
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
-            if (user != null && user.Status)
+            if (user != null && user.Status == StatusEntidadeEnum.ATIVO)
             {
                 // Gera nova senha aleatória
                 var newPassword = GenerateRandomPassword();
@@ -186,7 +187,7 @@ public class AuthService : IAuthService
     /// Gera uma senha aleatória segura
     /// </summary>
     /// <returns>Senha aleatória de 12 caracteres</returns>
-    private string GenerateRandomPassword()
+    public string GenerateRandomPassword()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
         var random = new Random();

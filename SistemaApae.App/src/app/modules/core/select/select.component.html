@@ -2,11 +2,8 @@
   <mat-label *ngIf="label">{{ label }}</mat-label>
 
   <mat-select
-    [value]="value"
+    [formControl]="control"
     [placeholder]="placeholder"
-    [required]="required"
-    [disabled]="disabled"
-    [multiple]="multiple"
     [compareWith]="compareWith"
     (selectionChange)="onSelectionChange($event.value)"
   >
@@ -15,13 +12,23 @@
     </mat-option>
   </mat-select>
 
+  <mat-icon matPrefix *ngIf="prefixIcon">
+    {{ prefixIcon }}
+  </mat-icon>
+
+  <mat-icon matSuffix *ngIf="suffixIcon && !clearable" (click)="onSuffixIconClick()">
+    {{ suffixIcon }}
+  </mat-icon>
+
   <mat-icon
     matSuffix
-    *ngIf="clearable && hasValue() && !disabled"
+    *ngIf="clearable && hasValue() && !control.disabled"
     (click)="onClear()"
     class="clear-icon"
     [matTooltip]="clearTooltip"
   >
     clear
   </mat-icon>
+
+  <mat-error *ngIf="hasError">{{ errorMessage }}</mat-error>
 </mat-form-field>

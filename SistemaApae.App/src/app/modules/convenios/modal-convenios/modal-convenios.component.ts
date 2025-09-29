@@ -1,11 +1,6 @@
 import { Component, OnInit, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  Validators,
-  UntypedFormBuilder,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -51,9 +46,7 @@ export class ModalConveniosComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<ModalConveniosComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ModalData
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initFormCadastro();
@@ -78,6 +71,7 @@ export class ModalConveniosComponent implements OnInit {
   onConfirm(): void {
     if (this.formCadastro.invalid) {
       this.formCadastro.markAllAsTouched();
+      this.formCadastro.updateValueAndValidity();
       return;
     }
 

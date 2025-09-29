@@ -1,10 +1,47 @@
-// TODO verificar razão dos estilos não estarem sendo aplicados
+// Estilos para notificações do interceptor
 
+.success-snackbar {
+  --mdc-snackbar-container-color: #4caf50 !important;
+  --mat-snack-bar-button-color: #ffffff !important;
+
+  .mat-mdc-snack-bar-label {
+    color: white !important;
+  }
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #f44336 !important;
+  --mat-snack-bar-button-color: #ffffff !important;
+
+  .mat-mdc-snack-bar-label {
+    color: white !important;
+  }
+}
+
+.warning-snackbar {
+  --mdc-snackbar-container-color: #ff9800 !important;
+  --mat-snack-bar-button-color: #ffffff !important;
+
+  .mat-mdc-snack-bar-label {
+    color: white !important;
+  }
+}
+
+.info-snackbar {
+  --mdc-snackbar-container-color: #2196f3 !important;
+  --mat-snack-bar-button-color: #ffffff !important;
+
+  .mat-mdc-snack-bar-label {
+    color: white !important;
+  }
+}
+
+// Estilos legados (manter para compatibilidade)
 .snackbar-success {
   background-color: #4caf50 !important;
   color: white !important;
-  border: none !important;     
-  box-shadow: none !important;   
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .snackbar-error {

@@ -1,48 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Administrative;
-using SistemaApae.Api.Services.Administrative;
+using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SistemaApae.Api.Controllers.Administrative;
 
 /// <summary>
-/// Controller público com endpoints de leitura para a entidade Município
+/// Controller com endpoints de leitura para a entidade Município
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 [Produces("application/json")]
 public class MunicipioController : ControllerBase
 {
-    private readonly ILogger<MunicipioController> _logger;
-    private readonly IMunicipioService _municipioService;
-
-    public MunicipioController(ILogger<MunicipioController> logger, IMunicipioService municipioService)
+    private readonly IService<Municipio, MunicipioFiltroRequest> _service;
+    public MunicipioController(IService<Municipio, MunicipioFiltroRequest> service)
     {
-        _logger = logger;
-        _municipioService = municipioService;
-    }
-
-    /// <summary>
-    /// Lista todos os municípios
-    /// </summary>
-    /// <returns> Lista de municípios </returns>
-    [HttpGet("all")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<MunicipioDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<MunicipioDto>>>> GetAll()
-    {
-        var result = await _municipioService.GetAll();
-
-        if (!result.Success)
-        {
-            if (result.Message.Contains("não foram encontrados", StringComparison.OrdinalIgnoreCase))
-                return NotFound();
-
-            return StatusCode(500, result);
-        }
-
-        return Ok(result);
+        _service = service;
     }
 
     /// <summary>
@@ -50,16 +27,16 @@ public class MunicipioController : ControllerBase
     /// </summary>
     /// <returns> Município do id </returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<MunicipioDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Municipio>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<MunicipioDto>>> GetById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<Municipio>>> GetById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
 
-        var result = await _municipioService.GetById(id);
+        var result = await _service.GetById(id);
 
         if (!result.Success)
         {
@@ -76,26 +53,20 @@ public class MunicipioController : ControllerBase
     /// Buscar municípios por nome (parcial, case-insensitive)
     /// </summary>
     /// <returns> Lista de municípios que correspondem ao nome informado </returns>
-    [HttpGet("search")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<MunicipioDto>>), StatusCodes.Status200OK)]
+    [HttpGet("filter")]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Municipio>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<MunicipioDto>>>> GetByName([FromQuery] string nome)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Assistido>>>> GetByFilters([FromQuery] MunicipioFiltroRequest request)
     {
-        if (string.IsNullOrWhiteSpace(nome))
-            return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
-
-        var result = await _municipioService.GetByName(nome);
-
+        var result = await _service.GetByFilters(request);
         if (!result.Success)
         {
-            if (result.Message.Contains("não foram encontrados", StringComparison.OrdinalIgnoreCase))
-                return NotFound();
-
+            if (result.Message.Contains("não foram encontrados") || result.Message.Contains("não foi encontrado"))
+                return NotFound(result);
             return StatusCode(500, result);
         }
-
         return Ok(result);
     }
 }

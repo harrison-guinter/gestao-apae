@@ -18,14 +18,14 @@ public interface IUsuarioRepository
     /// Lista usuários por filtros de pesquisa
     /// </summary>
     /// <returns> Lista de Usuario dos filtros de pesquisa </returns>
-    Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filtros);
+    Task<IEnumerable<Usuario>> GetByFiltersAsync(UsuarioFiltroRequest filters);
 
     /// <summary>
     /// Busca um usuário por id
     /// </summary>
-    /// <param name="idUsuario">ID do usuário</param>
+    /// <param name="idUser">ID do usuário</param>
     /// <returns> Usuario do id ou nulo </returns>
-    Task<Usuario?> GetByIdAsync(Guid idUsuario);
+    Task<Usuario?> GetByIdAsync(Guid idUser);
 
     /// <summary>
     /// Lista todos os usuários
@@ -36,21 +36,13 @@ public interface IUsuarioRepository
     /// <summary>
     /// Cria um novo usuário
     /// </summary>
-    /// <param name="usuario">Dados do usuário</param>
     /// <returns> Usuario criado </returns>
-    Task<Usuario> CreateAsync(Usuario usuario);
+    Task<Usuario> CreateAsync(Usuario user, string hashedPassword);
 
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
-    /// <param name="usuario">Dados do usuário</param>
+    /// <param name="user">Dados do usuário</param>
     /// <returns> Usuario atualizado </returns>
-    Task<Usuario> UpdateAsync(Usuario usuario);
-
-    /// <summary>
-    /// Inativa um usuário
-    /// </summary>
-    /// <param name="idUsuario">ID do usuário</param>
-    /// <returns> Usuario inativado </returns>
-    Task<Usuario> DeleteAsync(Guid idUsuario);
+    Task<Usuario> UpdateAsync(Usuario user);
 }

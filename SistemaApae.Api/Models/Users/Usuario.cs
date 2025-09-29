@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using Supabase.Postgrest.Models;
-using Supabase.Postgrest.Attributes;
+using Newtonsoft.Json.Converters;
 using SistemaApae.Api.Models.Enums;
-using System.Text.Json.Serialization;
+using Supabase.Postgrest.Attributes;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace SistemaApae.Api.Models.Users;
 
@@ -10,15 +10,8 @@ namespace SistemaApae.Api.Models.Users;
 /// Modelo de usuário do sistema
 /// </summary>
 [Table("usuario")]
-public class Usuario : BaseModel
+public class Usuario : ApiBaseModel
 {
-    /// <summary>
-    /// ID único do usuário
-    /// </summary>
-    [PrimaryKey("id_usuario", true)]
-    [Column("id_usuario")]
-    public Guid IdUsuario { get; set; }
-
     /// <summary>
     /// Nome do usuário
     /// </summary>
@@ -46,37 +39,23 @@ public class Usuario : BaseModel
     /// <summary>
     /// Senha hasheada do usuário
     /// </summary>
-    [Required]
-    [MaxLength(150)]
     [Column("senha")]
-    public string Senha { get; set; } = string.Empty;
+    public string? Senha { get; set; }
 
     /// <summary>
-    /// Perfil usado no código
+    /// Perfil do usuário
     /// </summary>
-    [JsonIgnore]
+    [Column("perfil")]
+    [JsonConverter(typeof(StringEnumConverter))]
     public PerfilEnum Perfil { get; set; }
 
-    /// <summary>
-    /// Perfil do usuário no banco de dados
-    /// </summary>
-    [Required]
-    [Column("perfil")]
-    public string PerfilDb 
-    {
-        get => Perfil.ToString();
-        set 
-        {
-            if (Enum.TryParse<PerfilEnum>(value, out var parsed))
-                Perfil = parsed;
-        }
-    }
 
     /// <summary>
     /// Indica se o usuário está ativo/inativo
     /// </summary>
     [Column("status")]
-    public bool Status { get; set; } = true;
+    [JsonConverter(typeof(StringEnumConverter))]
+    public StatusEntidadeEnum Status { get; set; }
 
     /// <summary>
     /// Registro profissional

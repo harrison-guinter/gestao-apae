@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,22 +19,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   ],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.less'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
-      multi: true,
-    },
-  ],
 })
-export class InputComponent implements ControlValueAccessor {
+export class InputComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() appearance: 'fill' | 'outline' = 'outline';
-  @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() readonly: boolean = false;
   @Input() clearable: boolean = false;
   @Input() clearTooltip: string = 'Limpar';
   @Input() cssClass: string = '';
@@ -42,14 +32,11 @@ export class InputComponent implements ControlValueAccessor {
   @Input() minlength: number | null = null;
   @Input() pattern: string = '';
   @Input() autocomplete: string = 'off';
-  @Input() hint: string = '';
-  @Input() error: string = '';
+  @Input() control!: FormControl;
 
   // Ícones
   @Input() prefixIcon: string = '';
   @Input() suffixIcon: string = '';
-  @Input() prefixIconClass: string = 'prefix-icon';
-  @Input() suffixIconClass: string = 'suffix-icon';
 
   @Output() inputChange = new EventEmitter<string>();
   @Output() clear = new EventEmitter<void>();
@@ -57,36 +44,12 @@ export class InputComponent implements ControlValueAccessor {
   @Output() inputFocus = new EventEmitter<void>();
   @Output() inputBlur = new EventEmitter<void>();
 
-  value: string = '';
-
-  private onChange = (value: string) => {};
-  private onTouched = () => {};
-
-  writeValue(value: string): void {
-    this.value = value || '';
-  }
-
-  registerOnChange(fn: (value: string) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.value = target.value;
-    this.onChange(this.value);
-    this.inputChange.emit(this.value);
+    this.inputChange.emit(target.value);
   }
 
   onBlur(): void {
-    this.onTouched();
     this.inputBlur.emit();
   }
 
@@ -95,9 +58,7 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   onClear(): void {
-    this.value = '';
-    this.onChange('');
-    this.onTouched();
+    this.control.setValue('');
     this.clear.emit();
   }
 
@@ -106,6 +67,24 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   hasValue(): boolean {
-    return this.value !== '' && this.value !== null && this.value !== undefined;
+    const value = this.control.value;
+    return value !== '' && value !== null && value !== undefined;
+  }
+
+  get hasError(): boolean {
+    return this.control ? !!(this.control.invalid && this.control.touched) : false;
+  }
+
+  get errorMessage(): string {
+    if (!this.control?.errors) return '';
+
+    const errors = this.control.errors;
+    if (errors['required']) return `${this.label || 'Campo'} é obrigatório`;
+    if (errors['minlength']) return `Mínimo ${errors['minlength'].requiredLength} caracteres`;
+    if (errors['maxlength']) return `Máximo ${errors['maxlength'].requiredLength} caracteres`;
+    if (errors['email']) return 'E-mail inválido';
+    if (errors['pattern']) return 'Formato inválido';
+
+    return Object.keys(errors)[0] || '';
   }
 }

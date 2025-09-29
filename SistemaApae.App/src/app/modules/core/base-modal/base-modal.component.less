@@ -73,10 +73,32 @@
     gap: 12px;
     justify-content: flex-end;
 
-    .cancel-button,
+    .cancel-button {
+      height: 40px;
+      min-width: 80px;
+      color: #1976d2 !important;
+      background-color: white !important;
+      border: 1px solid #1976d2 !important;
+
+      &:hover {
+        background-color: rgba(25, 118, 210, 0.04) !important;
+      }
+    }
+
     .confirm-button {
       height: 40px;
       min-width: 80px;
+      background-color: #1976d2 !important;
+      color: white !important;
+
+      &:hover {
+        background-color: #1565c0 !important;
+      }
+
+      &:disabled {
+        background-color: rgba(0, 0, 0, 0.12) !important;
+        color: rgba(0, 0, 0, 0.26) !important;
+      }
     }
   }
 }
