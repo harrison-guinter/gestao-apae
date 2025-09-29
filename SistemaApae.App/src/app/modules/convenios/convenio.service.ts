@@ -14,10 +14,8 @@ export class ConvenioService {
   constructor(private http: HttpClient) {}
 
   listarConvenios(): Observable<Convenio[]> {
-    return of([new Convenio('id', 'nome', new Cidade('9d8f9bb7-1ae6-4e11-9f5d-196ce6647083', 'Alto Feliz'), 'obs', true) ]);
-      // this.http
-      // .get<{ data: Convenio[] }>(`${this.baseUrl}Convenio/all`)
-      // .pipe(map((r) => r.data)) || 
-      
+    return this.http
+      .get<{ Data: Convenio[] }>(`${this.baseUrl}Convenio/filter`)
+      .pipe(map((r) => r.Data)) || of([]);
   }
 }

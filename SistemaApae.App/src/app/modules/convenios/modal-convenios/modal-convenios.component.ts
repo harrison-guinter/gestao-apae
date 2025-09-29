@@ -15,6 +15,7 @@ import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
 import { CidadesService } from '../../cidades/cidades.service';
 import { map } from 'rxjs';
+import { Convenio } from '../convenio';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -43,7 +44,7 @@ export class ModalConveniosComponent implements OnInit {
   ];
 
   cidades$ = this.cidadesService.listarCidades().pipe(
-    map(cidades => cidades.map(cidade => ({ value: cidade.idMunicipio, label: cidade.nome })))
+    map(cidades => cidades.map(cidade => ({ value: cidade.Id, label: cidade.Nome })))
   );
 
   constructor(
@@ -59,14 +60,14 @@ export class ModalConveniosComponent implements OnInit {
   }
 
   initFormCadastro() {
-    const object = this.data.element;
+    const object: Convenio = this.data.element;
 
     this.formCadastro = this.formBuilder.group({
-      id: [object?.id || null],
-      nome: [object?.nome || '', Validators.required],
-      status: [object?.status, Validators.required],
-      cidade: [object?.cidade ? [{value: object.cidade.idMunicipio, label: object.cidade.nome}] : null, Validators.required],
-      observacoes: [object?.observacoes || ''],
+      Id: [object?.Id || null],
+      Nome: [object?.Nome || '', Validators.required],
+      Status: [object?.Status, Validators.required],
+      Municipio: [object?.Municipio ? [{value: object.Municipio.Id, label: object.Municipio.Nome}] : null, Validators.required],
+      Observacao: [object?.Observacao || ''],
     });
 
     if (this.data.isVisualizacao) {
