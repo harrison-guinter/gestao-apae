@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SistemaApae.Api.Models.Administrative;
+using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Repositories;
+using SistemaApae.Api.Repositories.Admistrative;
+using SistemaApae.Api.Repositories.Agreements;
+using SistemaApae.Api.Repositories.Patients;
 using SistemaApae.Api.Repositories.Users;
-using SistemaApae.Api.Repositories.Administrative;
+using SistemaApae.Api.Serialization;
 using SistemaApae.Api.Services;
+using SistemaApae.Api.Services.Agreements;
 using SistemaApae.Api.Services.Users;
-using SistemaApae.Api.Services.Administrative;
 using System.Text;
 using System.Text.Json.Serialization;
-using SistemaApae.Api.Serialization;
-using SistemaApae.Api.Repositories.Agreements;
-using SistemaApae.Api.Services.Agreements;
 
 var builder = WebApplication.CreateBuilder(args);
 

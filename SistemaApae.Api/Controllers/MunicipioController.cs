@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Administrative;
-using SistemaApae.Api.Services.Administrative;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Services;
 
