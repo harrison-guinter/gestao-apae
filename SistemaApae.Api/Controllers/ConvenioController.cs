@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Agreements;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Services;
@@ -7,9 +8,10 @@ using SistemaApae.Api.Services.Agreements;
 namespace SistemaApae.Api.Controllers;
 
 /// <summary>
-/// Controller publico com endpoints de CRUD da entidade Convenio
+/// Controller com endpoints de CRUD da entidade Convenio
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class ConvenioController : ControllerBase
@@ -52,28 +54,7 @@ public class ConvenioController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Lista todos os convênios
-    /// </summary>
-    /// <returns> Lista de Convenio </returns>
-    [HttpGet]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Convenio>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Convenio>>>> GetAllAgreements()
-    {
-        var result = await _convenioService.GetAllAgreements();
-
-        if (!result.Success)
-        {
-            if (result.Message.Contains("Convênios não foram encontrados"))
-                return NotFound();
-
-            return StatusCode(500, result);
-        }
-
-        return Ok(result);
-    }
+    // Rota GetAll removida: utilizar GET api/Convenio/filter com paginação
 
     /// <summary>
     /// Criar um convênio

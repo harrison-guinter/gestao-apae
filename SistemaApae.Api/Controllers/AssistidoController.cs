@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Patients;
@@ -9,6 +10,7 @@ namespace SistemaApae.Api.Controllers.Patients;
 /// Controller com endpoints de CRUD da entidade Assistido
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AssistidoController : ControllerBase

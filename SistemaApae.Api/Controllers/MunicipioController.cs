@@ -3,6 +3,7 @@ using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Administrative;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SistemaApae.Api.Controllers.Administrative;
 
@@ -11,6 +12,7 @@ namespace SistemaApae.Api.Controllers.Administrative;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 [Produces("application/json")]
 public class MunicipioController : ControllerBase
 {
