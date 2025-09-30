@@ -49,9 +49,4 @@ public class Atendimento : ApiBaseModel
     [Column("status")]
     public StatusEntidadeEnum Status { get; set; }
 
-    // Navigation properties
-    /// <summary>
-    /// Agendamento associado ao atendimento
-    /// </summary>
-    public Agendamento? Agendamento { get; set; }
 }

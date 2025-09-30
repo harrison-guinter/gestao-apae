@@ -50,13 +50,4 @@ public class Agendamento : ApiBaseModel
     [Column("status")]
     public StatusEntidadeEnum Status { get; set; }
 
-    /// <summary>
-    /// Lista de assistidos associados ao agendamento
-    /// </summary>
-    public List<AgendamentoAssistido>? AgendamentoAssistidos { get; set; }
-
-    /// <summary>
-    /// Lista de atendimentos realizados
-    /// </summary>
-    public List<Atendimento>? Atendimentos { get; set; }
 }

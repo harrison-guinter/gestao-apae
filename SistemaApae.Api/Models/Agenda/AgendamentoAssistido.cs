@@ -26,14 +26,4 @@ public class AgendamentoAssistido : ApiBaseModel
     [Column("id_assistido")]
     public Guid IdAssistido { get; set; }
 
-    // Navigation properties
-    /// <summary>
-    /// Agendamento associado
-    /// </summary>
-    public Agendamento? Agendamento { get; set; }
-
-    /// <summary>
-    /// Assistido associado
-    /// </summary>
-    public Assistido? Assistido { get; set; }
 }

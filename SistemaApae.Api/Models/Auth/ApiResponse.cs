@@ -22,6 +22,16 @@ public class ApiResponse<T>
     public T? Data { get; set; }
 
     /// <summary>
+    /// Limite de registros por página
+    /// </summary>
+    public int? Limit { get; set; }
+    
+    /// <summary>
+    /// Página atual
+    /// </summary>
+    public int? Skip { get; set; }
+
+    /// <summary>
     /// Lista de erros (se houver)
     /// </summary>
     public List<string> Errors { get; set; } = new();

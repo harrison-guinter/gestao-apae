@@ -48,15 +48,4 @@ public class Convenio : ApiBaseModel
     [JsonConverter(typeof(StringEnumConverter))]
     public TipoConvenioEnum? TipoConvenio { get; set; }
 
-    ///// <summary>
-    ///// Município associado
-    ///// </summary>
-    [Reference(typeof(Municipio))]
-    [JsonIgnore]
-    public Municipio? Municipio { get; set; }
-
-    ///// <summary>
-    ///// Lista de assistidos associados
-    ///// </summary>
-    //public List<Assistido>? Assistidos { get; set; }
 }

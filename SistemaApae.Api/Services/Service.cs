@@ -1,5 +1,6 @@
 using SistemaApae.Api.Models;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Filters;
 using SistemaApae.Api.Repositories;
 
 namespace SistemaApae.Api.Services;
@@ -30,7 +31,21 @@ public class Service<TEntity, TFilter> : IService<TEntity, TFilter>
             var result = await _repository.GetByFiltersAsync(filtros);
             if (!result.Any())
                 return ApiResponse<IEnumerable<TEntity>>.ErrorResponse("Registros não foram encontrados");
-            return ApiResponse<IEnumerable<TEntity>>.SuccessResponse(result);
+
+            var resp = ApiResponse<IEnumerable<TEntity>>.SuccessResponse(result);
+
+            if (filtros is IBaseFilter paged)
+            {
+                resp.Limit = paged.Limit ?? 50;
+                resp.Skip = paged.Skip ?? 0;
+            }
+            else
+            {
+                resp.Limit = 50;
+                resp.Skip = 0;
+            }
+
+            return resp;
         }
         catch (Exception ex)
         {

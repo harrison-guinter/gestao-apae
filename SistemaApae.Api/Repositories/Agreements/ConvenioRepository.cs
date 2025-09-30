@@ -36,8 +36,6 @@ public class ConvenioRepository : IConvenioRepository
             if (!string.IsNullOrEmpty(filters.Nome))
                 query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filters.Nome}%");
 
-            if (!string.IsNullOrEmpty(filters.Municipio))
-                query = query.Filter(u => u.Municipio!.Nome, Constants.Operator.ILike, $"%{filters.Municipio}%");
 
             var response = await query.Get();
 

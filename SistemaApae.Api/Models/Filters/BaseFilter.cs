@@ -15,15 +15,6 @@ public interface IBaseFilter
     /// </summary>
     int? Skip { get; set; }
 
-    /// <summary>
-    /// Nome da coluna para ordenação
-    /// </summary>
-    string? OrderBy { get; set; }
-
-    /// <summary>
-    /// Indica se a ordenação é descendente (true) ou ascendente (false)
-    /// </summary>
-    bool? Desc { get; set; }
 }
 
 /// <summary>
@@ -31,10 +22,9 @@ public interface IBaseFilter
 /// </summary>
 public class BaseFilter : IBaseFilter
 {
-    public int? Limit { get; set; }
+    public int? Limit { get; set; } = 50;
     public int? Skip { get; set; }
-    public string? OrderBy { get; set; }
-    public bool? Desc { get; set; }
+
 }
 
 
