@@ -26,7 +26,7 @@ public class Convenio : ApiBaseModel
     [Required]
     [MaxLength(150)]
     [Column("nome")]
-    public string Nome { get; set; } = string.Empty;
+    public string Nome { get; set; }
 
     /// <summary>
     /// Indica se o convênio está ativo/inativo
