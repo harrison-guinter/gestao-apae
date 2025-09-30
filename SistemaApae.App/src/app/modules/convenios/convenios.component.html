@@ -3,11 +3,12 @@
     [formGroup]="filtrosForm"
     (add)="onAdd()"
     (clear)="onClear()"
+    (search)="pesquisarConvenios()"
     title="Lista de Convênios"
   >
     <app-input
       label="Nome"
-      [control]="$any(filtrosForm.get('name'))"
+      [control]="$any(filtrosForm.get('Nome'))"
       placeholder="Buscar por nome"
       suffixIcon="search"
       appearance="outline"
@@ -15,19 +16,11 @@
     >
     </app-input>
 
-    <app-select
-      label="Status"
-      [control]="$any(filtrosForm.get('status'))"
-      [options]="statusOptions"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-select>
   </app-filters-container>
   <div class="table-section">
     <app-table
       [columns]="tableColumns"
-      [data]="(convenios$ | async) || []"
+      [data]="convenios"
       [actions]="tableActions"
       [showActions]="true"
       tableClass="convenios-table"

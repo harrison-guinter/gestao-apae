@@ -15,13 +15,10 @@ export class ResponseInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse && event.body) {
-          // Log para desenvolvimento - mostra antes e depois da normalização
-          console.log('Response original:', event.body);
 
           // Normalizar as chaves do body da resposta
           const normalizedBody = this.normalizeKeys(event.body);
 
-          console.log('Response normalizado:', normalizedBody);
 
           return event.clone({
             body: normalizedBody,

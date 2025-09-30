@@ -1,9 +1,9 @@
 export class Cidade {
-    idMunicipio: string
+    id: string
     nome: string
 
-    constructor(idMunicipio: string, nome: string) {
-        this.idMunicipio = idMunicipio;
+    constructor(id: string, nome: string) {
+        this.id = id;
         this.nome = nome;
     }
 }

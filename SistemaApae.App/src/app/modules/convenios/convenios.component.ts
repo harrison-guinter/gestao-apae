@@ -15,9 +15,9 @@ import { FiltersContainerComponent } from '../core/filters-container/filters-con
 import { ModalService } from '../core/services/modal.service';
 import { Convenio } from './convenio';
 import { ModalConveniosComponent } from './modal-convenios/modal-convenios.component';
-import { Observable } from 'rxjs';
 import { ConvenioService } from './convenio.service';
-import { Usuario } from '../usuarios/usuario';
+import { NotificationService } from '../core/notification/notification.service';
+import { ConvenioFiltro } from './convenio.service';
 
 @Component({
   selector: 'app-convenios',
@@ -44,11 +44,12 @@ export class ConveniosComponent implements OnInit {
 
   private convenioService = inject(ConvenioService);
 
-  convenios$: Observable<Convenio[]> = this.convenioService.listarConvenios();
+  protected convenios: Convenio[] = []
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
+    private notificationService: NotificationService,
     private modalService: ModalService
   ) {}
 
@@ -56,13 +57,25 @@ export class ConveniosComponent implements OnInit {
     this.pageInfoService.updatePageInfo('Convênios', 'Gerenciar convênios do sistema');
 
     this.initFiltrosForm();
+    this.pesquisarConvenios()
   }
+
+    pesquisarConvenios() {
+      const filtros: ConvenioFiltro = this.filtrosForm.value;
+  
+       this.convenioService.listarConvenios(filtros).subscribe((convenios) => {
+        this.convenios = convenios;
+
+        if (convenios.length === 0) {
+          this.notificationService.showInfo('Nenhum convênio encontrado com os filtros aplicados');
+        }
+      });
+    }
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-        name: [],
-        status: []
-    });
+        Nome: [],
+       });
   }
 
   limparFiltros() {
@@ -126,7 +139,7 @@ export class ConveniosComponent implements OnInit {
         data: { isEdit: true },
         element: element,
       })
-      .subscribe();
+      .subscribe(() => this.pesquisarConvenios());
   }
 
   visualizarConvenio(element: Convenio) {
@@ -140,6 +153,6 @@ export class ConveniosComponent implements OnInit {
         element: element,
         isVisualizacao: true
       })
-      .subscribe();
+      .subscribe(() => this.pesquisarConvenios());
   }
 }

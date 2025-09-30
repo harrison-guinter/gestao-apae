@@ -10,6 +10,10 @@ import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
 import { CidadesService } from '../../cidades/cidades.service';
 import { map } from 'rxjs';
+import { Convenio } from '../convenio';
+import { ConvenioService } from '../convenio.service';
+import { NotificationService } from '../../core/notification/notification.service';
+import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -29,42 +33,50 @@ import { map } from 'rxjs';
 })
 export class ModalConveniosComponent implements OnInit {
   protected formCadastro!: FormGroup;
+  private isEdit: boolean = false;
 
   private cidadesService: CidadesService = inject(CidadesService);
+  private convenioService: ConvenioService = inject(ConvenioService);
 
   statusOptions: SelectOption[] = [
-    { value: true, label: 'Ativo' },
-    { value: false, label: 'Inativo' },
+    { value: 1, label: 'Ativo' },
+    { value: 2, label: 'Inativo' },
+  ];
+
+  tipos: SelectOption[] = [
+    { value: 1, label: 'CAS' },
+    { value: 2, label: 'Educação' },
+    { value: 3, label: 'Saúde' },
+    { value: 4, label: 'Assistência social' },
+    { value: 5, label: 'EJA' },
   ];
 
   cidades$ = this.cidadesService
     .listarCidades()
-    .pipe(
-      map((cidades) => cidades.map((cidade) => ({ value: cidade.idMunicipio, label: cidade.nome })))
-    );
+    .pipe(map((cidades) => cidades.map((cidade) => ({ value: cidade.id, label: cidade.nome }))));
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<ModalConveniosComponent>,
+    private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ModalData
   ) {}
 
   ngOnInit(): void {
+    this.isEdit = !!this.data?.data.isEdit;
     this.initFormCadastro();
   }
 
   initFormCadastro() {
-    const object = this.data.element;
+    const object: Convenio = this.data.element;
 
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
-      status: [object?.status, Validators.required],
-      cidade: [
-        object?.cidade ? [{ value: object.cidade.idMunicipio, label: object.cidade.nome }] : null,
-        Validators.required,
-      ],
-      observacoes: [object?.observacoes || ''],
+      status: [{value: object?.status}, Validators.required],
+      idMunicipio: [object?.idMunicipio ? { value: object.idMunicipio } : null, Validators.required],
+      observacao: [object?.observacao || ''],
+      tipoConvenio: [{value: object?.tipoConvenio}, Validators.required],
     });
 
     if (this.data.isVisualizacao) {
@@ -72,15 +84,35 @@ export class ModalConveniosComponent implements OnInit {
     }
   }
 
+  valueFromForm(): Convenio {
+    const valor = this.formCadastro.value;
+    console.log(valor)
+    return {...valor } as Convenio;
+  }
+
   onConfirm(): void {
+    console.log(this.valueFromForm())
     if (this.formCadastro.invalid) {
       this.formCadastro.markAllAsTouched();
       this.formCadastro.updateValueAndValidity();
+
+      this.notificationService.showWarning(
+        'Campos obrigatórios não preenchidos. Verifique os campos destacados.'
+      );
       return;
     }
 
-    if (this.formCadastro.valid) {
-      this.dialogRef.close(this.formCadastro.value);
+    this.formCadastro.get('UpdatedAt')?.setValue(new Date(), { emitEvent: false });
+    if (this.isEdit) {
+      this.convenioService.editar(this.valueFromForm()).subscribe((val) => {
+        this.notificationService.showSuccess('Convênio editado com sucesso!');
+        this.dialogRef.close();
+      });
+    } else {
+      this.convenioService.salvar(this.valueFromForm()).subscribe((val) => {
+        this.notificationService.showSuccess('Convênio salvo com sucesso!');
+        this.dialogRef.close();
+      });
     }
   }
 

@@ -34,20 +34,16 @@ export class UsuarioService {
     );
   }
 
-  salvarUsuario(usuario: Usuario): Observable<Usuario> {
+  salvarUsuario(usuario: Usuario): Observable<void> {
     const payload = this.buildUsuarioPayload(usuario, true);
 
-    return this.http
-      .post<ApiResponse<Usuario>>(`${this.baseUrl}Usuario`, payload)
-      .pipe(map((response) => response.data));
+    return this.http.post<void>(`${this.baseUrl}Usuario`, payload);
   }
 
-  editarUsuario(usuario: Usuario): Observable<Usuario> {
+  editarUsuario(usuario: Usuario): Observable<void> {
     const payload = this.buildUsuarioPayload(usuario, false);
 
-    return this.http
-      .put<ApiResponse<Usuario>>(`${this.baseUrl}Usuario`, payload)
-      .pipe(map((response) => response.data));
+    return this.http.put<void>(`${this.baseUrl}Usuario`, payload);
   }
 
   private buildValidParams(filtros: UsuarioFiltro): any {

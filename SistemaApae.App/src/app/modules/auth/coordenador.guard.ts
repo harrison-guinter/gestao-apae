@@ -11,7 +11,6 @@ export class CoordenadorGuard implements CanActivate {
   }
 
   public canActivate(): boolean {
-    console.log(Usuario.getCurrentUser());
     return !!(Usuario.getCurrentUser()).hasRole(Roles.COORDENADOR); 
   }
   

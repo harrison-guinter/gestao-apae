@@ -27,8 +27,16 @@
       <div class="form-row-half">
         <app-select
           label="Cidade"
-          [control]="$any(formCadastro.get('cidade'))"
+          [control]="$any(formCadastro.get('idMunicipio'))"
           [options]="(cidades$ | async) || []"
+          appearance="outline"
+        ></app-select>
+      </div>
+      <div class="form-row-half">
+        <app-select
+          label="Tipo de convênio/CAS"
+          [control]="$any(formCadastro.get('tipoConvenio'))"
+          [options]="tipos || []"
           appearance="outline"
         ></app-select>
       </div>
@@ -36,7 +44,7 @@
     <div class="form-row">
       <app-input
         label="Observações"
-        [control]="$any(formCadastro.get('observacoes'))"
+        [control]="$any(formCadastro.get('observacao'))"
         placeholder="Digite as observações"
         appearance="outline"
       ></app-input>
