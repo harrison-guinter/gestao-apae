@@ -72,6 +72,7 @@ builder.Services.AddControllers()
     {
         opt.JsonSerializerOptions.PropertyNamingPolicy = null;
         opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         opt.JsonSerializerOptions.TypeInfoResolverChain.Insert(0, new SupabaseModelJsonResolver());
     });
 
@@ -107,8 +108,6 @@ builder.Services.AddSwaggerGen(c =>
 
     // Adiciona o SchemaFilter para remover propriedades internas do BaseModel
     c.SchemaFilter<RemoveSupabaseBasePropertiesFilter>();
-    // Adiciona o SchemaFilter para descrever enums com nome e número
-    c.SchemaFilter<EnumDescriptionsSchemaFilter>();
 });
 
 var app = builder.Build();

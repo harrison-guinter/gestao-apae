@@ -46,7 +46,6 @@ public class Usuario : ApiBaseModel
     /// Perfil do usuário
     /// </summary>
     [Column("perfil")]
-    [JsonConverter(typeof(StringEnumConverter))]
     public PerfilEnum Perfil { get; set; }
 
 
@@ -54,7 +53,6 @@ public class Usuario : ApiBaseModel
     /// Indica se o usuário está ativo/inativo
     /// </summary>
     [Column("status")]
-    [JsonConverter(typeof(StringEnumConverter))]
     public StatusEntidadeEnum Status { get; set; }
 
     /// <summary>

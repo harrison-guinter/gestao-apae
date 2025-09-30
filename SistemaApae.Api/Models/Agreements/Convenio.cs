@@ -32,7 +32,6 @@ public class Convenio : ApiBaseModel
     /// Indica se o convênio está ativo/inativo
     /// </summary>
     [Column("status")]
-    [JsonConverter(typeof(StringEnumConverter))]
     public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.ATIVO;
 
     /// <summary>
@@ -45,7 +44,6 @@ public class Convenio : ApiBaseModel
     /// Tipo do convênio CAS
     /// </summary>
     [Column("tipo_convenio_cas")]
-    [JsonConverter(typeof(StringEnumConverter))]
     public TipoConvenioEnum? TipoConvenio { get; set; }
 
 }

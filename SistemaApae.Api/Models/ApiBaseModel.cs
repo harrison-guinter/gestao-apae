@@ -12,7 +12,7 @@ namespace SistemaApae.Api.Models
         /// <summary>
         /// ID único da entidade
         /// </summary>
-        [PrimaryKey("id", true)] // true indica que é auto-increment
+        [PrimaryKey("id", false)] // true indica que é auto-increment
         public Guid Id { get; set; }
     }
 }
