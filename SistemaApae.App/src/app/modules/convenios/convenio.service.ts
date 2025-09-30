@@ -3,7 +3,11 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { Convenio } from './convenio';
-import { Cidade } from '../cidades/cidade';
+
+export interface ConvenioFiltro {
+  Nome?: string;
+  Status?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +17,21 @@ export class ConvenioService {
 
   constructor(private http: HttpClient) {}
 
-  listarConvenios(): Observable<Convenio[]> {
-    return this.http
-      .get<{ Data: Convenio[] }>(`${this.baseUrl}Convenio/filter`)
-      .pipe(map((r) => r.Data)) || of([]);
+  listarConvenios(filtro: ConvenioFiltro): Observable<Convenio[]> {
+    return (
+      this.http
+        .get<{ data: Convenio[] }>(`${this.baseUrl}Convenio/filter`, { params: filtro as any })
+        .pipe(map((r) => r.data)) || of([])
+    );
   }
+
+    salvar(convenio: Convenio): Observable<void> {  
+      return this.http.post<void>(`${this.baseUrl}Convenio`, convenio);
+    }
+  
+    editar(convenio: Convenio): Observable<void> {
+
+      return this.http.put<void>(`${this.baseUrl}Convenio`, convenio);
+    }
+  
 }

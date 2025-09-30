@@ -89,10 +89,8 @@ export class ModalUsuariosComponent implements OnInit {
     }
 
     this.formCadastro.get('UpdatedAt')?.setValue(new Date(), { emitEvent: false });
-    console.log('aqui', this.formCadastro.value);
     if (this.isEdit) {
       this.usuarioService.editarUsuario(this.formCadastro.value).subscribe((val) => {
-        console.log('aqui', val);
         this.notificationService.showSuccess('Usuário editado com sucesso!');
         this.dialogRef.close(this.formCadastro.value);
       });

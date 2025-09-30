@@ -38,8 +38,6 @@ export class RequestInterceptor implements HttpInterceptor {
         params: normalizedParams,
       });
 
-      console.log('Request params original:', this.paramsToObject(authReq.params));
-      console.log('Request params normalizado:', this.paramsToObject(normalizedParams));
 
       return next.handle(normalizedRequest);
     }
@@ -52,8 +50,6 @@ export class RequestInterceptor implements HttpInterceptor {
         body: normalizedBody,
       });
 
-      console.log('Request body original:', authReq.body);
-      console.log('Request body normalizado:', normalizedBody);
 
       return next.handle(normalizedRequest);
     }

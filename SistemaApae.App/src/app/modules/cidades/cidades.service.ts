@@ -14,7 +14,7 @@ export class CidadesService {
 
   listarCidades(): Observable<Cidade[]> {
     return this.http
-      .get<{ data: Cidade[] }>(`${this.baseUrl}Municipio/all`)
+      .get<{ data: Cidade[] }>(`${this.baseUrl}Municipio/filter`)
       .pipe(map((r) => r.data));
   }
 }

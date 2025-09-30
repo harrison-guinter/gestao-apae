@@ -64,9 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
 
         this.generateUserInitials();
-      } else {
-        console.log('Nenhum usuário encontrado no localStorage');
-      }
+      } 
     } catch (error) {
       this.userName = 'Usuário';
       this.userRole = 'Perfil';

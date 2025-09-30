@@ -1,21 +1,21 @@
 import { Cidade } from "../cidades/cidade";
 
 export class Convenio {
-    Id: string;
-    Nome: string;
-    Municipio: Cidade;
-    IdMunicipio: string;
-    Observacao: string;
-    Status: number;
-    TipoConvenio: number;
+    id: string;
+    nome: string;
+    municipio: Cidade;
+    idMunicipio: string;
+    observacao: string;
+    status: number;
+    tipoConvenio: number;
 
-    constructor(Id: string, Nome: string, Municipio: Cidade, Observacao: string, Status: number, TipoConvenio: number) {
-        this.Id = Id;
-        this.Nome = Nome;
-        this.Municipio = Municipio;
-        this.Observacao = Observacao;
-        this.Status = Status;
-        this.TipoConvenio = TipoConvenio;
-        this.IdMunicipio = Municipio.Id;
+    constructor(id: string, nome: string, municipio: Cidade, observacao: string, status: number, tipoConvenio: number) {
+        this.id = id;
+        this.nome = nome;
+        this.municipio = municipio;
+        this.observacao = observacao;
+        this.status = status;
+        this.tipoConvenio = tipoConvenio;
+        this.idMunicipio = municipio.id;
     }
 }
