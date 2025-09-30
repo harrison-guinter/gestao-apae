@@ -82,17 +82,13 @@ export class ModalUsuariosComponent implements OnInit {
       this.formCadastro.markAllAsTouched();
       this.formCadastro.updateValueAndValidity();
 
-      this.notificationService.showWarning(
-        'Campos obrigatórios não preenchidos. Verifique os campos destacados.'
-      );
+      this.notificationService.showWarning(this.notificationService.camposObrigatorios);
       return;
     }
 
     this.formCadastro.get('UpdatedAt')?.setValue(new Date(), { emitEvent: false });
-    console.log('aqui', this.formCadastro.value);
     if (this.isEdit) {
       this.usuarioService.editarUsuario(this.formCadastro.value).subscribe((val) => {
-        console.log('aqui', val);
         this.notificationService.showSuccess('Usuário editado com sucesso!');
         this.dialogRef.close(this.formCadastro.value);
       });
