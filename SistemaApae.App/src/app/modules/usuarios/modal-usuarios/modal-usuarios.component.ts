@@ -82,9 +82,7 @@ export class ModalUsuariosComponent implements OnInit {
       this.formCadastro.markAllAsTouched();
       this.formCadastro.updateValueAndValidity();
 
-      this.notificationService.showWarning(
-        'Campos obrigatórios não preenchidos. Verifique os campos destacados.'
-      );
+      this.notificationService.showWarning(this.notificationService.camposObrigatorios);
       return;
     }
 
