@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Models.Administrative;
+using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Repositories;
 using SistemaApae.Api.Repositories.Admistrative;
@@ -55,6 +56,7 @@ builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped(typeof(IRepositoryFilter<,>), typeof(DefaultRepositoryFilter<,>));
 
 builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFiltroRequest>, AssistidoFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Agendamento, AgendamentoFilterRequest>, AgendamentoFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFiltroRequest>, MunicipioFilter>();
 
 
