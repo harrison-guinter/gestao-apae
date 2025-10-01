@@ -49,7 +49,7 @@ public class AuthService : IAuthService
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
-            if (user == null || user.Status == StatusEntidadeEnum.INATIVO)
+            if (user == null || user.Status == StatusEntidadeEnum.Inativo)
             {
                 return ApiResponse<LoginResponse>.ErrorResponse("Credenciais inválidas");
             }
@@ -104,7 +104,7 @@ public class AuthService : IAuthService
             // Busca usuário no banco de dados
             var user = await _usuarioRepository.GetByEmailAsync(request.Email);
 
-            if (user != null && user.Status == StatusEntidadeEnum.ATIVO)
+            if (user != null && user.Status == StatusEntidadeEnum.Ativo)
             {
                 // Gera nova senha aleatória
                 var newPassword = GenerateRandomPassword();

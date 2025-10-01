@@ -161,6 +161,8 @@ public class UsuarioRepository : IUsuarioRepository
                 .Set(u => u.Nome, user.Nome)
                 .Set(u => u.Email, user.Email)
                 .Set(u => u.Telefone!, user.Telefone)
+                .Set(u => u.Perfil, user.Perfil)
+                .Set(u => u.Status, user.Status)
                 .Set(u => u.RegistroProfissional!, user.RegistroProfissional)
                 .Set(u => u.Especialidade!, user.Especialidade)
                 .Set(u => u.Observacao!, user.Observacao)

@@ -8,10 +8,10 @@ public enum StatusEntidadeEnum
     /// <summary>
     /// ATIVO
     /// </summary>
-    ATIVO = 1,
+    Ativo = 1,
     
     /// <summary>
     /// INATIVO
     /// </summary>
-    INATIVO = 2
+    Inativo = 2
 }

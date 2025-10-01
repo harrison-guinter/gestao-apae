@@ -32,7 +32,7 @@ public class Convenio : ApiBaseModel
     /// Indica se o convênio está ativo/inativo
     /// </summary>
     [Column("status")]
-    public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.ATIVO;
+    public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.Ativo;
 
     /// <summary>
     /// Observações sobre o convênio

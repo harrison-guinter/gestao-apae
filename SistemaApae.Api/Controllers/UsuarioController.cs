@@ -12,7 +12,7 @@ namespace SistemaApae.Api.Controllers.Users;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
