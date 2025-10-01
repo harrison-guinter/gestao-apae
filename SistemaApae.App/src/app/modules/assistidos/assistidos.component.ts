@@ -98,7 +98,6 @@ export class AssistidosComponent implements OnInit {
   }
 
   statusOptions: SelectOption[] = [
-    { value: '', label: 'Todos' },
     { value: StatusAssistidoEnum.ATIVO, label: 'Ativo' },
     { value: StatusAssistidoEnum.INATIVO, label: 'Inativo' },
   ];

@@ -1,80 +1,50 @@
-<div class="cadastro-assistido-container">
-  <mat-card class="form-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>person</mat-icon>
-        {{ isEdit ? 'Editar Assistido' : 'Cadastrar Assistido' }}
-      </mat-card-title>
-    </mat-card-header>
+<mat-card class="form-card">
+  <mat-card-content>
+    <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()" class="assistido-form">
+      <!-- Dados Pessoais -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>person</mat-icon>
+          Dados Pessoais
+        </h3>
 
-    <mat-card-content>
-      <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()" class="assistido-form">
-        <!-- Dados Pessoais -->
-        <div class="form-section">
-          <h3 class="section-title">
-            <mat-icon>person</mat-icon>
-            Dados Pessoais
-          </h3>
+        <div class="form-row form-row-full">
+          <app-input
+            label="Nome Completo"
+            [control]="$any(formCadastro.get('nome'))"
+            placeholder="Digite o nome completo"
+            appearance="outline"
+          ></app-input>
+        </div>
 
-          <div class="form-row">
+        <div class="form-row">
+          <div class="form-row-third">
+            <mat-form-field appearance="outline">
+              <mat-label>Data de Nascimento</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [formControl]="$any(formCadastro.get('dataNascimento'))"
+                placeholder="DD/MM/AAAA"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
             <app-input
-              label="Nome Completo"
-              [control]="$any(formCadastro.get('nome'))"
-              placeholder="Digite o nome completo"
+              label="CPF"
+              [control]="$any(formCadastro.get('cpf'))"
+              placeholder="000.000.000-00"
               appearance="outline"
-              cssClass="field-full"
             ></app-input>
-          </div>
 
-          <div class="form-row">
-            <div class="form-row-third">
-              <mat-form-field appearance="outline">
-                <mat-label>Data de Nascimento</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker"
-                  [formControl]="$any(formCadastro.get('dataNascimento'))"
-                  placeholder="DD/MM/AAAA"
-                />
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
+            <app-select
+              label="Sexo"
+              [control]="$any(formCadastro.get('sexo'))"
+              [options]="sexoOptions"
+              appearance="outline"
+            ></app-select>
 
-              <app-input
-                label="CPF"
-                [control]="$any(formCadastro.get('cpf'))"
-                placeholder="000.000.000-00"
-                appearance="outline"
-              ></app-input>
-
-              <app-select
-                label="Sexo"
-                [control]="$any(formCadastro.get('sexo'))"
-                [options]="sexoOptions"
-                appearance="outline"
-              ></app-select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-row-half">
-              <app-input
-                label="Nome da Mãe"
-                [control]="$any(formCadastro.get('nomeMae'))"
-                placeholder="Digite o nome da mãe"
-                appearance="outline"
-              ></app-input>
-
-              <app-input
-                label="Nome do Pai"
-                [control]="$any(formCadastro.get('nomePai'))"
-                placeholder="Digite o nome do pai"
-                appearance="outline"
-              ></app-input>
-            </div>
-          </div>
-
-          <div class="form-row">
             <app-input
               label="Naturalidade"
               [control]="$any(formCadastro.get('naturalidade'))"
@@ -84,148 +54,164 @@
           </div>
         </div>
 
-        <!-- Endereço -->
-        <div class="form-section">
-          <h3 class="section-title">
-            <mat-icon>location_on</mat-icon>
-            Endereço
-          </h3>
-
-          <div class="form-row">
+        <div class="form-row">
+          <div class="form-row-half">
             <app-input
-              label="Endereço"
-              [control]="$any(formCadastro.get('endereco'))"
-              placeholder="Rua, número, complemento"
+              label="Nome da Mãe"
+              [control]="$any(formCadastro.get('nomeMae'))"
+              placeholder="Digite o nome da mãe"
               appearance="outline"
-              cssClass="field-large"
             ></app-input>
-          </div>
 
-          <div class="form-row">
-            <div class="form-row-half">
-              <app-input
-                label="Bairro"
-                [control]="$any(formCadastro.get('bairro'))"
-                placeholder="Nome do bairro"
-                appearance="outline"
-              ></app-input>
-
-              <app-input
-                label="CEP"
-                [control]="$any(formCadastro.get('cep'))"
-                placeholder="00000-000"
-                appearance="outline"
-              ></app-input>
-            </div>
-          </div>
-        </div>
-
-        <!-- Responsável -->
-        <div class="form-section">
-          <h3 class="section-title">
-            <mat-icon>supervisor_account</mat-icon>
-            Responsável
-          </h3>
-
-          <div class="form-row">
-            <div class="form-row-half">
-              <app-input
-                label="Nome do Responsável"
-                [control]="$any(formCadastro.get('nomeResponsavel'))"
-                placeholder="Digite o nome do responsável"
-                appearance="outline"
-              ></app-input>
-
-              <app-input
-                label="Telefone do Responsável"
-                [control]="$any(formCadastro.get('telefoneResponsavel'))"
-                placeholder="(00) 00000-0000"
-                appearance="outline"
-              ></app-input>
-            </div>
-          </div>
-        </div>
-
-        <!-- Saúde -->
-        <div class="form-section">
-          <h3 class="section-title">
-            <mat-icon>medical_services</mat-icon>
-            Informações de Saúde
-          </h3>
-
-          <div class="form-row">
-            <div class="form-row-half">
-              <app-select
-                label="Tipo de Deficiência"
-                [control]="$any(formCadastro.get('tipoDeficiencia'))"
-                [options]="tipoDeficienciaOptions"
-                appearance="outline"
-              ></app-select>
-
-              <app-input
-                label="CID"
-                [control]="$any(formCadastro.get('cid'))"
-                placeholder="Ex: F70, F84.0"
-                appearance="outline"
-              ></app-input>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <mat-checkbox [formControl]="$any(formCadastro.get('medicamentosUso'))">
-              Faz uso de medicamentos
-            </mat-checkbox>
-          </div>
-
-          <div class="form-row" *ngIf="formCadastro.get('medicamentosUso')?.value">
             <app-input
-              label="Quais medicamentos utiliza?"
-              [control]="$any(formCadastro.get('medicamentosQuais'))"
-              placeholder="Liste os medicamentos utilizados"
+              label="Nome do Pai"
+              [control]="$any(formCadastro.get('nomePai'))"
+              placeholder="Digite o nome do pai"
               appearance="outline"
-              cssClass="field-full"
             ></app-input>
           </div>
         </div>
+      </div>
 
-        <!-- Status e Observações -->
-        <div class="form-section">
-          <h3 class="section-title">
-            <mat-icon>info</mat-icon>
-            Status e Observações
-          </h3>
+      <!-- Endereço -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>location_on</mat-icon>
+          Endereço
+        </h3>
 
-          <div class="form-row">
+        <div class="form-row form-row-full">
+          <app-input
+            label="Endereço"
+            [control]="$any(formCadastro.get('endereco'))"
+            placeholder="Rua, número, complemento"
+            appearance="outline"
+          ></app-input>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Bairro"
+              [control]="$any(formCadastro.get('bairro'))"
+              placeholder="Nome do bairro"
+              appearance="outline"
+            ></app-input>
+
+            <app-input
+              label="CEP"
+              [control]="$any(formCadastro.get('cep'))"
+              placeholder="00000-000"
+              appearance="outline"
+            ></app-input>
+          </div>
+        </div>
+      </div>
+
+      <!-- Responsável -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>supervisor_account</mat-icon>
+          Responsável
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Nome do Responsável"
+              [control]="$any(formCadastro.get('nomeResponsavel'))"
+              placeholder="Digite o nome do responsável"
+              appearance="outline"
+            ></app-input>
+
+            <app-input
+              label="Telefone do Responsável"
+              [control]="$any(formCadastro.get('telefoneResponsavel'))"
+              placeholder="(00) 00000-0000"
+              appearance="outline"
+            ></app-input>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saúde -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>medical_services</mat-icon>
+          Informações de Saúde
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-half">
             <app-select
-              label="Status"
-              [control]="$any(formCadastro.get('status'))"
-              [options]="statusOptions"
+              label="Tipo de Deficiência"
+              [control]="$any(formCadastro.get('tipoDeficiencia'))"
+              [options]="tipoDeficienciaOptions"
               appearance="outline"
             ></app-select>
-          </div>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="field-full">
-              <mat-label>Observações</mat-label>
-              <textarea
-                matInput
-                [formControl]="$any(formCadastro.get('observacao'))"
-                placeholder="Observações gerais sobre o assistido"
-                rows="4"
-              >
-              </textarea>
-            </mat-form-field>
+            <app-input
+              label="CID"
+              [control]="$any(formCadastro.get('cid'))"
+              placeholder="Ex: F70, F84.0"
+              appearance="outline"
+            ></app-input>
           </div>
         </div>
-      </form>
-    </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-button type="button" (click)="onCancel()">Voltar</button>
+        <div class="form-row">
+          <mat-checkbox [formControl]="$any(formCadastro.get('medicamentosUso'))">
+            Faz uso de medicamentos
+          </mat-checkbox>
+        </div>
 
-      <button mat-raised-button color="primary" type="button" (click)="onSubmit()">
-        {{ isEdit ? 'Salvar Alterações' : 'Cadastrar Assistido' }}
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</div>
+        <div class="form-row form-row-full" *ngIf="formCadastro.get('medicamentosUso')?.value">
+          <app-input
+            label="Quais medicamentos utiliza?"
+            [control]="$any(formCadastro.get('medicamentosQuais'))"
+            placeholder="Liste os medicamentos utilizados"
+            appearance="outline"
+          ></app-input>
+        </div>
+      </div>
+
+      <!-- Status e Observações -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>info</mat-icon>
+          Status e Observações
+        </h3>
+
+        <div class="form-row">
+          <app-select
+            label="Status"
+            [control]="$any(formCadastro.get('status'))"
+            [options]="statusOptions"
+            appearance="outline"
+          ></app-select>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Observações</mat-label>
+            <textarea
+              matInput
+              [formControl]="$any(formCadastro.get('observacao'))"
+              placeholder="Observações gerais sobre o assistido"
+              rows="4"
+            >
+            </textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Voltar</button>
+
+    <button mat-raised-button color="primary" type="button" (click)="onSubmit()">
+      {{ isEdit ? 'Salvar Alterações' : 'Cadastrar Assistido' }}
+    </button>
+  </mat-card-actions>
+</mat-card>
