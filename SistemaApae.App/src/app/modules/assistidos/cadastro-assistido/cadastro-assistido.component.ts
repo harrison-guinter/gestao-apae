@@ -198,7 +198,7 @@ export class CadastroAssistidoComponent implements OnInit {
       this.assistidoService.editarAssistido(assistidoData).subscribe({
         next: () => {
           this.notificationService.showSuccess('Assistido editado com sucesso!');
-          this.router.navigate(['/assistidos']);
+          this.router.navigate(['/home/assistidos']);
         },
         error: (error) => {
           this.notificationService.showError('Erro ao editar assistido');
@@ -208,7 +208,7 @@ export class CadastroAssistidoComponent implements OnInit {
       this.assistidoService.salvarAssistido(assistidoData).subscribe({
         next: () => {
           this.notificationService.showSuccess('Assistido cadastrado com sucesso!');
-          this.router.navigate(['/assistidos']);
+          this.router.navigate(['/home/assistidos']);
         },
         error: (error) => {
           this.notificationService.showError('Erro ao cadastrar assistido');
@@ -218,6 +218,6 @@ export class CadastroAssistidoComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['/assistidos']);
+    this.router.navigate(['/home/assistidos']);
   }
 }

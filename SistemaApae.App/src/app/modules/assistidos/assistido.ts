@@ -61,8 +61,8 @@ export interface Assistido {
 }
 
 export enum StatusAssistidoEnum {
-  ATIVO = 1,
-  INATIVO = 0,
+  ATIVO = 'Ativo',
+  INATIVO = 'Inativo',
 }
 
 export enum SexoEnum {
