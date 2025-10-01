@@ -27,7 +27,7 @@ public class AgendamentoController : ControllerBase
     }
 
     /// <summary>
-    /// Lista Assistidos por filtros de pesquisa (paginado)
+    /// Lista Agendamentos por filtros de pesquisa (paginado)
     /// </summary>
     [HttpGet("filter")]
     [ProducesResponseType(typeof(ApiResponse<IEnumerable<Agendamento>>), StatusCodes.Status200OK)]
@@ -47,7 +47,7 @@ public class AgendamentoController : ControllerBase
     }
 
     /// <summary>
-    /// Buscar um Assistido por id
+    /// Buscar um Agendamento por id
     /// </summary>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status200OK)]

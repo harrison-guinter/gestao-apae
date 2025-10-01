@@ -8,9 +8,14 @@ namespace SistemaApae.Api.Models.Agenda;
 public class AgendamentoFilterRequest : BaseFilter
 {
     /// <summary>
-    /// Data do agendamento
+    /// Data inicial do agendamento 
     /// </summary>
-    public DateOnly? DataAgendamento { get; set; }
+    public DateOnly? DataAgendamentoInicio { get; set; }
+
+    /// <summary>
+    /// Data final do agendamento 
+    /// </summary>
+    public DateOnly? DataAgendamentoFim { get; set; }
 
     /// <summary>
     /// ID do assistido

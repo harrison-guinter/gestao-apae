@@ -1,7 +1,5 @@
 using SistemaApae.Api.Models.Enums;
-using SistemaApae.Api.Models.Users;
 using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace SistemaApae.Api.Models.Agenda;

@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using Supabase.Postgrest.Models;
-using Supabase.Postgrest.Attributes;
 using SistemaApae.Api.Models.Enums;
+using Supabase.Postgrest.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaApae.Api.Models.Agenda;
 
@@ -18,6 +17,13 @@ public class Atendimento : ApiBaseModel
     [Required]
     [Column("id_agendamento")]
     public Guid IdAgendamento { get; set; }
+
+    /// <summary>
+    /// ID do Assistido associado
+    /// </summary>
+    [Required]
+    [Column("id_assistido")]
+    public Guid IdAssistido { get; set; }
 
     /// <summary>
     /// Data e hora do atendimento
