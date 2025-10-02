@@ -8,11 +8,17 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { NotificationService } from '../notification/notification.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
@@ -23,6 +29,15 @@ export class ErrorInterceptor implements HttpInterceptor {
           // Erro do lado do cliente
           errorMessage = `Erro: ${error.error.message}`;
         } else {
+          // Verificar erro 401 primeiro (não autorizado)
+          if (error.status === 401) {
+            errorMessage = 'Sessão expirada. Redirecionando para login...';
+            this.authService.logout();
+            this.router.navigate(['/login']);
+            this.notificationService.showError(errorMessage);
+            return throwError(() => error);
+          }
+
           // Verificar se a resposta tem o formato da API (com Success, Message, Errors)
           const apiError = error.error;
 
@@ -50,7 +65,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                 errorMessage = 'Dados inválidos';
                 break;
               case 401:
-                errorMessage = 'Não autorizado. Faça login novamente.';
+                errorMessage = 'Sessão expirada. Redirecionando para login...';
+                // Fazer logout e redirecionar para login
+                this.authService.logout();
+                this.router.navigate(['/login']);
                 break;
               case 403:
                 errorMessage = 'Acesso negado';

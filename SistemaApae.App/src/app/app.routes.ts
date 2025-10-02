@@ -10,6 +10,7 @@ import { AuthGuard } from './modules/auth/auth.guard';
 import { NoAuthGuard } from './modules/auth/no-auth.guard';
 import { CoordenadorGuard } from './modules/auth/coordenador.guard';
 import { ConveniosComponent } from './modules/convenios/convenios.component';
+import { CadastroAssistidoComponent } from './modules/assistidos/cadastro-assistido/cadastro-assistido.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,7 +24,17 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
-      // { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
+      { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
+      {
+        path: 'assistidos/cadastro',
+        canActivate: [CoordenadorGuard],
+        component: CadastroAssistidoComponent,
+      },
+      {
+        path: 'assistidos/cadastro/:id',
+        canActivate: [CoordenadorGuard],
+        component: CadastroAssistidoComponent,
+      },
       { path: 'convenios', canActivate: [CoordenadorGuard], component: ConveniosComponent },
     ],
   },
