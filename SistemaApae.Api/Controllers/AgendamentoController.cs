@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Agenda;
-using SistemaApae.Api.Models.Agreements;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Services;
@@ -9,33 +8,33 @@ using SistemaApae.Api.Services;
 namespace SistemaApae.Api.Controllers;
 
 /// <summary>
-/// Controller com endpoints de CRUD da entidade Convenio
+/// Controller com endpoints de CRUD da entidade Agendamento
 /// </summary>
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
-public class ConvenioController : ControllerBase
+public class AgendamentoController : ControllerBase
 {
-    private readonly IService<Convenio, ConvenioFilterRequest> _service;
+    private readonly IService<Agendamento, AgendamentoFilterRequest> _service;
 
     /// <summary>
-    /// Inicializa uma nova instância do ConvenioController
+    /// Inicializa uma nova instância do AgendamentoController
     /// </summary>
-    public ConvenioController(IService<Convenio, ConvenioFilterRequest> service)
+    public AgendamentoController(IService<Agendamento, AgendamentoFilterRequest> service)
     {
         _service = service;
     }
 
     /// <summary>
-    /// Lista Convenios por filtros de pesquisa (paginado)
+    /// Lista Agendamentos por filtros de pesquisa (paginado)
     /// </summary>
     [HttpGet("filter")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Convenio>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Agendamento>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Convenio>>>> GetByFilters([FromQuery] ConvenioFilterRequest request)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Agendamento>>>> GetByFilters([FromQuery] AgendamentoFilterRequest request)
     {
         var result = await _service.GetByFilters(request);
         if (!result.Success)
@@ -48,14 +47,14 @@ public class ConvenioController : ControllerBase
     }
 
     /// <summary>
-    /// Buscar um Convenio por id
+    /// Buscar um Agendamento por id
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<Convenio>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Convenio>>> GetById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<Agendamento>>> GetById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -71,14 +70,14 @@ public class ConvenioController : ControllerBase
     }
 
     /// <summary>
-    /// Criar um Convenio
+    /// Criar um Agendamento
     /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(ApiResponse<Convenio>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Convenio>>> Create([FromBody] Convenio request)
+    public async Task<ActionResult<ApiResponse<Agendamento>>> Create([FromBody] Agendamento request)
     {
         if (!ModelState.IsValid)
         {
@@ -100,14 +99,14 @@ public class ConvenioController : ControllerBase
     }
 
     /// <summary>
-    /// Atualiza um Convenio existente
+    /// Atualiza um Agendamento existente
     /// </summary>
     [HttpPut]
-    [ProducesResponseType(typeof(ApiResponse<Convenio>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Convenio>>> Update([FromBody] Convenio request)
+    public async Task<ActionResult<ApiResponse<Agendamento>>> Update([FromBody] Agendamento request)
     {
         if (!ModelState.IsValid)
         {
@@ -129,3 +128,5 @@ public class ConvenioController : ControllerBase
         return Ok(result);
     }
 }
+
+

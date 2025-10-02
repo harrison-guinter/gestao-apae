@@ -1,8 +1,5 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using SistemaApae.Api.Models.Administrative;
 using SistemaApae.Api.Models.Enums;
-using SistemaApae.Api.Models.Patients;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 

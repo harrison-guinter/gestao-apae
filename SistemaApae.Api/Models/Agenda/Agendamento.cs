@@ -1,7 +1,5 @@
 using SistemaApae.Api.Models.Enums;
-using SistemaApae.Api.Models.Users;
 using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace SistemaApae.Api.Models.Agenda;
@@ -37,6 +35,12 @@ public class Agendamento : ApiBaseModel
     /// </summary>
     [Column("data_agendamento")]
     public DateOnly? DataAgendamento { get; set; }
+
+    /// <summary>
+    /// Dia da semana do agendamento
+    /// </summary>
+    [Column("dia_semana")]
+    public DiaSemanaEnum? DiaSemana { get; set; }
 
     /// <summary>
     /// Observações sobre o agendamento

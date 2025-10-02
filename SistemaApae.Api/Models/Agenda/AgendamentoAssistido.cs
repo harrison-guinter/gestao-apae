@@ -1,7 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using Supabase.Postgrest.Models;
 using Supabase.Postgrest.Attributes;
-using SistemaApae.Api.Models.Patients;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaApae.Api.Models.Agenda;
 
