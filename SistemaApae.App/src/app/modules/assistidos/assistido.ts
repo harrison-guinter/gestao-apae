@@ -71,12 +71,12 @@ export enum SexoEnum {
 }
 
 export enum TipoDeficienciaEnum {
-  INTELECTUAL = 1,
-  FISICA = 2,
-  AUDITIVA = 3,
-  VISUAL = 4,
-  MULTIPLA = 5,
-  AUTISMO = 6,
+  INTELECTUAL = 'INTELECTUAL',
+  FISICA = 'FISICA',
+  AUDITIVA = 'AUDITIVA',
+  VISUAL = 'VISUAL',
+  MULTIPLA = 'MULTIPLA',
+  AUTISMO = 'AUTISMO',
 }
 
 export enum PlanoSaudeEnum {
