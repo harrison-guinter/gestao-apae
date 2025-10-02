@@ -1,6 +1,7 @@
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Repositories;
 using Supabase.Postgrest.Interfaces;
+using Supabase.Postgrest;
 
 namespace SistemaApae.Api.Repositories.Patients;
 
@@ -13,7 +14,7 @@ public class AssistidoFilter : IRepositoryFilter<Assistido, AssistidoFiltroReque
     {
         if (!string.IsNullOrWhiteSpace(filtros.Nome))
         {
-            query = query.Filter(a => a.Nome, Supabase.Postgrest.Constants.Operator.ILike, $"%{filtros.Nome}%");
+            query = query.Filter(a => a.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
         }
 
         if (!string.IsNullOrWhiteSpace(filtros.CPF))
@@ -22,7 +23,7 @@ public class AssistidoFilter : IRepositoryFilter<Assistido, AssistidoFiltroReque
             var digits = new string(filtros.CPF.Where(char.IsDigit).ToArray());
             if (!string.IsNullOrEmpty(digits))
             {
-                query = query.Filter(a => a.Cpf!, Supabase.Postgrest.Constants.Operator.ILike, $"%{digits}%");
+                query = query.Filter(a => a.Cpf!, Constants.Operator.ILike, $"%{digits}%");
             }
         }
 

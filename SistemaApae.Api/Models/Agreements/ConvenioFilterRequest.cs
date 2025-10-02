@@ -3,7 +3,7 @@
 /// <summary>
 /// Modelo para requisição de convênios por filtros de pesquisa
 /// </summary>
-public class ConvenioFiltroRequest
+public class ConvenioFilterRequest
 {
     /// <summary>
     /// Nome do convênio
@@ -13,6 +13,6 @@ public class ConvenioFiltroRequest
     /// <summary>
     /// Nome do munícipio do convênio
     /// </summary>
-    public string? Municipio { get; set; }
+    public Guid IdMunicipio { get; set; }
 }
 

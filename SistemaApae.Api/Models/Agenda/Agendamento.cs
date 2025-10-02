@@ -37,6 +37,12 @@ public class Agendamento : ApiBaseModel
     public DateOnly? DataAgendamento { get; set; }
 
     /// <summary>
+    /// Dia da semana do agendamento
+    /// </summary>
+    [Column("dia_semana")]
+    public DiaSemanaEnum? DiaSemana { get; set; }
+
+    /// <summary>
     /// Observações sobre o agendamento
     /// </summary>
     [Column("observacao")]
