@@ -1,0 +1,30 @@
+<div class="usuarios-container">
+  <app-filters-container
+    [formGroup]="filtrosForm"
+    (add)="onAdd()"
+    (clear)="onClear()"
+    (search)="pesquisarAgendamentos()"
+    title="Lista de Agendamentos"
+  >
+    <app-input
+      label="Nome"
+      [control]="$any(filtrosForm.get('Nome'))"
+      placeholder="Buscar por nome"
+      suffixIcon="search"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-input>
+
+  </app-filters-container>
+  <div class="table-section">
+    <app-table
+      [columns]="tableColumns"
+      [data]="agendamentos"
+      [actions]="tableActions"
+      [showActions]="true"
+      tableClass="agendamentos-table"
+    >
+    </app-table>
+  </div>
+</div>

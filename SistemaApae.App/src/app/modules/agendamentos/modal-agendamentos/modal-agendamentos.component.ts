@@ -10,8 +10,8 @@ import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
 import { CidadesService } from '../../cidades/cidades.service';
 import { map } from 'rxjs';
-import { Convenio, TipoConvenio } from '../convenio';
-import { ConvenioService } from '../convenio.service';
+import { Agendamento } from '../agendamento';
+import { AgendamentoService } from '../agendamento.service';
 import { NotificationService } from '../../core/notification/notification.service';
 import { Status } from '../../core/enum/status.enum';
 
@@ -28,36 +28,23 @@ import { Status } from '../../core/enum/status.enum';
     InputComponent,
     BaseModalComponent,
   ],
-  templateUrl: './modal-convenios.component.html',
-  styleUrls: ['./modal-convenios.component.less'],
+  templateUrl: './modal-agendamentos.component.html',
+  styleUrls: ['./modal-agendamentos.component.less'],
 })
-export class ModalConveniosComponent implements OnInit {
+export class ModalAgendamentosComponent implements OnInit {
   protected formCadastro!: FormGroup;
   private isEdit: boolean = false;
 
-  private cidadesService: CidadesService = inject(CidadesService);
-  private convenioService: ConvenioService = inject(ConvenioService);
+  private agendamentoService: AgendamentoService = inject(AgendamentoService);
 
   statusOptions: SelectOption[] = [
     { value: Status.Ativo, label: 'Ativo' },
     { value: Status.Inativo, label: 'Inativo' },
   ];
 
-  tipos: SelectOption[] = [
-    { value: TipoConvenio.CAS, label: 'CAS' },
-    { value: TipoConvenio.Educacao, label: 'Educação' },
-    { value: TipoConvenio.Saude, label: 'Saúde' },
-    { value: TipoConvenio.AssistenciaSocial, label: 'Assistência social' },
-    { value: TipoConvenio.EJA, label: 'EJA' },
-  ];
-
-  cidades$ = this.cidadesService
-    .listarCidades()
-    .pipe(map((cidades) => cidades.map((cidade) => ({ value: cidade.id, label: cidade.nome }))));
-
   constructor(
     private formBuilder: UntypedFormBuilder,
-    public dialogRef: MatDialogRef<ModalConveniosComponent>,
+    public dialogRef: MatDialogRef<ModalAgendamentosComponent>,
     private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ModalData
   ) {}
@@ -68,15 +55,13 @@ export class ModalConveniosComponent implements OnInit {
   }
 
   initFormCadastro() {
-    const object: Convenio = this.data.element;
+    const object: Agendamento = this.data.element;
 
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
       nome: [object?.nome || '', Validators.required],
       status: [object?.status, Validators.required],
-      idMunicipio: [object?.idMunicipio, Validators.required],
       observacao: [object?.observacao || ''],
-      tipoConvenio: [object?.tipoConvenio, Validators.required],
     });
 
     if (this.data.isVisualizacao) {
@@ -84,10 +69,10 @@ export class ModalConveniosComponent implements OnInit {
     }
   }
 
-  valueFromForm(): Convenio {
+  valueFromForm(): Agendamento {
     const valor = this.formCadastro.value;
   
-    return {...valor } as Convenio;
+    return {...valor } as Agendamento;
   }
 
   onConfirm(): void {
@@ -104,13 +89,13 @@ export class ModalConveniosComponent implements OnInit {
 
     this.formCadastro.get('UpdatedAt')?.setValue(new Date(), { emitEvent: false });
     if (this.isEdit) {
-      this.convenioService.editar(this.valueFromForm()).subscribe((val) => {
-        this.notificationService.showSuccess('Convênio editado com sucesso!');
+      this.agendamentoService.editar(this.valueFromForm()).subscribe((val) => {
+        this.notificationService.showSuccess('Agendamento editado com sucesso!');
         this.dialogRef.close();
       });
     } else {
-      this.convenioService.salvar(this.valueFromForm()).subscribe((val) => {
-        this.notificationService.showSuccess('Convênio salvo com sucesso!');
+      this.agendamentoService.salvar(this.valueFromForm()).subscribe((val) => {
+        this.notificationService.showSuccess('Agendamento salvo com sucesso!');
         this.dialogRef.close();
       });
     }

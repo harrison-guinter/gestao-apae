@@ -1,0 +1,35 @@
+<app-base-modal
+  [modalTitle]="'Agendamento'"
+  [confirmButtonText]="'Salvar'"
+  (onConfirmClick)="onConfirm()"
+  (onCancelClick)="onCancel()"
+  [isVisualizacao]="data.isVisualizacao"
+>
+  <form [formGroup]="formCadastro" class="convenio-form">
+    <div class="form-row">
+      <div class="form-row-half">
+        <app-input
+          label="Nome"
+          [control]="$any(formCadastro.get('nome'))"
+          placeholder="Digite o nome"
+          appearance="outline"
+        ></app-input>
+
+        <app-select
+          label="Status"
+          [control]="$any(formCadastro.get('status'))"
+          [options]="statusOptions"
+          appearance="outline"
+        ></app-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <app-input
+        label="Observações"
+        [control]="$any(formCadastro.get('observacao'))"
+        placeholder="Digite as observações"
+        appearance="outline"
+      ></app-input>
+    </div>
+  </form>
+</app-base-modal>

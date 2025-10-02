@@ -16,42 +16,40 @@ export class RequestInterceptor implements HttpInterceptor {
         },
       });
     }
-    // Normalizar parâmetros de query (GET requests)
-    if (authReq.method === 'GET' && authReq.params.keys().length > 0) {
+
+    // 🔹 Normalizar parâmetros de query (GET requests)
+    if (authReq.params.keys().length > 0) {
       let normalizedParams = authReq.params;
 
-      // Converter cada parâmetro de camelCase para PascalCase
       authReq.params.keys().forEach((key) => {
-        const pascalKey = this.toPascalCase(key);
         const value = authReq.params.get(key);
 
-        if (pascalKey !== key && value !== null) {
-          // Remove o parâmetro com chave original
+        // 🔹 remove se for null, undefined ou string vazia
+
+        if (value === "null" || value === null || value === undefined || value === '') {
           normalizedParams = normalizedParams.delete(key);
-          // Adiciona com chave em PascalCase
+          return;
+        }
+
+        const pascalKey = this.toPascalCase(key);
+        if (pascalKey !== key) {
+          normalizedParams = normalizedParams.delete(key);
           normalizedParams = normalizedParams.set(pascalKey, value);
         }
       });
 
-      // Cria uma nova requisição com parâmetros normalizados
-      const normalizedRequest = authReq.clone({
+      authReq = authReq.clone({
         params: normalizedParams,
       });
-
-
-      return next.handle(normalizedRequest);
     }
 
-    // Normalizar body de requisições POST/PUT
+    // 🔹 Normalizar body de requisições POST/PUT
     if ((authReq.method === 'POST' || authReq.method === 'PUT') && authReq.body) {
       const normalizedBody = this.normalizeKeysForBackend(authReq.body);
 
-      const normalizedRequest = authReq.clone({
+      authReq = authReq.clone({
         body: normalizedBody,
       });
-
-
-      return next.handle(normalizedRequest);
     }
 
     return next.handle(authReq);
@@ -59,52 +57,49 @@ export class RequestInterceptor implements HttpInterceptor {
 
   /**
    * Converte camelCase para PascalCase
-   * Exemplo: "nome" -> "Nome", "registroProfissional" -> "RegistroProfissional"
    */
   private toPascalCase(str: string): string {
     if (!str || str.length === 0) {
       return str;
     }
-
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   /**
-   * Normaliza as chaves de um objeto para o formato esperado pelo backend (PascalCase)
-   * Funciona recursivamente com objetos aninhados e arrays
+   * Normaliza chaves e remove valores null/undefined/"" de objetos e arrays
    */
   private normalizeKeysForBackend(obj: any): any {
-    if (obj === null || obj === undefined) {
-      return obj;
+    if (obj === null || obj === undefined || obj === '') {
+      return undefined;
     }
 
     if (Array.isArray(obj)) {
-      // Se for array, normaliza cada item
-      return obj.map((item) => this.normalizeKeysForBackend(item));
+      return obj
+        .map((item) => this.normalizeKeysForBackend(item))
+        .filter((item) => item !== undefined);
     }
 
     if (typeof obj === 'object' && obj.constructor === Object) {
-      // Se for objeto, normaliza as chaves
       const normalized: any = {};
 
       for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
-          // Converte para PascalCase
-          const pascalKey = this.toPascalCase(key);
-          // Recursivamente normaliza o valor se for objeto
-          normalized[pascalKey] = this.normalizeKeysForBackend(obj[key]);
+          const value = this.normalizeKeysForBackend(obj[key]);
+          if (value !== undefined) {
+            const pascalKey = this.toPascalCase(key);
+            normalized[pascalKey] = value;
+          }
         }
       }
 
       return normalized;
     }
 
-    // Se não for objeto nem array, retorna o valor original
     return obj;
   }
 
   /**
-   * Converte HttpParams para objeto para logging
+   * Converte HttpParams para objeto (debug)
    */
   private paramsToObject(params: any): any {
     const obj: any = {};

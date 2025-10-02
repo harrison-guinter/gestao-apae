@@ -43,21 +43,17 @@ export class SelectComponent {
   @Output() suffixIconClick = new EventEmitter<void>();
 
   compareWith = (o1: any, o2: any): boolean => {
-    console.log('Comparing:', o1, o2);
     // Se são objetos SelectOption
-    // console.log(o1 && o2 && typeof o1 === 'object' && typeof o2 === 'object');
     if (o1 && o2 && typeof o1 === 'object' && typeof o2 === 'object') {
 
       return o1.value === o2.value;
     }
 
-    // console.log(o1 && typeof o1 === 'object' && o1.value !== undefined)
     // Se o1 é um SelectOption e o2 é um valor primitivo
     if (o1 && typeof o1 === 'object' && o1.value !== undefined) {
       return o1.value === o2;
     }
 
-    // console.log(o2 && typeof o2 === 'object' && o2.value !== undefined)
     // Se o2 é um SelectOption e o1 é um valor primitivo
     if (o2 && typeof o2 === 'object' && o2.value !== undefined) {
       return o1 === o2.value;

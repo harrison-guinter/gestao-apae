@@ -3,10 +3,11 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { Convenio } from './convenio';
+import { Status } from '../core/enum/status.enum';
 
 export interface ConvenioFiltro {
   Nome?: string;
-  Status?: number;
+  Status?: Status;
 }
 
 @Injectable({

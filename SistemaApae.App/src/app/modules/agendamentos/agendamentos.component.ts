@@ -13,15 +13,15 @@ import { InputComponent } from '../core/input/input.component';
 import { PageInfoService } from '../core/services/page-info.service';
 import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
 import { ModalService } from '../core/services/modal.service';
-import { Convenio } from './convenio';
-import { ModalConveniosComponent } from './modal-convenios/modal-convenios.component';
-import { ConvenioService } from './convenio.service';
+import { Agendamento } from './agendamento';
+import { ModalAgendamentosComponent } from './modal-agendamentos/modal-agendamentos.component';
+import { AgendamentoService } from './agendamento.service';
 import { NotificationService } from '../core/notification/notification.service';
-import { ConvenioFiltro } from './convenio.service';
+import { AgendamentoFiltro } from './agendamento.service';
 import { Status } from '../core/enum/status.enum';
 
 @Component({
-  selector: 'app-convenios',
+  selector: 'app-agendamentos',
   standalone: true,
   imports: [
     CommonModule,
@@ -37,15 +37,15 @@ import { Status } from '../core/enum/status.enum';
     InputComponent,
     FiltersContainerComponent,
   ],
-  templateUrl: './convenios.component.html',
-  styleUrls: ['./convenios.component.less'],
+  templateUrl: './agendamentos.component.html',
+  styleUrls: ['./agendamentos.component.less'],
 })
-export class ConveniosComponent implements OnInit {
+export class AgendamentosComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
-  private convenioService = inject(ConvenioService);
+  private agendamentoService = inject(AgendamentoService);
 
-  protected convenios: Convenio[] = []
+  protected agendamentos: Agendamento[] = []
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -55,19 +55,19 @@ export class ConveniosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pageInfoService.updatePageInfo('Convênios', 'Gerenciar convênios do sistema');
+    this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar convênios do sistema');
 
     this.initFiltrosForm();
-    this.pesquisarConvenios()
+    this.pesquisarAgendamentos()
   }
 
-    pesquisarConvenios() {
-      const filtros: ConvenioFiltro = this.filtrosForm.value;
+    pesquisarAgendamentos() {
+      const filtros: AgendamentoFiltro = this.filtrosForm.value;
   
-       this.convenioService.listarConvenios(filtros).subscribe((convenios) => {
-        this.convenios = convenios;
+       this.agendamentoService.listarAgendamentos(filtros).subscribe((agendamentos) => {
+        this.agendamentos = agendamentos;
 
-        if (convenios.length === 0) {
+        if (agendamentos.length === 0) {
           this.notificationService.showInfo('Nenhum convênio encontrado com os filtros aplicados');
         }
       });
@@ -84,7 +84,7 @@ export class ConveniosComponent implements OnInit {
   }
 
   onAdd() {
-    this.adicionarConvenio();
+    this.adicionarAgendamento();
   }
 
   onClear() {
@@ -106,47 +106,47 @@ export class ConveniosComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Editar',
       color: 'primary',
-      action: (row) => this.editarConvenio(row),
+      action: (row) => this.editarAgendamento(row),
     },
      {
       icon: 'visibility',
       tooltip: 'Visualizar',
       color: 'primary',
-      action: (row) => this.visualizarConvenio(row),
+      action: (row) => this.visualizarAgendamento(row),
     },
   ];
 
-  adicionarConvenio(): void {
+  adicionarAgendamento(): void {
 
     this.modalService
       .openModal({
-        component: ModalConveniosComponent,
+        component: ModalAgendamentosComponent,
         width: '60%',
         height: 'auto',
         disableClose: true,
         data: { isEdit: false },
         element: null,
       })
-      .subscribe(() => this.pesquisarConvenios());
+      .subscribe(() => this.pesquisarAgendamentos());
   }
 
-  editarConvenio(element: Convenio) {
+  editarAgendamento(element: Agendamento) {
     this.modalService
       .openModal({
-        component: ModalConveniosComponent,
+        component: ModalAgendamentosComponent,
         width: '60%',
         height: 'auto',
         disableClose: true,
         data: { isEdit: true },
         element: element,
       })
-      .subscribe(() => this.pesquisarConvenios());
+      .subscribe(() => this.pesquisarAgendamentos());
   }
 
-  visualizarConvenio(element: Convenio) {
+  visualizarAgendamento(element: Agendamento) {
     this.modalService
       .openModal({
-        component: ModalConveniosComponent,
+        component: ModalAgendamentosComponent,
         width: '60%',
         height: 'auto',
         disableClose: true,
@@ -154,6 +154,6 @@ export class ConveniosComponent implements OnInit {
         element: element,
         isVisualizacao: true
       })
-      .subscribe(() => this.pesquisarConvenios());
+      .subscribe(() => this.pesquisarAgendamentos());
   }
 }

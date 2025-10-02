@@ -1,0 +1,79 @@
+.agendamentos-container {
+  //background-color: var(--mat-surface);
+  height: calc(100vh - 150px);
+
+  .filters-section {
+    margin-bottom: 12px;
+
+    .filters-card {
+      box-shadow: var(--elevation-1);
+      background-color: var(--mat-surface);
+
+      .button-group {
+        display: flex;
+        margin-bottom: 8px;
+      }
+      .filters-container {
+        display: flex;
+        align-items: center;
+
+        // Alinhamento dos campos de formulário (mantém altura padrão)
+        app-input,
+        app-select {
+          align-self: center;
+        }
+
+        .clear-button,
+        .add-button {
+          width: 40px;
+          height: 40px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 12px;
+          align-self: center;
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .clear-button {
+          background-color: transparent;
+          border: 2px solid var(--mat-primary-500);
+          color: var(--mat-primary-500);
+
+          &:hover {
+            background-color: rgba(33, 150, 243, 0.04);
+            border-color: var(--mat-primary-600);
+            color: var(--mat-primary-600);
+          }
+
+          mat-icon {
+            color: var(--mat-primary-500);
+          }
+
+          &:hover mat-icon {
+            color: var(--mat-primary-600);
+          }
+        }
+
+        .add-button {
+          background-color: var(--mat-primary-500);
+          color: white;
+
+          &:hover {
+            background-color: var(--mat-primary-600);
+          }
+
+          mat-icon {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
