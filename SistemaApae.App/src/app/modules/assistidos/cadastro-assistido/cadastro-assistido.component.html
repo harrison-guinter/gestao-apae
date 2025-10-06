@@ -17,8 +17,8 @@
           ></app-input>
         </div>
 
-        <div class="form-row form-row-full">
-          <div class="form-row-half">
+        <div class="form-row">
+          <div class="form-row-quarters">
             <mat-form-field appearance="outline">
               <mat-label>Data de Nascimento</mat-label>
               <input
@@ -37,9 +37,7 @@
               placeholder="000.000.000-00"
               appearance="outline"
             ></app-input>
-          </div>
 
-          <div class="form-row-half">
             <app-select
               label="Sexo"
               [control]="$any(formCadastro.get('sexo'))"
