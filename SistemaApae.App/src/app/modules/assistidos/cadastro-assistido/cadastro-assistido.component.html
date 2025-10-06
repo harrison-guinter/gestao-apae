@@ -4,7 +4,7 @@
       <!-- Dados Pessoais -->
       <div class="form-section">
         <h3 class="section-title">
-          <mat-icon>dashboard</mat-icon>
+          <mat-icon>person</mat-icon>
           Dados Pessoais
         </h3>
 
@@ -17,8 +17,8 @@
           ></app-input>
         </div>
 
-        <div class="form-row">
-          <div class="form-row-third">
+        <div class="form-row form-row-full">
+          <div class="form-row-half">
             <mat-form-field appearance="outline">
               <mat-label>Data de Nascimento</mat-label>
               <input
@@ -37,7 +37,9 @@
               placeholder="000.000.000-00"
               appearance="outline"
             ></app-input>
+          </div>
 
+          <div class="form-row-half">
             <app-select
               label="Sexo"
               [control]="$any(formCadastro.get('sexo'))"

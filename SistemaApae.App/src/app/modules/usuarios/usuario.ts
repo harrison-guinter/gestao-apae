@@ -1,8 +1,8 @@
 import { Roles } from '../auth/roles.enum';
 
 export enum StatusUsuarioEnum {
-  ATIVO = 1,
-  INATIVO = 2,
+  ATIVO = 'Ativo',
+  INATIVO = 'Inativo',
 }
 
 export class Usuario {
