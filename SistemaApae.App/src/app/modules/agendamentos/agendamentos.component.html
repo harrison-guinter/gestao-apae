@@ -6,16 +6,34 @@
     (search)="pesquisarAgendamentos()"
     title="Lista de Agendamentos"
   >
-    <app-input
+    <!-- <app-input
       label="Nome"
-      [control]="$any(filtrosForm.get('Nome'))"
+      [control]="$any(filtrosForm.get('profissional'))"
       placeholder="Buscar por nome"
       suffixIcon="search"
       appearance="outline"
       cssClass="mat-spacing-sm field-lg"
     >
-    </app-input>
+    </app-input> -->
 
+    <app-autocomplete
+      label="Usuário"
+      placeholder="Digite para buscar..."
+      [options]="userOptions"
+      [control]="$any(filtrosForm.get('profissionalId'))"
+      [clearable]="true"
+    >
+    </app-autocomplete>
+
+    <!-- <app-input
+      label="Nome"
+      [control]="$any(filtrosForm.get('nome'))"
+      placeholder="Buscar por nome"
+      suffixIcon="search"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-input> -->
   </app-filters-container>
   <div class="table-section">
     <app-table

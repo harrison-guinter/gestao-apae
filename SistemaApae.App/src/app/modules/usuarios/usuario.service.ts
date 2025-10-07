@@ -21,10 +21,21 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
-  listarUsuarios(filtros: UsuarioFiltro): Observable<Usuario[]> {
+  filtrarUsuarios(filtros: UsuarioFiltro): Observable<Usuario[]> {
     const params = this.buildValidParams(filtros);
 
     return this.http.get<ApiResponse<Usuario[]>>(`${this.baseUrl}Usuario/filter`, { params }).pipe(
+      map((response) => {
+        const usuarios = response.data || [];
+        return usuarios.sort((a, b) =>
+          (a.nome || '').toLowerCase().localeCompare((b.nome || '').toLowerCase())
+        );
+      })
+    );
+  }
+
+  listarUsuarios(): Observable<Usuario[]> {
+    return this.http.get<ApiResponse<Usuario[]>>(`${this.baseUrl}Usuario`).pipe(
       map((response) => {
         const usuarios = response.data || [];
         return usuarios.sort((a, b) =>
