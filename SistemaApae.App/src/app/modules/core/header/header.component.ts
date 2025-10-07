@@ -52,21 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const user = JSON.parse(userString);
 
         this.userName = user.nome || user.name || 'Usuário';
-
-        switch (user.perfil) {
-          case Roles.COORDENADOR:
-            this.userRole = 'Coordenador';
-            break;
-          case Roles.PROFISSIONAL:
-            this.userRole = 'Profissional';
-            break;
-          default:
-            if (user.perfil === 1) {
-              this.userRole = 'Coordenador';
-            } else if (user.perfil === 2) {
-              this.userRole = 'Profissional';
-            }
-        }
+        this.userRole = user.perfil || 'Perfil';
 
         this.generateUserInitials();
       }
