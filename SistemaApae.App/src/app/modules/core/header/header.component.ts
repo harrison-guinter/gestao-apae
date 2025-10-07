@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { PageInfoService, PageInfo } from '../services/page-info.service';
 import { AuthService } from '../../auth/auth.service';
 import { NotificationService } from '../notification/notification.service';
 import { Roles } from '../../auth/roles.enum';
+import { V } from '@angular/cdk/keycodes';
+import { ConfirmationService } from '../confirmation-modal/confirmation.service';
 
 @Component({
   selector: 'app-header',
@@ -22,13 +24,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   pageTitle: string = 'Dashboard';
   pageSubtitle: string = 'Sistema de Gestão de Atendimentos';
 
+  @ViewChild('logoutIcon') logoutIcon!: MatIcon;
+
   private pageInfoSubscription?: Subscription;
 
   constructor(
     private router: Router,
     private pageInfoService: PageInfoService,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -64,7 +69,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
 
         this.generateUserInitials();
-      } 
+      }
     } catch (error) {
       this.userName = 'Usuário';
       this.userRole = 'Perfil';
@@ -97,21 +102,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    const confirmLogout = confirm('Tem certeza que deseja sair do sistema?');
+    const config = {
+      message: 'Tem certeza que deseja sair do sistema?',
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não',
+      elementRef: this.logoutIcon._elementRef.nativeElement,
+      disableClose: true,
+    };
 
-    if (confirmLogout) {
-      try {
-        this.authService.logout();
-        this.notificationService.success('Logout realizado com sucesso!');
-        this.router.navigate(['/login']);
-      } catch (error) {
-        console.error('Erro durante logout:', error);
-        this.notificationService.fail('Erro ao realizar logout');
+    this.confirmationService.openConfirmationModal(config).subscribe((confirmed) => {
+      if (confirmed) {
+        try {
+          this.authService.logout();
+          this.notificationService.success('Logout realizado com sucesso!');
+          this.router.navigate(['/login']);
+        } catch (error) {
+          console.error('Erro durante logout:', error);
+          this.notificationService.fail('Erro ao realizar logout');
+        }
       }
-    }
-  }
-
-  onProfileClick(): void {
-    this.loadUserInfo();
+    });
   }
 }

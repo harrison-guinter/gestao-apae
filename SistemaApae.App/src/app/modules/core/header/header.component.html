@@ -11,7 +11,7 @@
     </div>
 
     <div class="user-info">
-      <button class="profile-btn" (click)="onProfileClick()" title="Perfil do usuário">
+      <button class="profile-btn" title="Perfil do usuário">
         <span class="profile-initials">{{ userInitials }}</span>
       </button>
       <div class="user-details">
@@ -19,7 +19,7 @@
         <span class="user-role">{{ userRole }}</span>
       </div>
       <button class="logout-btn" (click)="logout()" title="Sair">
-        <mat-icon class="logout-icon">logout</mat-icon>
+        <mat-icon #logoutIcon class="logout-icon">logout</mat-icon>
       </button>
     </div>
   </div>
