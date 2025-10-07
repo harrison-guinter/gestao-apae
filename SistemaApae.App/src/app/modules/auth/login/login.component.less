@@ -1,8 +1,194 @@
-.login-form {
-    display: flex;
-    flex-direction: column;
-    width: 100dvw;
-    height: 100dvh;
-    place-items: center;
-    justify-content: center;
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--mat-primary-50) 0%, var(--mat-primary-100) 100%);
+  padding: var(--mat-spacing-lg);
+
+  .login-content {
+    width: 100%;
+    max-width: 450px;
+
+    .login-card {
+      background-color: var(--mat-surface);
+      box-shadow: var(--mat-elevation-z8);
+      border-radius: var(--mat-border-radius-large);
+      overflow: hidden;
+
+      .login-header {
+        background: linear-gradient(135deg, var(--mat-primary-500) 0%, var(--mat-primary-700) 100%);
+        color: var(--mat-primary-contrast);
+        padding: var(--mat-spacing-xl);
+        text-align: center;
+        justify-content: center;
+
+        .logo-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: var(--mat-spacing-sm);
+
+          .logo-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            color: var(--mat-primary-contrast);
+          }
+
+          .logo-text {
+            h1 {
+              margin: 0;
+              font-size: 28px;
+              font-weight: 500;
+              font-family: var(--mat-font-family);
+            }
+
+            p {
+              margin: 0;
+              font-size: 16px;
+              opacity: 0.9;
+              font-weight: 300;
+            }
+          }
+        }
+      }
+
+      .login-form-content {
+        padding: var(--mat-spacing-xl);
+
+        .form-title {
+          margin: 0 0 var(--mat-spacing-lg) 0;
+          font-size: 24px;
+          font-weight: 500;
+          color: var(--mat-on-surface);
+          text-align: center;
+        }
+
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: var(--mat-spacing-md);
+
+          .form-field {
+            width: 100%;
+
+            app-input {
+              width: 100%;
+            }
+          }
+
+          .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--mat-spacing-md);
+            margin-top: var(--mat-spacing-lg);
+
+            .forgot-password-btn {
+              align-self: center;
+              color: var(--mat-primary-600);
+              font-size: 14px;
+              text-decoration: none;
+              transition: color var(--mat-animation-duration-short);
+
+              &:hover {
+                color: var(--mat-primary-700);
+                text-decoration: underline;
+              }
+            }
+
+            .login-btn {
+              height: 48px;
+              font-size: 16px;
+              font-weight: 500;
+              border-radius: var(--mat-border-radius);
+
+              &:disabled {
+                background-color: rgba(0, 0, 0, 0.12);
+                color: rgba(0, 0, 0, 0.26);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsividade para tablets
+@media (max-width: 768px) {
+  .login-container {
+    padding: var(--mat-spacing-md);
+
+    .login-content {
+      max-width: 100%;
+
+      .login-card {
+        .login-header {
+          padding: var(--mat-spacing-lg);
+
+          .logo-section {
+            .logo-icon {
+              font-size: 40px;
+              width: 40px;
+              height: 40px;
+            }
+
+            .logo-text h1 {
+              font-size: 24px;
+            }
+          }
+        }
+
+        .login-form-content {
+          padding: var(--mat-spacing-lg);
+
+          .form-title {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsividade para mobile
+@media (max-width: 480px) {
+  .login-container {
+    padding: var(--mat-spacing-sm);
+
+    .login-content {
+      .login-card {
+        .login-header {
+          padding: var(--mat-spacing-md);
+
+          .logo-section {
+            .logo-icon {
+              font-size: 36px;
+              width: 36px;
+              height: 36px;
+            }
+
+            .logo-text {
+              h1 {
+                font-size: 20px;
+              }
+
+              p {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+
+        .login-form-content {
+          padding: var(--mat-spacing-md);
+
+          .form-title {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
 }
