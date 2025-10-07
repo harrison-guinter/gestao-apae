@@ -1,0 +1,105 @@
+// Estilos da Modal de Confirmação - Versão Limpa
+:host {
+  display: block;
+}
+
+.confirmation-modal {
+  padding: 16px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+// Header da modal
+.modal-header {
+  background-color: white;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-start;
+
+    .warning-icon {
+      color: #ff9800;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// Conteúdo da modal
+.modal-content {
+  background-color: white;
+
+  .confirmation-message {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #666;
+    word-wrap: break-word;
+    margin-bottom: 16px;
+  }
+}
+
+// Ações da modal
+.modal-actions {
+  padding: 16px 24px 20px 24px;
+  background-color: white;
+
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+
+  .cancel-button {
+    height: var(--field-height-md);
+    min-width: var(--field-width-xs);
+    color: var(--mat-primary-500);
+    background-color: var(--mat-surface);
+    border: 1px solid var(--mat-primary-500);
+
+    &:hover {
+      background-color: var(--mat-primary-50);
+    }
+  }
+
+  .confirm-button {
+    height: var(--field-height-md);
+    min-width: var(--field-width-xs);
+    background-color: var(--mat-primary-500);
+    color: var(--mat-primary-50);
+
+    &:hover {
+      background-color: var(--mat-primary-600);
+    }
+
+    &:disabled {
+      background-color: var(--mat-action-disabled-background);
+      color: var(--mat-action-disabled);
+    }
+  }
+}
+
+// Override específico para Angular Material (sem !important)
+::ng-deep .confirmation-dialog-container .mat-mdc-dialog-container {
+  padding: 0;
+  overflow: hidden;
+}
+
+::ng-deep .confirmation-dialog-container .mat-mdc-dialog-content {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  max-height: none;
+}
+
+::ng-deep .confirmation-dialog-container .mat-mdc-dialog-actions {
+  margin: 0;
+  padding: 0;
+  min-height: auto;
+}

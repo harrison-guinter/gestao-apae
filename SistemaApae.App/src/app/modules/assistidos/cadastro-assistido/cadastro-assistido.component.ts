@@ -18,6 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
+import { DateComponent } from '../../core/date/date.component';
 import { PageInfoService } from '../../core/services/page-info.service';
 import { NotificationService } from '../../core/notification/notification.service';
 import { AssistidoService } from '../assistido.service';
@@ -47,6 +48,7 @@ import {
     MatNativeDateModule,
     InputComponent,
     SelectComponent,
+    DateComponent,
   ],
   templateUrl: './cadastro-assistido.component.html',
   styleUrls: ['./cadastro-assistido.component.less'],

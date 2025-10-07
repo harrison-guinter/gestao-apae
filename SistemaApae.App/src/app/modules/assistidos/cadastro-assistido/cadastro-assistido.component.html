@@ -4,7 +4,7 @@
       <!-- Dados Pessoais -->
       <div class="form-section">
         <h3 class="section-title">
-          <mat-icon>dashboard</mat-icon>
+          <mat-icon>person</mat-icon>
           Dados Pessoais
         </h3>
 
@@ -18,18 +18,14 @@
         </div>
 
         <div class="form-row">
-          <div class="form-row-third">
-            <mat-form-field appearance="outline">
-              <mat-label>Data de Nascimento</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker"
-                [formControl]="$any(formCadastro.get('dataNascimento'))"
-                placeholder="DD/MM/AAAA"
-              />
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+          <div class="form-row-quarters">
+            <app-date
+              label="Data de Nascimento"
+              [control]="$any(formCadastro.get('dataNascimento'))"
+              placeholder="DD/MM/AAAA"
+              appearance="outline"
+              [clearable]="true"
+            ></app-date>
 
             <app-input
               label="CPF"

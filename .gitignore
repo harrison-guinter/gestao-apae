@@ -4,6 +4,9 @@
 .env.production
 *.env
 
+pnpm-lock.yaml
+package-lock.json
+
 # IDE files (global)
 .vscode/
 .idea/

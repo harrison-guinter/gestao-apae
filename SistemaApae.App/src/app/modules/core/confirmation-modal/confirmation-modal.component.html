@@ -1,0 +1,33 @@
+<div class="confirmation-modal">
+  <div class="modal-header">
+    <h2 mat-dialog-title>
+      <mat-icon class="warning-icon">warning</mat-icon>
+      Confirmação
+    </h2>
+  </div>
+
+  <mat-dialog-content class="modal-content">
+    <p class="confirmation-message">{{ message }}</p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="modal-actions" align="end">
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="onCancel()"
+      class="cancel-button"
+      type="button"
+    >
+      {{ cancelButtonText }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      class="confirm-button"
+      (click)="onConfirm()"
+      type="button"
+    >
+      {{ confirmButtonText }}
+    </button>
+  </mat-dialog-actions>
+</div>

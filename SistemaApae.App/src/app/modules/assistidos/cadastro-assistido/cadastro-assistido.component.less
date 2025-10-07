@@ -3,18 +3,58 @@
 }
 
 .form-card {
-  background-color: #fff;
+  background-color: var(--mat-surface);
   font-family: inherit;
+
   .mat-mdc-card-header {
     .mat-mdc-card-title {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--mat-spacing-sm);
       font-size: 1.5rem;
       font-weight: 500;
 
       mat-icon {
-        color: #1976d2;
+        color: var(--mat-primary-500);
+      }
+    }
+  }
+
+  // Estilos para os botões de ação - usa variáveis do sistema
+  mat-card-actions {
+    padding: var(--mat-spacing-md) var(--mat-spacing-lg);
+    background-color: var(--mat-surface);
+    display: flex;
+    gap: var(--mat-spacing-sm);
+    justify-content: flex-end;
+
+    // Botão Voltar/Cancelar (stroked button style)
+    button[mat-button] {
+      height: var(--field-height-md);
+      min-width: var(--field-width-xs);
+      color: var(--mat-primary-500);
+      background-color: var(--mat-surface);
+      border: 1px solid var(--mat-primary-500);
+
+      &:hover {
+        background-color: var(--mat-primary-50);
+      }
+    }
+
+    // Botão Salvar/Confirmar (raised button style)
+    button[mat-raised-button] {
+      height: var(--field-height-md);
+      min-width: var(--field-width-xs);
+      background-color: var(--mat-primary-500);
+      color: var(--mat-primary-50);
+
+      &:hover {
+        background-color: var(--mat-primary-600);
+      }
+
+      &:disabled {
+        background-color: var(--mat-action-disabled-background);
+        color: var(--mat-action-disabled);
       }
     }
   }
@@ -24,92 +64,60 @@
   font-family: inherit;
 
   .form-section {
-    margin-bottom: 40px;
     font-family: inherit;
 
     .section-title {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin: 0 0 20px 0;
+      gap: var(--mat-spacing-sm);
+      margin: 0 0 var(--mat-spacing-lg) 0;
       font-size: 1.1rem;
       font-weight: 500;
       font-family: inherit;
-      color: #1976d2;
-
-      mat-icon {
-        color: #1976d2;
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
+      color: var(--mat-primary-500);
     }
 
     .form-row {
       display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: var(--mat-spacing-md);
 
       &:last-child {
         margin-bottom: 0;
       }
 
-      .form-row-half {
+      // Layout containers - aproveitam os tamanhos do sistema
+      .form-row-half,
+      .form-row-third,
+      .form-row-quarters {
         display: flex;
-        gap: 16px;
+        gap: var(--mat-spacing-md);
         width: 100%;
 
         > * {
           flex: 1;
+          min-width: var(--field-min-width);
         }
       }
 
-      .form-row-third {
-        display: flex;
-        gap: 16px;
-        width: 100%;
-
-        > * {
-          flex: 1;
-        }
-      }
-
-      // Campo que ocupa toda a largura
-      .field-full {
-        width: 100%;
-      }
-
-      .field-large {
-        flex: 2;
-      }
-
-      // Para campos individuais que devem ocupar toda a largura
-      app-input.field-full,
-      mat-form-field.field-full {
-        width: 100% !important;
-        flex: 1 1 100% !important;
-        min-width: 0;
-      }
-
-      // Estilo para form-row que deve ter largura total
+      // Estilo para campos que ocupam toda largura - usa variável do sistema
       &.form-row-full {
         > app-input,
-        > mat-form-field {
-          width: 100% !important;
-          flex: 1 1 100% !important;
+        > mat-form-field,
+        > app-select {
+          width: var(--field-width-full);
         }
       }
 
       // Checkbox styling
       mat-checkbox {
-        margin: 8px 0;
+        margin: var(--mat-spacing-xs) 0;
 
         ::ng-deep .mat-mdc-checkbox-label {
           font-size: 14px;
         }
       }
 
-      // Textarea styling
+      // Textarea styling - usa variáveis do sistema
       mat-form-field {
         width: 100%;
 
@@ -117,87 +125,6 @@
           resize: vertical;
           min-height: 60px;
         }
-      }
-    }
-  }
-}
-
-// Responsividade
-@media (max-width: 768px) {
-  padding: 16px;
-
-  .assistido-form {
-    .form-section {
-      .form-row {
-        flex-direction: column;
-        gap: 8px;
-
-        .form-row-half,
-        .form-row-third {
-          flex-direction: column;
-          gap: 8px;
-        }
-      }
-    }
-  }
-}
-
-// Estilos globais para melhorar a aparência
-::ng-deep {
-  // Forçar fonte Roboto em todos os elementos do Material Design
-  .mat-mdc-form-field,
-  .mat-mdc-form-field * {
-    font-family: Roboto, 'Helvetica Neue', sans-serif !important;
-  }
-
-  .mat-mdc-button,
-  .mat-mdc-button * {
-    font-family: Roboto, 'Helvetica Neue', sans-serif !important;
-  }
-
-  .mat-mdc-card,
-  .mat-mdc-card * {
-    font-family: Roboto, 'Helvetica Neue', sans-serif !important;
-  }
-
-  .mat-mdc-checkbox,
-  .mat-mdc-checkbox * {
-    font-family: Roboto, 'Helvetica Neue', sans-serif !important;
-  }
-
-  .mat-mdc-form-field {
-    .mat-mdc-text-field-wrapper {
-      .mat-mdc-form-field-flex {
-        .mat-mdc-form-field-infix {
-          min-height: 56px;
-        }
-      }
-    }
-  }
-
-  .mat-mdc-card-actions {
-    gap: 12px;
-    padding: 16px 24px;
-  }
-
-  // Garantir que campos com field-full ocupem toda a largura
-  app-input.field-full,
-  .field-full {
-    width: 100% !important;
-
-    .mat-mdc-form-field {
-      width: 100% !important;
-    }
-  }
-
-  // Garantir que campos dentro de form-row-full ocupem toda a largura
-  .form-row-full {
-    app-input,
-    mat-form-field {
-      width: 100% !important;
-
-      .mat-mdc-form-field {
-        width: 100% !important;
       }
     }
   }
