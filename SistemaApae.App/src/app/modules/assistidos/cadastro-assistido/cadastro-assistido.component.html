@@ -19,17 +19,13 @@
 
         <div class="form-row">
           <div class="form-row-quarters">
-            <mat-form-field appearance="outline">
-              <mat-label>Data de Nascimento</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker"
-                [formControl]="$any(formCadastro.get('dataNascimento'))"
-                placeholder="DD/MM/AAAA"
-              />
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <app-date
+              label="Data de Nascimento"
+              [control]="$any(formCadastro.get('dataNascimento'))"
+              placeholder="DD/MM/AAAA"
+              appearance="outline"
+              [clearable]="true"
+            ></app-date>
 
             <app-input
               label="CPF"
