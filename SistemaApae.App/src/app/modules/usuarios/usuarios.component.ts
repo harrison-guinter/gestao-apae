@@ -91,8 +91,7 @@ export class UsuariosComponent implements OnInit {
           : undefined,
     };
 
-    // Com o interceptor, agora podemos usar subscribe simples
-    this.usuarioService.listarUsuarios(filtros).subscribe((usuarios) => {
+    this.usuarioService.filtrarUsuarios(filtros).subscribe((usuarios) => {
       this.usuarios = usuarios;
       if (usuarios.length === 0) {
         this.notificationService.showInfo('Nenhum usuário encontrado com os filtros aplicados');

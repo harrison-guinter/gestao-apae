@@ -1,0 +1,36 @@
+<mat-form-field [appearance]="'outline'" [class]="cssClass">
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+  <input
+    matInput
+    [formControl]="control"
+    [matAutocomplete]="auto"
+    [placeholder]="placeholder"
+    [disabled]="control.disabled"
+  />
+
+  <mat-icon matPrefix *ngIf="prefixIcon">
+    {{ prefixIcon }}
+  </mat-icon>
+
+  <mat-icon matSuffix *ngIf="suffixIcon && !clearable" (click)="onSuffixIconClick()">
+    {{ suffixIcon }}
+  </mat-icon>
+
+  <mat-icon
+    matSuffix
+    *ngIf="clearable && hasValue() && !control.disabled"
+    (click)="onClear()"
+    class="clear-icon"
+    [matTooltip]="clearTooltip"
+  >
+    clear
+  </mat-icon>
+
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelection($event)">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value" [disabled]="option.disabled">
+      {{ option.label }}
+    </mat-option>
+  </mat-autocomplete>
+
+  <mat-error *ngIf="hasError">{{ errorMessage }}</mat-error>
+</mat-form-field>
