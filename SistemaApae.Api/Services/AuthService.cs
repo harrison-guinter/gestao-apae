@@ -123,7 +123,7 @@ public class AuthService : IAuthService
                 await _repository.UpdateAsync(user);
 
                 // Envia email com a nova senha
-                var emailSent = await _emailService.SendNewPasswordEmailAsync(user.Email, user.Nome, newPassword);
+                var emailSent = await _emailService.SendEmailAsync(user.Email, user.Nome, newPassword);
             }
 
             // Por segurança, sempre retorna sucesso

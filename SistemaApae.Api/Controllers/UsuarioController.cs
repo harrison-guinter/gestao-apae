@@ -17,14 +17,16 @@ public class UsuarioController : ControllerBase
 {
     private readonly IService<Usuario, UsuarioFiltroRequest> _service;
     private readonly IAuthService _authService;
+    private readonly IEmailService _emailService;
 
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService)
+    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService, EmailService emailService)
     {
         _service = service;
         _authService = authService;
+        _emailService = emailService;
     }
 
     /// <summary>
@@ -135,6 +137,8 @@ public class UsuarioController : ControllerBase
 
             return StatusCode(500, result);
         }
+
+        await _emailService.SendEmailAsync(result.Data!.Email, result.Data.Nome, result.Data!.Senha!);
 
         return Created();
     }

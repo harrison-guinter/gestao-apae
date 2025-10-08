@@ -19,9 +19,9 @@ public class EmailService : IEmailService
     }
 
     /// <summary>
-    /// Envia email com nova senha gerada
+    /// Envia email
     /// </summary>
-    public async Task<bool> SendNewPasswordEmailAsync(string email, string name, string newPassword)
+    public async Task<bool> SendEmailAsync(string email, string name, string newPassword)
     {
         try
         {
@@ -43,8 +43,8 @@ public class EmailService : IEmailService
             using var message = new MailMessage();
             message.From = new MailAddress(senderEmail, senderName);
             message.To.Add(email);
-            message.Subject = "Nova senha de acesso";
-            message.Body = $"Olá {name},\n\nSua nova senha é: {newPassword}\nPor favor, altere após o primeiro login.";
+            message.Subject = "Acesso à sua conta - Sistema Apae";
+            message.Body = $"Olá {name},\n\nSua nova senha é: {newPassword}.";
             message.IsBodyHtml = false;
 
             await smtp.SendMailAsync(message);
