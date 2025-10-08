@@ -18,9 +18,9 @@ public class UsuarioFilter : IRepositoryFilter<Usuario, UsuarioFiltroRequest>
             query = query.Filter(u => u.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
 
         if (filtros.Perfil != null)
-            query = query.Where(u => u.Perfil == filtros.Perfil);
+            query = query.Filter(u => u.Perfil, Constants.Operator.Equals, (int)filtros.Perfil);
 
-        //query = query.Where(u => u.Status == filtros.Status);
+        query = query.Filter(u => u.Status, Constants.Operator.Equals, (int)filtros.Status);
 
         return query;
     }
