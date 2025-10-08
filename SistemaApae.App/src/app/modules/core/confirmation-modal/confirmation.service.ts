@@ -15,6 +15,9 @@ export interface ConfirmationConfig {
   providedIn: 'root',
 })
 export class ConfirmationService {
+  public msgAlteracaoNaoSalva: string =
+    'Existem alterações não salvas. Tem certeza que deseja continuar?';
+
   constructor(private dialog: MatDialog) {}
 
   /**

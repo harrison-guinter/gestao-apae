@@ -10,7 +10,13 @@
 </mat-dialog-content>
 
 <mat-dialog-actions *ngIf="!isVisualizacao" class="modal-actions" align="end">
-  <button mat-stroked-button color="primary" (click)="onCancel()" class="cancel-button">
+  <button
+    #cancelButton
+    mat-stroked-button
+    color="primary"
+    (click)="onCancel()"
+    class="cancel-button"
+  >
     Cancelar
   </button>
   <button
