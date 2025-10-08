@@ -4,13 +4,13 @@ using SistemaApae.Api.Models.Administrative;
 using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Agreements;
 using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Repositories;
 using SistemaApae.Api.Repositories.Admistrative;
 using SistemaApae.Api.Repositories.Patients;
 using SistemaApae.Api.Repositories.Users;
 using SistemaApae.Api.Serialization;
 using SistemaApae.Api.Services;
-using SistemaApae.Api.Services.Users;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -46,9 +46,6 @@ if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
         });
 }
 
-// Registrar repositories
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-
 // Registro de genéricos e filtros
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped(typeof(IRepositoryFilter<,>), typeof(DefaultRepositoryFilter<,>));
@@ -57,11 +54,11 @@ builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFiltroRequest>,
 builder.Services.AddScoped<IRepositoryFilter<Agendamento, AgendamentoFilterRequest>, AgendamentoFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Convenio, ConvenioFilterRequest>, ConvenioFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFiltroRequest>, MunicipioFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Usuario, UsuarioFiltroRequest>, UsuarioFilter>();
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 // Registrar service genérico
 builder.Services.AddScoped(typeof(IService<,>), typeof(Service<,>));

@@ -21,6 +21,11 @@ public interface IRepository<TEntity, TFilter>
     Task<IEnumerable<TEntity>> GetByFiltersAsync(TFilter filtros);
 
     /// <summary>
+    /// Lista todas as entidades
+    /// </summary>
+    Task<IEnumerable<TEntity>> GetAllAsync();
+
+    /// <summary>
     /// Cria uma nova entidade
     /// </summary>
     Task<TEntity> CreateAsync(TEntity entity);
