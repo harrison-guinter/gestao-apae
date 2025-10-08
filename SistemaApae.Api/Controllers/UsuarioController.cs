@@ -22,7 +22,7 @@ public class UsuarioController : ControllerBase
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService, EmailService emailService)
+    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService, IEmailService emailService)
     {
         _service = service;
         _authService = authService;
