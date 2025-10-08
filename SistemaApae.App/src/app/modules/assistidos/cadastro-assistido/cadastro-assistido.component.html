@@ -84,6 +84,14 @@
             appearance="outline"
           ></app-input>
         </div>
+        <div class="form-row form-row-full">
+          <app-select
+            label="Cidade"
+            [control]="$any(formCadastro.get('idMunicipio'))"
+            [options]="(cidades$ | async) || []"
+            appearance="outline"
+          ></app-select>
+        </div>
 
         <div class="form-row">
           <div class="form-row-half">
@@ -136,6 +144,15 @@
           <mat-icon>medical_services</mat-icon>
           Informações de Saúde
         </h3>
+
+        <div class="form-row form-row-full">
+          <app-select
+            label="Convênio"
+            [control]="$any(formCadastro.get('idConvenio'))"
+            [options]="(convenios$ | async) || []"
+            appearance="outline"
+          ></app-select>
+        </div>
 
         <div class="form-row">
           <div class="form-row-half">

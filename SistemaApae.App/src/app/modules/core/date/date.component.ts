@@ -65,11 +65,14 @@ export class DateComponent {
   }
 
   onClear(): void {
-    this.control.setValue(null);
+    if (this.control) {
+      this.control.setValue(null);
+    }
     this.clear.emit();
   }
 
   hasValue(): boolean {
+    if (!this.control) return false;
     const value = this.control.value;
     return value !== '' && value !== null && value !== undefined;
   }
