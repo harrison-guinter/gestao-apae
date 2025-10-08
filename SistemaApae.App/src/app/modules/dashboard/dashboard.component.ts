@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToUsuarios(): void {
-    this.router.navigate(['/home/usuarios']);
+    this.router.navigate(['/home/usuarios'], { queryParams: { isNew: 'true' } });
   }
 
   navigateToAgendamentos(): void {
