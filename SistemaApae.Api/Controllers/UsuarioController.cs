@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
-using SistemaApae.Api.Services.Users;
 
 namespace SistemaApae.Api.Controllers.Users;
 
@@ -16,18 +15,16 @@ namespace SistemaApae.Api.Controllers.Users;
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
-    private readonly ISupabaseService _supabaseService;
-    private readonly ILogger<UsuarioController> _logger;
-    private readonly IUsuarioService _usuarioService;
+    private readonly IService<Usuario, UsuarioFiltroRequest> _service;
+    private readonly IAuthService _authService;
 
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(ISupabaseService supabaseService, ILogger<UsuarioController> logger, IUsuarioService usuarioService)
+    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService)
     {
-        _supabaseService = supabaseService;
-        _logger = logger;
-        _usuarioService = usuarioService;
+        _service = service;
+        _authService = authService;
     }
 
     /// <summary>
@@ -39,19 +36,19 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest filters)
     {
-        var result = await _usuarioService.GetUserByFilters(request);
+        var result = await _service.GetByFilters(filters);
 
         if (!result.Success)
         {
-            if (result.Message.Contains("Usuário não foi encontrado"))
+            if (result.Message.Contains("Registros não foram encontrados"))
                 return NotFound();
 
             return StatusCode(500, result);
         }
 
-        return Ok(result);
+        return Ok(result.Data!.Select(u => { u.Senha = null; return u; }));
     }
 
     /// <summary>
@@ -68,15 +65,17 @@ public class UsuarioController : ControllerBase
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
 
-        var result = await _usuarioService.GetUserById(id);
+        var result = await _service.GetById(id);
 
         if (!result.Success)
         {
-            if (result.Message.Contains("Usuário não foi encontrado"))
+            if (result.Message.Contains("Registro não foi encontrado"))
                 return NotFound();
 
             return StatusCode(500, result);
         }
+
+        result.Data!.Senha = null;
 
         return Ok(result);
     }
@@ -91,17 +90,17 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ApiResponse<IEnumerable<Usuario>>>> GetAllUsers()
     {
-        var result = await _usuarioService.GetAllUsers();
+        var result = await _service.GetAll();
 
         if (!result.Success)
         {
-            if (result.Message.Contains("Usuários não foram encontrados"))
+            if (result.Message.Contains("Registros não foram encontrados"))
                 return NotFound();
 
             return StatusCode(500, result);
         }
 
-        return Ok(result);
+        return Ok(result.Data!.Select(u => { u.Senha = null; return u; }));
     }
 
     /// <summary>
@@ -124,11 +123,14 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        var result = await _usuarioService.CreateUser(user);
+        user.UpdatedAt = DateTime.UtcNow;
+        user.Senha = BCrypt.Net.BCrypt.HashPassword(_authService.GenerateRandomPassword());
+
+        var result = await _service.Create(user);
 
         if (!result.Success)
         {
-            if (result.Message.Contains("Usuário não foi adicionado"))
+            if (result.Message.Contains("Registro não foi adicionado"))
                 return NoContent();
 
             return StatusCode(500, result);
@@ -157,11 +159,13 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        var result = await _usuarioService.UpdateUser(user);
+        user.Senha = (await _service.GetById(user.Id)).Data!.Senha;
+
+        var result = await _service.Update(user);
 
         if (!result.Success)
         {
-            if (result.Message.Contains("Usuário não foi atualizado"))
+            if (result.Message.Contains("Registro não foi atualizado"))
                 return NoContent();
 
             return StatusCode(500, result);

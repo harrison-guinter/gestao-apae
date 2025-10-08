@@ -1,6 +1,8 @@
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Users;
+using SistemaApae.Api.Repositories;
 using SistemaApae.Api.Repositories.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,7 +15,7 @@ namespace SistemaApae.Api.Services;
 /// </summary>
 public class AuthService : IAuthService
 {
-    private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IRepository<Usuario, UsuarioFiltroRequest> _repository;
     private readonly IEmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
@@ -21,17 +23,17 @@ public class AuthService : IAuthService
     /// <summary>
     /// Inicializa uma nova instância do AuthService
     /// </summary>
-    /// <param name="usuarioRepository">Repositório de usuários</param>
+    /// <param name="repository">Repositório genérico</param>
     /// <param name="emailService">Serviço de email</param>
     /// <param name="configuration">Configuração da aplicação</param>
     /// <param name="logger">Logger para registro de eventos</param>
     public AuthService(
-        IUsuarioRepository usuarioRepository,
+        IRepository<Usuario, UsuarioFiltroRequest> repository,
         IEmailService emailService,
         IConfiguration configuration, 
         ILogger<AuthService> logger)
     {
-        _usuarioRepository = usuarioRepository;
+        _repository = repository;
         _emailService = emailService;
         _configuration = configuration;
         _logger = logger;
@@ -47,7 +49,7 @@ public class AuthService : IAuthService
         try
         {
             // Busca usuário no banco de dados
-            var user = await _usuarioRepository.GetByEmailAsync(request.Email);
+            var user = (await _repository.GetByFiltersAsync(new UsuarioFiltroRequest { Email = request.Email })).First();
 
             if (user == null || user.Status == StatusEntidadeEnum.Inativo)
             {
@@ -61,7 +63,9 @@ public class AuthService : IAuthService
             }
 
             // Atualiza último login
-            await _usuarioRepository.UpdateAsync(user);
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(user);
 
             // Obtém perfil do usuário
             var perfil = new List<string> { user.Perfil.ToString() };
@@ -102,7 +106,7 @@ public class AuthService : IAuthService
         try
         {
             // Busca usuário no banco de dados
-            var user = await _usuarioRepository.GetByEmailAsync(request.Email);
+            var user = (await _repository.GetByFiltersAsync(new UsuarioFiltroRequest { Email = request.Email })).First();
 
             if (user != null && user.Status == StatusEntidadeEnum.Ativo)
             {
@@ -115,12 +119,11 @@ public class AuthService : IAuthService
                 // Atualiza a senha no banco de dados
                 user.Senha = hashedPassword;
                 user.UpdatedAt = DateTime.UtcNow;
-                
-                await _usuarioRepository.UpdateAsync(user);
+
+                await _repository.UpdateAsync(user);
 
                 // Envia email com a nova senha
                 var emailSent = await _emailService.SendNewPasswordEmailAsync(user.Email, user.Nome, newPassword);
-   
             }
 
             // Por segurança, sempre retorna sucesso
