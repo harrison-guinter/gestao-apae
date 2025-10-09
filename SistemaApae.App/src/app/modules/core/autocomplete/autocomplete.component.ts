@@ -90,4 +90,11 @@ export class AutocompleteComponent<T = any> implements OnInit {
   hasValue() {
     return !!this.control.value;
   }
+
+  static selectOptionValidator(control: any) {
+    const value = control.value;
+    if (!value) return null; 
+    if (typeof value === 'object' && 'value' in value && 'label' in value) return null;
+    return { invalidSelectOption: true };
+  }
 }
