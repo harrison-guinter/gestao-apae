@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButton, MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ConfirmationService } from '../confirmation-modal/confirmation.service';
 
@@ -32,6 +32,7 @@ export class BaseModalComponent implements OnInit {
   @Output() onCancelClick = new EventEmitter<void>();
 
   @ViewChild('cancelButton') cancelButton!: MatButton;
+  @ViewChild('closeButton') closeButton!: MatIcon;
 
   constructor(
     public dialogRef: MatDialogRef<BaseModalComponent>,
@@ -39,6 +40,17 @@ export class BaseModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  onClose(): void {
+    const config = {
+      message: this.confirmationService.msgAlteracaoNaoSalva,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não',
+      elementRef: this.closeButton._elementRef.nativeElement,
+      disableClose: true,
+    };
+    this.cancel(config);
+  }
 
   onCancel(): void {
     const config = {
@@ -48,7 +60,10 @@ export class BaseModalComponent implements OnInit {
       elementRef: this.cancelButton._elementRef.nativeElement,
       disableClose: true,
     };
+    this.cancel(config);
+  }
 
+  cancel(config: any) {
     if (this.formHasChanges) {
       this.confirmationService.openConfirmationModal(config).subscribe((confirmed) => {
         if (confirmed) {

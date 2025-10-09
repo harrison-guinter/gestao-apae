@@ -238,7 +238,7 @@ export class CadastroAssistidoComponent implements OnInit {
       nome: ['', Validators.required],
       dataNascimento: [null],
       cpf: [''],
-      sexo: [null],
+      sexo: [null, Validators.required],
       naturalidade: [''],
       nomeMae: [''],
       nomePai: [''],
@@ -247,7 +247,7 @@ export class CadastroAssistidoComponent implements OnInit {
       endereco: [''],
       bairro: [''],
       cep: [''],
-      idMunicipio: [null],
+      idMunicipio: [null, Validators.required],
 
       // Responsável
       nomeResponsavel: [''],
@@ -255,7 +255,7 @@ export class CadastroAssistidoComponent implements OnInit {
       responsavelBusca: [''],
 
       // Saúde
-      idConvenio: [null],
+      idConvenio: [null, Validators.required],
       tipoDeficiencia: [null],
       cid: [''],
       medicamentosUso: [false],
