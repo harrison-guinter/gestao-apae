@@ -172,7 +172,7 @@
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row margin-bottom-md">
           <mat-checkbox [formControl]="$any(formCadastro.get('medicamentosUso'))">
             Faz uso de medicamentos
           </mat-checkbox>
@@ -185,6 +185,363 @@
             placeholder="Liste os medicamentos utilizados"
             appearance="outline"
           ></app-input>
+        </div>
+
+        <div class="form-row">
+          <app-select
+            label="Plano de Saúde"
+            [control]="$any(formCadastro.get('planoSaude'))"
+            [options]="planoSaudeOptions"
+            appearance="outline"
+          ></app-select>
+        </div>
+      </div>
+
+      <!-- Escolaridade -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>school</mat-icon>
+          Escolaridade
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Nome da Escola"
+              [control]="$any(formCadastro.get('nomeEscola'))"
+              placeholder="Digite o nome da escola"
+              appearance="outline"
+            ></app-input>
+
+            <app-input
+              label="Ano Escolar"
+              [control]="$any(formCadastro.get('anoEscola'))"
+              placeholder="Ex: 1º ano, 2ª série"
+              appearance="outline"
+            ></app-input>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-select
+              label="Turno Escolar"
+              [control]="$any(formCadastro.get('turnoEscola'))"
+              [options]="turnoEscolaOptions"
+              appearance="outline"
+            ></app-select>
+
+            <div class="checkbox-container">
+              <mat-checkbox [formControl]="$any(formCadastro.get('acompanhamentoEspecializado'))">
+                Possui acompanhamento especializado
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benefícios Sociais -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>account_balance_wallet</mat-icon>
+          Benefícios Sociais
+        </h3>
+
+        <div class="form-row margin-bottom-md">
+          <div class="form-row-quarters">
+            <mat-checkbox [formControl]="$any(formCadastro.get('bpc'))">
+              BPC (Benefício de Prestação Continuada)
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('bolsaFamilia'))">
+              Bolsa Família
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('passeLivreEstadual'))">
+              Passe Livre Estadual
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('passeLivreMunicipal'))">
+              Passe Livre Municipal
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Composição Familiar</mat-label>
+            <textarea
+              matInput
+              [formControl]="$any(formCadastro.get('composicaoFamiliar'))"
+              placeholder="Descreva a composição familiar"
+              rows="3"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Informações Familiares -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>family_restroom</mat-icon>
+          Informações Familiares
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Responsável pela Busca"
+              [control]="$any(formCadastro.get('responsavelBusca'))"
+              placeholder="Quem busca o assistido"
+              appearance="outline"
+            ></app-input>
+
+            <div class="checkbox-container">
+              <mat-checkbox [formControl]="$any(formCadastro.get('paisCasados'))">
+                Pais são casados
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <mat-checkbox [formControl]="$any(formCadastro.get('paternidadeRegistrada'))">
+              Paternidade registrada
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('consentimentoImagem'))">
+              Consentimento para uso de imagem
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desenvolvimento e Comportamento -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>psychology</mat-icon>
+          Desenvolvimento e Comportamento
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-quarters">
+            <mat-checkbox [formControl]="$any(formCadastro.get('boaSocializacao'))">
+              Boa socialização
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('boaAdaptacao'))">
+              Boa adaptação
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('comportamentoAgressivo'))">
+              Comportamento agressivo
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('controleEsfincteres'))">
+              Controle dos esfíncteres
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Apego Familiar"
+              [control]="$any(formCadastro.get('apegoFamiliar'))"
+              placeholder="Descreva o apego familiar"
+              appearance="outline"
+            ></app-input>
+
+            <app-input
+              label="Características Marcantes"
+              [control]="$any(formCadastro.get('caracteristicasMarcantes'))"
+              placeholder="Características comportamentais"
+              appearance="outline"
+            ></app-input>
+          </div>
+        </div>
+
+        <!-- Atrasos no Desenvolvimento -->
+        <h4 class="subsection-title">Atrasos no Desenvolvimento</h4>
+        <div class="form-row">
+          <div class="form-row-quarters">
+            <mat-checkbox [formControl]="$any(formCadastro.get('atrasoAlimentacao'))">
+              Atraso em alimentação
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('atrasoHigiene'))">
+              Atraso em higiene
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('atrasoVestuario'))">
+              Atraso em vestuário
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('atrasoLocomocao'))">
+              Atraso em locomoção
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <div class="form-row margin-bottom-md">
+          <mat-checkbox [formControl]="$any(formCadastro.get('atrasoComunicacao'))">
+            Atraso em comunicação
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <!-- Histórico Médico -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>local_hospital</mat-icon>
+          Histórico Médico
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Médico Responsável"
+              [control]="$any(formCadastro.get('medicoResponsavel'))"
+              placeholder="Nome do médico responsável"
+              appearance="outline"
+            ></app-input>
+
+            <app-input
+              label="Qualidade do Sono"
+              [control]="$any(formCadastro.get('qualidadeSono'))"
+              placeholder="Descreva a qualidade do sono"
+              appearance="outline"
+            ></app-input>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <mat-form-field appearance="outline">
+              <mat-label>Exames Realizados</mat-label>
+              <textarea
+                matInput
+                [formControl]="$any(formCadastro.get('examesRealizados'))"
+                placeholder="Liste os exames realizados"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Doenças Físicas</mat-label>
+              <textarea
+                matInput
+                [formControl]="$any(formCadastro.get('doencasFisicas'))"
+                placeholder="Descreva doenças físicas"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <mat-form-field appearance="outline">
+              <mat-label>Cirurgias Realizadas</mat-label>
+              <textarea
+                matInput
+                [formControl]="$any(formCadastro.get('cirurgiasRealizadas'))"
+                placeholder="Liste cirurgias realizadas"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Doenças Neurológicas</mat-label>
+              <textarea
+                matInput
+                [formControl]="$any(formCadastro.get('doencasNeurologicas'))"
+                placeholder="Descreva doenças neurológicas"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Histórico Familiar de Doenças</mat-label>
+            <textarea
+              matInput
+              [formControl]="$any(formCadastro.get('historicoFamiliarDoencas'))"
+              placeholder="Descreva o histórico familiar de doenças"
+              rows="3"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Histórico Gestacional -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>pregnant_woman</mat-icon>
+          Histórico Gestacional
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <app-input
+              label="Semanas de Gestação"
+              [control]="$any(formCadastro.get('gestacaoSemanas'))"
+              placeholder="Ex: 38"
+              type="number"
+              appearance="outline"
+            ></app-input>
+
+            <mat-checkbox [formControl]="$any(formCadastro.get('internacaoPosNascimento'))">
+              Houve internação pós-nascimento
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-row-half">
+            <mat-form-field appearance="outline">
+              <mat-label>Descrição da Gestação</mat-label>
+              <textarea
+                matInput
+                [formControl]="$any(formCadastro.get('descricaoGestacao'))"
+                placeholder="Descreva como foi a gestação"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Uso de Medicação pela Mãe</mat-label>
+              <textarea
+                matInput
+                [formControl]="$any(formCadastro.get('usoMedicacaoMae'))"
+                placeholder="Medicações utilizadas durante a gestação"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demanda e Descrição -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>description</mat-icon>
+          Demanda e Descrição
+        </h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Descrição da Demanda</mat-label>
+            <textarea
+              matInput
+              [formControl]="$any(formCadastro.get('descricaoDemanda'))"
+              placeholder="Descreva a demanda e necessidades do assistido"
+              rows="4"
+            ></textarea>
+          </mat-form-field>
         </div>
       </div>
 

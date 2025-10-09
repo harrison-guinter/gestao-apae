@@ -83,29 +83,6 @@ public class UsuarioController : ControllerBase
     }
 
     /// <summary>
-    /// Lista todos os usuários
-    /// </summary>
-    /// <returns> Lista de Usuario </returns>
-    [HttpGet]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Usuario>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Usuario>>>> GetAllUsers()
-    {
-        var result = await _service.GetAll();
-
-        if (!result.Success)
-        {
-            if (result.Message.Contains("Registros não foram encontrados"))
-                return NotFound();
-
-            return StatusCode(500, result);
-        }
-
-        return Ok(result.Data!.Select(u => { u.Senha = null; return u; }));
-    }
-
-    /// <summary>
     /// Criar um usuário
     /// </summary>
     [HttpPost]

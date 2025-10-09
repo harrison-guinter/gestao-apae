@@ -32,6 +32,7 @@ import { UsuarioService } from '../usuario.service';
 export class ModalUsuariosComponent implements OnInit {
   protected formCadastro!: FormGroup;
   private isEdit: boolean = false;
+  protected formHasChanges: boolean = false;
 
   protected tiposUsuario: SelectOption[] = [
     { value: Roles.PROFISSIONAL, label: 'Profissional' },
@@ -74,6 +75,10 @@ export class ModalUsuariosComponent implements OnInit {
       telefone: [object?.telefone],
       registroProfissional: [object?.registroProfissional],
       UpdatedAt: [{ value: object?.UpdatedAt || null, disabled: true }],
+    });
+
+    this.formCadastro.valueChanges.subscribe(() => {
+      if (this.formCadastro.dirty) this.formHasChanges = true;
     });
   }
 

@@ -26,8 +26,8 @@ export class UsuarioService {
 
     return this.http.get<ApiResponse<Usuario[]>>(`${this.baseUrl}Usuario/filter`, { params }).pipe(
       map((response) => {
-        const usuarios = response.data || [];
-        return usuarios.sort((a, b) =>
+        const usuarios = response as any;
+        return usuarios.sort((a: { nome: any }, b: { nome: any }) =>
           (a.nome || '').toLowerCase().localeCompare((b.nome || '').toLowerCase())
         );
       })

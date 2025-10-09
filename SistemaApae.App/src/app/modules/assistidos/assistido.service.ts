@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Assistido, StatusAssistidoEnum } from './assistido';
+import { Assistido, StatusAssistidoEnum, PlanoSaudeEnum } from './assistido';
 import { ApiResponse } from '../core/models/api-response.model';
 
 export interface AssistidoFiltro {
@@ -81,42 +81,102 @@ export class AssistidoService {
   }
 
   private buildAssistidoPayload(assistido: Assistido, isCreating: boolean): any {
+    // Campos obrigatórios
     const payload: any = {
       nome: assistido.nome?.trim() || '',
       status: assistido.status || StatusAssistidoEnum.ATIVO,
+      medicamentosUso: assistido.medicamentosUso ?? false,
     };
 
-    // Campos opcionais - dados pessoais
-    if (assistido.dataNascimento) payload.dataNascimento = assistido.dataNascimento;
-    if (assistido.cpf) payload.cpf = assistido.cpf.trim();
-    if (assistido.sexo) payload.sexo = assistido.sexo;
-    if (assistido.naturalidade) payload.naturalidade = assistido.naturalidade.trim();
-    if (assistido.nomeMae) payload.nomeMae = assistido.nomeMae.trim();
-    if (assistido.nomePai) payload.nomePai = assistido.nomePai.trim();
+    // Campos que devem ser trimmed (strings)
+    const stringFields = [
+      'cpf',
+      'naturalidade',
+      'nomeMae',
+      'nomePai',
+      'endereco',
+      'bairro',
+      'cep',
+      'nomeResponsavel',
+      'telefoneResponsavel',
+      'responsavelBusca',
+      'cid',
+      'medicamentosQuais',
+      'nomeEscola',
+      'anoEscola',
+      'composicaoFamiliar',
+      'apegoFamiliar',
+      'caracteristicasMarcantes',
+      'medicoResponsavel',
+      'examesRealizados',
+      'doencasFisicas',
+      'qualidadeSono',
+      'cirurgiasRealizadas',
+      'doencasNeurologicas',
+      'historicoFamiliarDoencas',
+      'descricaoGestacao',
+      'usoMedicacaoMae',
+      'descricaoDemanda',
+      'observacao',
+    ];
 
-    // Endereço
-    if (assistido.endereco) payload.endereco = assistido.endereco.trim();
-    if (assistido.bairro) payload.bairro = assistido.bairro.trim();
-    if (assistido.cep) payload.cep = assistido.cep.trim();
-    if (assistido.idMunicipio) payload.idMunicipio = assistido.idMunicipio;
+    // Campos booleanos
+    const booleanFields = [
+      'acompanhamentoEspecializado',
+      'bpc',
+      'bolsaFamilia',
+      'passeLivreEstadual',
+      'passeLivreMunicipal',
+      'paisCasados',
+      'paternidadeRegistrada',
+      'consentimentoImagem',
+      'boaSocializacao',
+      'boaAdaptacao',
+      'comportamentoAgressivo',
+      'controleEsfincteres',
+      'atrasoAlimentacao',
+      'atrasoHigiene',
+      'atrasoVestuario',
+      'atrasoLocomocao',
+      'atrasoComunicacao',
+      'internacaoPosNascimento',
+    ];
 
-    // Responsável
-    if (assistido.nomeResponsavel) payload.nomeResponsavel = assistido.nomeResponsavel.trim();
-    if (assistido.telefoneResponsavel)
-      payload.telefoneResponsavel = assistido.telefoneResponsavel.trim();
+    // Campos de valor direto (IDs, enums, números, datas)
+    const directFields = [
+      'dataNascimento',
+      'sexo',
+      'idMunicipio',
+      'tipoDeficiencia',
+      'planoSaude',
+      'turnoEscola',
+      'gestacaoSemanas',
+      'idConvenio',
+    ];
 
-    // Saúde
-    if (assistido.tipoDeficiencia) payload.tipoDeficiencia = assistido.tipoDeficiencia;
-    if (assistido.cid) payload.cid = assistido.cid.trim();
-    if (assistido.medicamentosUso !== undefined)
-      payload.medicamentosUso = assistido.medicamentosUso;
-    if (assistido.medicamentosQuais) payload.medicamentosQuais = assistido.medicamentosQuais.trim();
+    // Processar campos de string (com trim)
+    stringFields.forEach((field) => {
+      const value = assistido[field as keyof Assistido];
+      if (value && typeof value === 'string' && value.trim()) {
+        payload[field] = value.trim();
+      }
+    });
 
-    // Convênio
-    if (assistido.idConvenio) payload.idConvenio = assistido.idConvenio;
+    // Processar campos booleanos
+    booleanFields.forEach((field) => {
+      const value = assistido[field as keyof Assistido];
+      if (value !== undefined && value !== null) {
+        payload[field] = value;
+      }
+    });
 
-    // Observações
-    if (assistido.observacao) payload.observacao = assistido.observacao.trim();
+    // Processar campos de valor direto
+    directFields.forEach((field) => {
+      const value = assistido[field as keyof Assistido];
+      if (value !== undefined && value !== null) {
+        payload[field] = value;
+      }
+    });
 
     // Se está editando, inclui o ID
     if (!isCreating && assistido.id) {
