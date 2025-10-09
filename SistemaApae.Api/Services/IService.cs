@@ -24,12 +24,6 @@ public interface IService<TEntity, TFilter>
     Task<ApiResponse<TEntity>> GetById(Guid id);
 
     /// <summary>
-    /// Lista todas as entidades
-    /// </summary>
-    /// <returns>Resposta com a lista de entidades</returns>
-    Task<ApiResponse<IEnumerable<TEntity>>> GetAll();
-
-    /// <summary>
     /// Cria uma nova entidade
     /// </summary>
     /// <param name="entity">Dados da entidade</param>

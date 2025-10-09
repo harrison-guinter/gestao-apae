@@ -64,16 +64,6 @@ public class Repository<TEntity, TFilter> : IRepository<TEntity, TFilter>
         }
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
-    {
-        var entity = await _supabaseService.Client
-            .From<TEntity>()
-            .Get();
-
-        return entity.Models;
-    }
-
-
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         if (entity.Id == Guid.Empty)
