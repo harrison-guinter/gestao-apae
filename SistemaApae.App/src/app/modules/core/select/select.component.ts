@@ -45,7 +45,6 @@ export class SelectComponent {
   compareWith = (o1: any, o2: any): boolean => {
     // Se são objetos SelectOption
     if (o1 && o2 && typeof o1 === 'object' && typeof o2 === 'object') {
-
       return o1.value === o2.value;
     }
 
@@ -59,7 +58,6 @@ export class SelectComponent {
       return o1 === o2.value;
     }
 
-   
     // Comparação direta para valores primitivos
     return o1 === o2;
   };
@@ -69,7 +67,9 @@ export class SelectComponent {
   }
 
   onClear(): void {
-    this.control.setValue(null);
+    if (this.control) {
+      this.control.setValue(null);
+    }
     this.clear.emit();
   }
 
@@ -78,6 +78,7 @@ export class SelectComponent {
   }
 
   hasValue(): boolean {
+    if (!this.control) return false;
     const value = this.control.value;
     return value !== '' && value !== null && value !== undefined;
   }

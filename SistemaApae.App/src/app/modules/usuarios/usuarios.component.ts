@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,13 +50,24 @@ export class UsuariosComponent implements OnInit {
     private pageInfoService: PageInfoService,
     private modalService: ModalService,
     private usuarioService: UsuarioService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Usuários', 'Gerenciar usuários do sistema');
 
     this.initFiltrosForm();
+
+    // Verifica se deve abrir a modal de cadastro automaticamente
+    this.route.queryParams.subscribe((params) => {
+      if (params['isNew'] === 'true') {
+        // Pequeno delay para garantir que a tela foi carregada completamente
+        setTimeout(() => {
+          this.adicionarUsuario();
+        }, 100);
+      }
+    });
   }
 
   initFiltrosForm() {

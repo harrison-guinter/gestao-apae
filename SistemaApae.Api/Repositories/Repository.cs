@@ -2,6 +2,7 @@ using SistemaApae.Api.Models;
 using SistemaApae.Api.Services;
 using Supabase.Postgrest;
 using SistemaApae.Api.Models.Filters;
+using System.Runtime.CompilerServices;
 
 namespace SistemaApae.Api.Repositories;
 
@@ -32,36 +33,47 @@ public class Repository<TEntity, TFilter> : IRepository<TEntity, TFilter>
         return entity;
     }
 
-public virtual async Task<IEnumerable<TEntity>> GetByFiltersAsync(TFilter filtros)
-{
-    try
+    public virtual async Task<IEnumerable<TEntity>> GetByFiltersAsync(TFilter filtros)
     {
-        var table = _supabaseService.Client
-            .From<TEntity>();
+        try
+        {
+            var table = _supabaseService.Client
+                .From<TEntity>();
 
-        var filtered = _filter.Apply(table, filtros);
+            var filtered = _filter.Apply(table, filtros);
 
             // Aplica paginação se o filtro suportar IBaseFilter
             if (filtros is IBaseFilter paged)
-        {
-            var limit = paged.Limit ?? 50;
-            var from = paged.Skip.GetValueOrDefault(0);
-            var to = from + Math.Max(0, limit - 1);
-            filtered = filtered.Range(from, to);
-        }
-        else
-        {
-            filtered = filtered.Range(0, 49);
-        }
+            {
+                var limit = paged.Limit ?? 50;
+                var from = paged.Skip.GetValueOrDefault(0);
+                var to = from + Math.Max(0, limit - 1);
+                filtered = filtered.Range(from, to);
+            }
+            else
+            {
+                filtered = filtered.Range(0, 49);
+            }
 
-        var response = await filtered.Get();
-        return response.Models;
+            var response = await filtered.Get();
+            return response.Models;
+        }
+        catch
+        {
+            return new List<TEntity>();
+        }
     }
-    catch
+
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-        return new List<TEntity>();
+        var entity = await _supabaseService.Client
+            .From<TEntity>()
+            .Get();
+
+        return entity.Models;
     }
-}
+
+
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         if (entity.Id == Guid.Empty)

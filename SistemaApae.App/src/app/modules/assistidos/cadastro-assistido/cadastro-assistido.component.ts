@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -30,6 +30,9 @@ import {
   PlanoSaudeEnum,
   TurnoEscolaEnum,
 } from '../assistido';
+import { CidadesService } from '../../cidades/cidades.service';
+import { ConvenioService } from '../../convenios/convenio.service';
+import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'app-cadastro-assistido',
@@ -57,6 +60,9 @@ export class CadastroAssistidoComponent implements OnInit {
   protected formCadastro!: UntypedFormGroup;
   protected isEdit: boolean = false;
   protected assistidoId?: string;
+
+  private cidadesService: CidadesService = inject(CidadesService);
+  private convenioService: ConvenioService = inject(ConvenioService);
 
   // Options para selects
   statusOptions: SelectOption[] = [
@@ -90,6 +96,18 @@ export class CadastroAssistidoComponent implements OnInit {
     { value: TurnoEscolaEnum.NOTURNO, label: 'Noturno' },
     { value: TurnoEscolaEnum.INTEGRAL, label: 'Integral' },
   ];
+
+  cidades$ = this.cidadesService
+    .listarCidades()
+    .pipe(map((cidades) => cidades.map((cidade) => ({ value: cidade.id, label: cidade.nome }))));
+
+  convenios$ = this.convenioService
+    .listarConvenios({} as any)
+    .pipe(
+      map((convenios) =>
+        convenios.map((convenio) => ({ value: convenio.id, label: convenio.nome }))
+      )
+    );
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -140,6 +158,8 @@ export class CadastroAssistidoComponent implements OnInit {
       endereco: assistido.endereco,
       bairro: assistido.bairro,
       cep: assistido.cep,
+      idMunicipio: assistido.idMunicipio,
+      idConvenio: assistido.idConvenio,
       naturalidade: assistido.naturalidade,
       nomeMae: assistido.nomeMae,
       nomePai: assistido.nomePai,
@@ -164,6 +184,8 @@ export class CadastroAssistidoComponent implements OnInit {
       bairro: [''],
       cep: [''],
       naturalidade: [''],
+      idMunicipio: [null],
+      idConvenio: [null],
       nomeMae: [''],
       nomePai: [''],
       nomeResponsavel: [''],

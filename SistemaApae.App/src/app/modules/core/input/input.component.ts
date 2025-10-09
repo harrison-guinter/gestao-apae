@@ -58,7 +58,9 @@ export class InputComponent {
   }
 
   onClear(): void {
-    this.control.setValue('');
+    if (this.control) {
+      this.control.setValue('');
+    }
     this.clear.emit();
   }
 
@@ -67,6 +69,7 @@ export class InputComponent {
   }
 
   hasValue(): boolean {
+    if (!this.control) return false;
     const value = this.control.value;
     return value !== '' && value !== null && value !== undefined;
   }

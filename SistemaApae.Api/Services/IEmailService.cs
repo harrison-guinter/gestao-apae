@@ -12,5 +12,5 @@ public interface IEmailService
     /// <param name="name">Nome do usuário</param>
     /// <param name="newPassword">Nova senha gerada</param>
     /// <returns>True se enviado com sucesso</returns>
-    Task<bool> SendNewPasswordEmailAsync(string email, string name, string newPassword);
+    Task<bool> SendEmailAsync(string email, string name, string newPassword);
 }
