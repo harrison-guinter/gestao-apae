@@ -72,25 +72,6 @@ public class Service<TEntity, TFilter> : IService<TEntity, TFilter>
     }
 
     /// <inheritdoc />
-    public virtual async Task<ApiResponse<IEnumerable<TEntity>>> GetAll()
-    {
-        try
-        {
-            var result = await _repository.GetAllAsync();
-
-            if (!result.Any())
-                return ApiResponse<IEnumerable<TEntity>>.ErrorResponse("Registros não foram encontrados");
-
-            return ApiResponse<IEnumerable<TEntity>>.SuccessResponse(result);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao buscar todos os registros");
-            return ApiResponse<IEnumerable<TEntity>>.ErrorResponse("Erro interno ao buscar todos os registros");
-        }
-    }
-
-    /// <inheritdoc />
     public virtual async Task<ApiResponse<TEntity>> Create(TEntity entity)
     {
         try
