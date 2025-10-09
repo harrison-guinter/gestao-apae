@@ -151,24 +151,82 @@ export class CadastroAssistidoComponent implements OnInit {
 
   private preencherFormulario(assistido: Assistido): void {
     this.formCadastro.patchValue({
+      // Dados Pessoais
       nome: assistido.nome,
       dataNascimento: assistido.dataNascimento ? new Date(assistido.dataNascimento) : null,
       cpf: assistido.cpf,
       sexo: assistido.sexo,
+      naturalidade: assistido.naturalidade,
+      nomeMae: assistido.nomeMae,
+      nomePai: assistido.nomePai,
+
+      // Endereço
       endereco: assistido.endereco,
       bairro: assistido.bairro,
       cep: assistido.cep,
       idMunicipio: assistido.idMunicipio,
-      idConvenio: assistido.idConvenio,
-      naturalidade: assistido.naturalidade,
-      nomeMae: assistido.nomeMae,
-      nomePai: assistido.nomePai,
+
+      // Responsável
       nomeResponsavel: assistido.nomeResponsavel,
       telefoneResponsavel: assistido.telefoneResponsavel,
+      responsavelBusca: assistido.responsavelBusca,
+
+      // Saúde
+      idConvenio: assistido.idConvenio,
       tipoDeficiencia: assistido.tipoDeficiencia,
       cid: assistido.cid,
       medicamentosUso: assistido.medicamentosUso,
       medicamentosQuais: assistido.medicamentosQuais,
+      planoSaude: assistido.planoSaude,
+
+      // Escolaridade
+      nomeEscola: assistido.nomeEscola,
+      anoEscola: assistido.anoEscola,
+      turnoEscola: assistido.turnoEscola,
+      acompanhamentoEspecializado: assistido.acompanhamentoEspecializado,
+
+      // Benefícios Sociais
+      bpc: assistido.bpc,
+      bolsaFamilia: assistido.bolsaFamilia,
+      passeLivreEstadual: assistido.passeLivreEstadual,
+      passeLivreMunicipal: assistido.passeLivreMunicipal,
+      composicaoFamiliar: assistido.composicaoFamiliar,
+
+      // Informações Familiares
+      paisCasados: assistido.paisCasados,
+      paternidadeRegistrada: assistido.paternidadeRegistrada,
+      consentimentoImagem: assistido.consentimentoImagem,
+
+      // Desenvolvimento e Comportamento
+      boaSocializacao: assistido.boaSocializacao,
+      boaAdaptacao: assistido.boaAdaptacao,
+      comportamentoAgressivo: assistido.comportamentoAgressivo,
+      controleEsfincteres: assistido.controleEsfincteres,
+      apegoFamiliar: assistido.apegoFamiliar,
+      caracteristicasMarcantes: assistido.caracteristicasMarcantes,
+
+      // Atrasos no Desenvolvimento
+      atrasoAlimentacao: assistido.atrasoAlimentacao,
+      atrasoHigiene: assistido.atrasoHigiene,
+      atrasoVestuario: assistido.atrasoVestuario,
+      atrasoLocomocao: assistido.atrasoLocomocao,
+      atrasoComunicacao: assistido.atrasoComunicacao,
+
+      // Histórico Médico e Gestacional
+      descricaoGestacao: assistido.descricaoGestacao,
+      usoMedicacaoMae: assistido.usoMedicacaoMae,
+      gestacaoSemanas: assistido.gestacaoSemanas,
+      internacaoPosNascimento: assistido.internacaoPosNascimento,
+      medicoResponsavel: assistido.medicoResponsavel,
+      examesRealizados: assistido.examesRealizados,
+      doencasFisicas: assistido.doencasFisicas,
+      qualidadeSono: assistido.qualidadeSono,
+      cirurgiasRealizadas: assistido.cirurgiasRealizadas,
+      doencasNeurologicas: assistido.doencasNeurologicas,
+      historicoFamiliarDoencas: assistido.historicoFamiliarDoencas,
+
+      // Outros
+      descricaoDemanda: assistido.descricaoDemanda,
       status: assistido.status,
       observacao: assistido.observacao,
     });
@@ -176,24 +234,82 @@ export class CadastroAssistidoComponent implements OnInit {
 
   initFormCadastro(): void {
     this.formCadastro = this.formBuilder.group({
+      // Dados Pessoais
       nome: ['', Validators.required],
       dataNascimento: [null],
       cpf: [''],
       sexo: [null],
+      naturalidade: [''],
+      nomeMae: [''],
+      nomePai: [''],
+
+      // Endereço
       endereco: [''],
       bairro: [''],
       cep: [''],
-      naturalidade: [''],
       idMunicipio: [null],
-      idConvenio: [null],
-      nomeMae: [''],
-      nomePai: [''],
+
+      // Responsável
       nomeResponsavel: [''],
       telefoneResponsavel: [''],
+      responsavelBusca: [''],
+
+      // Saúde
+      idConvenio: [null],
       tipoDeficiencia: [null],
       cid: [''],
       medicamentosUso: [false],
       medicamentosQuais: [''],
+      planoSaude: [null],
+
+      // Escolaridade
+      nomeEscola: [''],
+      anoEscola: [''],
+      turnoEscola: [null],
+      acompanhamentoEspecializado: [false],
+
+      // Benefícios Sociais
+      bpc: [false],
+      bolsaFamilia: [false],
+      passeLivreEstadual: [false],
+      passeLivreMunicipal: [false],
+      composicaoFamiliar: [''],
+
+      // Informações Familiares
+      paisCasados: [false],
+      paternidadeRegistrada: [false],
+      consentimentoImagem: [false],
+
+      // Desenvolvimento e Comportamento
+      boaSocializacao: [false],
+      boaAdaptacao: [false],
+      comportamentoAgressivo: [false],
+      controleEsfincteres: [false],
+      apegoFamiliar: [''],
+      caracteristicasMarcantes: [''],
+
+      // Atrasos no Desenvolvimento
+      atrasoAlimentacao: [false],
+      atrasoHigiene: [false],
+      atrasoVestuario: [false],
+      atrasoLocomocao: [false],
+      atrasoComunicacao: [false],
+
+      // Histórico Médico e Gestacional
+      descricaoGestacao: [''],
+      usoMedicacaoMae: [''],
+      gestacaoSemanas: [null],
+      internacaoPosNascimento: [false],
+      medicoResponsavel: [''],
+      examesRealizados: [''],
+      doencasFisicas: [''],
+      qualidadeSono: [''],
+      cirurgiasRealizadas: [''],
+      doencasNeurologicas: [''],
+      historicoFamiliarDoencas: [''],
+
+      // Outros
+      descricaoDemanda: [''],
       status: [StatusAssistidoEnum.ATIVO, Validators.required],
       observacao: [''],
     });
@@ -219,24 +335,14 @@ export class CadastroAssistidoComponent implements OnInit {
     };
 
     if (this.isEdit) {
-      this.assistidoService.editarAssistido(assistidoData).subscribe({
-        next: () => {
-          this.notificationService.showSuccess('Assistido editado com sucesso!');
-          this.router.navigate(['/home/assistidos']);
-        },
-        error: (error) => {
-          this.notificationService.showError('Erro ao editar assistido');
-        },
+      this.assistidoService.editarAssistido(assistidoData).subscribe((val) => {
+        this.notificationService.showSuccess('Assistido editado com sucesso!');
+        this.router.navigate(['/home/assistidos']);
       });
     } else {
-      this.assistidoService.salvarAssistido(assistidoData).subscribe({
-        next: () => {
-          this.notificationService.showSuccess('Assistido cadastrado com sucesso!');
-          this.router.navigate(['/home/assistidos']);
-        },
-        error: (error) => {
-          this.notificationService.showError('Erro ao cadastrar assistido');
-        },
+      this.assistidoService.salvarAssistido(assistidoData).subscribe((val) => {
+        this.notificationService.showSuccess('Assistido cadastrado com sucesso!');
+        this.router.navigate(['/home/assistidos']);
       });
     }
   }

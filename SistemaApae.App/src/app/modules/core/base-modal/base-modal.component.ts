@@ -49,11 +49,15 @@ export class BaseModalComponent implements OnInit {
       disableClose: true,
     };
 
-    this.confirmationService.openConfirmationModal(config).subscribe((confirmed) => {
-      if (confirmed) {
-        this.onCancelClick.emit();
-      }
-    });
+    if (this.formHasChanges) {
+      this.confirmationService.openConfirmationModal(config).subscribe((confirmed) => {
+        if (confirmed) {
+          this.onCancelClick.emit();
+        }
+      });
+    } else {
+      this.onCancelClick.emit();
+    }
   }
 
   onConfirm(): void {
