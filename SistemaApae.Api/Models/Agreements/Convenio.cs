@@ -26,12 +26,6 @@ public class Convenio : ApiBaseModel
     public string Nome { get; set; }
 
     /// <summary>
-    /// Indica se o convênio está ativo/inativo
-    /// </summary>
-    [Column("status")]
-    public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.Ativo;
-
-    /// <summary>
     /// Observações sobre o convênio
     /// </summary>
     [Column("observacao")]

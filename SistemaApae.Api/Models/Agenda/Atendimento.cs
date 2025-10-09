@@ -49,10 +49,4 @@ public class Atendimento : ApiBaseModel
     [Column("observacao")]
     public string? Observacao { get; set; }
 
-    /// <summary>
-    /// Indica se o atendimento está ativo/inativo
-    /// </summary>
-    [Column("status")]
-    public StatusEntidadeEnum Status { get; set; }
-
 }

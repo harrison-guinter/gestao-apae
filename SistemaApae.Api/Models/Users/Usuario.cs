@@ -48,13 +48,6 @@ public class Usuario : ApiBaseModel
     [Column("perfil")]
     public PerfilEnum Perfil { get; set; }
 
-
-    /// <summary>
-    /// Indica se o usuário está ativo/inativo
-    /// </summary>
-    [Column("status")]
-    public StatusEntidadeEnum Status { get; set; }
-
     /// <summary>
     /// Registro profissional
     /// </summary>

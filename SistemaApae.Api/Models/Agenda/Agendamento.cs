@@ -48,10 +48,4 @@ public class Agendamento : ApiBaseModel
     [Column("observacao")]
     public string? Observacao { get; set; }
 
-    /// <summary>
-    /// Indica se o agendamento está ativo/inativo
-    /// </summary>
-    [Column("status")]
-    public StatusEntidadeEnum Status { get; set; }
-
 }

@@ -45,12 +45,6 @@ public class Assistido : ApiBaseModel
     public Guid? IdConvenio { get; set; }
 
     /// <summary>
-    /// Status do assistido ativo/inativo
-    /// </summary>
-    [Column("status")]
-    public StatusEntidadeEnum Status { get; set; }
-
-    /// <summary>
     /// Data de cadastro do assistido
     /// </summary>
     [Column("data_cadastro")]
