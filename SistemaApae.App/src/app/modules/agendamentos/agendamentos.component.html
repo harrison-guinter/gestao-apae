@@ -6,38 +6,33 @@
     (search)="pesquisarAgendamentos()"
     title="Lista de Agendamentos"
   >
-    <!-- <app-input
-      label="Nome"
+    <app-autocomplete
+      label="Profissional"
+      placeholder="Digite para buscar..."
+      [options]="(profissionalOptions | async) || []"
       [control]="$any(filtrosForm.get('profissional'))"
-      placeholder="Buscar por nome"
-      suffixIcon="search"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      [clearable]="true"
+      prefixIcon="person"
+      (selectionChange)="onProfissionalSelecionado($event)"
+      cssClass="mat-spacing-sm field-md"
     >
-    </app-input> -->
+    </app-autocomplete>
 
-  <app-autocomplete
-    label="Profissional"
-    placeholder="Digite para buscar..."
-    [options]="(profissionalOptions | async) || []"
-    [control]="$any(filtrosForm.get('profissional'))"
-    [clearable]="true"
-    prefixIcon="person"
-    (selectionChange)="onProfissionalSelecionado($event)"
-  >
-  </app-autocomplete>
- 
-  {{ filtrosForm.get('profissional')?.value | json }}
+    <app-datepicker
+      label="Data do Agendamento"
+      placeholder="dd/MM/yyyy"
+      formControlName="data"
+      cssClass="mat-spacing-sm field-md"
+    ></app-datepicker>
 
-    <!-- <app-input
-      label="Nome"
-      [control]="$any(filtrosForm.get('nome'))"
-      placeholder="Buscar por nome"
-      suffixIcon="search"
+    <app-select
+      label="Status"
+      [control]="$any(filtrosForm.get('status'))"
+      [options]="statusOptions"
       appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      cssClass="mat-spacing-sm field-md"
     >
-    </app-input> -->
+    </app-select>
   </app-filters-container>
   <div class="table-section">
     <app-table

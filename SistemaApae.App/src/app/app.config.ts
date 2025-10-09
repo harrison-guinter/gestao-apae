@@ -17,6 +17,7 @@ import { ErrorInterceptor } from './modules/core/interceptors/error.interceptor'
 import { ResponseInterceptor } from './modules/core/interceptors/response.interceptor';
 import { RequestInterceptor } from './modules/core/interceptors/request.interceptor';
 import { LoadingInterceptor } from './modules/core/interceptors/loading.interceptor';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 // Registrar locale português
 registerLocaleData(localePt);
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
       MatSnackBarModule,
       BrowserAnimationsModule
     ),
+      provideNativeDateAdapter(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,

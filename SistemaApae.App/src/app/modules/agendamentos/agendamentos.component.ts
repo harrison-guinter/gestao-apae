@@ -1,11 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -21,25 +16,16 @@ import { ModalService } from '../core/services/modal.service';
 import { Agendamento, DiaDaSemana, TipoRecorrencia } from './agendamento';
 import { ModalAgendamentosComponent } from './modal-agendamentos/modal-agendamentos.component';
 import { AgendamentoService } from './agendamento.service';
-import { NotificationService } from '../core/notification/notification.service';
 import { AgendamentoFiltro } from './agendamento.service';
 import { Status } from '../core/enum/status.enum';
 import { Assistido } from '../assistidos/assistido';
 import { StatusUsuarioEnum, Usuario } from '../usuarios/usuario';
 import { Roles } from '../auth/roles.enum';
 import { UsuarioService } from '../usuarios/usuario.service';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AutocompleteComponent } from '../core/autocomplete/autocomplete.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DatepickerComponent } from '../core/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-agendamentos',
@@ -58,6 +44,7 @@ import { AutocompleteComponent } from '../core/autocomplete/autocomplete.compone
     InputComponent,
     FiltersContainerComponent,
     AutocompleteComponent,
+    DatepickerComponent
   ],
   templateUrl: './agendamentos.component.html',
   styleUrls: ['./agendamentos.component.less'],
@@ -71,15 +58,14 @@ export class AgendamentosComponent implements OnInit {
 
   protected agendamentos: Agendamento[] = [];
 
-profissionalOptions: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
-  map((users) =>
-    users.map((user) => ({
-      value: user, // objeto completo
-      label: user.nome,
-    }))
-  )
-);
-
+  profissionalOptions: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
+    map((users) =>
+      users.map((user) => ({
+        value: user, // objeto completo
+        label: user.nome,
+      }))
+    )
+  );
 
   isLoadingUsers: boolean = false;
 
@@ -255,14 +241,13 @@ profissionalOptions: Observable<SelectOption[]> = this.buscarProfissionais().pip
   }
 
   initFiltrosForm() {
- this.filtrosForm = this.formBuilder.group({
-  profissional: [null], // agora armazena o objeto SelectOption<Usuario>
-  assistidoId: [''],
-  data: [''],
-  recorrencia: [null],
-  status: [''],
-});
-
+    this.filtrosForm = this.formBuilder.group({
+      profissional: ['', AutocompleteComponent.selectOptionValidator],
+      assistidoId: [''],
+      data: [''],
+      recorrencia: [null],
+      status: [''],
+    });
   }
 
   limparFiltros() {
@@ -413,8 +398,7 @@ profissionalOptions: Observable<SelectOption[]> = this.buscarProfissionais().pip
   }
 
   onProfissionalSelecionado(option: SelectOption) {
-  console.log('Profissional selecionado:', option.value);
-  // Exemplo: atualizar outro campo se precisar
-}
-
+    console.log('Profissional selecionado:', option.value);
+    // Exemplo: atualizar outro campo se precisar
+  }
 }
