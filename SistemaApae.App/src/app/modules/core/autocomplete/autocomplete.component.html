@@ -1,18 +1,21 @@
-<mat-form-field [appearance]="'outline'" [class]="cssClass">
+<mat-form-field appearance="outline" [class]="cssClass">
   <mat-label *ngIf="label">{{ label }}</mat-label>
+
   <input
     matInput
-    [formControl]="control"
     [matAutocomplete]="auto"
+    [formControl]="control"
     [placeholder]="placeholder"
     [disabled]="control.disabled"
   />
 
-  <mat-icon matPrefix *ngIf="prefixIcon">
-    {{ prefixIcon }}
-  </mat-icon>
+  <mat-icon matPrefix *ngIf="prefixIcon">{{ prefixIcon }}</mat-icon>
 
-  <mat-icon matSuffix *ngIf="suffixIcon && !clearable" (click)="onSuffixIconClick()">
+  <mat-icon
+    matSuffix
+    *ngIf="suffixIcon && !clearable"
+    (click)="onSuffixIconClick()"
+  >
     {{ suffixIcon }}
   </mat-icon>
 
@@ -26,8 +29,16 @@
     clear
   </mat-icon>
 
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelection($event)">
-    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value" [disabled]="option.disabled">
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onSelection($event)"
+  >
+    <mat-option
+      *ngFor="let option of filteredOptions | async"
+      [value]="option"
+      [disabled]="option.disabled"
+    >
       {{ option.label }}
     </mat-option>
   </mat-autocomplete>

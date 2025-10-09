@@ -28,7 +28,17 @@ import { Assistido } from '../assistidos/assistido';
 import { StatusUsuarioEnum, Usuario } from '../usuarios/usuario';
 import { Roles } from '../auth/roles.enum';
 import { UsuarioService } from '../usuarios/usuario.service';
-import { debounceTime, distinctUntilChanged, filter, Observable, of, switchMap, tap } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 import { AutocompleteComponent } from '../core/autocomplete/autocomplete.component';
 
 @Component({
@@ -47,7 +57,7 @@ import { AutocompleteComponent } from '../core/autocomplete/autocomplete.compone
     SelectComponent,
     InputComponent,
     FiltersContainerComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
   ],
   templateUrl: './agendamentos.component.html',
   styleUrls: ['./agendamentos.component.less'],
@@ -61,13 +71,21 @@ export class AgendamentosComponent implements OnInit {
 
   protected agendamentos: Agendamento[] = [];
 
-  userOptions: SelectOption[] = [];
+profissionalOptions: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
+  map((users) =>
+    users.map((user) => ({
+      value: user, // objeto completo
+      label: user.nome,
+    }))
+  )
+);
+
+
   isLoadingUsers: boolean = false;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
-    private notificationService: NotificationService,
     private modalService: ModalService
   ) {}
 
@@ -76,10 +94,6 @@ export class AgendamentosComponent implements OnInit {
 
     this.initFiltrosForm();
     this.pesquisarAgendamentos();
-  }
-
-  ngAfterViewInit() {
-    this.setupUsuarioAutocomplete();
   }
 
   pesquisarAgendamentos() {
@@ -241,13 +255,14 @@ export class AgendamentosComponent implements OnInit {
   }
 
   initFiltrosForm() {
-    this.filtrosForm = this.formBuilder.group({
-      profissionalId: [''],
-      assistidoId: [''],
-      data: [''],
-      recorrencia: [null],
-      status: [''],
-    });
+ this.filtrosForm = this.formBuilder.group({
+  profissional: [null], // agora armazena o objeto SelectOption<Usuario>
+  assistidoId: [''],
+  data: [''],
+  recorrencia: [null],
+  status: [''],
+});
+
   }
 
   limparFiltros() {
@@ -260,25 +275,6 @@ export class AgendamentosComponent implements OnInit {
 
   onClear() {
     this.limparFiltros();
-  }
-
-  setupUsuarioAutocomplete() {
-    this.filtrosForm
-      .get('profissionalId')!
-      .valueChanges.pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        filter((value) => typeof value === 'string' && value.length > 1),
-        tap(() => (this.isLoadingUsers = true)),
-        switchMap((value) => this.buscarUsuarios(value)),
-        tap(() => (this.isLoadingUsers = false))
-      )
-      .subscribe((users) => {
-        this.userOptions = users.map((u: Usuario) => ({
-          label: u.nome,
-          value: u.id,
-        }));
-      });
   }
 
   statusOptions: SelectOption[] = [
@@ -406,12 +402,19 @@ export class AgendamentosComponent implements OnInit {
       .subscribe(() => this.pesquisarAgendamentos());
   }
 
-  buscarUsuarios(query: string): Observable<Usuario[]> {
-    if (!query) return of([]);
-    return this.usuarioService
-      .listarUsuarios()
-      .pipe(
-        filter((users) => users.some((u) => u.nome?.toLowerCase().includes(query.toLowerCase())))
-      );
+  private buscarProfissionais(): Observable<Usuario[]> {
+    return this.usuarioService.listarUsuarios().pipe(
+      map((users) => {
+        return users
+          .map((u) => new Usuario(u))
+          .filter((u) => u.hasRole(Roles.PROFISSIONAL) && u.status === StatusUsuarioEnum.ATIVO);
+      })
+    );
   }
+
+  onProfissionalSelecionado(option: SelectOption) {
+  console.log('Profissional selecionado:', option.value);
+  // Exemplo: atualizar outro campo se precisar
+}
+
 }

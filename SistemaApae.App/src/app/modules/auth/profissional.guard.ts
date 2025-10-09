@@ -11,6 +11,7 @@ export class ProfissionalGuard implements CanActivate {
   constructor() {}
 
   public canActivate(): boolean {
+
      return !!(Usuario.getCurrentUser()).hasRole(Roles.PROFISSIONAL); 
   }
   

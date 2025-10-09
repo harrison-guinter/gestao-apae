@@ -35,9 +35,9 @@ export class UsuarioService {
   }
 
   listarUsuarios(): Observable<Usuario[]> {
-    return this.http.get<ApiResponse<Usuario[]>>(`${this.baseUrl}Usuario`).pipe(
+    return this.http.get<Usuario[]>(`${this.baseUrl}Usuario`).pipe(
       map((response) => {
-        const usuarios = response.data || [];
+        const usuarios = response || [];
         return usuarios.sort((a, b) =>
           (a.nome || '').toLowerCase().localeCompare((b.nome || '').toLowerCase())
         );
