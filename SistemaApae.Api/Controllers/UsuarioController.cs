@@ -22,7 +22,7 @@ public class UsuarioController : ControllerBase
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService, EmailService emailService)
+    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService, IEmailService emailService)
     {
         _service = service;
         _authService = authService;
@@ -80,29 +80,6 @@ public class UsuarioController : ControllerBase
         result.Data!.Senha = null;
 
         return Ok(result);
-    }
-
-    /// <summary>
-    /// Lista todos os usuários
-    /// </summary>
-    /// <returns> Lista de Usuario </returns>
-    [HttpGet]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Usuario>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Usuario>>>> GetAllUsers()
-    {
-        var result = await _service.GetAll();
-
-        if (!result.Success)
-        {
-            if (result.Message.Contains("Registros não foram encontrados"))
-                return NotFound();
-
-            return StatusCode(500, result);
-        }
-
-        return Ok(result.Data!.Select(u => { u.Senha = null; return u; }));
     }
 
     /// <summary>

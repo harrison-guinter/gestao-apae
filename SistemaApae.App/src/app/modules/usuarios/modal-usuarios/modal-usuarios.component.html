@@ -3,6 +3,7 @@
   [confirmButtonText]="'Salvar'"
   (onConfirmClick)="onConfirm()"
   (onCancelClick)="onCancel()"
+  [formHasChanges]="formHasChanges"
 >
   <form [formGroup]="formCadastro" class="usuario-form">
     <div class="form-row">

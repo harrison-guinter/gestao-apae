@@ -1,16 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Observable, startWith, map } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-interface AutocompleteOption {
+export interface SelectOption<T = any> {
   label: string;
-  value: any;
+  value: T;
   disabled?: boolean;
 }
 
@@ -29,11 +29,13 @@ interface AutocompleteOption {
   templateUrl: './autocomplete.component.html',
   styleUrls: ['./autocomplete.component.less']
 })
-export class AutocompleteComponent {
-  @Input() label: string = '';
-  @Input() placeholder: string = '';
-  @Input() options: AutocompleteOption[] = [];
-  @Input() control = new FormControl();
+export class AutocompleteComponent<T = any> implements OnInit {
+  @ViewChild('input') input?: MatInput;
+
+  @Input() label = '';
+  @Input() placeholder = '';
+  @Input() options: SelectOption<T>[] = [];
+  @Input() control = new FormControl<SelectOption<T> | null>(null);
   @Input() cssClass?: string;
   @Input() prefixIcon?: string;
   @Input() suffixIcon?: string;
@@ -42,29 +44,38 @@ export class AutocompleteComponent {
   @Input() hasError = false;
   @Input() errorMessage?: string;
 
-  @Output() selectionChange = new EventEmitter<any>();
+  @Output() selectionChange = new EventEmitter<SelectOption<T>>();
   @Output() suffixIconClick = new EventEmitter<void>();
   @Output() cleared = new EventEmitter<void>();
 
-  filteredOptions: Observable<AutocompleteOption[]> = this.control.valueChanges.pipe(
-    startWith(''),
-    map(value => this._filter(value))
-  );
+  filteredOptions!: Observable<SelectOption<T>[]>;
 
-  private _filter(value: string | any): AutocompleteOption[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+  ngOnInit() {
+    this.filteredOptions = this.control.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: SelectOption<T> | string | null): SelectOption<T>[] {
+    const filterValue =
+      typeof value === 'string'
+        ? value.toLowerCase()
+        : value?.label?.toLowerCase() || '';
+
     return this.options.filter(option =>
       option.label.toLowerCase().includes(filterValue)
     );
   }
 
-  displayFn = (option: any) => {
-    const found = this.options.find(o => o.value === option);
-    return found ? found.label : '';
-  };
+  displayFn(option: SelectOption<T> | null): string {
+    return option ? option.label : '';
+  }
 
   onSelection(event: MatAutocompleteSelectedEvent) {
-    this.selectionChange.emit(event.option.value);
+    const selectedOption = event.option.value as SelectOption<T>;
+    this.control.setValue(selectedOption);
+    this.selectionChange.emit(selectedOption);
   }
 
   onSuffixIconClick() {
@@ -72,11 +83,18 @@ export class AutocompleteComponent {
   }
 
   onClear() {
-    this.control.setValue('');
+    this.control.setValue(null);
     this.cleared.emit();
   }
 
   hasValue() {
     return !!this.control.value;
+  }
+
+  static selectOptionValidator(control: any) {
+    const value = control.value;
+    if (!value) return null; 
+    if (typeof value === 'object' && 'value' in value && 'label' in value) return null;
+    return { invalidSelectOption: true };
   }
 }

@@ -6,17 +6,19 @@ export enum StatusUsuarioEnum {
 }
 
 export class Usuario {
-  id: string;
-  nome: string;
-  email: string;
-  perfil: Roles;
-  status: StatusUsuarioEnum;
+  id!: string;
+  nome!: string;
+  email!: string;
+  perfil!: Roles;
+  status!: StatusUsuarioEnum;
   especialidade?: string;
   observacao?: string;
   registroProfissional?: string;
   telefone?: string;
   UpdatedAt?: Date;
 
+  constructor();
+  constructor(data: Partial<Usuario>);
   constructor(
     id: string,
     nome: string,
@@ -27,22 +29,38 @@ export class Usuario {
     observacao?: string,
     registroProfissional?: string,
     telefone?: string
+  );
+
+  // 👉 Implementação única
+  constructor(
+    idOrData?: string | Partial<Usuario>,
+    nome?: string,
+    email?: string,
+    perfil?: Roles,
+    status?: StatusUsuarioEnum,
+    especialidade?: string,
+    observacao?: string,
+    registroProfissional?: string,
+    telefone?: string
   ) {
-    this.id = id;
-    this.nome = nome;
-    this.email = email;
-    this.perfil = perfil;
-    this.especialidade = especialidade;
-    this.status = status;
-    this.observacao = observacao;
-    this.registroProfissional = registroProfissional; // orgão classe + número do registro
-    this.telefone = telefone;
+    if (typeof idOrData === 'object') {
+      Object.assign(this, idOrData);
+    } else if (idOrData) {
+      this.id = idOrData;
+      this.nome = nome!;
+      this.email = email!;
+      this.perfil = perfil!;
+      this.status = status!;
+      this.especialidade = especialidade;
+      this.observacao = observacao;
+      this.registroProfissional = registroProfissional;
+      this.telefone = telefone;
+    }
   }
 
   hasRole(role: Roles): boolean {
-    // TODO
     return true;
-    return this.perfil == role;
+    return this.perfil === role;
   }
 
   isActive(): boolean {
@@ -56,19 +74,19 @@ export class Usuario {
   static getCurrentUser(): Usuario {
     const jsonParsed = JSON.parse(localStorage.getItem('usuario') || '{}');
 
-    return new Usuario(
-      jsonParsed.id,
-      jsonParsed.name,
-      jsonParsed.email,
-      jsonParsed.roles,
-      jsonParsed.especialidade,
-      jsonParsed.ativo,
-      jsonParsed.observacao,
-      jsonParsed.registroProfissional,
-      jsonParsed.telefone
-    );
+    return new Usuario({
+      id: jsonParsed.id,
+      nome: jsonParsed.name, 
+      email: jsonParsed.email,
+      perfil: jsonParsed.perfil,
+      status: jsonParsed.ativo ? StatusUsuarioEnum.ATIVO : StatusUsuarioEnum.INATIVO,
+      especialidade: jsonParsed.especialidade,
+      observacao: jsonParsed.observacao,
+      registroProfissional: jsonParsed.registroProfissional,
+      telefone: jsonParsed.telefone,
+    });
   }
 }
 
-//apae@apae
+//apae@apae 
 //paulo1234
