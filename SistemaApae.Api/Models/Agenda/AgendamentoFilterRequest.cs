@@ -20,14 +20,14 @@ public class AgendamentoFilterRequest : BaseFilter
     public DateOnly? DataAgendamentoFim { get; set; }
 
     /// <summary>
-    /// Assistido
+    /// ID do assistido para filtrar
     /// </summary>
-    public AssistidoDto Assistido { get; set; }
+    public Guid IdAssistido { get; set; } = Guid.Empty;
 
     /// <summary>
-    /// Profissional responsável
+    /// ID do Profissional para filtrar
     /// </summary>
-    public UsuarioDto Profissional { get; set; }
+    public Guid IdProfissional { get; set; } = Guid.Empty;
 
 }
 
