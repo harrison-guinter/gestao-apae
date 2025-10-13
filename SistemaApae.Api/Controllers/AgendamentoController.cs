@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Auth;
-using SistemaApae.Api.Models.Patients;
-using SistemaApae.Api.Services;
+using SistemaApae.Api.Services.Agenda;
 
 namespace SistemaApae.Api.Controllers;
 
@@ -16,25 +15,25 @@ namespace SistemaApae.Api.Controllers;
 [Produces("application/json")]
 public class AgendamentoController : ControllerBase
 {
-    private readonly IService<Agendamento, AgendamentoFilterRequest> _service;
+    private readonly AgendamentoService _service;
 
     /// <summary>
     /// Inicializa uma nova instância do AgendamentoController
     /// </summary>
-    public AgendamentoController(IService<Agendamento, AgendamentoFilterRequest> service)
+    public AgendamentoController(AgendamentoService service)
     {
         _service = service;
     }
 
     /// <summary>
-    /// Lista Agendamentos por filtros de pesquisa (paginado)
+    /// Lista Agendamentos por filtros de pesquisa (paginado) com assistidos
     /// </summary>
     [HttpGet("filter")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<Agendamento>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<AgendamentoResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Agendamento>>>> GetByFilters([FromQuery] AgendamentoFilterRequest request)
+    public async Task<ActionResult<ApiResponse<IEnumerable<AgendamentoResponseDto>>>> GetByFilters([FromQuery] AgendamentoFilterRequest request)
     {
         var result = await _service.GetByFilters(request);
         if (!result.Success)
@@ -47,14 +46,14 @@ public class AgendamentoController : ControllerBase
     }
 
     /// <summary>
-    /// Buscar um Agendamento por id
+    /// Buscar um Agendamento por id com assistidos
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AgendamentoResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Agendamento>>> GetById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<AgendamentoResponseDto>>> GetById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -70,14 +69,13 @@ public class AgendamentoController : ControllerBase
     }
 
     /// <summary>
-    /// Criar um Agendamento
+    /// Criar um Agendamento com assistidos
     /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<AgendamentoResponseDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Agendamento>>> Create([FromBody] Agendamento request)
+    public async Task<ActionResult<ApiResponse<AgendamentoResponseDto>>> Create([FromBody] AgendamentoCreateDto request)
     {
         if (!ModelState.IsValid)
         {
@@ -89,24 +87,22 @@ public class AgendamentoController : ControllerBase
         }
 
         var result = await _service.Create(request);
-        if (!result.Success)
+        if (!result.Success || result.Data == null)
         {
-            if (result.Message.Contains("não foi adicionado") || result.Data is null)
-                return NoContent();
             return StatusCode(500, result);
         }
-        return Created();
+
+        return CreatedAtAction(nameof(GetById), new { id = result.Data.Id }, result);
     }
 
     /// <summary>
-    /// Atualiza um Agendamento existente
+    /// Atualiza um Agendamento existente com assistidos
     /// </summary>
     [HttpPut]
-    [ProducesResponseType(typeof(ApiResponse<Agendamento>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<AgendamentoResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Agendamento>>> Update([FromBody] Agendamento request)
+    public async Task<ActionResult<ApiResponse<AgendamentoResponseDto>>> Update([FromBody] AgendamentoUpdateDto request)
     {
         if (!ModelState.IsValid)
         {
@@ -120,8 +116,6 @@ public class AgendamentoController : ControllerBase
         var result = await _service.Update(request);
         if (!result.Success)
         {
-            if (result.Message.Contains("não foi atualizado"))
-                return NoContent();
             return StatusCode(500, result);
         }
 

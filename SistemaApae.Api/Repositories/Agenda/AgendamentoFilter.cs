@@ -26,9 +26,9 @@ public class AgendamentoFilter : IRepositoryFilter<Agendamento, AgendamentoFilte
         }
 
         // Filtro por profissional
-        if (filtros.IdProfissional != Guid.Empty)
+        if (filtros.Profissional.Id != Guid.Empty)
         {
-            query = query.Filter(a => a.IdProfissional, Constants.Operator.Equals, filtros.IdProfissional);
+            query = query.Filter(a => a.IdProfissional, Constants.Operator.Equals, filtros.Profissional.Id);
         }
 
         return query;

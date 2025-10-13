@@ -11,6 +11,7 @@ using SistemaApae.Api.Repositories.Patients;
 using SistemaApae.Api.Repositories.Users;
 using SistemaApae.Api.Serialization;
 using SistemaApae.Api.Services;
+using SistemaApae.Api.Services.Agenda;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -62,6 +63,9 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Registrar service genérico
 builder.Services.AddScoped(typeof(IService<,>), typeof(Service<,>));
+
+// Registrar serviços customizados
+builder.Services.AddScoped<AgendamentoService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>

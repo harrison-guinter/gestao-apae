@@ -1,4 +1,6 @@
 ﻿using SistemaApae.Api.Models.Filters;
+using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Models.Users;
 
 namespace SistemaApae.Api.Models.Agenda;
 
@@ -18,14 +20,14 @@ public class AgendamentoFilterRequest : BaseFilter
     public DateOnly? DataAgendamentoFim { get; set; }
 
     /// <summary>
-    /// ID do assistido
+    /// Assistido
     /// </summary>
-    public Guid IdAssistido { get; set; }
+    public AssistidoDto Assistido { get; set; }
 
     /// <summary>
-    /// ID do profissional responsável
+    /// Profissional responsável
     /// </summary>
-    public Guid IdProfissional { get; set; }
+    public UsuarioDto Profissional { get; set; }
 
 }
 
