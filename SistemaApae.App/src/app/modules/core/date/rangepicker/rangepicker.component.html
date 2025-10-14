@@ -1,0 +1,43 @@
+<mat-form-field [appearance]="appearance" [class]="cssClass" class="range-field">
+  <mat-label>{{ label }}</mat-label>
+
+  <!-- date range input usando dois FormControls -->
+  <mat-date-range-input
+    [rangePicker]="picker"
+    [min]="minDate"
+    [max]="maxDate"
+    (dateChange)="onDateChange()"
+  >
+    <input
+      matStartDate
+      placeholder="Início"
+      [formControl]="controlInicio"
+      readonly
+    />
+    <input
+      matEndDate
+      placeholder="Fim"
+      [formControl]="controlFim"
+      readonly
+    />
+  </mat-date-range-input>
+
+
+  <mat-datepicker-toggle
+    matIconSuffix
+    [for]="picker"
+    *ngIf="!clearable || !hasValue"
+  ></mat-datepicker-toggle>
+
+  <mat-icon
+    matSuffix
+    *ngIf="clearable && hasValue && !controlInicio.disabled && !controlFim.disabled"
+    (click)="onClear()"
+    class="clear-icon"
+    [matTooltip]="clearTooltip"
+  >
+    clear
+  </mat-icon>
+
+  <mat-date-range-picker #picker [touchUi]="touchUi"></mat-date-range-picker>
+</mat-form-field>

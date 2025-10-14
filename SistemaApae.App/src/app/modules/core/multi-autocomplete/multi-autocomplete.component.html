@@ -1,0 +1,66 @@
+<mat-form-field appearance="outline" [class]="cssClass" class="w-full">
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+
+  <mat-chip-listbox aria-label="Seleções">
+    <!-- Chips das opções selecionadas -->
+    <mat-chip
+      *ngFor="let option of selectedOptions"
+      [removable]="true"
+      (removed)="remove(option)"
+    >
+      {{ option.label }}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+
+    <!-- Campo de entrada -->
+    <input
+      matInput
+      [matAutocomplete]="auto"
+      [formControl]="control"
+      [placeholder]="placeholder"
+      (blur)="onTouched()"
+    />
+  </mat-chip-listbox>
+
+  <!-- Ícone à esquerda -->
+  <mat-icon matPrefix *ngIf="prefixIcon">{{ prefixIcon }}</mat-icon>
+
+  <!-- Ícone à direita -->
+  <mat-icon
+    matSuffix
+    *ngIf="suffixIcon && !clearable"
+    (click)="onSuffixIconClick()"
+  >
+    {{ suffixIcon }}
+  </mat-icon>
+
+  <!-- Botão de limpar -->
+  <mat-icon
+    matSuffix
+    *ngIf="clearable && hasValue()"
+    (click)="clearAll()"
+    [matTooltip]="clearTooltip"
+    class="cursor-pointer"
+  >
+    clear
+  </mat-icon>
+
+  <!-- Lista de sugestões -->
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="onSelection($event)"
+  >
+    <mat-option
+      *ngFor="let option of filteredOptions | async"
+      [value]="option"
+      [disabled]="option.disabled"
+    >
+      {{ option.label }}
+    </mat-option>
+  </mat-autocomplete>
+
+  <!-- Mensagem de erro -->
+  <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+</mat-form-field>

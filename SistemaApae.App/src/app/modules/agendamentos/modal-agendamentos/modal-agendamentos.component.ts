@@ -14,6 +14,8 @@ import { Agendamento } from '../agendamento';
 import { AgendamentoService } from '../agendamento.service';
 import { NotificationService } from '../../core/notification/notification.service';
 import { Status } from '../../core/enum/status.enum';
+import { AutocompleteMultipleComponent } from '../../core/multi-autocomplete/multi-autocomplete.component';
+
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -27,6 +29,7 @@ import { Status } from '../../core/enum/status.enum';
     SelectComponent,
     InputComponent,
     BaseModalComponent,
+    AutocompleteMultipleComponent
   ],
   templateUrl: './modal-agendamentos.component.html',
   styleUrls: ['./modal-agendamentos.component.less'],
@@ -59,7 +62,8 @@ export class ModalAgendamentosComponent implements OnInit {
 
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
-      nome: [object?.nome || '', Validators.required],
+      profissional: [object?.profissional || '', Validators.required],
+      assistidos: [object?.assistidos || '', Validators.required],
       status: [object?.status, Validators.required],
       observacao: [object?.observacao || ''],
     });

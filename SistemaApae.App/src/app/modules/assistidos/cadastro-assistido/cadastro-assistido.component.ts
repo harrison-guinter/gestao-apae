@@ -18,7 +18,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-import { DateComponent } from '../../core/date/date.component';
 import { PageInfoService } from '../../core/services/page-info.service';
 import { NotificationService } from '../../core/notification/notification.service';
 import { AssistidoService } from '../assistido.service';
@@ -33,6 +32,7 @@ import {
 import { CidadesService } from '../../cidades/cidades.service';
 import { ConvenioService } from '../../convenios/convenio.service';
 import { map } from 'rxjs/internal/operators/map';
+import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-cadastro-assistido',
@@ -51,7 +51,8 @@ import { map } from 'rxjs/internal/operators/map';
     MatNativeDateModule,
     InputComponent,
     SelectComponent,
-    DateComponent,
+    DatepickerComponent
+
   ],
   templateUrl: './cadastro-assistido.component.html',
   styleUrls: ['./cadastro-assistido.component.less'],
