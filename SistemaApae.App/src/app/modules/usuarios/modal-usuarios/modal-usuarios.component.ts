@@ -9,9 +9,9 @@ import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
 import { Roles } from '../../auth/roles.enum';
-import { StatusUsuarioEnum } from '../usuario';
 import { NotificationService } from '../../core/notification/notification.service';
 import { UsuarioService } from '../usuario.service';
+import { Status } from '../../core/enum/status.enum';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -40,8 +40,8 @@ export class ModalUsuariosComponent implements OnInit {
   ];
 
   statusOptions: SelectOption[] = [
-    { value: StatusUsuarioEnum.ATIVO, label: 'Ativo' },
-    { value: StatusUsuarioEnum.INATIVO, label: 'Inativo' },
+    { value: Status.Ativo, label: 'Ativo' },
+    { value: Status.Inativo, label: 'Inativo' },
   ];
 
   constructor(
@@ -61,7 +61,7 @@ export class ModalUsuariosComponent implements OnInit {
   initFormCadastro() {
     const object = this.data.element;
 
-    const statusValue = object?.status || StatusUsuarioEnum.ATIVO;
+    const statusValue = object?.status || Status.Ativo;
     const perfilValue = object?.perfil || Roles.PROFISSIONAL;
 
     this.formCadastro = this.formBuilder.group({

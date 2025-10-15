@@ -19,13 +19,14 @@ import { AgendamentoService } from './agendamento.service';
 import { AgendamentoFiltro } from './agendamento.service';
 import { Status } from '../core/enum/status.enum';
 import { Assistido } from '../assistidos/assistido';
-import { StatusUsuarioEnum, Usuario } from '../usuarios/usuario';
+import { Usuario } from '../usuarios/usuario';
 import { Roles } from '../auth/roles.enum';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { map, Observable } from 'rxjs';
 import { AutocompleteComponent } from '../core/autocomplete/autocomplete.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { DatepickerComponent } from '../core/datepicker/datepicker.component';
+import { DatepickerComponent } from '../core/date/datepicker/datepicker.component';
+import { RangePickerComponent } from '../core/date/rangepicker/rangepicker.component';
+import { NotificationService } from '../core/notification/notification.service';
 
 @Component({
   selector: 'app-agendamentos',
@@ -44,7 +45,7 @@ import { DatepickerComponent } from '../core/datepicker/datepicker.component';
     InputComponent,
     FiltersContainerComponent,
     AutocompleteComponent,
-    DatepickerComponent
+    RangePickerComponent
   ],
   templateUrl: './agendamentos.component.html',
   styleUrls: ['./agendamentos.component.less'],
@@ -72,6 +73,7 @@ export class AgendamentosComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
+    private notificationService: NotificationService,
     private modalService: ModalService
   ) {}
 
@@ -85,167 +87,25 @@ export class AgendamentosComponent implements OnInit {
   pesquisarAgendamentos() {
     const filtros: AgendamentoFiltro = this.filtrosForm.value;
     // Exemplo de dados mockados para teste
-    const agendamentosExemplo: Agendamento[] = [
-      new Agendamento(
-        'AG001',
-        'Sessão de Fisioterapia',
-        'Primeira sessão de avaliação motora',
-        Status.Ativo,
-        [
-          {
-            id: 'A2',
-            nome: 'Carlos Silva',
-            dataNascimento: '2010-11-22',
-            endereco: 'Av. Central, 456',
-            status: Status.Ativo,
-            sexo: 'MASCULINO',
-            tipoDeficiencia: 'FISICA',
-            medicamentosUso: false,
-            nomeResponsavel: 'Ana Silva',
-            telefoneResponsavel: '(49) 98888-2222',
-            descricaoDemanda: 'Fisioterapia motora semanal',
-            acompanhamentoEspecializado: true,
-            nomeEscola: 'Colégio Estadual Horizonte',
-            turnoEscola: 'VESPERTINO',
-          } as unknown as Assistido,
-        ],
-        new Usuario(
-          'U1',
-          'Dra. Paula Andrade',
-          'paula@apae.org',
-          Roles.PROFISSIONAL,
-          StatusUsuarioEnum.ATIVO,
-          'Fisioterapia',
-          'Atende público infantil',
-          'CREFITO 12345',
-          '(49) 97777-3333'
-        ),
-        TipoRecorrencia.SEMANAL,
-        new Date('2025-10-07'),
-        '09:00',
-        DiaDaSemana.TERCA
-      ),
-
-      new Agendamento(
-        'AG002',
-        'Atendimento Psicológico',
-        'Sessão de acompanhamento emocional',
-        Status.Ativo,
-        [
-          {
-            id: 'A1',
-            nome: 'Maria Souza',
-            dataNascimento: '2012-05-10',
-            endereco: 'Rua das Flores, 123',
-            status: Status.Ativo,
-            sexo: 'FEMININO',
-            tipoDeficiencia: 'INTELECTUAL',
-            medicamentosUso: true,
-            medicamentosQuais: 'Ritalina',
-            nomeResponsavel: 'João Souza',
-            telefoneResponsavel: '(49) 99999-1111',
-            descricaoDemanda: 'Dificuldades de aprendizagem',
-            acompanhamentoEspecializado: true,
-            nomeEscola: 'Escola Municipal Esperança',
-            turnoEscola: 'MATUTINO',
-          } as unknown as Assistido,
-        ],
-        new Usuario(
-          'U2',
-          'Dr. Ricardo Menezes',
-          'ricardo@apae.org',
-          Roles.PROFISSIONAL,
-          StatusUsuarioEnum.ATIVO,
-          'Psicologia',
-          'Especialista em comportamento infantil',
-          'CRP 06/98765',
-          '(49) 96666-4444'
-        ),
-        TipoRecorrencia.SEMANAL,
-        new Date('2025-10-08'),
-        '14:00',
-        DiaDaSemana.QUARTA
-      ),
-
-      new Agendamento(
-        'AG003',
-        'Reunião Interdisciplinar',
-        'Reunião entre profissionais e familiares para acompanhamento de casos',
-        Status.Inativo,
-        [
-          {
-            id: 'A1',
-            nome: 'Maria Souza',
-            dataNascimento: '2012-05-10',
-            endereco: 'Rua das Flores, 123',
-            status: Status.Ativo,
-            sexo: 'FEMININO',
-            tipoDeficiencia: 'INTELECTUAL',
-            medicamentosUso: true,
-            medicamentosQuais: 'Ritalina',
-            nomeResponsavel: 'João Souza',
-            telefoneResponsavel: '(49) 99999-1111',
-            descricaoDemanda: 'Dificuldades de aprendizagem',
-            acompanhamentoEspecializado: true,
-            nomeEscola: 'Escola Municipal Esperança',
-            turnoEscola: 'MATUTINO',
-          } as unknown as Assistido,
-          {
-            id: 'A2',
-            nome: 'Carlos Silva',
-            dataNascimento: '2010-11-22',
-            endereco: 'Av. Central, 456',
-            status: Status.Ativo,
-            sexo: 'MASCULINO',
-            tipoDeficiencia: 'FISICA',
-            medicamentosUso: false,
-            nomeResponsavel: 'Ana Silva',
-            telefoneResponsavel: '(49) 98888-2222',
-            descricaoDemanda: 'Fisioterapia motora semanal',
-            acompanhamentoEspecializado: true,
-            nomeEscola: 'Colégio Estadual Horizonte',
-            turnoEscola: 'VESPERTINO',
-          } as unknown as Assistido,
-        ],
-        new Usuario(
-          'U2',
-          'Dr. Ricardo Menezes',
-          'ricardo@apae.org',
-          Roles.PROFISSIONAL,
-          StatusUsuarioEnum.ATIVO,
-          'Psicologia',
-          'Especialista em comportamento infantil',
-          'CRP 06/98765',
-          '(49) 96666-4444'
-        ),
-        TipoRecorrencia.NENHUM,
-        new Date('2025-10-10'),
-        '10:30',
-        undefined
-      ),
-    ];
-
-    // Simular chamada ao serviço
-    this.agendamentos = agendamentosExemplo;
-    /*
-      this.agendamentoService.pesquisar(filtros).subscribe({
+    
+      this.agendamentoService.listarAgendamentos(filtros).subscribe({
         next: (response) => {
           this.agendamentos = response;
         },
         error: (error) => {
-          this.notificationService.error('Erro ao pesquisar agendamentos');
+          this.notificationService.fail('Erro ao pesquisar agendamentos');
           console.error(error);
         }
       });
-      */
+      
   }
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
       profissional: ['', AutocompleteComponent.selectOptionValidator],
       assistidoId: [''],
-      data: [''],
-      recorrencia: [null],
+      dataAgendamentoInicio: [''],
+      dataAgendamentoFim: [''],
       status: [''],
     });
   }
@@ -388,17 +248,13 @@ export class AgendamentosComponent implements OnInit {
   }
 
   private buscarProfissionais(): Observable<Usuario[]> {
-    return this.usuarioService.listarUsuarios().pipe(
+    return this.usuarioService.filtrarUsuarios({perfil: Roles.PROFISSIONAL, status: Status.Ativo}).pipe(
       map((users) => {
         return users
           .map((u) => new Usuario(u))
-          .filter((u) => u.hasRole(Roles.PROFISSIONAL) && u.status === StatusUsuarioEnum.ATIVO);
       })
     );
   }
 
-  onProfissionalSelecionado(option: SelectOption) {
-    console.log('Profissional selecionado:', option.value);
-    // Exemplo: atualizar outro campo se precisar
-  }
+
 }

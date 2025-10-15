@@ -13,17 +13,18 @@
       [control]="$any(filtrosForm.get('profissional'))"
       [clearable]="true"
       prefixIcon="person"
-      (selectionChange)="onProfissionalSelecionado($event)"
       cssClass="mat-spacing-sm field-md"
     >
     </app-autocomplete>
 
-    <app-datepicker
-      label="Data do Agendamento"
-      placeholder="dd/MM/yyyy"
-      formControlName="data"
-      cssClass="mat-spacing-sm field-md"
-    ></app-datepicker>
+    <app-rangepicker
+      [controlInicio]="$any(filtrosForm.get('dataAgendamentoInicio'))"
+      [controlFim]="$any(filtrosForm.get('dataAgendamentoFim'))"
+      labelInicio="Data Inicial"
+      labelFim="Data Final"
+      [clearable]="true"
+   cssClass="mat-spacing-sm field-md"
+    ></app-rangepicker>
 
     <app-select
       label="Status"

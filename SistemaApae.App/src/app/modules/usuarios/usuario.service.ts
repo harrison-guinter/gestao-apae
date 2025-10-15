@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Usuario, StatusUsuarioEnum } from './usuario';
+import { Usuario } from './usuario';
 import { Roles } from '../auth/roles.enum';
 import { ApiResponse } from '../core/models/api-response.model';
+import { Status } from '../core/enum/status.enum';
 
 export interface UsuarioFiltro {
   nome?: string;
   email?: string;
   perfil?: Roles;
-  status?: StatusUsuarioEnum;
+  status?: Status;
 }
 
 @Injectable({
@@ -28,17 +29,6 @@ export class UsuarioService {
       map((response) => {
         const usuarios = response as any;
         return usuarios.sort((a: { nome: any }, b: { nome: any }) =>
-          (a.nome || '').toLowerCase().localeCompare((b.nome || '').toLowerCase())
-        );
-      })
-    );
-  }
-
-  listarUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.baseUrl}Usuario`).pipe(
-      map((response) => {
-        const usuarios = response || [];
-        return usuarios.sort((a, b) =>
           (a.nome || '').toLowerCase().localeCompare((b.nome || '').toLowerCase())
         );
       })
@@ -84,7 +74,7 @@ export class UsuarioService {
       nome: usuario.nome?.trim() || '',
       email: usuario.email?.trim() || '',
       perfil: usuario.perfil || Roles.PROFISSIONAL,
-      status: usuario.status || StatusUsuarioEnum.ATIVO,
+      status: usuario.status || Status.Ativo,
     };
 
     // Campos opcionais

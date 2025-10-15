@@ -21,10 +21,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatTooltipModule,
   ],
-  templateUrl: './date.component.html',
-  styleUrls: ['./date.component.less'],
+  templateUrl: './datepicker.component.html',
+  styleUrls: ['./datepicker.component.less'],
 })
-export class DateComponent {
+export class DatepickerComponent {
   @Input() label: string = '';
   @Input() placeholder: string = 'DD/MM/AAAA';
   @Input() appearance: 'fill' | 'outline' = 'outline';

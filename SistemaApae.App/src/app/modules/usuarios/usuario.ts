@@ -1,16 +1,13 @@
 import { Roles } from '../auth/roles.enum';
+import { Status } from '../core/enum/status.enum';
 
-export enum StatusUsuarioEnum {
-  ATIVO = 'Ativo',
-  INATIVO = 'Inativo',
-}
 
 export class Usuario {
   id!: string;
   nome!: string;
   email!: string;
   perfil!: Roles;
-  status!: StatusUsuarioEnum;
+  status!: Status;
   especialidade?: string;
   observacao?: string;
   registroProfissional?: string;
@@ -24,7 +21,7 @@ export class Usuario {
     nome: string,
     email: string,
     perfil: Roles,
-    status: StatusUsuarioEnum,
+    status: Status,
     especialidade?: string,
     observacao?: string,
     registroProfissional?: string,
@@ -37,7 +34,7 @@ export class Usuario {
     nome?: string,
     email?: string,
     perfil?: Roles,
-    status?: StatusUsuarioEnum,
+    status?: Status,
     especialidade?: string,
     observacao?: string,
     registroProfissional?: string,
@@ -64,11 +61,7 @@ export class Usuario {
   }
 
   isActive(): boolean {
-    return this.status === StatusUsuarioEnum.ATIVO;
-  }
-
-  getStatusLabel(): string {
-    return this.status === StatusUsuarioEnum.ATIVO ? 'Ativo' : 'Inativo';
+    return this.status === Status.Ativo;
   }
 
   static getCurrentUser(): Usuario {
@@ -79,7 +72,7 @@ export class Usuario {
       nome: jsonParsed.name, 
       email: jsonParsed.email,
       perfil: jsonParsed.perfil,
-      status: jsonParsed.ativo ? StatusUsuarioEnum.ATIVO : StatusUsuarioEnum.INATIVO,
+      status: jsonParsed.ativo ? Status.Ativo : Status.Inativo,
       especialidade: jsonParsed.especialidade,
       observacao: jsonParsed.observacao,
       registroProfissional: jsonParsed.registroProfissional,

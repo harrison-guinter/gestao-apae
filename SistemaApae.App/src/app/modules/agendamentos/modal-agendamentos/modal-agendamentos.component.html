@@ -8,19 +8,35 @@
   <form [formGroup]="formCadastro" class="convenio-form">
     <div class="form-row">
       <div class="form-row-half">
-        <app-input
-          label="Nome"
-          [control]="$any(formCadastro.get('nome'))"
-          placeholder="Digite o nome"
-          appearance="outline"
-        ></app-input>
-
-        <app-select
+        <!-- <app-select
           label="Status"
           [control]="$any(formCadastro.get('status'))"
           [options]="statusOptions"
           appearance="outline"
         ></app-select>
+
+        <app-autocomplete
+          label="Profissional"
+          placeholder="Digite para buscar..."
+          [options]="(profissionalOptions | async) || []"
+          [control]="$any(filtrosForm.get('profissional'))"
+          [clearable]="true"
+          prefixIcon="person"
+          cssClass="mat-spacing-sm field-md"
+        >
+        </app-autocomplete>
+
+        <app-autocomplete-multiple
+          [label]="'Assistidos'"
+          [placeholder]="'Selecione um ou mais'"
+          [options]="[
+            { label: 'São Paulo', value: 'SP' },
+            { label: 'Rio de Janeiro', value: 'RJ' },
+            { label: 'Curitiba', value: 'PR' },
+            { label: 'Porto Alegre', value: 'RS' }
+          ]"
+  
+        ></app-autocomplete-multiple> -->
       </div>
     </div>
     <div class="form-row">

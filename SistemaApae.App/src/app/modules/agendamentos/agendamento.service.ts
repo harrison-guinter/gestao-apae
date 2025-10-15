@@ -4,10 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { Agendamento } from './agendamento';
 import { Status } from '../core/enum/status.enum';
+import { Assistido } from '../assistidos/assistido';
 
 export interface AgendamentoFiltro {
-  Nome?: string;
-  Status?: Status;
+  nome?: string;
+  status?: Status;
+  dataAgendamentoInicio?: string;
+  dataAgendamentoFim?: string;
+  assistido: Assistido
 }
 
 @Injectable({
