@@ -1,7 +1,7 @@
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Filters;
 
-namespace SistemaApae.Api.Models.Agenda;
+namespace SistemaApae.Api.Models.Agenda.Agendamento;
 
 /// <summary>
 /// Filtros para busca de relacionamentos AgendamentoAssistido

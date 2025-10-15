@@ -1,19 +1,23 @@
+using SistemaApae.Api.Models.Agenda.Atendimento;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
-using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Agenda;
+namespace SistemaApae.Api.Models.Agenda.Agendamento;
 
 /// <summary>
-/// DTO para criação de agendamento com assistidos
+/// DTO de resposta de agendamento com assistidos
 /// </summary>
-public class AgendamentoCreateDto
+public class AgendamentoResponseDto
 {
+    /// <summary>
+    /// ID do agendamento
+    /// </summary>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Profissional responsável
     /// </summary>
-    [Required(ErrorMessage = "Profissional é obrigatório")]
     public UsuarioDto Profissional { get; set; }
 
     /// <summary>
@@ -29,7 +33,7 @@ public class AgendamentoCreateDto
     /// <summary>
     /// Data do agendamento
     /// </summary>
-    public DateOnly DataAgendamento { get; set; }
+    public DateOnly? DataAgendamento { get; set; }
 
     /// <summary>
     /// Dia da semana do agendamento
@@ -42,9 +46,13 @@ public class AgendamentoCreateDto
     public string? Observacao { get; set; }
 
     /// <summary>
-    /// Lista de assistidos para este agendamento
+    /// Indica se o agendamento está ativo/inativo
     /// </summary>
-    [Required(ErrorMessage = "Pelo menos um assistido deve ser selecionado")]
-    [MinLength(1, ErrorMessage = "Pelo menos um assistido deve ser selecionado")]
+    public StatusEntidadeEnum Status { get; set; }
+
+    /// <summary>
+    /// Lista de assistidos associados
+    /// </summary>
     public List<AssistidoDto> Assistidos { get; set; } = new();
+    public List<AtendimentoDto> Atendimentos { get; set; } = new();
 }

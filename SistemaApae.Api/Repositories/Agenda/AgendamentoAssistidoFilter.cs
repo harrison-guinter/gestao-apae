@@ -1,7 +1,7 @@
-using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Repositories;
 using Supabase.Postgrest.Interfaces;
 using Supabase.Postgrest;
+using SistemaApae.Api.Models.Agenda.Agendamento;
 
 namespace SistemaApae.Api.Repositories.Agenda;
 

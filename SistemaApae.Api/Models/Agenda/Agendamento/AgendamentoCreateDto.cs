@@ -3,19 +3,13 @@ using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Agenda;
+namespace SistemaApae.Api.Models.Agenda.Agendamento;
 
 /// <summary>
-/// DTO para atualização de agendamento
+/// DTO para criação de agendamento com assistidos
 /// </summary>
-public class AgendamentoUpdateDto
+public class AgendamentoCreateDto
 {
-    /// <summary>
-    /// ID do agendamento
-    /// </summary>
-    [Required(ErrorMessage = "Agendamento existente é obrigatório")]
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Profissional responsável
     /// </summary>
@@ -48,14 +42,9 @@ public class AgendamentoUpdateDto
     public string? Observacao { get; set; }
 
     /// <summary>
-    /// Status do agendamento
-    /// </summary>
-    public StatusEntidadeEnum Status { get; set; }
-
-    /// <summary>
-    /// Lista de Assistidos para este agendamento
+    /// Lista de assistidos para este agendamento
     /// </summary>
     [Required(ErrorMessage = "Pelo menos um assistido deve ser selecionado")]
     [MinLength(1, ErrorMessage = "Pelo menos um assistido deve ser selecionado")]
-    public List<AssistidoDto>? Assistidos { get; set; }
+    public List<AssistidoDto> Assistidos { get; set; } = new();
 }

@@ -1,4 +1,5 @@
-using SistemaApae.Api.Models.Agenda;
+using SistemaApae.Api.Models.Agenda.Agendamento;
+using SistemaApae.Api.Models.Agenda.Atendimento;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
@@ -15,6 +16,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
     private readonly IService<AgendamentoAssistido, AgendamentoAssistidoFilterRequest> _agendamentoAssistidoService;
     private readonly IService<Assistido, AssistidoFiltroRequest> _assistidoService;
     private readonly IService<Usuario, UsuarioFiltroRequest> _usuarioService;
+    private readonly AtendimentoService _atendimentoService;
     private readonly ILogger<AgendamentoService> _logger;
 
     /// <summary>
@@ -26,13 +28,15 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
         ISupabaseService supabaseService,
         IService<AgendamentoAssistido, AgendamentoAssistidoFilterRequest> agendamentoAssistidoService,
         IService<Assistido, AssistidoFiltroRequest> assistidoService,
-        IService<Usuario, UsuarioFiltroRequest> usuarioService)
+        IService<Usuario, UsuarioFiltroRequest> usuarioService,
+        AtendimentoService atendimentoService)
         : base(repository, logger)
     {
         _logger = logger;
         _agendamentoAssistidoService = agendamentoAssistidoService;
         _assistidoService = assistidoService;
         _usuarioService = usuarioService;
+        _atendimentoService = atendimentoService;
     }
 
     /// <summary>
@@ -282,18 +286,57 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
     {
         try
         {
+            // Se houver filtro por assistido, buscar os IDs dos agendamentos que contêm esse assistido
+            IEnumerable<Guid>? idsAgendamentosPorAssistido = null;
+            if (filtros != null && filtros.IdAssistido != Guid.Empty)
+            {
+                var filterAssistido = new AgendamentoAssistidoFilterRequest 
+                { 
+                    IdAssistido = filtros.IdAssistido,
+                    Status = StatusEntidadeEnum.Ativo
+                };
+                var relacionamentosResult = await _agendamentoAssistidoService.GetByFilters(filterAssistido);
+                
+                if (relacionamentosResult.Success && relacionamentosResult.Data != null)
+                {
+                    idsAgendamentosPorAssistido = relacionamentosResult.Data
+                        .Select(r => r.IdAgendamento)
+                        .Distinct()
+                        .ToList();
+                }
+                else
+                {
+                    // Se não encontrar relacionamentos, retornar lista vazia
+                    return ApiResponse<IEnumerable<AgendamentoResponseDto>>.SuccessResponse(new List<AgendamentoResponseDto>());
+                }
+            }
+
             // Buscar os agendamentos usando o método base
-            var agendamentosResult = await base.GetByFilters(filtros);
+            var agendamentosResult = await base.GetByFilters(filtros ?? new AgendamentoFilterRequest());
             
             if (!agendamentosResult.Success || agendamentosResult.Data == null)
             {
                 return ApiResponse<IEnumerable<AgendamentoResponseDto>>.ErrorResponse("Agendamentos não encontrados");
             }
 
+            // Aplicar filtro adicional para agendamentos recorrentes baseado no dia da semana
+            var agendamentosFiltrados = AgendamentoFilter.FilterRecurrentAppointments(
+                agendamentosResult.Data,
+                filtros?.DataAgendamentoInicio,
+                filtros?.DataAgendamentoFim
+            );
+
+            // Se houver filtro por assistido, aplicar o filtro adicional
+            if (idsAgendamentosPorAssistido != null)
+            {
+                agendamentosFiltrados = agendamentosFiltrados
+                    .Where(a => idsAgendamentosPorAssistido.Contains(a.Id));
+            }
+
             var responseDtos = new List<AgendamentoResponseDto>();
 
             // Para cada agendamento, buscar profissional e assistidos
-            foreach (var agendamento in agendamentosResult.Data)
+            foreach (var agendamento in agendamentosFiltrados)
             {
                 var profissionalDto = await BuscarProfissionalCompletoAsync(agendamento.IdProfissional);
                 var assistidosDtos = await BuscarAssistidosDoAgendamentoAsync(agendamento.Id);
@@ -324,6 +367,70 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
             return ApiResponse<IEnumerable<AgendamentoResponseDto>>.ErrorResponse("Erro interno ao buscar agendamentos");
         }
     }
+
+    /// <summary>
+    /// Busca agendamentos por profissional em uma data específica
+    /// </summary>
+    public async Task<ApiResponse<IEnumerable<AgendamentoResponseDto>>> GetByProfissional(Guid idProfissional, DateOnly? data)
+    {
+        try
+        {
+            var dataBase = data ?? DateOnly.FromDateTime(DateTime.Now);
+
+            // Criar filtro com profissional e intervalo de data
+            var filtros = new AgendamentoFilterRequest 
+            { 
+                IdProfissional = idProfissional,
+                DataAgendamentoInicio = dataBase,
+                DataAgendamentoFim = dataBase
+            };
+
+            var agendamentosResult = await base.GetByFilters(filtros);
+            if (!agendamentosResult.Success || agendamentosResult.Data == null)
+                return ApiResponse<IEnumerable<AgendamentoResponseDto>>.ErrorResponse("Nenhum agendamento encontrado para o profissional informado");
+
+            // Aplicar filtro de recorrência para a data específica
+            var agendamentosFiltrados = AgendamentoFilter.FilterRecurrentAppointments(
+                agendamentosResult.Data, dataBase, dataBase
+            );
+
+            var responseDtos = new List<AgendamentoResponseDto>();
+
+            foreach (var agendamento in agendamentosFiltrados)
+            {
+                var profissionalDto = await BuscarProfissionalCompletoAsync(agendamento.IdProfissional);
+                var assistidosDtos = await BuscarAssistidosDoAgendamentoAsync(agendamento.Id);
+
+                // Buscar atendimentos do dia
+                var atendimentosDoDiaResult = await _atendimentoService.GetByAgendamentoAndDate(agendamento.Id, dataBase);
+                var atendimentosDoDia = atendimentosDoDiaResult.Success && atendimentosDoDiaResult.Data != null 
+                    ? atendimentosDoDiaResult.Data.ToList() 
+                    : new List<AtendimentoDto>();
+
+                responseDtos.Add(new AgendamentoResponseDto
+                {
+                    Id = agendamento.Id,
+                    Profissional = profissionalDto,
+                    TipoRecorrencia = agendamento.TipoRecorrencia,
+                    HorarioAgendamento = agendamento.HorarioAgendamento,
+                    DataAgendamento = agendamento.DataAgendamento,
+                    DiaSemana = agendamento.DiaSemana,
+                    Observacao = agendamento.Observacao,
+                    Status = agendamento.Status,
+                    Assistidos = assistidosDtos,
+                    Atendimentos = atendimentosDoDia
+                });
+            }
+
+            return ApiResponse<IEnumerable<AgendamentoResponseDto>>.SuccessResponse(responseDtos);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar agendamentos por profissional");
+            return ApiResponse<IEnumerable<AgendamentoResponseDto>>.ErrorResponse("Erro interno ao buscar agendamentos do profissional");
+        }
+    }
+
 
     #region Métodos Privados de Validação
 

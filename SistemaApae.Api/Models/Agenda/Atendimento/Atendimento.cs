@@ -2,7 +2,7 @@ using SistemaApae.Api.Models.Enums;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Agenda;
+namespace SistemaApae.Api.Models.Agenda.Atendimento;
 
 /// <summary>
 /// Modelo de atendimento do sistema

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaApae.Api.Models.Agenda;
+using SistemaApae.Api.Models.Agenda.Agendamento;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Services.Agenda;
 
@@ -42,6 +42,22 @@ public class AgendamentoController : ControllerBase
                 return NotFound(result);
             return StatusCode(500, result);
         }
+        return Ok(result);
+    }
+
+        /// <summary>
+    /// Lista Agendamentos por filtros de pesquisa (paginado) com assistidos
+    /// </summary>
+    [HttpGet("profissional/{idProfissional}")]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<AgendamentoResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+     public async Task<ActionResult<ApiResponse<IEnumerable<AgendamentoResponseDto>>>> GetByProfissional([FromRoute] Guid idProfissional, [FromQuery] DateOnly? data)
+     {
+        var result = await _service.GetByProfissional(idProfissional, data);
+        if (!result.Success)
+            return StatusCode(500, result);
         return Ok(result);
     }
 
