@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
 
@@ -115,7 +116,7 @@ public class UsuarioController : ControllerBase
             return StatusCode(500, result);
         }
 
-        await _emailService.SendEmailAsync(result.Data!.Email, result.Data.Nome, result.Data!.Senha!);
+        await _emailService.SendEmailAsync(result.Data!.Email, result.Data.Nome, result.Data!.Senha!, EmailReasonEnum.CreateUser);
 
         return Created();
     }
