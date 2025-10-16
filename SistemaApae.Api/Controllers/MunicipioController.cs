@@ -16,8 +16,8 @@ namespace SistemaApae.Api.Controllers.Administrative;
 [Produces("application/json")]
 public class MunicipioController : ControllerBase
 {
-    private readonly IService<Municipio, MunicipioFiltroRequest> _service;
-    public MunicipioController(IService<Municipio, MunicipioFiltroRequest> service)
+    private readonly IService<Municipio, MunicipioFilterRequest> _service;
+    public MunicipioController(IService<Municipio, MunicipioFilterRequest> service)
     {
         _service = service;
     }
@@ -58,7 +58,7 @@ public class MunicipioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Assistido>>>> GetByFilters([FromQuery] MunicipioFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Assistido>>>> GetByFilters([FromQuery] MunicipioFilterRequest request)
     {
         var result = await _service.GetByFilters(request);
         if (!result.Success)

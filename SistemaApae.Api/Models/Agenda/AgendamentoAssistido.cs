@@ -1,7 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Agenda.Agendamento;
+namespace SistemaApae.Api.Models.Agenda;
 
 /// <summary>
 /// Modelo de relacionamento entre agendamento e assistido (tabela de junção)

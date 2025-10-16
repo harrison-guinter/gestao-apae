@@ -2,7 +2,7 @@ using SistemaApae.Api.Models.Enums;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Agenda.Agendamento;
+namespace SistemaApae.Api.Models.Agenda;
 
 /// <summary>
 /// Modelo de agendamento do sistema

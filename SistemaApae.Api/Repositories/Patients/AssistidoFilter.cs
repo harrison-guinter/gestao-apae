@@ -7,9 +7,9 @@ namespace SistemaApae.Api.Repositories.Patients;
 /// <summary>
 /// Aplica filtros específicos para consultas de Assistido
 /// </summary>
-public class AssistidoFilter : IRepositoryFilter<Assistido, AssistidoFiltroRequest>
+public class AssistidoFilter : IRepositoryFilter<Assistido, AssistidoFilterRequest>
 {
-    public IPostgrestTable<Assistido> Apply(IPostgrestTable<Assistido> query, AssistidoFiltroRequest filtros)
+    public IPostgrestTable<Assistido> Apply(IPostgrestTable<Assistido> query, AssistidoFilterRequest filtros)
     {
         if (!string.IsNullOrWhiteSpace(filtros.Nome))
         {

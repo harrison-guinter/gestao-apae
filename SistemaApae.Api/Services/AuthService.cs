@@ -15,7 +15,7 @@ namespace SistemaApae.Api.Services;
 /// </summary>
 public class AuthService : IAuthService
 {
-    private readonly IRepository<Usuario, UsuarioFiltroRequest> _repository;
+    private readonly IRepository<Usuario, UsuarioFilterRequest> _repository;
     private readonly IEmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
@@ -28,7 +28,7 @@ public class AuthService : IAuthService
     /// <param name="configuration">Configuração da aplicação</param>
     /// <param name="logger">Logger para registro de eventos</param>
     public AuthService(
-        IRepository<Usuario, UsuarioFiltroRequest> repository,
+        IRepository<Usuario, UsuarioFilterRequest> repository,
         IEmailService emailService,
         IConfiguration configuration, 
         ILogger<AuthService> logger)
@@ -49,7 +49,7 @@ public class AuthService : IAuthService
         try
         {
             // Busca usuário no banco de dados
-            var user = (await _repository.GetByFiltersAsync(new UsuarioFiltroRequest { Email = request.Email })).First();
+            var user = (await _repository.GetByFiltersAsync(new UsuarioFilterRequest { Email = request.Email })).First();
 
             if (user == null || user.Status == StatusEntidadeEnum.Inativo)
             {
@@ -106,7 +106,7 @@ public class AuthService : IAuthService
         try
         {
             // Busca usuário no banco de dados
-            var user = (await _repository.GetByFiltersAsync(new UsuarioFiltroRequest { Email = request.Email })).First();
+            var user = (await _repository.GetByFiltersAsync(new UsuarioFilterRequest { Email = request.Email })).First();
 
             if (user != null && user.Status == StatusEntidadeEnum.Ativo)
             {

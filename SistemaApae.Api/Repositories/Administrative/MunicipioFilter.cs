@@ -6,9 +6,9 @@ namespace SistemaApae.Api.Repositories.Admistrative;
 /// <summary>
 /// Aplica filtros específicos para consultas de Municipio
 /// </summary>
-public class MunicipioFilter : IRepositoryFilter<Municipio, MunicipioFiltroRequest>
+public class MunicipioFilter : IRepositoryFilter<Municipio, MunicipioFilterRequest>
 {
-    public IPostgrestTable<Municipio> Apply(IPostgrestTable<Municipio> query, MunicipioFiltroRequest filtros)
+    public IPostgrestTable<Municipio> Apply(IPostgrestTable<Municipio> query, MunicipioFilterRequest filtros)
     {
         if (!string.IsNullOrWhiteSpace(filtros.Nome))
         {

@@ -1,10 +1,11 @@
-using SistemaApae.Api.Models.Agenda.Agendamento;
-using SistemaApae.Api.Models.Agenda.Atendimento;
+using SistemaApae.Api.Models.Agenda;
+using SistemaApae.Api.Models.Appointment;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Repositories;
+using SistemaApae.Api.Services.Appointment;
 
 namespace SistemaApae.Api.Services.Agenda;
 
@@ -14,8 +15,8 @@ namespace SistemaApae.Api.Services.Agenda;
 public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
 {
     private readonly IService<AgendamentoAssistido, AgendamentoAssistidoFilterRequest> _agendamentoAssistidoService;
-    private readonly IService<Assistido, AssistidoFiltroRequest> _assistidoService;
-    private readonly IService<Usuario, UsuarioFiltroRequest> _usuarioService;
+    private readonly IService<Assistido, AssistidoFilterRequest> _assistidoService;
+    private readonly IService<Usuario, UsuarioFilterRequest> _usuarioService;
     private readonly AtendimentoService _atendimentoService;
     private readonly ILogger<AgendamentoService> _logger;
 
@@ -27,8 +28,8 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
         ILogger<AgendamentoService> logger,
         ISupabaseService supabaseService,
         IService<AgendamentoAssistido, AgendamentoAssistidoFilterRequest> agendamentoAssistidoService,
-        IService<Assistido, AssistidoFiltroRequest> assistidoService,
-        IService<Usuario, UsuarioFiltroRequest> usuarioService,
+        IService<Assistido, AssistidoFilterRequest> assistidoService,
+        IService<Usuario, UsuarioFilterRequest> usuarioService,
         AtendimentoService atendimentoService)
         : base(repository, logger)
     {

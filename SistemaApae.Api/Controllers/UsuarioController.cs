@@ -16,14 +16,14 @@ namespace SistemaApae.Api.Controllers.Users;
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
-    private readonly IService<Usuario, UsuarioFiltroRequest> _service;
+    private readonly IService<Usuario, UsuarioFilterRequest> _service;
     private readonly IAuthService _authService;
     private readonly IEmailService _emailService;
 
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(IService<Usuario, UsuarioFiltroRequest> service, IAuthService authService, IEmailService emailService)
+    public UsuarioController(IService<Usuario, UsuarioFilterRequest> service, IAuthService authService, IEmailService emailService)
     {
         _service = service;
         _authService = authService;
@@ -39,7 +39,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFiltroRequest filters)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFilterRequest filters)
     {
         var result = await _service.GetByFilters(filters);
 

@@ -15,12 +15,12 @@ namespace SistemaApae.Api.Controllers.Patients;
 [Produces("application/json")]
 public class AssistidoController : ControllerBase
 {
-    private readonly IService<Assistido, AssistidoFiltroRequest> _service;
+    private readonly IService<Assistido, AssistidoFilterRequest> _service;
 
     /// <summary>
     /// Inicializa uma nova instância do AssistidoController
     /// </summary>
-    public AssistidoController(IService<Assistido, AssistidoFiltroRequest> service)
+    public AssistidoController(IService<Assistido, AssistidoFilterRequest> service)
     {
         _service = service;
     }
@@ -33,7 +33,7 @@ public class AssistidoController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Assistido>>>> GetByFilters([FromQuery] AssistidoFiltroRequest request)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Assistido>>>> GetByFilters([FromQuery] AssistidoFilterRequest request)
     {
         var result = await _service.GetByFilters(request);
         if (!result.Success)

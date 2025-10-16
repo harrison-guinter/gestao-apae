@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Appointment;
-using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Appointment;
@@ -17,13 +16,13 @@ namespace SistemaApae.Api.Controllers;
 [Produces("application/json")]
 public class AtendimentoController : ControllerBase
 {
-    private readonly IService<Atendimento, AtendimentoFiltroRequest> _service;
+    private readonly IService<Atendimento, AtendimentoFilterRequest> _service;
     private readonly AtendimentoService _atendimentoService;
 
     /// <summary>
     /// Inicializa uma nova instância do AtendimentoController
     /// </summary>
-    public AtendimentoController(IService<Atendimento, AtendimentoFiltroRequest> service, AtendimentoService atendimentoService)
+    public AtendimentoController(IService<Atendimento, AtendimentoFilterRequest> service, AtendimentoService atendimentoService)
     {
         _service = service;
         _atendimentoService = atendimentoService;
@@ -38,7 +37,7 @@ public class AtendimentoController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Atendimento>>>> GetAppointmentByFilters([FromQuery] AtendimentoFiltroRequest filters)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Atendimento>>>> GetAppointmentByFilters([FromQuery] AtendimentoFilterRequest filters)
     {
         var result = await _service.GetByFilters(filters);
 

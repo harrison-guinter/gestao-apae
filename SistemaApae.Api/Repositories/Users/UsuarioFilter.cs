@@ -7,9 +7,9 @@ namespace SistemaApae.Api.Repositories.Users;
 /// <summary>
 /// Aplica filtros específicos para consultas de Usuario
 /// </summary>
-public class UsuarioFilter : IRepositoryFilter<Usuario, UsuarioFiltroRequest>
+public class UsuarioFilter : IRepositoryFilter<Usuario, UsuarioFilterRequest>
 {
-    public IPostgrestTable<Usuario> Apply(IPostgrestTable<Usuario> query, UsuarioFiltroRequest filtros)
+    public IPostgrestTable<Usuario> Apply(IPostgrestTable<Usuario> query, UsuarioFilterRequest filtros)
     {
         if (!string.IsNullOrEmpty(filtros.Email))
             query = query.Filter(u => u.Email, Constants.Operator.ILike, $"%{filtros.Email}%");

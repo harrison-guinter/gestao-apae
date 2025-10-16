@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaApae.Api.Models.Agenda.Agendamento;
+using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Services.Agenda;
 

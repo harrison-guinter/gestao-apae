@@ -1,19 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Models.Administrative;
-using SistemaApae.Api.Models.Agenda.Agendamento;
-using SistemaApae.Api.Models.Agenda.Atendimento;
+using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Agreements;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Repositories;
 using SistemaApae.Api.Repositories.Admistrative;
-using SistemaApae.Api.Repositories.Agenda;
 using SistemaApae.Api.Repositories.Patients;
 using SistemaApae.Api.Repositories.Users;
 using SistemaApae.Api.Serialization;
 using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Agenda;
+using SistemaApae.Api.Services.Appointment;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -53,12 +52,11 @@ if (!string.IsNullOrEmpty(jwtKey) && !string.IsNullOrEmpty(jwtIssuer))
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped(typeof(IRepositoryFilter<,>), typeof(DefaultRepositoryFilter<,>));
 
-builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFiltroRequest>, AssistidoFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFilterRequest>, AssistidoFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Agendamento, AgendamentoFilterRequest>, AgendamentoFilter>();
-builder.Services.AddScoped<IRepositoryFilter<Atendimento, AtendimentoFilterRequest>, AtendimentoFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Convenio, ConvenioFilterRequest>, ConvenioFilter>();
-builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFiltroRequest>, MunicipioFilter>();
-builder.Services.AddScoped<IRepositoryFilter<Usuario, UsuarioFiltroRequest>, UsuarioFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFilterRequest>, MunicipioFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Usuario, UsuarioFilterRequest>, UsuarioFilter>();
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();

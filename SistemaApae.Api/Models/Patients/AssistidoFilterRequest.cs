@@ -6,7 +6,7 @@ namespace SistemaApae.Api.Models.Patients;
 /// <summary>
 /// Modelo para requisição de Assistido por filtros de pesquisa
 /// </summary>
-public class AssistidoFiltroRequest : BaseFilter
+public class AssistidoFilterRequest : BaseFilter
 {
     /// <summary>
     /// Nome do Assistido

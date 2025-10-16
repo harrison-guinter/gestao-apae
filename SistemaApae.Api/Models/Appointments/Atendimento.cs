@@ -2,7 +2,7 @@ using SistemaApae.Api.Models.Enums;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace SistemaApae.Api.Models.Appointments;
+namespace SistemaApae.Api.Models.Appointment;
 
 /// <summary>
 /// Modelo de atendimento do sistema
@@ -34,8 +34,8 @@ public class Atendimento : ApiBaseModel
     /// <summary>
     /// Status do atendimento
     /// </summary>
-    [Column("status")]
-    public StatusAtendimentoEnum? Status { get; set; }
+    [Column("presenca")]
+    public StatusAtendimentoEnum? Presenca { get; set; }
 
     /// <summary>
     /// Avaliação do atendimento

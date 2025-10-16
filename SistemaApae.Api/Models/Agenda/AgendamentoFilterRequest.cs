@@ -2,7 +2,7 @@
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 
-namespace SistemaApae.Api.Models.Agenda.Agendamento;
+namespace SistemaApae.Api.Models.Agenda;
 
 /// <summary>
 /// Modelo para requisição de Municipio por filtros de pesquisa

@@ -2,7 +2,7 @@ using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Repositories;
 using Supabase.Postgrest.Interfaces;
 using Supabase.Postgrest;
-using SistemaApae.Api.Models.Agenda.Agendamento;
+using SistemaApae.Api.Models.Agenda;
 
 /// <summary>
 /// Filtro para agendamentos com suporte a recorrência

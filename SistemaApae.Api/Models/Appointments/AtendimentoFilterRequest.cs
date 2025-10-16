@@ -6,7 +6,7 @@ namespace SistemaApae.Api.Models.Appointment;
 /// <summary>
 /// Modelo para requisição de atendimento por filtros de pesquisa
 /// </summary>
-public class AtendimentoFiltroRequest : BaseFilter
+public class AtendimentoFilterRequest : BaseFilter
 {
     /// <summary>
     /// ID do agendamento
@@ -31,5 +31,5 @@ public class AtendimentoFiltroRequest : BaseFilter
     /// <summary>
     /// Status do atendimento (presença/falta/justificada)
     /// </summary>
-    public StatusAtendimentoEnum? Status { get; set; }
+    public StatusAtendimentoEnum? Presenca { get; set; }
 }

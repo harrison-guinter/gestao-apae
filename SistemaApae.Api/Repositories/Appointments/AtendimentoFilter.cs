@@ -1,5 +1,4 @@
 ﻿using SistemaApae.Api.Models.Appointment;
-using SistemaApae.Api.Models.Appointments;
 using Supabase.Postgrest;
 using Supabase.Postgrest.Interfaces;
 
@@ -8,9 +7,9 @@ namespace SistemaApae.Api.Repositories.Appointments;
 /// <summary>
 /// Aplica filtros específicos para consultas de Atendimento
 /// </summary>
-public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFiltroRequest>
+public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilterRequest>
 {
-    public IPostgrestTable<Atendimento> Apply(IPostgrestTable<Atendimento> query, AtendimentoFiltroRequest filtros)
+    public IPostgrestTable<Atendimento> Apply(IPostgrestTable<Atendimento> query, AtendimentoFilterRequest filtros)
     {
         if (filtros.IdAgendamento != Guid.Empty)
             query = query.Filter(a => a.IdAgendamento, Constants.Operator.Equals, filtros.IdAgendamento);
@@ -32,8 +31,8 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFiltr
             query = query.Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, filtros.DataFimAtendimento.Value);
         }
 
-        if (filtros.Status != null)
-            query = query.Filter(a => a.Status!, Constants.Operator.Equals, (int)filtros.Status);
+        if (filtros.Presenca != null)
+            query = query.Filter(a => a.Status!, Constants.Operator.Equals, (int)filtros.Presenca);
 
         return query;
     }

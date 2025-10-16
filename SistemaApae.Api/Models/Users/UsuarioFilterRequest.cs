@@ -6,7 +6,7 @@ namespace SistemaApae.Api.Models.Users;
 /// <summary>
 /// Modelo para requisição de usuário por filtros de pesquisa
 /// </summary>
-public class UsuarioFiltroRequest : BaseFilter
+public class UsuarioFilterRequest : BaseFilter
 {
     /// <summary>
     /// Nome do usuário
