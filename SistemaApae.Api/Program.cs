@@ -61,6 +61,7 @@ builder.Services.AddScoped<IRepositoryFilter<Usuario, UsuarioFilterRequest>, Usu
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<DashboardService>();
 
 // Registrar service genérico
 builder.Services.AddScoped(typeof(IService<,>), typeof(Service<,>));
