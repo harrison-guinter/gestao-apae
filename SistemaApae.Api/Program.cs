@@ -3,10 +3,13 @@ using Microsoft.IdentityModel.Tokens;
 using SistemaApae.Api.Models.Administrative;
 using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Agreements;
+using SistemaApae.Api.Models.Appointment;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Repositories;
 using SistemaApae.Api.Repositories.Admistrative;
+using SistemaApae.Api.Repositories.Agenda;
+using SistemaApae.Api.Repositories.Appointments;
 using SistemaApae.Api.Repositories.Patients;
 using SistemaApae.Api.Repositories.Users;
 using SistemaApae.Api.Serialization;
@@ -55,9 +58,11 @@ builder.Services.AddScoped(typeof(IRepositoryFilter<,>), typeof(DefaultRepositor
 
 builder.Services.AddScoped<IRepositoryFilter<Assistido, AssistidoFilterRequest>, AssistidoFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Agendamento, AgendamentoFilterRequest>, AgendamentoFilter>();
+builder.Services.AddScoped<IRepositoryFilter<AgendamentoAssistido, AgendamentoAssistidoFilterRequest>, AgendamentoAssistidoFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Convenio, ConvenioFilterRequest>, ConvenioFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Municipio, MunicipioFilterRequest>, MunicipioFilter>();
 builder.Services.AddScoped<IRepositoryFilter<Usuario, UsuarioFilterRequest>, UsuarioFilter>();
+builder.Services.AddScoped<IRepositoryFilter<Atendimento, AtendimentoFilterRequest>, AtendimentoFilter>();
 
 // Registrar serviços
 builder.Services.AddScoped<IAuthService, AuthService>();
