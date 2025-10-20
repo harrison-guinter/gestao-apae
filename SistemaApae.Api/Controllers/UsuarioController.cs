@@ -48,7 +48,7 @@ public class UsuarioController : ControllerBase
             return StatusCode(500, result);
         }
 
-        return Ok();
+        return Ok(result);
     }
 
     /// <summary>
