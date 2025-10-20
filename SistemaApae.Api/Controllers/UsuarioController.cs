@@ -17,14 +17,14 @@ namespace SistemaApae.Api.Controllers.Users;
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
-    private readonly UsuarioService _usuarioService;
+    private readonly UsuarioService _service;
 
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(UsuarioService usuarioService)
+    public UsuarioController(UsuarioService service)
     {
-        _usuarioService = usuarioService;
+        _service = service;
     }
 
     /// <summary>
@@ -36,9 +36,9 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFilterRequest filters)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetByFilters([FromQuery] UsuarioFilterRequest filters)
     {
-        var result = await _usuarioService.GetUserByFilters(filters);
+        var result = await _service.GetByFilters(filters);
 
         if (!result.Success)
         {
@@ -56,16 +56,16 @@ public class UsuarioController : ControllerBase
     /// </summary>
     /// <returns> Usuario do id </returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponse<Usuario>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
 
-        var result = await _usuarioService.GetUserById(id);
+        var result = await _service.GetById(id);
 
         if (!result.Success)
         {
@@ -82,11 +82,11 @@ public class UsuarioController : ControllerBase
     /// Criar um usuário
     /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> CreateUser([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> Create([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -98,7 +98,7 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        var result = await _usuarioService.CreateUser(user);
+        var result = await _service.Create(user);
 
         if (!result.Success)
         {
@@ -115,11 +115,11 @@ public class UsuarioController : ControllerBase
     /// Atualiza um usuário existente
     /// </summary>
     [HttpPut]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> UpdateUser([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> Update([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -131,7 +131,7 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        var result = await _usuarioService.UpdateUser(user);
+        var result = await _service.Update(user);
 
         if (!result.Success)
         {

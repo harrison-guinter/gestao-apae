@@ -13,6 +13,7 @@ using SistemaApae.Api.Serialization;
 using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Agenda;
 using SistemaApae.Api.Services.Appointment;
+using SistemaApae.Api.Services.Users;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -69,6 +70,7 @@ builder.Services.AddScoped(typeof(IService<,>), typeof(Service<,>));
 // Registrar serviços customizados
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<AtendimentoService>();
+builder.Services.AddScoped<UsuarioService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>

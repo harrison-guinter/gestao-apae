@@ -32,7 +32,7 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
     /// <summary>
     /// Lista usuários por filtros de pesquisa
     /// </summary>
-    public async Task<ApiResponse<IEnumerable<UsuarioDto>>> GetUserByFilters(UsuarioFilterRequest filters)
+    public async Task<ApiResponse<IEnumerable<UsuarioDto>>> GetByFilters(UsuarioFilterRequest filters)
     {
         try
         {
@@ -73,7 +73,7 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
     /// <summary>
     /// Buscar um usuário por id
     /// </summary>
-    public async Task<ApiResponse<UsuarioDto>> GetUserById(Guid id)
+    public async Task<ApiResponse<UsuarioDto>> GetById(Guid id)
     {
         try
         {
@@ -109,53 +109,79 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
     /// <summary>
     /// Criar um usuário
     /// </summary>
-    public async Task<ApiResponse<Usuario>> CreateUser(Usuario user)
+    public async Task<ApiResponse<UsuarioDto>> Create(Usuario user)
     {
         try
         {
             user.UpdatedAt = DateTime.UtcNow;
             user.Senha = BCrypt.Net.BCrypt.HashPassword(_authService.GenerateRandomPassword());
 
-            var response = await base.Create(user);
+            var result = await base.Create(user);
 
-            if (!response.Success || response.Data == null)
+            if (!result.Success || result.Data == null)
             {
-                return ApiResponse<Usuario>.ErrorResponse("Registro não foi adicionado");
+                return ApiResponse<UsuarioDto>.ErrorResponse("Registro não foi adicionado");
             }
 
-            await _emailService.SendEmailAsync(response.Data!.Email, response.Data.Nome, response.Data!.Senha!, EmailReasonEnum.CreateUser);
+            var response = new UsuarioDto
+            {
+                Id = result.Data.Id,
+                Nome = result.Data.Nome,
+                Email = result.Data.Email,
+                Telefone = result.Data.Telefone,
+                Perfil = result.Data.Perfil,
+                RegistroProfissional = result.Data.RegistroProfissional,
+                Especialidade = result.Data.Especialidade,
+                Observacao = result.Data.Observacao,
+                Status = result.Data.Status
+            };
 
-            return ApiResponse<Usuario>.SuccessResponse(response.Data);
+            await _emailService.SendEmailAsync(response.Email, response.Nome, user.Senha, EmailReasonEnum.CreateUser);
+
+            return ApiResponse<UsuarioDto>.SuccessResponse(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro interno ao adicionar usuário");
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao adicionar usuário");
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao adicionar usuário");
         }
     }
 
     /// <summary>
     /// Atualiza um usuário existente
     /// </summary>
-    public async Task<ApiResponse<Usuario>> UpdateUser(Usuario user)
+    public async Task<ApiResponse<UsuarioDto>> Update(Usuario user)
     {
         try
         {
             user.Senha = (await _service.GetById(user.Id)).Data!.Senha;
 
-            var response = await base.Create(user);
+            var result = await base.Update(user);
 
-            if (!response.Success || response.Data == null)
+            if (!result.Success || result.Data == null)
             {
-                return ApiResponse<Usuario>.ErrorResponse("Registro não foi atualizado");
+                return ApiResponse<UsuarioDto>.ErrorResponse("Registro não foi atualizado");
             }
 
-            return ApiResponse<Usuario>.SuccessResponse(response.Data);
+            var response = new UsuarioDto
+            {
+                Id = result.Data.Id,
+                Nome = result.Data.Nome,
+                Email = result.Data.Email,
+                Telefone = result.Data.Telefone,
+                Perfil = result.Data.Perfil,
+                RegistroProfissional = result.Data.RegistroProfissional,
+                Especialidade = result.Data.Especialidade,
+                Observacao = result.Data.Observacao,
+                Status = result.Data.Status
+            };
+
+            return ApiResponse<UsuarioDto>.SuccessResponse(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro interno ao atualizar usuário");
-            return ApiResponse<Usuario>.ErrorResponse("Erro interno ao atualizar usuário");
+            return ApiResponse<UsuarioDto>.ErrorResponse("Erro interno ao atualizar usuário");
         }
     }
 }
