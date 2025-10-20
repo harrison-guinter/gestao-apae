@@ -1,0 +1,97 @@
+<div class="modal-header">
+  <h2 mat-dialog-title>{{ titulo }}</h2>
+  <button mat-icon-button (click)="cancelar()" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="modal-content">
+  <form [formGroup]="form" class="form-container">
+    <div class="form-grid">
+      <div class="form-row">
+        <app-select
+          label="Agendamento *"
+          [control]="$any(form.get('idAgendamento'))"
+          [options]="(agendamentoOptions | async) || []"
+          placeholder="Selecione um agendamento"
+        >
+        </app-select>
+
+        <app-select
+          label="Assistido *"
+          [control]="$any(form.get('idAssistido'))"
+          [options]="(assistidoOptions | async) || []"
+          placeholder="Selecione um assistido"
+        >
+        </app-select>
+      </div>
+
+      <div class="form-row">
+        <app-datepicker
+          label="Data e Hora do Atendimento *"
+          placeholder="Selecione a data"
+          [formControl]="$any(form.get('dataAtendimento'))"
+        >
+        </app-datepicker>
+
+        <app-select
+          label="Presença *"
+          [control]="$any(form.get('presenca'))"
+          [options]="presencaOptions"
+          placeholder="Selecione a presença"
+        >
+        </app-select>
+      </div>
+
+      <div class="form-row full-width">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Avaliação</mat-label>
+          <textarea
+            matInput
+            formControlName="avaliacao"
+            placeholder="Descreva a avaliação do atendimento..."
+            rows="4"
+          >
+          </textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row full-width">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Observação</mat-label>
+          <textarea
+            matInput
+            formControlName="observacao"
+            placeholder="Adicione observações sobre o atendimento..."
+            rows="3"
+          >
+          </textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <app-select
+          label="Status *"
+          [control]="$any(form.get('status'))"
+          [options]="statusOptions"
+          placeholder="Selecione o status"
+        >
+        </app-select>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="modal-actions">
+  <button mat-button (click)="cancelar()" type="button">Cancelar</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="salvar()"
+    type="button"
+    [disabled]="form.invalid"
+    *ngIf="!isVisualizacao"
+  >
+    {{ isEdit ? 'Salvar' : 'Criar' }}
+  </button>
+</mat-dialog-actions>

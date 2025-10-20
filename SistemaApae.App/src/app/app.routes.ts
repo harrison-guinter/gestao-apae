@@ -11,6 +11,7 @@ import { NoAuthGuard } from './modules/auth/no-auth.guard';
 import { CoordenadorGuard } from './modules/auth/coordenador.guard';
 import { ConveniosComponent } from './modules/convenios/convenios.component';
 import { AgendamentosComponent } from './modules/agendamentos/agendamentos.component';
+import { AtendimentosComponent } from './modules/atendimentos/atendimentos.component';
 import { ProfissionalGuard } from './modules/auth/profissional.guard';
 import { CadastroAssistidoComponent } from './modules/assistidos/cadastro-assistido/cadastro-assistido.component';
 
@@ -39,6 +40,7 @@ export const routes: Routes = [
       },
       { path: 'convenios', canActivate: [CoordenadorGuard], component: ConveniosComponent },
       { path: 'agendamentos', canActivate: [ProfissionalGuard], component: AgendamentosComponent },
+      { path: 'atendimentos', canActivate: [ProfissionalGuard], component: AtendimentosComponent },
     ],
   },
   { path: '**', redirectTo: 'login' },

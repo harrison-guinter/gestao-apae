@@ -1,0 +1,131 @@
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 0 24px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    color: #333;
+    font-weight: 500;
+    font-size: 20px;
+  }
+
+  .close-button {
+    color: #666;
+
+    &:hover {
+      color: #333;
+    }
+  }
+}
+
+.modal-content {
+  padding: 0 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+
+  &.full-width {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.modal-actions {
+  padding: 20px 24px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  button {
+    min-width: 100px;
+  }
+}
+
+/* Estilos específicos para campos do formulário */
+mat-form-field {
+  width: 100%;
+
+  &.full-width {
+    width: 100%;
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Estilos para campos obrigatórios */
+.mat-mdc-form-field-required-marker {
+  color: #f44336;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .modal-header {
+    padding: 16px;
+
+    h2 {
+      font-size: 18px;
+    }
+  }
+
+  .modal-content {
+    padding: 0 16px;
+  }
+
+  .modal-actions {
+    padding: 16px;
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* Estados de validação */
+.mat-mdc-form-field.mat-form-field-invalid {
+  .mat-mdc-text-field-wrapper {
+    border-color: #f44336;
+  }
+}
+
+/* Melhorias visuais */
+.mat-mdc-raised-button:disabled {
+  opacity: 0.6;
+}
+
+.mat-mdc-form-field {
+  .mat-mdc-form-field-focus-overlay {
+    background-color: transparent;
+  }
+}
