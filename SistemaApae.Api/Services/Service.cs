@@ -2,6 +2,7 @@ using SistemaApae.Api.Models;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Filters;
 using SistemaApae.Api.Repositories;
+using Supabase.Postgrest.Exceptions;
 
 namespace SistemaApae.Api.Services;
 
@@ -80,6 +81,17 @@ public class Service<TEntity, TFilter> : IService<TEntity, TFilter>
             if (result is null)
                 return ApiResponse<TEntity>.ErrorResponse("Registro não foi adicionado");
             return ApiResponse<TEntity>.SuccessResponse(result);
+        }
+        catch (PostgrestException ex)
+        {
+            if (ex.Message.Contains("23505"))
+            {
+                _logger.LogError(ex, "Erro de duplicidade de registro");
+                return ApiResponse<TEntity>.ErrorResponse("Erro de duplicidade de registro");
+            }
+
+            _logger.LogError(ex, "Erro ao adicionar registro");
+            return ApiResponse<TEntity>.ErrorResponse("Erro interno ao adicionar registro");
         }
         catch (Exception ex)
         {
