@@ -1,8 +1,8 @@
 <div class="atendimentos-container">
   <app-filters-container
     [formGroup]="filtrosForm"
-    (add)="onAdd()"
     (clear)="onClear()"
+    [showAddButton]="false"
     (search)="pesquisarAtendimentos()"
     title="Lista de Atendimentos"
   >

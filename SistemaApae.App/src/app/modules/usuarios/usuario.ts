@@ -1,7 +1,6 @@
 import { Roles } from '../auth/roles.enum';
 import { Status } from '../core/enum/status.enum';
 
-
 export class Usuario {
   id!: string;
   nome!: string;
@@ -69,7 +68,7 @@ export class Usuario {
 
     return new Usuario({
       id: jsonParsed.id,
-      nome: jsonParsed.name, 
+      nome: jsonParsed.name,
       email: jsonParsed.email,
       perfil: jsonParsed.perfil,
       status: jsonParsed.ativo ? Status.Ativo : Status.Inativo,
@@ -81,5 +80,5 @@ export class Usuario {
   }
 }
 
-//apae@apae 
+//apae@apae
 //paulo1234

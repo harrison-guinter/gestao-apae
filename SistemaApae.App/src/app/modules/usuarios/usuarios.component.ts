@@ -145,8 +145,7 @@ export class UsuariosComponent implements OnInit {
       width: 'small',
       align: 'center',
       getCellValue: (row) => (row.status === Status.Ativo ? 'Ativo' : 'Inativo'),
-      getClass: (row) =>
-        row.status === Status.Ativo ? 'status-ativo' : 'status-inativo',
+      getClass: (row) => (row.status === Status.Ativo ? 'status-ativo' : 'status-inativo'),
     },
   ];
 

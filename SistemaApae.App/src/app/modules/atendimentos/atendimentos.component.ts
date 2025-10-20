@@ -21,7 +21,7 @@ import { Agendamento } from '../agendamentos/agendamento';
 import { AssistidoService } from '../assistidos/assistido.service';
 import { AgendamentoService } from '../agendamentos/agendamento.service';
 import { map, Observable } from 'rxjs';
-import { DatepickerComponent } from '../core/datepicker/datepicker.component';
+import { DatepickerComponent } from '../core/date/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-atendimentos',
@@ -62,7 +62,7 @@ export class AtendimentosComponent implements OnInit {
   );
 
   agendamentoOptions: Observable<SelectOption[]> = this.agendamentoService
-    .listarAgendamentos({})
+    .listarAgendamentos({} as any)
     .pipe(
       map((agendamentos) =>
         agendamentos.map((agendamento) => ({
