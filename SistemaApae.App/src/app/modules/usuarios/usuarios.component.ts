@@ -60,10 +60,8 @@ export class UsuariosComponent implements OnInit {
 
     this.initFiltrosForm();
 
-    // Verifica se deve abrir a modal de cadastro automaticamente
     this.route.queryParams.subscribe((params) => {
       if (params['isNew'] === 'true') {
-        // Pequeno delay para garantir que a tela foi carregada completamente
         setTimeout(() => {
           this.adicionarUsuario();
         }, 100);
@@ -105,6 +103,7 @@ export class UsuariosComponent implements OnInit {
     };
 
     this.usuarioService.filtrarUsuarios(filtros).subscribe((usuarios) => {
+      console.log(usuarios);
       this.usuarios = usuarios;
       if (usuarios.length === 0) {
         this.notificationService.showInfo('Nenhum usuário encontrado com os filtros aplicados');
