@@ -4,6 +4,7 @@ using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services;
+using SistemaApae.Api.Services.Users;
 
 namespace SistemaApae.Api.Controllers.Users;
 
@@ -16,18 +17,14 @@ namespace SistemaApae.Api.Controllers.Users;
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
-    private readonly IService<Usuario, UsuarioFilterRequest> _service;
-    private readonly IAuthService _authService;
-    private readonly IEmailService _emailService;
+    private readonly UsuarioService _usuarioService;
 
     /// <summary>
     /// Inicializa uma nova instância do UsuarioController
     /// </summary>
-    public UsuarioController(IService<Usuario, UsuarioFilterRequest> service, IAuthService authService, IEmailService emailService)
+    public UsuarioController(UsuarioService usuarioService)
     {
-        _service = service;
-        _authService = authService;
-        _emailService = emailService;
+        _usuarioService = usuarioService;
     }
 
     /// <summary>
@@ -41,7 +38,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFilterRequest filters)
     {
-        var result = await _service.GetByFilters(filters);
+        var result = await _usuarioService.GetUserByFilters(filters);
 
         if (!result.Success)
         {
@@ -51,7 +48,7 @@ public class UsuarioController : ControllerBase
             return StatusCode(500, result);
         }
 
-        return Ok(result.Data!.Select(u => { u.Senha = null; return u; }));
+        return Ok();
     }
 
     /// <summary>
@@ -68,7 +65,7 @@ public class UsuarioController : ControllerBase
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
 
-        var result = await _service.GetById(id);
+        var result = await _usuarioService.GetUserById(id);
 
         if (!result.Success)
         {
@@ -77,8 +74,6 @@ public class UsuarioController : ControllerBase
 
             return StatusCode(500, result);
         }
-
-        result.Data!.Senha = null;
 
         return Ok(result);
     }
@@ -103,10 +98,7 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        user.UpdatedAt = DateTime.UtcNow;
-        user.Senha = BCrypt.Net.BCrypt.HashPassword(_authService.GenerateRandomPassword());
-
-        var result = await _service.Create(user);
+        var result = await _usuarioService.CreateUser(user);
 
         if (!result.Success)
         {
@@ -116,8 +108,6 @@ public class UsuarioController : ControllerBase
             return StatusCode(500, result);
         }
 
-        await _emailService.SendEmailAsync(result.Data!.Email, result.Data.Nome, result.Data!.Senha!, EmailReasonEnum.CreateUser);
-
         return Created();
     }
 
@@ -125,7 +115,7 @@ public class UsuarioController : ControllerBase
     /// Atualiza um usuário existente
     /// </summary>
     [HttpPut]
-    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
@@ -141,9 +131,7 @@ public class UsuarioController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos", errors));
         }
 
-        user.Senha = (await _service.GetById(user.Id)).Data!.Senha;
-
-        var result = await _service.Update(user);
+        var result = await _usuarioService.UpdateUser(user);
 
         if (!result.Success)
         {

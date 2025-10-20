@@ -80,33 +80,6 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
     }
 
     /// <summary>
-    /// Valida se agendamento existe
-    /// </summary>
-    private async Task<bool> SchedulingExistsAsync(Guid id)
-    {
-        // Verifica se o Guid é válido (não é vazio)
-        if (id == Guid.Empty)
-            return false;
-
-        var scheduling = await _agendamentoService.GetById(id);
-
-        return scheduling != null;
-    }
-
-    /// <summary>
-    /// Valida se assistido existe
-    /// </summary>
-    private async Task<bool> PatientsExistsAsync(Guid id)
-    {
-        // Verifica se o Guid é válido (não é vazio)
-        if (id == Guid.Empty)
-            return false;
-
-        var patient = await _assistidoService.GetById(id);
-
-        return patient != null;
-    }
-    /// <summary>
     /// Busca atendimentos por agendamento e data específica
     /// </summary>
     /// <param name="idAgendamento">ID do agendamento</param>
@@ -158,6 +131,34 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
             _logger.LogError(ex, "Erro ao buscar atendimentos por agendamento {IdAgendamento} e data {Data}", idAgendamento, data);
             return ApiResponse<IEnumerable<AtendimentoDto>>.ErrorResponse("Erro interno ao buscar atendimentos");
         }
+    }
+
+    /// <summary>
+    /// Valida se agendamento existe
+    /// </summary>
+    private async Task<bool> SchedulingExistsAsync(Guid id)
+    {
+        // Verifica se o Guid é válido (não é vazio)
+        if (id == Guid.Empty)
+            return false;
+
+        var scheduling = await _agendamentoService.GetById(id);
+
+        return scheduling != null;
+    }
+
+    /// <summary>
+    /// Valida se assistido existe
+    /// </summary>
+    private async Task<bool> PatientsExistsAsync(Guid id)
+    {
+        // Verifica se o Guid é válido (não é vazio)
+        if (id == Guid.Empty)
+            return false;
+
+        var patient = await _assistidoService.GetById(id);
+
+        return patient != null;
     }
 }
 
