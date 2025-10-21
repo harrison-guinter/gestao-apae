@@ -21,7 +21,7 @@ import { Agendamento } from '../../agendamentos/agendamento';
 import { AssistidoService } from '../../assistidos/assistido.service';
 import { AgendamentoService } from '../../agendamentos/agendamento.service';
 import { map, Observable } from 'rxjs';
-import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
+import { DatepickerComponent as DateComponent } from '../../core/date/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-atendimentos',
@@ -38,12 +38,12 @@ import { DatepickerComponent } from '../../core/date/datepicker/datepicker.compo
     TableComponent,
     SelectComponent,
     FiltersContainerComponent,
-    DatepickerComponent,
+    DateComponent,
   ],
-  templateUrl: './atendimentos.component.html',
-  styleUrls: ['./atendimentos.component.less'],
+  templateUrl: './atendimentos-realizados.component.html',
+  styleUrls: ['./atendimentos-realizados.component.less'],
 })
-export class AtendimentosPendentesComponent implements OnInit {
+export class AtendimentosRealizadosComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
   private atendimentoService = inject(AtendimentoService);

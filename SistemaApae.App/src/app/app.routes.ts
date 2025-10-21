@@ -13,8 +13,8 @@ import { ConveniosComponent } from './modules/convenios/convenios.component';
 import { AgendamentosComponent } from './modules/agendamentos/agendamentos.component';
 import { ProfissionalGuard } from './modules/auth/profissional.guard';
 import { CadastroAssistidoComponent } from './modules/assistidos/cadastro-assistido/cadastro-assistido.component';
-import { AtendimentosRealizadosComponent } from './modules/atendimentos/atendimentos-realizados/atendimentos.component';
-import { AtendimentosPendentesComponent } from './modules/atendimentos/atendimentos-pendentes/atendimentos.component';
+import { AtendimentosRealizadosComponent } from './modules/atendimentos/atendimentos-realizados/atendimentos-realizados.component';
+import { AtendimentosPendentesComponent } from './modules/atendimentos/atendimentos-pendentes/atendimentos-pendentes.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

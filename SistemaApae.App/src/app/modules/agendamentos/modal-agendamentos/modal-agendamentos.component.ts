@@ -16,7 +16,6 @@ import { NotificationService } from '../../core/notification/notification.servic
 import { Status } from '../../core/enum/status.enum';
 import { AutocompleteMultipleComponent } from '../../core/multi-autocomplete/multi-autocomplete.component';
 
-
 @Component({
   selector: 'app-modal-usuarios',
   standalone: true,
@@ -29,7 +28,7 @@ import { AutocompleteMultipleComponent } from '../../core/multi-autocomplete/mul
     SelectComponent,
     InputComponent,
     BaseModalComponent,
-    AutocompleteMultipleComponent
+    AutocompleteMultipleComponent,
   ],
   templateUrl: './modal-agendamentos.component.html',
   styleUrls: ['./modal-agendamentos.component.less'],
@@ -75,12 +74,11 @@ export class ModalAgendamentosComponent implements OnInit {
 
   valueFromForm(): Agendamento {
     const valor = this.formCadastro.value;
-  
-    return {...valor } as Agendamento;
+
+    return { ...valor } as Agendamento;
   }
 
   onConfirm(): void {
-
     if (!this.formCadastro.valid) {
       this.formCadastro.markAllAsTouched();
       this.formCadastro.updateValueAndValidity();

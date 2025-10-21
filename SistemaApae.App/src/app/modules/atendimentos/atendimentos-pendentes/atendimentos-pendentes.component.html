@@ -26,21 +26,21 @@
     >
     </app-select>
 
-    <app-datepicker
+    <app-date
       label="Data Início"
       placeholder="dd/MM/yyyy"
-      [formControl]="$any(filtrosForm.get('dataInicio'))"
+      [control]="$any(filtrosForm.get('dataInicio'))"
       cssClass="mat-spacing-sm field-md"
     >
-    </app-datepicker>
+    </app-date>
 
-    <app-datepicker
+    <app-date
       label="Data Fim"
       placeholder="dd/MM/yyyy"
-      [formControl]="$any(filtrosForm.get('dataFim'))"
+      [control]="$any(filtrosForm.get('dataFim'))"
       cssClass="mat-spacing-sm field-md"
     >
-    </app-datepicker>
+    </app-date>
 
     <app-select
       label="Presença"
@@ -65,7 +65,7 @@
   <div class="table-section">
     <app-table
       [columns]="tableColumns"
-      [data]="atendimentos"
+      [data]="atendimentosPendentes"
       [actions]="tableActions"
       [showActions]="true"
       tableClass="atendimentos-table"

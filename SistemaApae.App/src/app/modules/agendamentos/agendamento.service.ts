@@ -11,7 +11,7 @@ export interface AgendamentoFiltro {
   status?: Status;
   dataAgendamentoInicio?: string;
   dataAgendamentoFim?: string;
-  assistido: Assistido
+  assistido: Assistido;
 }
 
 @Injectable({
@@ -25,17 +25,22 @@ export class AgendamentoService {
   listarAgendamentos(filtro: AgendamentoFiltro): Observable<Agendamento[]> {
     return (
       this.http
-        .get<{ data: Agendamento[] }>(`${this.baseUrl}Agendamento/filter`, { params: filtro as any })
+        .get<{ data: Agendamento[] }>(`${this.baseUrl}Agendamento/filter`, {
+          params: filtro as any,
+        })
         .pipe(map((r) => r.data)) || of([])
     );
   }
 
-    salvar(agendamento: Agendamento): Observable<void> {  
-      return this.http.post<void>(`${this.baseUrl}Agendamento`, agendamento);
-    }
-  
-    editar(agendamento: Agendamento): Observable<void> {
-      return this.http.put<void>(`${this.baseUrl}Agendamento`, agendamento);
-    }
-  
+  salvar(agendamento: Agendamento): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}Agendamento`, agendamento);
+  }
+
+  editar(agendamento: Agendamento): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}Agendamento`, agendamento);
+  }
+
+  listarAgendamentosPorProfissional(idProfissional: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}Agendamento/profissional/${idProfissional}`);
+  }
 }

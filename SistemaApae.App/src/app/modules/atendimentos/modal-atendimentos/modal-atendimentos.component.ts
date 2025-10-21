@@ -14,7 +14,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 import { Atendimento, StatusAtendimentoEnum } from '../atendimento';
 import { AtendimentoService } from '../atendimento.service';
 import { Status } from '../../core/enum/status.enum';
@@ -42,7 +41,6 @@ export interface ModalAtendimentosData {
     MatDatepickerModule,
     MatDialogModule,
     SelectComponent,
-    DatepickerComponent,
   ],
   templateUrl: './modal-atendimentos.component.html',
   styleUrls: ['./modal-atendimentos.component.less'],
