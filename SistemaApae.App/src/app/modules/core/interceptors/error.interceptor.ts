@@ -82,8 +82,11 @@ export class ErrorInterceptor implements HttpInterceptor {
               case 500:
                 errorMessage = 'Erro interno do servidor';
                 break;
+              case 409:
+                errorMessage = error.error;
+                break;
               default:
-                errorMessage = `Erro ${error.status}: ${error.statusText}`;
+                errorMessage = `Erro ${error.status}: ${error.error}`;
             }
           }
         }

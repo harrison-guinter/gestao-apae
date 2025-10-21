@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
-using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Users;
-using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Users;
 
 namespace SistemaApae.Api.Controllers.Users;
@@ -85,6 +83,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<UsuarioDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ApiResponse<UsuarioDto>>> Create([FromBody] Usuario user)
     {
@@ -104,6 +103,9 @@ public class UsuarioController : ControllerBase
         {
             if (result.Message.Contains("Registro não foi adicionado"))
                 return NoContent();
+
+            if (result.Message.Contains("Erro de duplicidade de registro"))
+                return Conflict(result.Message);
 
             return StatusCode(500, result);
         }

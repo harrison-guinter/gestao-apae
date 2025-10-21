@@ -1,0 +1,75 @@
+<div class="atendimentos-container">
+  <app-filters-container
+    [formGroup]="filtrosForm"
+    (clear)="onClear()"
+    [showAddButton]="false"
+    (search)="pesquisarAtendimentos()"
+    title="Lista de Atendimentos Pendentes"
+  >
+    <app-select
+      label="Assistido"
+      [control]="$any(filtrosForm.get('assistido'))"
+      [options]="(assistidoOptions | async) || []"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione um assistido"
+    >
+    </app-select>
+
+    <app-select
+      label="Agendamento"
+      [control]="$any(filtrosForm.get('agendamento'))"
+      [options]="(agendamentoOptions | async) || []"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione um agendamento"
+    >
+    </app-select>
+
+    <app-datepicker
+      label="Data Início"
+      placeholder="dd/MM/yyyy"
+      [formControl]="$any(filtrosForm.get('dataInicio'))"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-datepicker>
+
+    <app-datepicker
+      label="Data Fim"
+      placeholder="dd/MM/yyyy"
+      [formControl]="$any(filtrosForm.get('dataFim'))"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-datepicker>
+
+    <app-select
+      label="Presença"
+      [control]="$any(filtrosForm.get('presenca'))"
+      [options]="presencaOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione a presença"
+    >
+    </app-select>
+
+    <app-select
+      label="Status"
+      [control]="$any(filtrosForm.get('status'))"
+      [options]="statusOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione o status"
+    >
+    </app-select>
+  </app-filters-container>
+  <div class="table-section">
+    <app-table
+      [columns]="tableColumns"
+      [data]="atendimentos"
+      [actions]="tableActions"
+      [showActions]="true"
+      tableClass="atendimentos-table"
+    >
+    </app-table>
+  </div>
+</div>

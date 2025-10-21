@@ -7,21 +7,21 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TableComponent, TableColumn, TableAction } from '../core/table/table.component';
-import { SelectComponent, SelectOption } from '../core/select/select.component';
-import { PageInfoService } from '../core/services/page-info.service';
-import { FiltersContainerComponent } from '../core/filters-container/filters-container.component';
-import { ModalService } from '../core/services/modal.service';
-import { Atendimento, StatusAtendimentoEnum } from './atendimento';
-import { ModalAtendimentosComponent } from './modal-atendimentos/modal-atendimentos.component';
-import { AtendimentoService, AtendimentoFiltro } from './atendimento.service';
-import { Status } from '../core/enum/status.enum';
-import { Assistido } from '../assistidos/assistido';
-import { Agendamento } from '../agendamentos/agendamento';
-import { AssistidoService } from '../assistidos/assistido.service';
-import { AgendamentoService } from '../agendamentos/agendamento.service';
+import { TableComponent, TableColumn, TableAction } from '../../core/table/table.component';
+import { SelectComponent, SelectOption } from '../../core/select/select.component';
+import { PageInfoService } from '../../core/services/page-info.service';
+import { FiltersContainerComponent } from '../../core/filters-container/filters-container.component';
+import { ModalService } from '../../core/services/modal.service';
+import { Atendimento, StatusAtendimentoEnum } from '../atendimento';
+import { ModalAtendimentosComponent } from '../modal-atendimentos/modal-atendimentos.component';
+import { AtendimentoService, AtendimentoFiltro } from '../atendimento.service';
+import { Status } from '../../core/enum/status.enum';
+import { Assistido } from '../../assistidos/assistido';
+import { Agendamento } from '../../agendamentos/agendamento';
+import { AssistidoService } from '../../assistidos/assistido.service';
+import { AgendamentoService } from '../../agendamentos/agendamento.service';
 import { map, Observable } from 'rxjs';
-import { DatepickerComponent } from '../core/date/datepicker/datepicker.component';
+import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-atendimentos',
@@ -43,7 +43,7 @@ import { DatepickerComponent } from '../core/date/datepicker/datepicker.componen
   templateUrl: './atendimentos.component.html',
   styleUrls: ['./atendimentos.component.less'],
 })
-export class AtendimentosComponent implements OnInit {
+export class AtendimentosPendentesComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
   private atendimentoService = inject(AtendimentoService);
