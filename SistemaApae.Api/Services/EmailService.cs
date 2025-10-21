@@ -62,7 +62,7 @@ public class EmailService : IEmailService
             }
 
             mail.Body = FillContent(name, email, newPassword, message);
-            mail.IsBodyHtml = false;
+            mail.IsBodyHtml = true;
 
             await smtp.SendMailAsync(mail);
 
