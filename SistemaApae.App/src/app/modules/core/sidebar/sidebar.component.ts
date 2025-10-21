@@ -37,12 +37,22 @@ export class SidebarComponent implements OnInit {
       });
   }
 
+  isProfissional(): boolean {
+    return JSON.parse(localStorage.getItem('usuario')!).perfil === 'Profissional';
+  }
+
   menuItems = [
     { icon: 'dashboard', label: 'Dashboard', route: '/home/dashboard' },
     { icon: 'groups', label: 'Assistidos', route: '/home/assistidos' },
     { icon: 'handshake', label: 'Convênios', route: '/home/convenios' },
     { icon: 'event', label: 'Agendamentos', route: '/home/agendamentos' },
-    { icon: 'medical_services', label: 'Atendimentos', route: '/home/atendimentos' },
+    {
+      icon: 'medical_services',
+      label: 'Atendimentos',
+      route: this.isProfissional()
+        ? '/home/atendimentos-pendentes'
+        : '/home/atendimentos-realizados',
+    },
     {
       icon: 'bar_chart',
       label: 'Relatórios',

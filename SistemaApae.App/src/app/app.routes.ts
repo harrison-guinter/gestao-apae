@@ -11,9 +11,10 @@ import { NoAuthGuard } from './modules/auth/no-auth.guard';
 import { CoordenadorGuard } from './modules/auth/coordenador.guard';
 import { ConveniosComponent } from './modules/convenios/convenios.component';
 import { AgendamentosComponent } from './modules/agendamentos/agendamentos.component';
-import { AtendimentosComponent } from './modules/atendimentos/atendimentos.component';
 import { ProfissionalGuard } from './modules/auth/profissional.guard';
 import { CadastroAssistidoComponent } from './modules/assistidos/cadastro-assistido/cadastro-assistido.component';
+import { AtendimentosRealizadosComponent } from './modules/atendimentos/atendimentos-realizados/atendimentos.component';
+import { AtendimentosPendentesComponent } from './modules/atendimentos/atendimentos-pendentes/atendimentos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -40,7 +41,16 @@ export const routes: Routes = [
       },
       { path: 'convenios', canActivate: [CoordenadorGuard], component: ConveniosComponent },
       { path: 'agendamentos', canActivate: [ProfissionalGuard], component: AgendamentosComponent },
-      { path: 'atendimentos', canActivate: [ProfissionalGuard], component: AtendimentosComponent },
+      {
+        path: 'atendimentos-pendentes',
+        canActivate: [ProfissionalGuard],
+        component: AtendimentosPendentesComponent,
+      },
+      {
+        path: 'atendimentos-realizados',
+        canActivate: [CoordenadorGuard],
+        component: AtendimentosRealizadosComponent,
+      },
     ],
   },
   { path: '**', redirectTo: 'login' },
