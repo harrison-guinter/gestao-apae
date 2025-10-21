@@ -120,6 +120,9 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
 
             if (!result.Success || result.Data == null)
             {
+                if (result.Message.Contains("Erro de duplicidade de registro"))
+                    return ApiResponse<UsuarioDto>.ErrorResponse("Erro de duplicidade de registro");
+
                 return ApiResponse<UsuarioDto>.ErrorResponse("Registro não foi adicionado");
             }
 
