@@ -30,6 +30,8 @@
           [control]="$any(formCadastro.get('telefone'))"
           placeholder="(99) 99999-9999"
           appearance="outline"
+          [minlength]="10"
+               [maxlength]="20"
           type="tel"
         ></app-input>
       </div>

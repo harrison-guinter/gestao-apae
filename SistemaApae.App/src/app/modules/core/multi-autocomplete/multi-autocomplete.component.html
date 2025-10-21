@@ -1,33 +1,31 @@
-<mat-form-field appearance="outline" [class]="cssClass" class="w-full">
+<mat-form-field appearance="outline" [class]="cssClass">
   <mat-label *ngIf="label">{{ label }}</mat-label>
 
-  <mat-chip-listbox aria-label="Seleções">
-    <!-- Chips das opções selecionadas -->
-    <mat-chip
-      *ngFor="let option of selectedOptions"
-      [removable]="true"
-      (removed)="remove(option)"
-    >
-      {{ option.label }}
-      <button matChipRemove>
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </mat-chip>
+   <mat-chip-grid   class="chip-scroll-container" #chipGrid aria-label="Seleções">
+    
+        <mat-chip-row *ngFor="let option of control?.value || []" (removed)="remove(option)">
+          {{ option.label }}
+          <button matChipRemove [attr.aria-label]="'Remover ' + option.label">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      
+    </mat-chip-grid>
 
-    <!-- Campo de entrada -->
-    <input
-      matInput
-      [matAutocomplete]="auto"
-      [formControl]="control"
-      [placeholder]="placeholder"
-      (blur)="onTouched()"
-    />
-  </mat-chip-listbox>
+  <input
+    name="autocompleteInput"
+    matInput
+    [matAutocomplete]="auto"
+    [matChipInputFor]="chipGrid"
+    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    [formControl]="controlInput"
+    [placeholder]="placeholder"
+    (matChipInputTokenEnd)="add($event)"
+    (blur)="onTouched()"
+  />
 
-  <!-- Ícone à esquerda -->
   <mat-icon matPrefix *ngIf="prefixIcon">{{ prefixIcon }}</mat-icon>
 
-  <!-- Ícone à direita -->
   <mat-icon
     matSuffix
     *ngIf="suffixIcon && !clearable"
@@ -36,7 +34,6 @@
     {{ suffixIcon }}
   </mat-icon>
 
-  <!-- Botão de limpar -->
   <mat-icon
     matSuffix
     *ngIf="clearable && hasValue()"
@@ -47,20 +44,19 @@
     clear
   </mat-icon>
 
-  <!-- Lista de sugestões -->
   <mat-autocomplete
     #auto="matAutocomplete"
-    (optionSelected)="onSelection($event)"
+    (optionSelected)="selected($event)"
   >
-    <mat-option
-      *ngFor="let option of filteredOptions | async"
-      [value]="option"
-      [disabled]="option.disabled"
-    >
-      {{ option.label }}
-    </mat-option>
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option"
+        [disabled]="option.disabled"
+      >
+        {{ option.label }}
+      </mat-option>
+    
   </mat-autocomplete>
 
-  <!-- Mensagem de erro -->
   <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
 </mat-form-field>

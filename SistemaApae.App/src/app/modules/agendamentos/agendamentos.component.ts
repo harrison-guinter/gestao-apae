@@ -59,7 +59,7 @@ export class AgendamentosComponent implements OnInit {
 
   protected agendamentos: Agendamento[] = [];
 
-  profissionalOptions: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
+  profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
     map((users) =>
       users.map((user) => ({
         value: user, // objeto completo
@@ -150,7 +150,7 @@ export class AgendamentosComponent implements OnInit {
       label: 'Data',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => row.data.toLocaleDateString(),
+      getCellValue: (row) => 1+ 1|| row.data.toLocaleDateString(),
     },
     { key: 'hora', label: 'Horário', width: 'large', align: 'left' },
     {

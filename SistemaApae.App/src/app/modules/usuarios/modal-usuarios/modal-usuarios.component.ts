@@ -72,7 +72,7 @@ export class ModalUsuariosComponent implements OnInit {
       especialidade: [object?.especialidade],
       status: [statusValue, Validators.required],
       observacao: [object?.observacao],
-      telefone: [object?.telefone],
+      telefone: [object?.telefone, [Validators.minLength(10), Validators.maxLength(20)]],
       registroProfissional: [object?.registroProfissional],
       UpdatedAt: [{ value: object?.UpdatedAt || null, disabled: true }],
     });

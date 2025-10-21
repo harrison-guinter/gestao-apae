@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
-using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Users;
-using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Users;
 
 namespace SistemaApae.Api.Controllers.Users;

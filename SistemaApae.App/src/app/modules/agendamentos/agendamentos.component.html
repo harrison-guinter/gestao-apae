@@ -9,7 +9,7 @@
     <app-autocomplete
       label="Profissional"
       placeholder="Digite para buscar..."
-      [options]="(profissionalOptions | async) || []"
+      [options]="(profissionalOptions$ | async) || []"
       [control]="$any(filtrosForm.get('profissional'))"
       [clearable]="true"
       prefixIcon="person"

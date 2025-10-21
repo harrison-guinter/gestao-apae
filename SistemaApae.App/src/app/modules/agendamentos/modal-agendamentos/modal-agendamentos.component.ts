@@ -9,12 +9,18 @@ import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
 import { CidadesService } from '../../cidades/cidades.service';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Agendamento } from '../agendamento';
 import { AgendamentoService } from '../agendamento.service';
 import { NotificationService } from '../../core/notification/notification.service';
 import { Status } from '../../core/enum/status.enum';
 import { AutocompleteMultipleComponent } from '../../core/multi-autocomplete/multi-autocomplete.component';
+import { Assistido } from '../../assistidos/assistido';
+import { AssistidoService } from '../../assistidos/assistido.service';
+import { Usuario } from '../../usuarios/usuario';
+import { Roles } from '../../auth/roles.enum';
+import { UsuarioService } from '../../usuarios/usuario.service';
+import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.component';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -29,6 +35,7 @@ import { AutocompleteMultipleComponent } from '../../core/multi-autocomplete/mul
     InputComponent,
     BaseModalComponent,
     AutocompleteMultipleComponent,
+    AutocompleteComponent,
   ],
   templateUrl: './modal-agendamentos.component.html',
   styleUrls: ['./modal-agendamentos.component.less'],
@@ -39,10 +46,27 @@ export class ModalAgendamentosComponent implements OnInit {
 
   private agendamentoService: AgendamentoService = inject(AgendamentoService);
 
-  statusOptions: SelectOption[] = [
-    { value: Status.Ativo, label: 'Ativo' },
-    { value: Status.Inativo, label: 'Inativo' },
-  ];
+  private assistidoService: AssistidoService = inject(AssistidoService);
+
+  private usuarioService: UsuarioService = inject(UsuarioService);
+
+  assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
+    map((assistidos) =>
+      assistidos.map((assistido) => ({
+        value: assistido.id,
+        label: assistido.nome,
+      }))
+    )
+  );
+
+  profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
+    map((users) =>
+      users.map((user) => ({
+        value: user, // objeto completo
+        label: user.nome,
+      }))
+    )
+  );
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -105,5 +129,15 @@ export class ModalAgendamentosComponent implements OnInit {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+  private buscarProfissionais(): Observable<Usuario[]> {
+    return this.usuarioService
+      .filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo })
+      .pipe(
+        map((users) => {
+          return users.map((u) => new Usuario(u));
+        })
+      );
   }
 }

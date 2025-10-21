@@ -1,4 +1,4 @@
-<mat-form-field appearance="outline" [class]="cssClass">
+<mat-form-field appearance="outline" [class]="cssClass" class="full-width">
   <mat-label *ngIf="label">{{ label }}</mat-label>
 
   <input
@@ -33,11 +33,11 @@
     #auto="matAutocomplete"
     [displayWith]="displayFn"
     (optionSelected)="onSelection($event)"
+
   >
     <mat-option
       *ngFor="let option of filteredOptions | async"
       [value]="option"
-      [disabled]="option.disabled"
     >
       {{ option.label }}
     </mat-option>

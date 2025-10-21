@@ -5,41 +5,31 @@
   (onCancelClick)="onCancel()"
   [isVisualizacao]="data.isVisualizacao"
 >
-  <form [formGroup]="formCadastro" class="convenio-form">
-    <div class="form-row">
-      <div class="form-row-half">
-        <!-- <app-select
-          label="Status"
-          [control]="$any(formCadastro.get('status'))"
-          [options]="statusOptions"
-          appearance="outline"
-        ></app-select>
+  <form [formGroup]="formCadastro" class="agendamento-form">
+    <div>
+    <app-autocomplete-multiple
+      [label]="'Assistidos'"
+      [placeholder]="'Selecione um ou mais'"
+      [control]="$any(formCadastro.get('assistidos'))"
+      [options]="(assistidosOptions$ | async) || []"
+    ></app-autocomplete-multiple>
+</div>
 
-        <app-autocomplete
-          label="Profissional"
-          placeholder="Digite para buscar..."
-          [options]="(profissionalOptions | async) || []"
-          [control]="$any(filtrosForm.get('profissional'))"
-          [clearable]="true"
-          prefixIcon="person"
-          cssClass="mat-spacing-sm field-md"
-        >
-        </app-autocomplete>
+<div class="form-row form-row-full">
+    <app-autocomplete
+      label="Profissional"
+      placeholder="Digite para buscar..."
+      [options]="(profissionalOptions$ | async) || []"
+      [control]="$any(formCadastro.get('profissional'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass=""
+    >
+    </app-autocomplete>
+</div>
 
-        <app-autocomplete-multiple
-          [label]="'Assistidos'"
-          [placeholder]="'Selecione um ou mais'"
-          [options]="[
-            { label: 'São Paulo', value: 'SP' },
-            { label: 'Rio de Janeiro', value: 'RJ' },
-            { label: 'Curitiba', value: 'PR' },
-            { label: 'Porto Alegre', value: 'RS' }
-          ]"
-  
-        ></app-autocomplete-multiple> -->
-      </div>
-    </div>
     <div class="form-row">
+
       <app-input
         label="Observações"
         [control]="$any(formCadastro.get('observacao'))"
