@@ -7,12 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Observable, startWith, map } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-export interface SelectOption<T = any> {
-  label: string;
-  value: T;
-  disabled?: boolean;
-}
+import { SelectOption } from '../select/select.component';
 
 @Component({
   selector: 'app-autocomplete',
@@ -34,8 +29,8 @@ export class AutocompleteComponent<T = any> implements OnInit {
 
   @Input() label = '';
   @Input() placeholder = '';
-  @Input() options: SelectOption<T>[] = [];
-  @Input() control = new FormControl<SelectOption<T> | null>(null);
+  @Input() options: SelectOption[] = [];
+  @Input() control = new FormControl<SelectOption | null>(null);
   @Input() cssClass?: string;
   @Input() prefixIcon?: string;
   @Input() suffixIcon?: string;
@@ -44,11 +39,11 @@ export class AutocompleteComponent<T = any> implements OnInit {
   @Input() hasError = false;
   @Input() errorMessage?: string;
 
-  @Output() selectionChange = new EventEmitter<SelectOption<T>>();
+  @Output() selectionChange = new EventEmitter<SelectOption>();
   @Output() suffixIconClick = new EventEmitter<void>();
   @Output() cleared = new EventEmitter<void>();
 
-  filteredOptions!: Observable<SelectOption<T>[]>;
+  filteredOptions!: Observable<SelectOption[]>;
 
   ngOnInit() {
     this.filteredOptions = this.control.valueChanges.pipe(
@@ -57,7 +52,7 @@ export class AutocompleteComponent<T = any> implements OnInit {
     );
   }
 
-  private _filter(value: SelectOption<T> | string | null): SelectOption<T>[] {
+  private _filter(value: SelectOption | string | null): SelectOption[] {
     const filterValue =
       typeof value === 'string'
         ? value.toLowerCase()
@@ -68,12 +63,12 @@ export class AutocompleteComponent<T = any> implements OnInit {
     );
   }
 
-  displayFn(option: SelectOption<T> | null): string {
+  displayFn(option: SelectOption | null): string {
     return option ? option.label : '';
   }
 
   onSelection(event: MatAutocompleteSelectedEvent) {
-    const selectedOption = event.option.value as SelectOption<T>;
+    const selectedOption = event.option.value as SelectOption;
     this.control.setValue(selectedOption);
     this.selectionChange.emit(selectedOption);
   }

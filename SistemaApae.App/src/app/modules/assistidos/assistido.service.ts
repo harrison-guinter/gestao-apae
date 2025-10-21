@@ -28,6 +28,7 @@ export class AssistidoService {
       .pipe(
         map((response) => {
           const assistidos = response.data || [];
+
           // Ordenação alfabética pelo nome, ignorando maiúsculas e minúsculas
           return assistidos.sort((a, b) =>
             (a.nome || '').toLowerCase().localeCompare((b.nome || '').toLowerCase())
