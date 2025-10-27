@@ -35,6 +35,27 @@ public class EmailService : IEmailService
             var password = _configuration["EmailSettings:Password"];
             var enableSsl = bool.Parse(_configuration["EmailSettings:EnableSsl"] ?? "true");
 
+            // Log de diagnóstico dos parâmetros de configuração (sem expor segredos)
+            _logger.LogInformation(
+                "Email config → SmtpServer: {SmtpServer}, Port: {Port}, SenderEmail: {SenderEmail}, SenderName: {SenderName}, UsernameSet: {UsernameSet}, PasswordSet: {PasswordSet}, EnableSsl: {EnableSsl}",
+                string.IsNullOrWhiteSpace(smtpServer) ? "(null/empty)" : smtpServer,
+                port,
+                string.IsNullOrWhiteSpace(senderEmail) ? "(null/empty)" : senderEmail,
+                string.IsNullOrWhiteSpace(senderName) ? "(null/empty)" : senderName,
+                !string.IsNullOrWhiteSpace(username),
+                !string.IsNullOrWhiteSpace(password),
+                enableSsl
+            );
+
+            if (string.IsNullOrWhiteSpace(smtpServer) || string.IsNullOrWhiteSpace(senderEmail))
+            {
+                _logger.LogWarning("Email config inválida: SmtpServer ou SenderEmail vazio. SmtpEmpty={SmtpEmpty}, SenderEmpty={SenderEmpty}",
+                    string.IsNullOrWhiteSpace(smtpServer),
+                    string.IsNullOrWhiteSpace(senderEmail));
+            }
+
+            _logger.LogInformation("Tentando enviar email para {Email} (Reason={Reason})", email, emailReason);
+
             using var smtp = new SmtpClient(smtpServer)
             {
                 Port = port,
