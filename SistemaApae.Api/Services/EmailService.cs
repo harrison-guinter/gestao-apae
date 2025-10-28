@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Sockets;
 using SistemaApae.Api.Models;
 using SistemaApae.Api.Models.Enums;
 
@@ -68,12 +69,17 @@ public class EmailService : IEmailService
     {
         try
         {
-
+            if (!await CanConnectToSmtpAsync(_smtpServer, _smtpPort, 5000))
+            {
+                _logger.LogError("SMTP preflight failed: host={Host}, port={Port}. Verify provider allows connections from this environment or try an alternative port (e.g., 2525).", _smtpServer, _smtpPort);
+                return false;
+            }
 			using var smtp = new SmtpClient(_smtpServer)
             {
 				Port = _smtpPort,
 				Credentials = new NetworkCredential(_username, _password),
-				EnableSsl = _enableSsl
+				EnableSsl = _enableSsl,
+				Timeout = 10000
             };
 
             using var mail = new MailMessage();
@@ -104,7 +110,23 @@ public class EmailService : IEmailService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao enviar email para: {Email}", email);
+            _logger.LogError(ex, "Erro ao enviar email para: {Email}. SMTP host={Host}, port={Port}, enableSsl={EnableSsl}", email, _smtpServer, _smtpPort, _enableSsl);
+            return false;
+        }
+    }
+
+    private static async Task<bool> CanConnectToSmtpAsync(string? host, int port, int timeoutMs)
+    {
+        if (string.IsNullOrWhiteSpace(host)) return false;
+        try
+        {
+            using var tcpClient = new TcpClient();
+            var connectTask = tcpClient.ConnectAsync(host, port);
+            var completed = await Task.WhenAny(connectTask, Task.Delay(timeoutMs)) == connectTask;
+            return completed && tcpClient.Connected;
+        }
+        catch
+        {
             return false;
         }
     }
