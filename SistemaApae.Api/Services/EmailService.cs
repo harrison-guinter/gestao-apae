@@ -28,38 +28,37 @@ public class EmailService : IEmailService
         _logger = logger;
         _configuration = configuration;
 
-		// Carrega configurações: primeiro variáveis de ambiente, depois appsettings
-		_smtpServer =
-			Environment.GetEnvironmentVariable("SMTP_SERVER_EMAIL") ??
-			_configuration["EmailSettings:SmtpServer"];
+		// Carrega configurações: primeiro variáveis de ambiente, depois appsettings, e loga a origem
+		var envSmtp = Environment.GetEnvironmentVariable("SMTP_SERVER_EMAIL");
+		_smtpServer = envSmtp ?? _configuration["EmailSettings:SmtpServer"];
+		_logger.LogInformation("Email config: SMTP server source={Source}, value={Value}", envSmtp is not null ? "ENV" : "APPSETTINGS", _smtpServer);
 
-		var portStr =
-			Environment.GetEnvironmentVariable("PORT_EMAIL") ??
-			_configuration["EmailSettings:Port"] ?? "587";
+		var envPort = Environment.GetEnvironmentVariable("PORT_EMAIL");
+		var portStr = envPort ?? _configuration["EmailSettings:Port"] ?? "587";
 		_smtpPort = int.TryParse(portStr, out var parsedPort) ? parsedPort : 587;
+		_logger.LogInformation("Email config: SMTP port source={Source}, value={Value}", envPort is not null ? "ENV" : "APPSETTINGS", _smtpPort);
 
-		_senderEmail =
-			Environment.GetEnvironmentVariable("SENDER_EMAIL") ??
-			_configuration["EmailSettings:SenderEmail"];
+		var envSenderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL");
+		_senderEmail = envSenderEmail ?? _configuration["EmailSettings:SenderEmail"];
+		_logger.LogInformation("Email config: SenderEmail source={Source}, value={Value}", envSenderEmail is not null ? "ENV" : "APPSETTINGS", _senderEmail);
 
-		_senderName =
-			Environment.GetEnvironmentVariable("SENDER_NAME_EMAIL") ??
-			_configuration["EmailSettings:SenderName"];
+		var envSenderName = Environment.GetEnvironmentVariable("SENDER_NAME_EMAIL");
+		_senderName = envSenderName ?? _configuration["EmailSettings:SenderName"];
+		_logger.LogInformation("Email config: SenderName source={Source}, value={Value}", envSenderName is not null ? "ENV" : "APPSETTINGS", _senderName);
 
-		_username =
-			Environment.GetEnvironmentVariable("USERNAME_EMAIL") ??
-			_configuration["EmailSettings:Username"] ??
-			_senderEmail;
+		var envUsername = Environment.GetEnvironmentVariable("USERNAME_EMAIL");
+		_username = envUsername ?? _configuration["EmailSettings:Username"] ?? _senderEmail;
+		_logger.LogInformation("Email config: Username source={Source}, value={Value}", envUsername is not null ? "ENV" : (_configuration["EmailSettings:Username"] is not null ? "APPSETTINGS" : "FALLBACK_SENDER_EMAIL"), _username);
 
-		_password =
-			Environment.GetEnvironmentVariable("PASSWORD_EMAIL") ??
-			_configuration["EmailSettings:Password"];
+		var envPassword = Environment.GetEnvironmentVariable("PASSWORD_EMAIL");
+		_password = envPassword ?? _configuration["EmailSettings:Password"];
+		_logger.LogInformation("Email config: Password source={Source}, set={Set}", envPassword is not null ? "ENV" : (_configuration["EmailSettings:Password"] is not null ? "APPSETTINGS" : "NONE"), string.IsNullOrEmpty(_password) ? "no" : "yes");
 
-		var enableSslStr =
-			Environment.GetEnvironmentVariable("USE_SSL_EMAIL") ??
-			_configuration["EmailSettings:EnableSsl"];
+		var envEnableSsl = Environment.GetEnvironmentVariable("USE_SSL_EMAIL");
+		var enableSslStr = envEnableSsl ?? _configuration["EmailSettings:EnableSsl"];
 		_enableSsl = true;
 		if (bool.TryParse(enableSslStr, out var parsedEnableSsl)) _enableSsl = parsedEnableSsl;
+		_logger.LogInformation("Email config: EnableSsl source={Source}, value={Value}", envEnableSsl is not null ? "ENV" : (_configuration["EmailSettings:EnableSsl"] is not null ? "APPSETTINGS" : "DEFAULT_TRUE"), _enableSsl);
     }
 
     /// <summary>
