@@ -66,7 +66,6 @@ export class ModalAgendamentosComponent implements OnInit {
   ];
 
   statusOptions: SelectOption[] = [
-    { value: '', label: 'Todos' },
     { value: Status.Ativo, label: 'Ativo' },
     { value: Status.Inativo, label: 'Inativo' },
   ];

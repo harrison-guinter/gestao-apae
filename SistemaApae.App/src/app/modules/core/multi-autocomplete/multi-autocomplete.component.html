@@ -1,6 +1,6 @@
 
-<div class="multi-autocomplete" [ngClass]="{'invalid' : control?.invalid && (control?.dirty || control?.touched || controlInput?.dirty || controlInput?.touched)}">
-  <mat-form-field appearance="outline" [class]="cssClass || ''"
+<div class="multi-autocomplete" [ngClass]="{'invalid' : control?.invalid && (control?.dirty || control?.touched || controlInput?.dirty || controlInput?.touched), 'disabled': control?.disabled || false}">
+  <mat-form-field  appearance="outline" [class]="cssClass || ''"
   
     [color]="control?.invalid && (control?.dirty || control?.touched) ? 'warn' : undefined">
     <mat-label *ngIf="label">{{ label }}</mat-label>
@@ -14,7 +14,7 @@
       </mat-chip-row>
     </mat-chip-grid>
 
-    <input name="autocompleteInput" matInput [matAutocomplete]="auto" [matChipInputFor]="chipGrid"
+    <input [disabled]="control?.disabled || false" name="autocompleteInput" matInput [matAutocomplete]="auto" [matChipInputFor]="chipGrid"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [formControl]="controlInput" [placeholder]="placeholder"
       (matChipInputTokenEnd)="add($event)" (blur)="onTouched()" />
 

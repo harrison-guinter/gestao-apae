@@ -5,7 +5,6 @@
   width: 100%;
 }
 
-/* Aplica o estilo de erro ao mat-form-field */
 .multi-autocomplete.invalid mat-form-field {
   --mdc-outlined-text-field-error-outline-color: #f44336;
   --mdc-outlined-text-field-error-label-text-color: #f44336;
@@ -13,20 +12,35 @@
   --mdc-outlined-text-field-label-text-color: #f44336;
 }
 
-/* Essa borda imita o estilo de erro do Angular Material */
 .multi-autocomplete.invalid .mdc-notched-outline__leading,
 .multi-autocomplete.invalid .mdc-notched-outline__notch,
 .multi-autocomplete.invalid .mdc-notched-outline__trailing {
   border-color: #f44336 !important;
 }
 
-/* Deixa o label e ícone vermelhos */
 .multi-autocomplete.invalid .mdc-floating-label,
 .multi-autocomplete.invalid mat-icon {
   color: #f44336 !important;
 }
 
-/* Margem e tamanho da mensagem de erro */
+.multi-autocomplete.disabled mat-form-field {
+  --mdc-outlined-text-field-error-outline-color: #c7c7c7;
+  --mdc-outlined-text-field-error-label-text-color: #c7c7c7;
+  --mdc-outlined-text-field-outline-color: #c7c7c7;
+  --mdc-outlined-text-field-label-text-color: #c7c7c7;
+}
+
+.multi-autocomplete.disabled .mdc-notched-outline__leading,
+.multi-autocomplete.disabled .mdc-notched-outline__notch,
+.multi-autocomplete.disabled .mdc-notched-outline__trailing {
+  border-color: #c7c7c7 !important;
+}
+
+.multi-autocomplete.disabled .mdc-floating-label,
+.multi-autocomplete.disabled mat-icon {
+  color: #c7c7c7 !important;
+}
+
 mat-error {
   margin-top: 4px;
   font-size: 12px;

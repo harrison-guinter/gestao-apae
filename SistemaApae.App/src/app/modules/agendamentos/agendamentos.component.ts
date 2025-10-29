@@ -160,7 +160,7 @@ export class AgendamentosComponent implements OnInit {
       label: 'Data',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => new Date(row.dataAgendamento).toLocaleDateString(),
+      getCellValue: (row) => row.tipoRecorrencia == TipoRecorrencia.NENHUM ? new Date(row.dataAgendamento).toLocaleDateString() : '-',
     },
     { key: 'hora', label: 'Horário', width: 'large', align: 'left', getCellValue: (row) => row.horarioAgendamento.slice(0, 5), },
     {
@@ -191,7 +191,7 @@ export class AgendamentosComponent implements OnInit {
       width: 'large',
       align: 'left',
       getCellValue: (row) =>
-        this.diaDaSemanaOptions.find((item) => item.value == row.diaSemana)?.label || '',
+         row.tipoRecorrencia == TipoRecorrencia.SEMANAL ? this.diaDaSemanaOptions.find((item) => item.value == row.diaSemana)?.label :  '-',
     },
     {
       key: 'status',
