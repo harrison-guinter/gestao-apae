@@ -67,8 +67,8 @@ export class AtendimentosRealizadosComponent implements OnInit {
       map((agendamentos) =>
         agendamentos.map((agendamento) => ({
           value: agendamento.id,
-          label: `${agendamento.nome} - ${agendamento.data.toLocaleDateString()} ${
-            agendamento.hora
+          label: `${agendamento.nome} - ${agendamento.dataAgendamento.toLocaleDateString()} ${
+            agendamento.horarioAgendamento
           }`,
         }))
       )

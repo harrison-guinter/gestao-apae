@@ -1,41 +1,49 @@
-<app-base-modal
-  [modalTitle]="'Agendamento'"
-  [confirmButtonText]="'Salvar'"
-  (onConfirmClick)="onConfirm()"
-  (onCancelClick)="onCancel()"
-  [isVisualizacao]="data.isVisualizacao"
->
+<app-base-modal [modalTitle]="'Agendamento'" [confirmButtonText]="'Salvar'" (onConfirmClick)="onConfirm()"
+  (onCancelClick)="onCancel()" [isVisualizacao]="data.isVisualizacao">
   <form [formGroup]="formCadastro" class="agendamento-form">
     <div>
-    <app-autocomplete-multiple
-      [label]="'Assistidos'"
-      [placeholder]="'Selecione um ou mais'"
-      [control]="$any(formCadastro.get('assistidos'))"
-      [options]="(assistidosOptions$ | async) || []"
-    ></app-autocomplete-multiple>
-</div>
+      <app-autocomplete-multiple #multiAutocomplete [label]="'Assistidos'" [placeholder]="'Selecione um ou mais'"
+        [control]="$any(formCadastro.get('assistidos'))"
+        [options]="(assistidosOptions$ | async) || []"></app-autocomplete-multiple>
+    </div>
 
-<div class="form-row form-row-full">
-    <app-autocomplete
-      label="Profissional"
-      placeholder="Digite para buscar..."
-      [options]="(profissionalOptions$ | async) || []"
-      [control]="$any(formCadastro.get('profissional'))"
-      [clearable]="true"
-      prefixIcon="person"
-      cssClass=""
-    >
-    </app-autocomplete>
-</div>
+    <div class="form-row form-row-full">
+      <app-autocomplete label="Profissional" placeholder="Digite para buscar..."
+        [options]="(profissionalOptions$ | async) || []" [control]="$any(formCadastro.get('profissional'))"
+        [clearable]="true" prefixIcon="person" cssClass="">
+      </app-autocomplete>
+    </div>
+
+    <div class="form-row form-row-half">
+      <mat-radio-group formControlName="tipoRecorrencia" aria-label="Recorrência">
+        <mat-radio-button [value]="tipoRecorrencia.NENHUM">Sem recorrência</mat-radio-button>
+        <mat-radio-button [value]="tipoRecorrencia.SEMANAL">Semanal</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div>
+      <app-date label="Data" [control]="$any(formCadastro.get('dataAgendamento'))" placeholder="DD/MM/AAAA"
+        appearance="outline" cssClass=" field-md" [clearable]="true"></app-date>
+
+      <app-select label="Dia da semana" [control]="$any(formCadastro.get('diaSemana'))" [options]="diaDaSemanaOptions"
+        appearance="outline" cssClass="mat-spacing-sm field-md">
+      </app-select>
+
+    </div>
+    <div class="form-row form-row-half">
+      <app-input [type]="'time'" label="Horário" [control]="$any(formCadastro.get('horarioAgendamento'))"
+        appearance="outline" cssClass=" field-md"></app-input>
+
+
+      <app-select label="Status" [control]="$any(formCadastro.get('status'))" [options]="statusOptions"
+        appearance="outline" cssClass="mat-spacing-sm field-md">
+      </app-select>
+    </div>
+
 
     <div class="form-row">
-
-      <app-input
-        label="Observações"
-        [control]="$any(formCadastro.get('observacao'))"
-        placeholder="Digite as observações"
-        appearance="outline"
-      ></app-input>
+      <app-input label="Observações" [control]="$any(formCadastro.get('observacao'))"
+        placeholder="Digite as observações" appearance="outline"></app-input>
     </div>
   </form>
 </app-base-modal>

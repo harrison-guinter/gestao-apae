@@ -1,62 +1,42 @@
-<mat-form-field appearance="outline" [class]="cssClass">
-  <mat-label *ngIf="label">{{ label }}</mat-label>
 
-   <mat-chip-grid   class="chip-scroll-container" #chipGrid aria-label="Seleções">
-    
-        <mat-chip-row *ngFor="let option of control?.value || []" (removed)="remove(option)">
-          {{ option.label }}
-          <button matChipRemove [attr.aria-label]="'Remover ' + option.label">
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip-row>
-      
+<div class="multi-autocomplete" [ngClass]="{'invalid' : control?.invalid && (control?.dirty || control?.touched || controlInput?.dirty || controlInput?.touched)}">
+  <mat-form-field appearance="outline" [class]="cssClass || ''"
+  
+    [color]="control?.invalid && (control?.dirty || control?.touched) ? 'warn' : undefined">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+
+    <mat-chip-grid class="chip-scroll-container" #chipGrid aria-label="Seleções">
+      <mat-chip-row *ngFor="let option of control?.value || []" (removed)="remove(option)">
+        {{ option.label }}
+        <button matChipRemove [attr.aria-label]="'Remover ' + option.label">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
     </mat-chip-grid>
 
-  <input
-    name="autocompleteInput"
-    matInput
-    [matAutocomplete]="auto"
-    [matChipInputFor]="chipGrid"
-    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-    [formControl]="controlInput"
-    [placeholder]="placeholder"
-    (matChipInputTokenEnd)="add($event)"
-    (blur)="onTouched()"
-  />
+    <input name="autocompleteInput" matInput [matAutocomplete]="auto" [matChipInputFor]="chipGrid"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [formControl]="controlInput" [placeholder]="placeholder"
+      (matChipInputTokenEnd)="add($event)" (blur)="onTouched()" />
 
-  <mat-icon matPrefix *ngIf="prefixIcon">{{ prefixIcon }}</mat-icon>
+    <mat-icon matPrefix *ngIf="prefixIcon">{{ prefixIcon }}</mat-icon>
 
-  <mat-icon
-    matSuffix
-    *ngIf="suffixIcon && !clearable"
-    (click)="onSuffixIconClick()"
-  >
-    {{ suffixIcon }}
-  </mat-icon>
+    <mat-icon matSuffix *ngIf="suffixIcon && !clearable" (click)="onSuffixIconClick()">
+      {{ suffixIcon }}
+    </mat-icon>
 
-  <mat-icon
-    matSuffix
-    *ngIf="clearable && hasValue()"
-    (click)="clearAll()"
-    [matTooltip]="clearTooltip"
-    class="cursor-pointer"
-  >
-    clear
-  </mat-icon>
+    <mat-icon matSuffix *ngIf="clearable && hasValue()" (click)="clearAll()" [matTooltip]="clearTooltip"
+      class="cursor-pointer">
+      clear
+    </mat-icon>
 
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    (optionSelected)="selected($event)"
-  >
-      <mat-option
-        *ngFor="let option of filteredOptions | async"
-        [value]="option"
-        [disabled]="option.disabled"
-      >
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option" [disabled]="option.disabled">
         {{ option.label }}
       </mat-option>
-    
-  </mat-autocomplete>
+    </mat-autocomplete>
 
-  <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
-</mat-form-field>
+    <mat-error *ngIf="control?.hasError('required') && (control?.dirty || control?.touched)">
+      {{ errorMessage || 'Campo obrigatório' }}
+    </mat-error>
+  </mat-form-field>
+</div>

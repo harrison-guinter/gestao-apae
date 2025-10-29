@@ -1,4 +1,4 @@
-<div class="usuarios-container">
+<div class="agendamentos-container">
   <app-filters-container
     [formGroup]="filtrosForm"
     (add)="onAdd()"
@@ -6,6 +6,7 @@
     (search)="pesquisarAgendamentos()"
     title="Lista de Agendamentos"
   >
+
     <app-autocomplete
       label="Profissional"
       placeholder="Digite para buscar..."
@@ -13,7 +14,7 @@
       [control]="$any(filtrosForm.get('profissional'))"
       [clearable]="true"
       prefixIcon="person"
-      cssClass="mat-spacing-sm field-md"
+      cssClass="padding-right mat-spacing-sm field-md"
     >
     </app-autocomplete>
 
@@ -23,7 +24,7 @@
       labelInicio="Data Inicial"
       labelFim="Data Final"
       [clearable]="true"
-   cssClass="mat-spacing-sm field-md"
+      cssClass="padding-left mat-spacing-sm field-md"
     ></app-rangepicker>
 
     <app-select
@@ -34,6 +35,7 @@
       cssClass="mat-spacing-sm field-md"
     >
     </app-select>
+ 
   </app-filters-container>
   <div class="table-section">
     <app-table
