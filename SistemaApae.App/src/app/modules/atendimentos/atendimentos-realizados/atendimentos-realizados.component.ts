@@ -91,8 +91,8 @@ export class AtendimentosRealizadosComponent implements OnInit {
     const filtros: AtendimentoFiltro = {
       idAssistido: this.filtrosForm.value.assistido || undefined,
       idAgendamento: this.filtrosForm.value.agendamento || undefined,
-      dataInicio: this.filtrosForm.value.dataInicio || undefined,
-      dataFim: this.filtrosForm.value.dataFim || undefined,
+      dataInicioAtendimento: this.filtrosForm.value.dataInicio || undefined,
+      dataFimAtendimento: this.filtrosForm.value.dataFim || undefined,
       presenca:
         this.filtrosForm.value.presenca !== '' ? this.filtrosForm.value.presenca : undefined,
       status: this.filtrosForm.value.status !== '' ? this.filtrosForm.value.status : undefined,

@@ -48,12 +48,13 @@
       Estatísticas do Sistema
     </h3>
 
-    <div class="stats-grid">
+    <!-- Grid de estatísticas -->
+    <div *ngIf="dashboardData" class="stats-grid">
       <mat-card class="stat-card">
         <mat-card-content class="stat-content">
           <mat-icon class="stat-icon">groups</mat-icon>
           <div class="stat-info">
-            <span class="stat-number">150</span>
+            <span class="stat-number">{{ dashboardData.totalAssistidos }}</span>
             <h4 class="stat-label">Total de Assistidos</h4>
           </div>
         </mat-card-content>
@@ -63,7 +64,7 @@
         <mat-card-content class="stat-content">
           <mat-icon class="stat-icon">today</mat-icon>
           <div class="stat-info">
-            <span class="stat-number">25</span>
+            <span class="stat-number">{{ dashboardData.atendimentosHoje }}</span>
             <h4 class="stat-label">Atendimentos Hoje</h4>
           </div>
         </mat-card-content>
@@ -73,7 +74,7 @@
         <mat-card-content class="stat-content">
           <mat-icon class="stat-icon">person</mat-icon>
           <div class="stat-info">
-            <span class="stat-number">12</span>
+            <span class="stat-number">{{ dashboardData.usuariosAtivos }}</span>
             <h4 class="stat-label">Usuários Ativos</h4>
           </div>
         </mat-card-content>
@@ -83,8 +84,48 @@
         <mat-card-content class="stat-content">
           <mat-icon class="stat-icon">event</mat-icon>
           <div class="stat-info">
-            <span class="stat-number">8</span>
+            <span class="stat-number">{{ dashboardData.agendamentosPendentes }}</span>
             <h4 class="stat-label">Agendamentos Pendentes</h4>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content class="stat-content">
+          <mat-icon class="stat-icon">trending_up</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ dashboardData.atendimentosSemana }}</span>
+            <h4 class="stat-label">Atendimentos esta Semana</h4>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content class="stat-content">
+          <mat-icon class="stat-icon">calendar_month</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ dashboardData.atendimentosMes }}</span>
+            <h4 class="stat-label">Atendimentos este Mês</h4>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content class="stat-content">
+          <mat-icon class="stat-icon">person_add</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ dashboardData.novosAssistidosMes }}</span>
+            <h4 class="stat-label">Novos Assistidos este Mês</h4>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content class="stat-content">
+          <mat-icon class="stat-icon">check_circle</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ dashboardData.taxaPresenca }}%</span>
+            <h4 class="stat-label">Taxa de Presença</h4>
           </div>
         </mat-card-content>
       </mat-card>

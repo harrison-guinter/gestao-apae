@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PageInfoService } from '../core/services/page-info.service';
+import { DashboardData } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,10 +15,20 @@ import { PageInfoService } from '../core/services/page-info.service';
   styleUrls: ['./dashboard.component.less'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(private pageInfoService: PageInfoService, private router: Router) {}
+  dashboardData: DashboardData | null = null;
+
+  constructor(
+    private pageInfoService: PageInfoService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Dashboard', 'Sistema de Gestão de Atendimentos');
+    this.activatedRoute.data.subscribe(({ data }) => {
+      this.dashboardData = data;
+      console.log('Dashboard data loaded:', this.dashboardData);
+    });
   }
 
   // Métodos de navegação para os diferentes cadastros
