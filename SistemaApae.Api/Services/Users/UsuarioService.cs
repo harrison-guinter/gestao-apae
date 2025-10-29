@@ -113,8 +113,10 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
     {
         try
         {
+            var newPassword = _authService.GenerateRandomPassword();
+
             user.UpdatedAt = DateTime.UtcNow;
-            user.Senha = BCrypt.Net.BCrypt.HashPassword(_authService.GenerateRandomPassword());
+            user.Senha = BCrypt.Net.BCrypt.HashPassword(newPassword);
 
             var result = await base.Create(user);
 
@@ -139,7 +141,7 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
                 Status = result.Data.Status
             };
 
-            await _emailService.SendEmailAsync(response.Email, response.Nome, user.Senha, EmailReasonEnum.CreateUser);
+            await _emailService.SendEmailAsync(response.Email, response.Nome, newPassword, EmailReasonEnum.CreateUser);
 
             return ApiResponse<UsuarioDto>.SuccessResponse(response);
         }
