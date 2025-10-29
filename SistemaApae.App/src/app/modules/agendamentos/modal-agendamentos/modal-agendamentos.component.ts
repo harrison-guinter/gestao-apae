@@ -107,11 +107,11 @@ export class ModalAgendamentosComponent implements OnInit {
 
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
-      profissional: [object?.profissional || '', Validators.required],
+      profissional: [this.isEdit ? {value: object?.profissional, label: object.profissional.nome} : null, Validators.required],
       assistidos: [object?.assistidos || '', [Validators.required]],
       tipoRecorrencia: [object?.tipoRecorrencia || TipoRecorrencia.NENHUM, Validators.required],
-      status: [object?.status || Status.Ativo, Validators.required],
-      horarioAgendamento: [object?.horarioAgendamento, [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]],
+      status: [{ value: object?.status || Status.Ativo, disabled: !this.isEdit}, Validators.required],
+      horarioAgendamento: [object?.horarioAgendamento ? object.horarioAgendamento.toString().slice(0,5) : "", [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]],
       diaSemana: [{ value: object?.diaSemana, disabled: object?.tipoRecorrencia != TipoRecorrencia.SEMANAL }, object?.tipoRecorrencia == TipoRecorrencia.SEMANAL ? Validators.required : []],
       dataAgendamento: [{ value: object?.dataAgendamento, disabled: object && object?.tipoRecorrencia != TipoRecorrencia.NENHUM }, object?.tipoRecorrencia == TipoRecorrencia.NENHUM || !object ? Validators.required : []],
       observacao: [object?.observacao || ''],
@@ -145,7 +145,7 @@ export class ModalAgendamentosComponent implements OnInit {
   valueFromForm(): Agendamento {
     const valor = this.formCadastro.value;
 
-    valor.dataAgendamento = new Date(valor.dataAgendamento).toISOString().slice(0, 10)
+    if (valor.dataAgendamento) valor.dataAgendamento = new Date(valor.dataAgendamento).toISOString().slice(0, 10)
 
     return { ...valor, assistidos: (valor.assistidos as SelectOption[]).map(v => v.value), profissional: (valor.profissional as SelectOption).value } as Agendamento;
   }
@@ -153,9 +153,8 @@ export class ModalAgendamentosComponent implements OnInit {
   onConfirm(): void {
     this.multiAutocompleteComponent.controlInput.markAsDirty()
     this.formCadastro.markAllAsTouched();
-  
+
     if (!this.formCadastro.valid) {
-      this.formCadastro.get('assistidos')?.updateValueAndValidity();
       this.formCadastro.updateValueAndValidity();
 
       this.notificationService.showWarning(

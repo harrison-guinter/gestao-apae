@@ -11,7 +11,8 @@ export interface AgendamentoFiltro {
   status?: Status;
   dataAgendamentoInicio?: string;
   dataAgendamentoFim?: string;
-  assistido: Assistido;
+  assistidoId: string;
+  profissionalId: string;
 }
 
 @Injectable({

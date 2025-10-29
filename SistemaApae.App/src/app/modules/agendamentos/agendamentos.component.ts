@@ -27,6 +27,7 @@ import { AutocompleteComponent } from '../core/autocomplete/autocomplete.compone
 import { DatepickerComponent } from '../core/date/datepicker/datepicker.component';
 import { RangePickerComponent } from '../core/date/rangepicker/rangepicker.component';
 import { NotificationService } from '../core/notification/notification.service';
+import { AssistidoService } from '../assistidos/assistido.service';
 
 @Component({
   selector: 'app-agendamentos',
@@ -57,6 +58,8 @@ export class AgendamentosComponent implements OnInit {
 
   private usuarioService = inject(UsuarioService);
 
+  private assistidoService: AssistidoService = inject(AssistidoService);
+
   protected agendamentos: Agendamento[] = [];
 
   profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
@@ -64,6 +67,15 @@ export class AgendamentosComponent implements OnInit {
       users.map((user) => ({
         value: user, 
         label: user.nome,
+      }))
+    )
+  );
+
+    assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
+    map((assistidos) =>
+      assistidos.map((assistido) => ({
+        value: assistido,
+        label: assistido.nome,
       }))
     )
   );
@@ -84,11 +96,7 @@ export class AgendamentosComponent implements OnInit {
   }
 
   pesquisarAgendamentos() {
-    const filtros: AgendamentoFiltro = this.filtrosForm.value;
-
-    if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = new Date(filtros.dataAgendamentoFim).toISOString().slice(0, 10)
-    if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = new Date(filtros.dataAgendamentoInicio).toISOString().slice(0, 10)
-
+    const filtros: AgendamentoFiltro = this.valueFromForm();
 
     this.agendamentoService.listarAgendamentos(filtros).subscribe({
       next: (response) => {
@@ -104,8 +112,8 @@ export class AgendamentosComponent implements OnInit {
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-      profissional: ['', AutocompleteComponent.selectOptionValidator],
-      assistidoId: [''],
+      idProfissional: ['', AutocompleteComponent.selectOptionValidator],
+      idAssistido: ['', AutocompleteComponent.selectOptionValidator],
       dataAgendamentoInicio: [''],
       dataAgendamentoFim: [''],
       status: [''],
@@ -256,6 +264,19 @@ export class AgendamentosComponent implements OnInit {
           .map((u) => new Usuario(u))
       })
     );
+  }
+
+
+  valueFromForm(): AgendamentoFiltro {
+    const filtros = this.filtrosForm.value;
+    console.log(filtros);
+
+    if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = new Date(filtros.dataAgendamentoFim).toISOString().slice(0, 10)
+    if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = new Date(filtros.dataAgendamentoInicio).toISOString().slice(0, 10)
+    if (filtros.idAssistido) filtros.idAssistido = filtros.idAssistido.value.id
+    if (filtros.idProfissional) filtros.idProfissional = filtros.idProfissional.value.id
+
+    return { ...filtros };
   }
 
 

@@ -11,7 +11,18 @@
       label="Profissional"
       placeholder="Digite para buscar..."
       [options]="(profissionalOptions$ | async) || []"
-      [control]="$any(filtrosForm.get('profissional'))"
+      [control]="$any(filtrosForm.get('idProfissional'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
+    >
+    </app-autocomplete>
+
+        <app-autocomplete
+      label="Assistido"
+      placeholder="Digite para buscar..."
+      [options]="(assistidosOptions$ | async) || []"
+      [control]="$any(filtrosForm.get('idAssistido'))"
       [clearable]="true"
       prefixIcon="person"
       cssClass="padding-right mat-spacing-sm field-md"
