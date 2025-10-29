@@ -25,13 +25,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Dashboard', 'Sistema de Gestão de Atendimentos');
-    this.activatedRoute.data.subscribe(({ data }) => {
-      this.dashboardData = data;
-      console.log('Dashboard data loaded:', this.dashboardData);
+    this.activatedRoute.data.subscribe((data) => {
+      this.dashboardData = data['DashboardResolver'].data;
     });
   }
 
-  // Métodos de navegação para os diferentes cadastros
   navigateToAssistidos(): void {
     this.router.navigate(['/home/assistidos/cadastro']);
   }
