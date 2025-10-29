@@ -11,55 +11,56 @@ namespace SistemaApae.Api.Services;
 /// </summary>
 public class EmailService : IEmailService
 {
-    private readonly ILogger<EmailService> _logger;
-    private readonly IConfiguration _configuration;
-	
-	// Configs em cache
-	private readonly string? _smtpServer;
-	private readonly int _smtpPort;
 	private readonly string? _senderEmail;
 	private readonly string? _senderName;
-	private readonly string? _username;
-	private readonly string? _password;
-	private readonly bool _enableSsl;
+	private readonly SmtpClient _smtpClient;
 
+    /// <summary>
+    /// Inicializa o serviço de e-mail, carregando configurações e preparando o cliente SMTP
+    /// </summary>
     public EmailService(ILogger<EmailService> logger, IConfiguration configuration)
     {
-        _logger = logger;
-        _configuration = configuration;
-
-		// Carrega configurações: primeiro variáveis de ambiente, depois appsettings
-		_smtpServer =
+		// Carrega configurações
+		var smtpServer =
 			Environment.GetEnvironmentVariable("SMTP_SERVER_EMAIL") ??
-			_configuration["EmailSettings:SmtpServer"];
+			configuration["EmailSettings:SmtpServer"];
 
 		var portStr =
 			Environment.GetEnvironmentVariable("PORT_EMAIL") ??
-			_configuration["EmailSettings:Port"] ?? "587";
-		_smtpPort = int.TryParse(portStr, out var parsedPort) ? parsedPort : 587;
+			configuration["EmailSettings:Port"] ?? "587";
+		var smtpPort = int.TryParse(portStr, out var parsedPort) ? parsedPort : 587;
 
 		_senderEmail =
 			Environment.GetEnvironmentVariable("SENDER_EMAIL") ??
-			_configuration["EmailSettings:SenderEmail"];
+			configuration["EmailSettings:SenderEmail"];
 
 		_senderName =
 			Environment.GetEnvironmentVariable("SENDER_NAME_EMAIL") ??
-			_configuration["EmailSettings:SenderName"];
+			configuration["EmailSettings:SenderName"];
 
-		_username =
+		var username =
 			Environment.GetEnvironmentVariable("USERNAME_EMAIL") ??
-			_configuration["EmailSettings:Username"] ??
+			configuration["EmailSettings:Username"] ??
 			_senderEmail;
 
-		_password =
+		var password =
 			Environment.GetEnvironmentVariable("PASSWORD_EMAIL") ??
-			_configuration["EmailSettings:Password"];
+			configuration["EmailSettings:Password"];
 
 		var enableSslStr =
 			Environment.GetEnvironmentVariable("USE_SSL_EMAIL") ??
-			_configuration["EmailSettings:EnableSsl"];
-		_enableSsl = true;
-		if (bool.TryParse(enableSslStr, out var parsedEnableSsl)) _enableSsl = parsedEnableSsl;
+			configuration["EmailSettings:EnableSsl"];
+		var enableSsl = true;
+		if (bool.TryParse(enableSslStr, out var parsedEnableSsl)) enableSsl = parsedEnableSsl;
+
+		// Instancia e configura o cliente SMTP
+		_smtpClient = new SmtpClient(smtpServer)
+		{
+			Port = smtpPort,
+			Credentials = new NetworkCredential(username, password),
+			EnableSsl = enableSsl,
+			Timeout = 10000
+		};
     }
 
     /// <summary>
@@ -69,16 +70,8 @@ public class EmailService : IEmailService
     {
         try
         {
-
-			using var smtp = new SmtpClient(_smtpServer)
-            {
-				Port = _smtpPort,
-				Credentials = new NetworkCredential(_username, _password),
-				EnableSsl = _enableSsl
-            };
-
             using var mail = new MailMessage();
-			mail.From = new MailAddress(_senderEmail, _senderName);
+			mail.From = new MailAddress(_senderEmail ?? email, _senderName ?? string.Empty);
             mail.To.Add(email);
 
             var message = string.Empty;
@@ -99,13 +92,12 @@ public class EmailService : IEmailService
             mail.Body = FillContent(name, email, newPassword, message);
             mail.IsBodyHtml = true;
 
-            await smtp.SendMailAsync(mail);
+            await _smtpClient.SendMailAsync(mail);
 
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Erro ao enviar email para: {Email}", email);
             return false;
         }
     }

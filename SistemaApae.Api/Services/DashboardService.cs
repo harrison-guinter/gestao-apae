@@ -2,6 +2,7 @@ using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Dashboard;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Services;
+using Supabase.Postgrest;
 
 namespace SistemaApae.Api.Services;
 
@@ -34,67 +35,95 @@ public class DashboardService
             var inicioSemana = hoje.AddDays(-(int)DateTime.Now.DayOfWeek);
             var inicioMes = new DateOnly(hoje.Year, hoje.Month, 1);
 
-            // Buscar total de assistidos
-            var totalAssistidos = await _supabaseService.Client
+            // Faixas de tempo em DateTime para facilitar filtros (evita métodos dentro do Where)
+            var inicioHoje = hoje.ToDateTime(TimeOnly.MinValue);
+            var inicioAmanha = hoje.AddDays(1).ToDateTime(TimeOnly.MinValue);
+            var inicioSemanaDateTime = inicioSemana.ToDateTime(TimeOnly.MinValue);
+            var inicioMesDateTime = inicioMes.ToDateTime(TimeOnly.MinValue);
+
+            // Converte datas para strings compatíveis com PostgREST
+            string inicioHojeStr = inicioHoje.ToString("yyyy-MM-dd HH:mm:ss");
+            string inicioAmanhaStr = inicioAmanha.ToString("yyyy-MM-dd HH:mm:ss");
+            string inicioSemanaStr = inicioSemanaDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            string inicioMesStr = inicioMesDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            string hojeDateStr = hoje.ToString("yyyy-MM-dd");
+            string inicioMesDateStr = inicioMes.ToString("yyyy-MM-dd");
+
+            var countType = Supabase.Postgrest.Constants.CountType.Exact;
+
+            // Dispara todas as contagens em paralelo para reduzir latência
+            var totalAssistidosTask = _supabaseService.Client
                 .From<Models.Patients.Assistido>()
-                .Where(a => a.Status == StatusEntidadeEnum.Ativo)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+                .Count(countType);
 
-            // Buscar atendimentos de hoje
-            var atendimentosHoje = await _supabaseService.Client
+            var atendimentosHojeTask = _supabaseService.Client
                 .From<Models.Appointment.Atendimento>()
-                .Where(a => a.DataAtendimento.HasValue && 
-                           DateOnly.FromDateTime(a.DataAtendimento.Value) == hoje)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioHojeStr)
+                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, inicioAmanhaStr)
+                .Count(countType);
 
-            // Buscar usuários ativos
-            var usuariosAtivos = await _supabaseService.Client
+            var usuariosAtivosTask = _supabaseService.Client
                 .From<Models.Users.Usuario>()
-                .Where(u => u.Status == StatusEntidadeEnum.Ativo)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(u => u.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+                .Count(countType);
 
-            // Buscar agendamentos pendentes (agendamentos futuros sem atendimento)
-            var agendamentosPendentes = await _supabaseService.Client
+            var agendamentosPendentesTask = _supabaseService.Client
                 .From<Models.Agenda.Agendamento>()
-                .Where(a => a.Status == StatusEntidadeEnum.Ativo &&
-                           a.DataAgendamento.HasValue &&
-                           a.DataAgendamento.Value >= hoje)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+                .Filter(a => a.DataAgendamento!, Constants.Operator.GreaterThanOrEqual, hojeDateStr)
+                .Count(countType);
 
-            // Buscar atendimentos da semana
-            var atendimentosSemana = await _supabaseService.Client
+            var atendimentosSemanaTask = _supabaseService.Client
                 .From<Models.Appointment.Atendimento>()
-                .Where(a => a.DataAtendimento.HasValue &&
-                           DateOnly.FromDateTime(a.DataAtendimento.Value) >= inicioSemana &&
-                           DateOnly.FromDateTime(a.DataAtendimento.Value) <= hoje)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioSemanaStr)
+                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, inicioAmanhaStr)
+                .Count(countType);
 
-            // Buscar atendimentos do mês
-            var atendimentosMes = await _supabaseService.Client
+            var atendimentosMesTask = _supabaseService.Client
                 .From<Models.Appointment.Atendimento>()
-                .Where(a => a.DataAtendimento.HasValue &&
-                           DateOnly.FromDateTime(a.DataAtendimento.Value) >= inicioMes &&
-                           DateOnly.FromDateTime(a.DataAtendimento.Value) <= hoje)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioMesStr)
+                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, inicioAmanhaStr)
+                .Count(countType);
 
-            // Buscar novos assistidos do mês
-            var novosAssistidosMes = await _supabaseService.Client
+            var novosAssistidosMesTask = _supabaseService.Client
                 .From<Models.Patients.Assistido>()
-                .Where(a => a.Status == StatusEntidadeEnum.Ativo &&
-                           a.DataCadastro.HasValue &&
-                           a.DataCadastro.Value >= inicioMes)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+                .Filter(a => a.DataCadastro!, Constants.Operator.GreaterThanOrEqual, inicioMesDateStr)
+                .Count(countType);
 
-            // Calcular taxa de presença (atendimentos com presença confirmada vs total de atendimentos)
-            var atendimentosComPresenca = await _supabaseService.Client
+            var atendimentosComPresencaTask = _supabaseService.Client
                 .From<Models.Appointment.Atendimento>()
-                .Where(a => a.Presenca == StatusAtendimentoEnum.PRESENCA)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.Presenca!, Constants.Operator.Equals, (int)StatusAtendimentoEnum.PRESENCA)
+                .Count(countType);
 
-            var totalAtendimentos = await _supabaseService.Client
+            // total de atendimentos com status definido (qualquer que seja) -> Presenca >= 1
+            var totalAtendimentosTask = _supabaseService.Client
                 .From<Models.Appointment.Atendimento>()
-                .Where(a => a.Presenca.HasValue)
-                .Count(Supabase.Postgrest.Constants.CountType.Exact);
+                .Filter(a => a.Presenca!, Constants.Operator.GreaterThanOrEqual, (int)StatusAtendimentoEnum.PRESENCA)
+                .Count(countType);
+
+            await Task.WhenAll(
+                totalAssistidosTask,
+                atendimentosHojeTask,
+                usuariosAtivosTask,
+                agendamentosPendentesTask,
+                atendimentosSemanaTask,
+                atendimentosMesTask,
+                novosAssistidosMesTask,
+                atendimentosComPresencaTask,
+                totalAtendimentosTask
+            );
+
+            var totalAssistidos = totalAssistidosTask.Result;
+            var atendimentosHoje = atendimentosHojeTask.Result;
+            var usuariosAtivos = usuariosAtivosTask.Result;
+            var agendamentosPendentes = agendamentosPendentesTask.Result;
+            var atendimentosSemana = atendimentosSemanaTask.Result;
+            var atendimentosMes = atendimentosMesTask.Result;
+            var novosAssistidosMes = novosAssistidosMesTask.Result;
+            var atendimentosComPresenca = atendimentosComPresencaTask.Result;
+            var totalAtendimentos = totalAtendimentosTask.Result;
 
             var taxaPresenca = totalAtendimentos > 0 
                 ? Math.Round((decimal)atendimentosComPresenca / totalAtendimentos * 100, 2)
