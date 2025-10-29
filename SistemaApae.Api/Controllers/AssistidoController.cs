@@ -10,7 +10,7 @@ namespace SistemaApae.Api.Controllers.Patients;
 /// Controller com endpoints de CRUD da entidade Assistido
 /// </summary>
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AssistidoController : ControllerBase

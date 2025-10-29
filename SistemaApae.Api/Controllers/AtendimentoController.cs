@@ -11,7 +11,7 @@ namespace SistemaApae.Api.Controllers;
 /// Controller com endpoints de CRUD da entidade Atendimento
 /// </summary>
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AtendimentoController : ControllerBase
