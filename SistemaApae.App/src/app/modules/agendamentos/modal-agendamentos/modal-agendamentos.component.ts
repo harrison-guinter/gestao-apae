@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, inject } from '@angular/core';
+import { Component, OnInit, Inject, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,19 +8,19 @@ import { BaseModalComponent } from '../../core/base-modal/base-modal.component';
 import { ModalData } from '../../core/services/modal.service';
 import { InputComponent } from '../../core/input/input.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-import { CidadesService } from '../../cidades/cidades.service';
 import { map, Observable } from 'rxjs';
-import { Agendamento } from '../agendamento';
+import { Agendamento, DiaDaSemana, TipoRecorrencia } from '../agendamento';
 import { AgendamentoService } from '../agendamento.service';
 import { NotificationService } from '../../core/notification/notification.service';
 import { Status } from '../../core/enum/status.enum';
 import { AutocompleteMultipleComponent } from '../../core/multi-autocomplete/multi-autocomplete.component';
-import { Assistido } from '../../assistidos/assistido';
 import { AssistidoService } from '../../assistidos/assistido.service';
 import { Usuario } from '../../usuarios/usuario';
 import { Roles } from '../../auth/roles.enum';
 import { UsuarioService } from '../../usuarios/usuario.service';
 import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -36,11 +36,15 @@ import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.comp
     BaseModalComponent,
     AutocompleteMultipleComponent,
     AutocompleteComponent,
+    MatRadioModule,
+    DatepickerComponent
   ],
   templateUrl: './modal-agendamentos.component.html',
   styleUrls: ['./modal-agendamentos.component.less'],
 })
 export class ModalAgendamentosComponent implements OnInit {
+  @ViewChild(`multiAutocomplete`) multiAutocompleteComponent!: AutocompleteMultipleComponent;
+
   protected formCadastro!: FormGroup;
   private isEdit: boolean = false;
 
@@ -50,10 +54,28 @@ export class ModalAgendamentosComponent implements OnInit {
 
   private usuarioService: UsuarioService = inject(UsuarioService);
 
+  public tipoRecorrencia = TipoRecorrencia
+
+  diaDaSemanaOptions: SelectOption[] = [
+    { value: DiaDaSemana.SEGUNDA, label: 'Segunda' },
+    { value: DiaDaSemana.TERCA, label: 'Terça' },
+    { value: DiaDaSemana.QUARTA, label: 'Quarta' },
+    { value: DiaDaSemana.QUINTA, label: 'Quinta' },
+    { value: DiaDaSemana.SEXTA, label: 'Sexta' },
+    { value: DiaDaSemana.SABADO, label: 'Sábado' },
+  ];
+
+  statusOptions: SelectOption[] = [
+    { value: '', label: 'Todos' },
+    { value: Status.Ativo, label: 'Ativo' },
+    { value: Status.Inativo, label: 'Inativo' },
+  ];
+
+
   assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
     map((assistidos) =>
       assistidos.map((assistido) => ({
-        value: assistido.id,
+        value: assistido,
         label: assistido.nome,
       }))
     )
@@ -62,7 +84,7 @@ export class ModalAgendamentosComponent implements OnInit {
   profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
     map((users) =>
       users.map((user) => ({
-        value: user, // objeto completo
+        value: user, 
         label: user.nome,
       }))
     )
@@ -73,7 +95,7 @@ export class ModalAgendamentosComponent implements OnInit {
     public dialogRef: MatDialogRef<ModalAgendamentosComponent>,
     private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ModalData
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isEdit = !!this.data?.data.isEdit;
@@ -86,25 +108,54 @@ export class ModalAgendamentosComponent implements OnInit {
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
       profissional: [object?.profissional || '', Validators.required],
-      assistidos: [object?.assistidos || '', Validators.required],
-      status: [object?.status, Validators.required],
+      assistidos: [object?.assistidos || '', [Validators.required]],
+      tipoRecorrencia: [object?.tipoRecorrencia || TipoRecorrencia.NENHUM, Validators.required],
+      status: [object?.status || Status.Ativo, Validators.required],
+      horarioAgendamento: [object?.horarioAgendamento, [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]],
+      diaSemana: [{ value: object?.diaSemana, disabled: object?.tipoRecorrencia != TipoRecorrencia.SEMANAL }, object?.tipoRecorrencia == TipoRecorrencia.SEMANAL ? Validators.required : []],
+      dataAgendamento: [{ value: object?.dataAgendamento, disabled: object && object?.tipoRecorrencia != TipoRecorrencia.NENHUM }, object?.tipoRecorrencia == TipoRecorrencia.NENHUM || !object ? Validators.required : []],
       observacao: [object?.observacao || ''],
     });
 
     if (this.data.isVisualizacao) {
       this.formCadastro.disable();
     }
+
+    this.formCadastro.get(`tipoRecorrencia`)?.valueChanges.subscribe((value) => {
+      this.formCadastro.get(`diaSemana`)?.reset();
+      this.formCadastro.get(`dataAgendamento`)?.reset();
+
+      if (value == TipoRecorrencia.NENHUM) {
+        this.formCadastro.get(`diaSemana`)?.clearValidators();
+        this.formCadastro.get(`diaSemana`)?.disable()
+
+        this.formCadastro.get(`dataAgendamento`)?.addValidators(Validators.required);
+        this.formCadastro.get(`dataAgendamento`)?.enable()
+      } else {
+
+        this.formCadastro.get(`diaSemana`)?.addValidators(Validators.required);
+        this.formCadastro.get(`diaSemana`)?.enable()
+
+        this.formCadastro.get(`dataAgendamento`)?.clearValidators();
+        this.formCadastro.get(`dataAgendamento`)?.disable()
+      }
+    });
   }
 
   valueFromForm(): Agendamento {
     const valor = this.formCadastro.value;
 
-    return { ...valor } as Agendamento;
+    valor.dataAgendamento = new Date(valor.dataAgendamento).toISOString().slice(0, 10)
+
+    return { ...valor, assistidos: (valor.assistidos as SelectOption[]).map(v => v.value), profissional: (valor.profissional as SelectOption).value } as Agendamento;
   }
 
   onConfirm(): void {
+    this.multiAutocompleteComponent.controlInput.markAsDirty()
+    this.formCadastro.markAllAsTouched();
+  
     if (!this.formCadastro.valid) {
-      this.formCadastro.markAllAsTouched();
+      this.formCadastro.get('assistidos')?.updateValueAndValidity();
       this.formCadastro.updateValueAndValidity();
 
       this.notificationService.showWarning(

@@ -62,7 +62,7 @@ export class AgendamentosComponent implements OnInit {
   profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
     map((users) =>
       users.map((user) => ({
-        value: user, // objeto completo
+        value: user, 
         label: user.nome,
       }))
     )
@@ -75,29 +75,31 @@ export class AgendamentosComponent implements OnInit {
     private pageInfoService: PageInfoService,
     private notificationService: NotificationService,
     private modalService: ModalService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar convênios do sistema');
 
     this.initFiltrosForm();
-    this.pesquisarAgendamentos();
   }
 
   pesquisarAgendamentos() {
     const filtros: AgendamentoFiltro = this.filtrosForm.value;
-    // Exemplo de dados mockados para teste
-    
-      this.agendamentoService.listarAgendamentos(filtros).subscribe({
-        next: (response) => {
-          this.agendamentos = response;
-        },
-        error: (error) => {
-          this.notificationService.fail('Erro ao pesquisar agendamentos');
-          console.error(error);
-        }
-      });
-      
+
+    if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = new Date(filtros.dataAgendamentoFim).toISOString().slice(0, 10)
+    if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = new Date(filtros.dataAgendamentoInicio).toISOString().slice(0, 10)
+
+
+    this.agendamentoService.listarAgendamentos(filtros).subscribe({
+      next: (response) => {
+        this.agendamentos = response;
+      },
+      error: (error) => {
+        this.notificationService.fail('Erro ao pesquisar agendamentos');
+        console.error(error);
+      }
+    });
+
   }
 
   initFiltrosForm() {
@@ -150,9 +152,9 @@ export class AgendamentosComponent implements OnInit {
       label: 'Data',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => 1+ 1|| row.data.toLocaleDateString(),
+      getCellValue: (row) => new Date(row.dataAgendamento).toLocaleDateString(),
     },
-    { key: 'hora', label: 'Horário', width: 'large', align: 'left' },
+    { key: 'hora', label: 'Horário', width: 'large', align: 'left', getCellValue: (row) => row.horarioAgendamento.slice(0, 5), },
     {
       key: 'profissional',
       label: 'Profissional',
@@ -181,7 +183,7 @@ export class AgendamentosComponent implements OnInit {
       width: 'large',
       align: 'left',
       getCellValue: (row) =>
-        this.diaDaSemanaOptions.find((item) => item.value == row.diaDaSemana)?.label || '',
+        this.diaDaSemanaOptions.find((item) => item.value == row.diaSemana)?.label || '',
     },
     {
       key: 'status',
@@ -248,7 +250,7 @@ export class AgendamentosComponent implements OnInit {
   }
 
   private buscarProfissionais(): Observable<Usuario[]> {
-    return this.usuarioService.filtrarUsuarios({perfil: Roles.PROFISSIONAL, status: Status.Ativo}).pipe(
+    return this.usuarioService.filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo }).pipe(
       map((users) => {
         return users
           .map((u) => new Usuario(u))

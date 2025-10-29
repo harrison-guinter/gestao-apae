@@ -82,6 +82,12 @@ export class AutocompleteComponent<T = any> implements OnInit {
     this.cleared.emit();
   }
 
+  onBlur() {
+    if (this.control.value && typeof this.control.value === 'string') {
+      this.control.setValue(null);
+    }
+  }
+
   hasValue() {
     return !!this.control.value;
   }

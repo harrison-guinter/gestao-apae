@@ -10,9 +10,9 @@ export class Agendamento {
   assistidos: Assistido[]; 
   profissional: Usuario;
   tipoRecorrencia: TipoRecorrencia;
-  data: Date;
-  hora: string;
-  diaDaSemana?: DiaDaSemana;
+  dataAgendamento: Date;
+  horarioAgendamento: string;
+  diaSemana?: DiaDaSemana;
 
     constructor(
         id: string,
@@ -22,9 +22,9 @@ export class Agendamento {
         assistidos: Assistido[],
         profissional: Usuario,
         tipoRecorrencia: TipoRecorrencia,
-        data: Date,
-        hora: string,
-        diaDaSemana?: DiaDaSemana
+        dataAgendamento: Date,
+        horarioAgendamento: string,
+        diaSemana?: DiaDaSemana
     ) {
         this.id = id;
         this.nome = nome;
@@ -33,9 +33,9 @@ export class Agendamento {
         this.assistidos = assistidos;
         this.profissional = profissional;
         this.tipoRecorrencia = tipoRecorrencia;
-        this.data = data;
-        this.hora = hora;
-        this.diaDaSemana = diaDaSemana;
+        this.dataAgendamento = new Date(dataAgendamento);
+        this.horarioAgendamento = horarioAgendamento;
+        this.diaSemana = diaSemana;
     }
 }
 
