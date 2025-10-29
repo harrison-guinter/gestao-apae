@@ -12,21 +12,21 @@ public class AssistidoDto
     /// <summary>
     /// Nome do assistido
     /// </summary>
-    public string Nome { get; set; } = string.Empty;
+    public string? Nome { get; set; } = string.Empty;
 
     /// <summary>
     /// Indica se a entidade está ativa/inativa
     /// </summary>
-    public StatusEntidadeEnum Status { get; set; }
+    public StatusEntidadeEnum? Status { get; set; }
 
     /// <summary>
     /// Nome do convênio do assistido
     /// </summary>
-    public string NomeConvenio { get; set; }
+    public string? NomeConvenio { get; set; }
 
     /// <summary>
     /// Nome da Cidade do assistido
     /// </summary>
-    public string NomeCidade { get; set; }
+    public string? NomeCidade { get; set; }
 }
 
