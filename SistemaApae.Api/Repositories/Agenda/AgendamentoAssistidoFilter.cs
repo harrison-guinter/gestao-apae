@@ -20,7 +20,7 @@ public class AgendamentoAssistidoFilter : IRepositoryFilter<AgendamentoAssistido
         // Filtro por assistido
         if (filtros.IdAssistido != Guid.Empty)
         {
-            query = query.Filter(ga => ga.IdAssistido, Constants.Operator.Equals, filtros.IdAssistido);
+            query = query.Where(ga => ga.IdAssistido == filtros.IdAssistido);
         }
 
         // Filtro por status
