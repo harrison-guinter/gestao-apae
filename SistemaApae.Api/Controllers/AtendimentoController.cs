@@ -11,20 +11,18 @@ namespace SistemaApae.Api.Controllers;
 /// Controller com endpoints de CRUD da entidade Atendimento
 /// </summary>
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AtendimentoController : ControllerBase
 {
-    private readonly IService<Atendimento, AtendimentoFilterRequest> _service;
     private readonly AtendimentoService _atendimentoService;
 
     /// <summary>
     /// Inicializa uma nova instância do AtendimentoController
     /// </summary>
-    public AtendimentoController(IService<Atendimento, AtendimentoFilterRequest> service, AtendimentoService atendimentoService)
+    public AtendimentoController(AtendimentoService atendimentoService)
     {
-        _service = service;
         _atendimentoService = atendimentoService;
     }
 
@@ -39,7 +37,7 @@ public class AtendimentoController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ApiResponse<IEnumerable<Atendimento>>>> GetAppointmentByFilters([FromQuery] AtendimentoFilterRequest filters)
     {
-        var result = await _service.GetByFilters(filters);
+        var result = await _atendimentoService.GetByFilters(filters);
 
         if (!result.Success)
         {
@@ -66,7 +64,7 @@ public class AtendimentoController : ControllerBase
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
 
-        var result = await _service.GetById(id);
+        var result = await _atendimentoService.GetById(id);
 
         if (!result.Success)
         {

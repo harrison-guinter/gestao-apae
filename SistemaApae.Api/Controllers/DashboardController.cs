@@ -10,7 +10,7 @@ namespace SistemaApae.Api.Controllers;
 /// Controller com endpoints para o dashboard do sistema
 /// </summary>
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class DashboardController : ControllerBase
