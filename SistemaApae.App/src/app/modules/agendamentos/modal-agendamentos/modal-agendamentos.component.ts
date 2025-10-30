@@ -37,7 +37,7 @@ import { DatepickerComponent } from '../../core/date/datepicker/datepicker.compo
     AutocompleteMultipleComponent,
     AutocompleteComponent,
     MatRadioModule,
-    DatepickerComponent
+    DatepickerComponent,
   ],
   templateUrl: './modal-agendamentos.component.html',
   styleUrls: ['./modal-agendamentos.component.less'],
@@ -54,7 +54,7 @@ export class ModalAgendamentosComponent implements OnInit {
 
   private usuarioService: UsuarioService = inject(UsuarioService);
 
-  public tipoRecorrencia = TipoRecorrencia
+  public tipoRecorrencia = TipoRecorrencia;
 
   diaDaSemanaOptions: SelectOption[] = [
     { value: DiaDaSemana.SEGUNDA, label: 'Segunda' },
@@ -70,11 +70,10 @@ export class ModalAgendamentosComponent implements OnInit {
     { value: Status.Inativo, label: 'Inativo' },
   ];
 
-
   assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
     map((assistidos) =>
       assistidos.map((assistido) => ({
-        value: assistido,
+        value: assistido.id,
         label: assistido.nome,
       }))
     )
@@ -83,7 +82,7 @@ export class ModalAgendamentosComponent implements OnInit {
   profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
     map((users) =>
       users.map((user) => ({
-        value: user, 
+        value: user.id,
         label: user.nome,
       }))
     )
@@ -94,7 +93,7 @@ export class ModalAgendamentosComponent implements OnInit {
     public dialogRef: MatDialogRef<ModalAgendamentosComponent>,
     private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ModalData
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.isEdit = !!this.data?.data.isEdit;
@@ -106,13 +105,34 @@ export class ModalAgendamentosComponent implements OnInit {
 
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
-      profissional: [this.isEdit ? {value: object?.profissional, label: object.profissional.nome} : null, Validators.required],
-      assistidos: [object?.assistidos || '', [Validators.required]],
+      profissional: [
+        this.isEdit ? { value: object?.profissional, label: object.profissional.nome } : null,
+        Validators.required,
+      ],
+      assistidos: [
+        this.isEdit ? object.assistidos.map((i) => ({ label: i.nome, value: i.id })) : null,
+        [Validators.required],
+      ],
       tipoRecorrencia: [object?.tipoRecorrencia || TipoRecorrencia.NENHUM, Validators.required],
-      status: [{ value: object?.status || Status.Ativo, disabled: !this.isEdit}, Validators.required],
-      horarioAgendamento: [object?.horarioAgendamento ? object.horarioAgendamento.toString().slice(0,5) : "", [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]],
-      diaSemana: [{ value: object?.diaSemana, disabled: object?.tipoRecorrencia != TipoRecorrencia.SEMANAL }, object?.tipoRecorrencia == TipoRecorrencia.SEMANAL ? Validators.required : []],
-      dataAgendamento: [{ value: object?.dataAgendamento, disabled: object && object?.tipoRecorrencia != TipoRecorrencia.NENHUM }, object?.tipoRecorrencia == TipoRecorrencia.NENHUM || !object ? Validators.required : []],
+      status: [
+        { value: object?.status || Status.Ativo, disabled: !this.isEdit },
+        Validators.required,
+      ],
+      horarioAgendamento: [
+        object?.horarioAgendamento ? object.horarioAgendamento.toString().slice(0, 5) : '',
+        [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)],
+      ],
+      diaSemana: [
+        { value: object?.diaSemana, disabled: object?.tipoRecorrencia != TipoRecorrencia.SEMANAL },
+        object?.tipoRecorrencia == TipoRecorrencia.SEMANAL ? Validators.required : [],
+      ],
+      dataAgendamento: [
+        {
+          value: object?.dataAgendamento,
+          disabled: object && object?.tipoRecorrencia != TipoRecorrencia.NENHUM,
+        },
+        object?.tipoRecorrencia == TipoRecorrencia.NENHUM || !object ? Validators.required : [],
+      ],
       observacao: [object?.observacao || ''],
     });
 
@@ -126,17 +146,16 @@ export class ModalAgendamentosComponent implements OnInit {
 
       if (value == TipoRecorrencia.NENHUM) {
         this.formCadastro.get(`diaSemana`)?.clearValidators();
-        this.formCadastro.get(`diaSemana`)?.disable()
+        this.formCadastro.get(`diaSemana`)?.disable();
 
         this.formCadastro.get(`dataAgendamento`)?.addValidators(Validators.required);
-        this.formCadastro.get(`dataAgendamento`)?.enable()
+        this.formCadastro.get(`dataAgendamento`)?.enable();
       } else {
-
         this.formCadastro.get(`diaSemana`)?.addValidators(Validators.required);
-        this.formCadastro.get(`diaSemana`)?.enable()
+        this.formCadastro.get(`diaSemana`)?.enable();
 
         this.formCadastro.get(`dataAgendamento`)?.clearValidators();
-        this.formCadastro.get(`dataAgendamento`)?.disable()
+        this.formCadastro.get(`dataAgendamento`)?.disable();
       }
     });
   }
@@ -144,13 +163,20 @@ export class ModalAgendamentosComponent implements OnInit {
   valueFromForm(): Agendamento {
     const valor = this.formCadastro.value;
 
-    if (valor.dataAgendamento) valor.dataAgendamento = new Date(valor.dataAgendamento).toISOString().slice(0, 10)
+    if (valor.dataAgendamento)
+      valor.dataAgendamento = new Date(valor.dataAgendamento).toISOString().slice(0, 10);
 
-    return { ...valor, assistidos: (valor.assistidos as SelectOption[]).map(v => v.value), profissional: (valor.profissional as SelectOption).value } as Agendamento;
+    return {
+      ...valor,
+      assistidos: (valor.assistidos as SelectOption[]).map((v) => ({
+        idAssistido: v.value
+      })),
+      profissional: { idProfissional: (valor.profissional as SelectOption).value },
+    } as Agendamento;
   }
 
   onConfirm(): void {
-    this.multiAutocompleteComponent.controlInput.markAsDirty()
+    this.multiAutocompleteComponent.controlInput.markAsDirty();
     this.formCadastro.markAllAsTouched();
 
     if (!this.formCadastro.valid) {
@@ -166,18 +192,18 @@ export class ModalAgendamentosComponent implements OnInit {
     if (this.isEdit) {
       this.agendamentoService.editar(this.valueFromForm()).subscribe((val) => {
         this.notificationService.showSuccess('Agendamento editado com sucesso!');
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       });
     } else {
       this.agendamentoService.salvar(this.valueFromForm()).subscribe((val) => {
         this.notificationService.showSuccess('Agendamento salvo com sucesso!');
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       });
     }
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   private buscarProfissionais(): Observable<Usuario[]> {

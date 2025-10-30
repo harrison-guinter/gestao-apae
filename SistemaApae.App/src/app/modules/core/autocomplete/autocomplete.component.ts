@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { Observable, startWith, map } from 'rxjs';
+import { Observable, startWith, map, debounceTime } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectOption } from '../select/select.component';
 
@@ -47,6 +47,7 @@ export class AutocompleteComponent<T = any> implements OnInit {
 
   ngOnInit() {
     this.filteredOptions = this.control.valueChanges.pipe(
+      debounceTime(200),
       startWith(''),
       map(value => this._filter(value))
     );
@@ -58,7 +59,7 @@ export class AutocompleteComponent<T = any> implements OnInit {
         ? value.toLowerCase()
         : value?.label?.toLowerCase() || '';
 
-    return this.options.filter(option =>
+    return this.options.filter(option => 
       option.label.toLowerCase().includes(filterValue)
     );
   }
