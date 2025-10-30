@@ -27,6 +27,8 @@ import { PageInfoService } from '../services/page-info.service';
 export class SidebarComponent implements OnInit {
   constructor(private router: Router, private pageInfoService: PageInfoService) {}
 
+  public menuItems: any[] = [];
+
   ngOnInit() {
     this.pageInfoService.updatePageInfoByRoute(this.router.url);
 
@@ -35,42 +37,51 @@ export class SidebarComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.pageInfoService.updatePageInfoByRoute(event.url);
       });
+
+    if (this.isProfissional()) {
+      this.menuItems = [
+        { icon: 'dashboard', label: 'Dashboard', route: '/home/dashboard' },
+        {
+          icon: 'medical_services',
+          label: 'Atendimentos',
+          route: '/home/atendimentos-pendentes',
+        },
+      ];
+    } else {
+      this.menuItems = [
+        { icon: 'dashboard', label: 'Dashboard', route: '/home/dashboard' },
+        { icon: 'groups', label: 'Assistidos', route: '/home/assistidos' },
+        { icon: 'handshake', label: 'Convênios', route: '/home/convenios' },
+        { icon: 'event', label: 'Agendamentos', route: '/home/agendamentos' },
+        {
+          icon: 'medical_services',
+          label: 'Atendimentos',
+          route: '/home/atendimentos-realizados',
+        },
+        {
+          icon: 'bar_chart',
+          label: 'Relatórios',
+          children: [
+            {
+              icon: 'assignment',
+              label: 'Atendimentos',
+              route: '/home/relatorios/atendimentos',
+            },
+            { icon: 'event_busy', label: 'Faltas', route: '/home/relatorios/faltas' },
+            { icon: 'person', label: 'Individual', route: '/home/relatorios/individual' },
+            {
+              icon: 'check_circle',
+              label: 'Presenças',
+              route: '/home/relatorios/presencas',
+            },
+          ],
+        },
+        { icon: 'person_outline', label: 'Usuários', route: '/home/usuarios' },
+      ];
+    }
   }
 
   isProfissional(): boolean {
     return JSON.parse(localStorage.getItem('usuario')!).perfil === 'Profissional';
   }
-
-  menuItems = [
-    { icon: 'dashboard', label: 'Dashboard', route: '/home/dashboard' },
-    { icon: 'groups', label: 'Assistidos', route: '/home/assistidos' },
-    { icon: 'handshake', label: 'Convênios', route: '/home/convenios' },
-    { icon: 'event', label: 'Agendamentos', route: '/home/agendamentos' },
-    {
-      icon: 'medical_services',
-      label: 'Atendimentos',
-      route: this.isProfissional()
-        ? '/home/atendimentos-pendentes'
-        : '/home/atendimentos-realizados',
-    },
-    {
-      icon: 'bar_chart',
-      label: 'Relatórios',
-      children: [
-        {
-          icon: 'assignment',
-          label: 'Atendimentos',
-          route: '/home/relatorios/atendimentos',
-        },
-        { icon: 'event_busy', label: 'Faltas', route: '/home/relatorios/faltas' },
-        { icon: 'person', label: 'Individual', route: '/home/relatorios/individual' },
-        {
-          icon: 'check_circle',
-          label: 'Presenças',
-          route: '/home/relatorios/presencas',
-        },
-      ],
-    },
-    { icon: 'person_outline', label: 'Usuários', route: '/home/usuarios' },
-  ];
 }

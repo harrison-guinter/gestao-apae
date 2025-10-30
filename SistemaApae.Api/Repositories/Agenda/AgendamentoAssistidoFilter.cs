@@ -14,19 +14,19 @@ public class AgendamentoAssistidoFilter : IRepositoryFilter<AgendamentoAssistido
         // Filtro por agendamento
         if (filtros.IdAgendamento != Guid.Empty)
         {
-            query = query.Filter(ga => ga.IdAgendamento, Constants.Operator.Equals, filtros.IdAgendamento);
+            query = query.Where(ga => ga.IdAgendamento == filtros.IdAgendamento);
         }
 
         // Filtro por assistido
         if (filtros.IdAssistido != Guid.Empty)
         {
-            query = query.Filter(ga => ga.IdAssistido, Constants.Operator.Equals, filtros.IdAssistido);
+            query = query.Where(ga => ga.IdAssistido == filtros.IdAssistido);
         }
 
         // Filtro por status
         if (filtros.Status.HasValue)
         {
-            query = query.Filter(ga => ga.Status, Constants.Operator.Equals, filtros.Status.Value);
+            query = query.Filter(u => u.Status, Constants.Operator.Equals, (int)filtros.Status);
         }
 
         return query;

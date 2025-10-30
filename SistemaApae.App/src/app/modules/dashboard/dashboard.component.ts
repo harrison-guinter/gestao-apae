@@ -17,21 +17,27 @@ import { DashboardData } from './dashboard.service';
 export class DashboardComponent implements OnInit {
   dashboardData: DashboardData | null = null;
 
+  protected isProfissional: boolean;
+
   constructor(
     private pageInfoService: PageInfoService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    this.isProfissional = this.getIsProfissional();
+  }
+
+  getIsProfissional(): boolean {
+    return JSON.parse(localStorage.getItem('usuario')!).perfil === 'Profissional';
+  }
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Dashboard', 'Sistema de Gestão de Atendimentos');
-    this.activatedRoute.data.subscribe(({ data }) => {
-      this.dashboardData = data;
-      console.log('Dashboard data loaded:', this.dashboardData);
+    this.activatedRoute.data.subscribe((data) => {
+      this.dashboardData = data['DashboardResolver'].data;
     });
   }
 
-  // Métodos de navegação para os diferentes cadastros
   navigateToAssistidos(): void {
     this.router.navigate(['/home/assistidos/cadastro']);
   }
@@ -45,6 +51,10 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToAtendimentos(): void {
-    this.router.navigate(['/home/atendimentos']);
+    if (this.isProfissional) {
+      this.router.navigate(['/home/atendimentos-pendentes']);
+      return;
+    }
+    this.router.navigate(['/home/atendimentos-realizados']);
   }
 }

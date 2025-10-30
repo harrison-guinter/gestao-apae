@@ -51,8 +51,7 @@ import { DatepickerComponent } from '../../core/date/datepicker/datepicker.compo
     MatNativeDateModule,
     InputComponent,
     SelectComponent,
-    DatepickerComponent
-
+    DatepickerComponent,
   ],
   templateUrl: './cadastro-assistido.component.html',
   styleUrls: ['./cadastro-assistido.component.less'],
@@ -151,10 +150,16 @@ export class CadastroAssistidoComponent implements OnInit {
   }
 
   private preencherFormulario(assistido: Assistido): void {
+    let dataNasc: number[] = [];
+    if (assistido.dataNascimento) {
+      dataNasc = assistido.dataNascimento.split('-').map((part) => parseInt(part));
+    }
+
     this.formCadastro.patchValue({
       // Dados Pessoais
       nome: assistido.nome,
-      dataNascimento: assistido.dataNascimento ? new Date(assistido.dataNascimento) : null,
+      dataNascimento:
+        dataNasc.length > 0 ? new Date(dataNasc[0], dataNasc[1] - 1, dataNasc[2]) : null,
       cpf: assistido.cpf,
       sexo: assistido.sexo,
       naturalidade: assistido.naturalidade,

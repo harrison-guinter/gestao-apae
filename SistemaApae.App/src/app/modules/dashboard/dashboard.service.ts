@@ -23,19 +23,6 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   buscarDadosDashboard(): Observable<DashboardData> {
-    const params: any = {};
-
-    return this.http.get<{ data: any }>(`${this.baseUrl}Dashboard/stats`).pipe(
-      map((response) => ({
-        totalAssistidos: response.data.TotalAssistidos,
-        atendimentosHoje: response.data.AtendimentosHoje,
-        usuariosAtivos: response.data.UsuariosAtivos,
-        agendamentosPendentes: response.data.AgendamentosPendentes,
-        atendimentosSemana: response.data.AtendimentosSemana,
-        atendimentosMes: response.data.AtendimentosMes,
-        novosAssistidosMes: response.data.NovosAssistidosMes,
-        taxaPresenca: response.data.TaxaPresenca,
-      }))
-    );
+    return this.http.get<any>(`${this.baseUrl}Dashboard/stats`);
   }
 }

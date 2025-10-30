@@ -1,11 +1,18 @@
 import { Component, Input, Output, EventEmitter, ViewChild, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteSelectedEvent, MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
 import { Observable, startWith, map, debounceTime } from 'rxjs';
+=======
+import { Observable, startWith, map, debounce, debounceTime } from 'rxjs';
+>>>>>>> 632c473c0dcfcb36dde57393f1117fe75d5fe91b
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectOption } from '../select/select.component';
 
@@ -19,10 +26,10 @@ import { SelectOption } from '../select/select.component';
     MatInputModule,
     MatAutocompleteModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.less']
+  styleUrls: ['./autocomplete.component.less'],
 })
 export class AutocompleteComponent<T = any> implements OnInit {
   @ViewChild('input') input?: MatInput;
@@ -49,15 +56,13 @@ export class AutocompleteComponent<T = any> implements OnInit {
     this.filteredOptions = this.control.valueChanges.pipe(
       debounceTime(200),
       startWith(''),
-      map(value => this._filter(value))
+      map((value) => this._filter(value))
     );
   }
 
   private _filter(value: SelectOption | string | null): SelectOption[] {
     const filterValue =
-      typeof value === 'string'
-        ? value.toLowerCase()
-        : value?.label?.toLowerCase() || '';
+      typeof value === 'string' ? value.toLowerCase() : value?.label?.toLowerCase() || '';
 
     return this.options.filter(option => 
       option.label.toLowerCase().includes(filterValue)
@@ -95,7 +100,7 @@ export class AutocompleteComponent<T = any> implements OnInit {
 
   static selectOptionValidator(control: any) {
     const value = control.value;
-    if (!value) return null; 
+    if (!value) return null;
     if (typeof value === 'object' && 'value' in value && 'label' in value) return null;
     return { invalidSelectOption: true };
   }
