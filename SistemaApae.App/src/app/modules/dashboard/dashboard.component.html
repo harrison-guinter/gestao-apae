@@ -7,7 +7,7 @@
     </h3>
 
     <div class="quick-actions-grid">
-      <mat-card class="action-card" (click)="navigateToAssistidos()">
+      <mat-card *ngIf="!isProfissional" class="action-card" (click)="navigateToAssistidos()">
         <mat-card-content class="action-content">
           <mat-icon class="action-icon">person_add</mat-icon>
           <h4 class="action-title">Cadastrar Assistido</h4>
@@ -15,7 +15,7 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card class="action-card" (click)="navigateToUsuarios()">
+      <mat-card *ngIf="!isProfissional" class="action-card" (click)="navigateToUsuarios()">
         <mat-card-content class="action-content">
           <mat-icon class="action-icon">group_add</mat-icon>
           <h4 class="action-title">Cadastrar Usuário</h4>
@@ -23,7 +23,7 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card class="action-card" (click)="navigateToAgendamentos()">
+      <mat-card *ngIf="!isProfissional" class="action-card" (click)="navigateToAgendamentos()">
         <mat-card-content class="action-content">
           <mat-icon class="action-icon">event</mat-icon>
           <h4 class="action-title">Novo Agendamento</h4>
@@ -35,7 +35,7 @@
         <mat-card-content class="action-content">
           <mat-icon class="action-icon">medical_services</mat-icon>
           <h4 class="action-title">Registrar Atendimento</h4>
-          <p class="action-description">Registrar novo atendimento</p>
+          <p class="action-description">Registrar atendimento</p>
         </mat-card-content>
       </mat-card>
     </div>
