@@ -106,7 +106,7 @@ export class ModalAgendamentosComponent implements OnInit {
     this.formCadastro = this.formBuilder.group({
       id: [object?.id || null],
       profissional: [
-        this.isEdit ? { value: object?.profissional, label: object.profissional.nome } : null,
+        this.isEdit ? { value: object?.profissional.id, label: object.profissional.nome } : null,
         Validators.required,
       ],
       assistidos: [
@@ -169,9 +169,9 @@ export class ModalAgendamentosComponent implements OnInit {
     return {
       ...valor,
       assistidos: (valor.assistidos as SelectOption[]).map((v) => ({
-        idAssistido: v.value
+        id: v.value
       })),
-      profissional: { idProfissional: (valor.profissional as SelectOption).value },
+      profissional: { id: (valor.profissional as SelectOption).value },
     } as Agendamento;
   }
 
