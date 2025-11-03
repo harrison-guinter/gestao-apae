@@ -8,11 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-<<<<<<< HEAD
+
 import { Observable, startWith, map, debounceTime } from 'rxjs';
-=======
-import { Observable, startWith, map, debounce, debounceTime } from 'rxjs';
->>>>>>> 632c473c0dcfcb36dde57393f1117fe75d5fe91b
+
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectOption } from '../select/select.component';
 
@@ -64,9 +62,7 @@ export class AutocompleteComponent<T = any> implements OnInit {
     const filterValue =
       typeof value === 'string' ? value.toLowerCase() : value?.label?.toLowerCase() || '';
 
-    return this.options.filter(option => 
-      option.label.toLowerCase().includes(filterValue)
-    );
+    return this.options.filter((option) => option.label.toLowerCase().includes(filterValue));
   }
 
   displayFn(option: SelectOption | null): string {
