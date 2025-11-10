@@ -20,7 +20,7 @@ public class AgendamentoFilter : IRepositoryFilter<Agendamento, AgendamentoFilte
         // Filtro por profissional
         if (filtros.IdProfissional != Guid.Empty)
         {
-            query = query.Filter(a => a.IdProfissional!, Constants.Operator.Equals, filtros.IdProfissional);
+            query = query.Where(a => a.IdProfissional! == filtros.IdProfissional);
         }
 
         // Nota: NÃO aplicamos filtro de data aqui no banco de dados
