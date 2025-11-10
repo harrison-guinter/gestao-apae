@@ -22,6 +22,7 @@ import { AssistidoService } from '../../assistidos/assistido.service';
 import { Agendamento } from '../../agendamentos/agendamento';
 import { AgendamentoService } from '../../agendamentos/agendamento.service';
 import { Observable, map } from 'rxjs';
+import { DatepickerComponent as DateComponent } from '../../core/date/datepicker/datepicker.component';
 
 export interface ModalAtendimentosData {
   isEdit: boolean;
@@ -41,6 +42,7 @@ export interface ModalAtendimentosData {
     MatDatepickerModule,
     MatDialogModule,
     SelectComponent,
+    DateComponent,
   ],
   templateUrl: './modal-atendimentos.component.html',
   styleUrls: ['./modal-atendimentos.component.less'],
@@ -73,6 +75,7 @@ export class ModalAtendimentosComponent implements OnInit {
     private dialogRef: MatDialogRef<ModalAtendimentosComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    console.log(data);
     this.isEdit = data?.isEdit || false;
     this.isVisualizacao = data?.isVisualizacao || false;
     this.atendimento = data?.element;
@@ -100,9 +103,6 @@ export class ModalAtendimentosComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    if (this.atendimento) {
-      this.preencherForm();
-    }
   }
 
   initForm() {
@@ -117,15 +117,16 @@ export class ModalAtendimentosComponent implements OnInit {
     });
 
     if (this.isVisualizacao) {
-      this.form.disable();
+      //this.form.disable();
     }
+    this.preencherForm();
   }
 
   preencherForm() {
     if (this.atendimento) {
       this.form.patchValue({
         idAgendamento: this.atendimento.idAgendamento,
-        idAssistido: this.atendimento.idAssistido,
+        idAssistido: this.atendimento.assistido,
         dataAtendimento: this.atendimento.dataAtendimento,
         presenca: this.atendimento.presenca,
         avaliacao: this.atendimento.avaliacao,

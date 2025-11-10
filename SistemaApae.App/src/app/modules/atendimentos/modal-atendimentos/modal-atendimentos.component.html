@@ -10,7 +10,7 @@
     <div class="form-grid">
       <div class="form-row">
         <app-select
-          label="Agendamento *"
+          label="Profissional"
           [control]="$any(form.get('idAgendamento'))"
           [options]="(agendamentoOptions | async) || []"
           placeholder="Selecione um agendamento"
@@ -18,7 +18,7 @@
         </app-select>
 
         <app-select
-          label="Assistido *"
+          label="Assistido"
           [control]="$any(form.get('idAssistido'))"
           [options]="(assistidoOptions | async) || []"
           placeholder="Selecione um assistido"
@@ -27,15 +27,15 @@
       </div>
 
       <div class="form-row">
-        <app-datepicker
+        <app-date
           label="Data e Hora do Atendimento *"
           placeholder="Selecione a data"
-          [formControl]="$any(form.get('dataAtendimento'))"
+          [control]="$any(form.get('dataAtendimento'))"
         >
-        </app-datepicker>
+        </app-date>
 
         <app-select
-          label="Presença *"
+          label="Presença"
           [control]="$any(form.get('presenca'))"
           [options]="presencaOptions"
           placeholder="Selecione a presença"
@@ -71,7 +71,7 @@
 
       <div class="form-row">
         <app-select
-          label="Status *"
+          label="Status"
           [control]="$any(form.get('status'))"
           [options]="statusOptions"
           placeholder="Selecione o status"

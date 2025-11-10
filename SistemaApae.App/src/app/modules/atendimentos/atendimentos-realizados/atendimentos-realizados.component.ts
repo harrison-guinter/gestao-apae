@@ -203,12 +203,6 @@ export class AtendimentosRealizadosComponent implements OnInit {
 
   tableActions: TableAction[] = [
     {
-      icon: 'edit',
-      tooltip: 'Editar',
-      color: 'primary',
-      action: (row) => this.editarAtendimento(row),
-    },
-    {
       icon: 'visibility',
       tooltip: 'Visualizar',
       color: 'primary',
@@ -225,19 +219,6 @@ export class AtendimentosRealizadosComponent implements OnInit {
         disableClose: true,
         data: { isEdit: false },
         element: null,
-      })
-      .subscribe(() => this.pesquisarAtendimentos());
-  }
-
-  editarAtendimento(element: Atendimento) {
-    this.modalService
-      .openModal({
-        component: ModalAtendimentosComponent,
-        width: '80%',
-        height: 'auto',
-        disableClose: true,
-        data: { isEdit: true },
-        element: element,
       })
       .subscribe(() => this.pesquisarAtendimentos());
   }
