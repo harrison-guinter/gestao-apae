@@ -82,3 +82,6 @@ export class Usuario {
 
 //apae@apae
 //paulo1234
+
+// Login: mipedi7767@dwakm.com
+// Senha: swVIX&aTvO3y
