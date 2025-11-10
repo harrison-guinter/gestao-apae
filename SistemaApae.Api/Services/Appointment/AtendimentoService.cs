@@ -45,23 +45,17 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 return ApiResponse<IEnumerable<AtendimentoDto>>.ErrorResponse("Registros não foram encontrados");
             }
 
-            var response = new List<AtendimentoDto>();
-
-            foreach (var atendimento in result.Data)
+            var response = result.Data.Select(atendimento => new AtendimentoDto
             {
-                var assistido = await _assistidoService.GetById(atendimento.IdAssistido);
+                Id = atendimento.Id,
+                IdAgendamento = atendimento.IdAgendamento,
+                Assistido = new AssistidoAtendimentoDto(atendimento.Assistido!.Id, atendimento.Assistido.Nome),
+                DataAtendimento = atendimento.DataAtendimento,
+                Presenca = atendimento.Presenca,
+                Avaliacao = atendimento.Avaliacao,
+                Observacao = atendimento.Observacao,
 
-                response.Add(new AtendimentoDto
-                {
-                    Id = atendimento.Id,
-                    IdAgendamento = atendimento.IdAgendamento,
-                    Assistido = new AssistidoAtendimentoDto(assistido.Data!.Id, assistido.Data.Nome),
-                    DataAtendimento = atendimento.DataAtendimento,
-                    Presenca = atendimento.Presenca,
-                    Avaliacao = atendimento.Avaliacao,
-                    Observacao = atendimento.Observacao,
-                });
-            }
+            }).ToList();
 
             return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(response);
         }
@@ -86,17 +80,15 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 return ApiResponse<AtendimentoDto>.ErrorResponse("Registro não foi encontrado");
             }
 
-            var assistido = await _assistidoService.GetById(result.Data.IdAssistido);
-
             var response = new AtendimentoDto
             {
                 Id = result.Data.Id,
                 IdAgendamento = result.Data.IdAgendamento,
-                Assistido = new AssistidoAtendimentoDto(assistido.Data!.Id, assistido.Data.Nome),
+                Assistido = new AssistidoAtendimentoDto(result.Data.Assistido!.Id, result.Data.Assistido.Nome),
                 DataAtendimento = result.Data.DataAtendimento,
                 Presenca = result.Data.Presenca,
                 Avaliacao = result.Data.Avaliacao,
-                Observacao = result.Data.Observacao,
+                Observacao = result.Data.Observacao
             };
 
             return ApiResponse<AtendimentoDto>.SuccessResponse(response);
@@ -189,25 +181,18 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 );
             }
 
-            var atendimentosDto = new List<AtendimentoDto>();
-
-            foreach (var atendimento in result.Data)
+            var response = result.Data.Select(atendimento => new AtendimentoDto
             {
-                var assistido = await _assistidoService.GetById(atendimento.IdAssistido);
+                Id = atendimento.Id,
+                IdAgendamento = atendimento.IdAgendamento,
+                Assistido = new AssistidoAtendimentoDto(atendimento.Assistido!.Id, atendimento.Assistido.Nome),
+                DataAtendimento = atendimento.DataAtendimento,
+                Presenca = atendimento.Presenca,
+                Avaliacao = atendimento.Avaliacao,
+                Observacao = atendimento.Observacao
+            }).ToList();
 
-                atendimentosDto.Add(new AtendimentoDto
-                {
-                    Id = atendimento.Id,
-                    IdAgendamento = atendimento.IdAgendamento,
-                    Assistido = new AssistidoAtendimentoDto(assistido.Data!.Id, assistido.Data.Nome),
-                    DataAtendimento = atendimento.DataAtendimento,
-                    Presenca = atendimento.Presenca,
-                    Avaliacao = atendimento.Avaliacao,
-                    Observacao = atendimento.Observacao,
-                });
-            }
-
-            return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(atendimentosDto);
+            return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(response);
         }
         catch (Exception ex)
         {
