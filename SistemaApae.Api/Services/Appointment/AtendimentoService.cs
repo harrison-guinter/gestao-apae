@@ -50,11 +50,11 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 Id = atendimento.Id,
                 IdAgendamento = atendimento.IdAgendamento,
                 Assistido = new AssistidoAtendimentoDto(atendimento.Assistido!.Id, atendimento.Assistido.Nome),
+                Profissional = new ProfissionalAtendimentoDto(atendimento.Profissional!.Id, atendimento.Profissional.Nome),
                 DataAtendimento = atendimento.DataAtendimento,
                 Presenca = atendimento.Presenca,
                 Avaliacao = atendimento.Avaliacao,
-                Observacao = atendimento.Observacao,
-
+                Observacao = atendimento.Observacao
             }).ToList();
 
             return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(response);
@@ -85,6 +85,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 Id = result.Data.Id,
                 IdAgendamento = result.Data.IdAgendamento,
                 Assistido = new AssistidoAtendimentoDto(result.Data.Assistido!.Id, result.Data.Assistido.Nome),
+                Profissional = new ProfissionalAtendimentoDto(result.Data.Profissional!.Id, result.Data.Profissional.Nome),
                 DataAtendimento = result.Data.DataAtendimento,
                 Presenca = result.Data.Presenca,
                 Avaliacao = result.Data.Avaliacao,
