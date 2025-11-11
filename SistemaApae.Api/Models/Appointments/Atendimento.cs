@@ -1,4 +1,5 @@
 using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Patients;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -48,5 +49,11 @@ public class Atendimento : ApiBaseModel
     /// </summary>
     [Column("observacao")]
     public string? Observacao { get; set; }
+
+    /// <summary>
+    /// Navegação do assistido (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Assistido), includeInQuery: true)]
+    public Assistido? Assistido { get; set; }
 
 }

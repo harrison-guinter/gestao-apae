@@ -43,14 +43,14 @@ public class AssistidoAtendimentoDto
 {
     public AssistidoAtendimentoDto(Guid id, string nome)
     {
-        IdAssistido = id;
+        Id = id;
         Nome = nome;
     }
 
     /// <summary>
     /// ID do Assistido associado
     /// </summary>
-    public Guid IdAssistido { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Nome do assistido
