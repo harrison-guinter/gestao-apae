@@ -60,7 +60,7 @@ export class ModalAtendimentosComponent implements OnInit {
 
   private assistidoService: AssistidoService = inject(AssistidoService);
 
-  assistidosOptions$: any;
+  protected assistidosOptions$: any;
 
   protected profissionalOptions$: any;
 
@@ -131,7 +131,7 @@ export class ModalAtendimentosComponent implements OnInit {
     });
 
     if (this.isVisualizacao) {
-      //this.form.disable();
+      this.form.disable();
     }
     this.preencherForm();
   }

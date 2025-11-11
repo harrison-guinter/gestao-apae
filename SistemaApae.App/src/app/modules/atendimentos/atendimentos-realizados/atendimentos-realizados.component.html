@@ -9,7 +9,7 @@
     <app-select
       label="Assistido"
       [control]="$any(filtrosForm.get('assistido'))"
-      [options]="(assistidoOptions | async) || []"
+      [options]="(assistidosOptions$ | async) || []"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
       placeholder="Selecione um assistido"
@@ -17,12 +17,12 @@
     </app-select>
 
     <app-select
-      label="Agendamento"
-      [control]="$any(filtrosForm.get('agendamento'))"
-      [options]="(agendamentoOptions | async) || []"
+      label="Profissional"
+      [control]="$any(filtrosForm.get('profissional'))"
+      [options]="(profissionalOptions$ | async) || []"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um agendamento"
+      placeholder="Selecione um profissional"
     >
     </app-select>
 

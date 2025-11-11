@@ -5,11 +5,11 @@ import { map, Observable, of } from 'rxjs';
 import { Atendimento, StatusAtendimentoEnum } from './atendimento';
 import { Status } from '../core/enum/status.enum';
 import { Assistido } from '../assistidos/assistido';
-import { Agendamento } from '../agendamentos/agendamento';
+import { Usuario } from '../usuarios/usuario';
 
 export interface AtendimentoFiltro {
-  idAgendamento?: string;
-  idAssistido?: string;
+  profissional?: Usuario;
+  assistido?: Assistido;
   dataInicioAtendimento?: Date;
   dataFimAtendimento?: Date;
   presenca?: StatusAtendimentoEnum;
@@ -27,49 +27,41 @@ export class AtendimentoService {
   listarAtendimentos(filtro: AtendimentoFiltro = {}): Observable<Atendimento[]> {
     // Preparar parâmetros para a API
     const params: any = {};
-    
-    if (filtro.idAgendamento) {
-      params.IdAgendamento = filtro.idAgendamento;
-    }
-    
-    if (filtro.idAssistido) {
-      params.IdAssistido = filtro.idAssistido;
-    }
-    
-    if (filtro.dataInicioAtendimento) {
-      params.DataInicioAtendimento = filtro.dataInicioAtendimento.toISOString();
-    }
-    
-    if (filtro.dataFimAtendimento) {
-      params.DataFimAtendimento = filtro.dataFimAtendimento.toISOString();
-    }
-    
-    if (filtro.presenca !== undefined) {
-      params.Presenca = filtro.presenca;
+
+    if (filtro.profissional?.id) {
+      params.idProfissional = filtro.profissional.id;
     }
 
-    return this.http
-      .get<{ data: any[] }>(`${this.baseUrl}Atendimento/filter`, { params })
-      .pipe(
-        map((response) => response.data.map(item => new Atendimento(item))),
-        map((atendimentos) => atendimentos)
-      );
+    if (filtro.assistido?.id) {
+      params.idAssistido = filtro.assistido.id;
+    }
+
+    if (filtro.dataInicioAtendimento) {
+      params.dataInicioAtendimento = filtro.dataInicioAtendimento.toISOString();
+    }
+
+    if (filtro.dataFimAtendimento) {
+      params.dataFimAtendimento = filtro.dataFimAtendimento.toISOString();
+    }
+
+    if (filtro.presenca !== undefined) {
+      params.presenca = filtro.presenca;
+    }
+
+    return this.http.get<{ data: any[] }>(`${this.baseUrl}Atendimento/filter`, { params }).pipe(
+      map((response) => response.data.map((item) => new Atendimento(item))),
+      map((atendimentos) => atendimentos)
+    );
   }
 
   buscarPorId(id: string): Observable<Atendimento | null> {
     return this.http
       .get<{ data: any }>(`${this.baseUrl}Atendimento/${id}`)
-      .pipe(
-        map((response) => new Atendimento(response.data))
-      );
+      .pipe(map((response) => new Atendimento(response.data)));
   }
 
-  buscarPorAgendamento(idAgendamento: string): Observable<Atendimento[]> {
-    return this.listarAtendimentos({ idAgendamento });
-  }
-
-  buscarPorAssistido(idAssistido: string): Observable<Atendimento[]> {
-    return this.listarAtendimentos({ idAssistido });
+  buscarPorAssistido(assistido: Assistido): Observable<Atendimento[]> {
+    return this.listarAtendimentos({ assistido });
   }
 
   salvar(atendimento: Atendimento): Observable<void> {
@@ -83,6 +75,4 @@ export class AtendimentoService {
   excluir(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}Atendimento/${id}`);
   }
-
-
 }
