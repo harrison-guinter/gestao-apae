@@ -42,17 +42,13 @@ public class Repository<TEntity, TFilter> : IRepository<TEntity, TFilter>
 
             var filtered = _filter.Apply(table, filtros);
 
-            // Aplica paginação se o filtro suportar IBaseFilter
-            if (filtros is IBaseFilter paged)
+            // Aplica paginação somente se o filtro suportar IBaseFilter e Limit tiver sido informado
+            if (filtros is IBaseFilter paged && paged.Limit.HasValue)
             {
-                var limit = paged.Limit ?? 50;
+                var limit = paged.Limit.Value;
                 var from = paged.Skip.GetValueOrDefault(0);
                 var to = from + Math.Max(0, limit - 1);
                 filtered = filtered.Range(from, to);
-            }
-            else
-            {
-                filtered = filtered.Range(0, 49);
             }
 
             var response = await filtered.Get();

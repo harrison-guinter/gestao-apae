@@ -11,6 +11,12 @@ public class AgendamentoAssistidoFilter : IRepositoryFilter<AgendamentoAssistido
         if (filtros == null)
             return query;
 
+        // Filtro por lista de agendamentos (busca em lote)
+        if (filtros.IdsAgendamento != null && filtros.IdsAgendamento.Count > 0)
+        {
+            query = query.Filter(ga => ga.IdAgendamento, Constants.Operator.In, filtros.IdsAgendamento);
+        }
+
         // Filtro por agendamento
         if (filtros.IdAgendamento != Guid.Empty)
         {

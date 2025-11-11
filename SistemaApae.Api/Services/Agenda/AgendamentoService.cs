@@ -212,8 +212,42 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
             }
 
             // Buscar dados completos para o DTO de resposta
-            var profissionalDto = await BuscarProfissionalCompletoAsync(agendamentoResult.Data.IdProfissional);
-            var assistidosDtos = await BuscarAssistidosDoAgendamentoAsync(dto.Id);
+            var profissionalDto = agendamentoResult.Data.Profissional != null
+                ? new UsuarioDto
+                {
+                    Id = agendamentoResult.Data.Profissional.Id,
+                    Nome = agendamentoResult.Data.Profissional.Nome,
+                    Email = agendamentoResult.Data.Profissional.Email,
+                    Telefone = agendamentoResult.Data.Profissional.Telefone,
+                    Perfil = agendamentoResult.Data.Profissional.Perfil,
+                    RegistroProfissional = agendamentoResult.Data.Profissional.RegistroProfissional,
+                    Especialidade = agendamentoResult.Data.Profissional.Especialidade,
+                    Observacao = agendamentoResult.Data.Profissional.Observacao
+                }
+				: new UsuarioDto { Id = agendamentoResult.Data.IdProfissional };
+
+			var relacionamentosUpdateResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
+			{
+				IdAgendamento = dto.Id,
+				Status = null
+			});
+
+			var assistidosDtos = (relacionamentosUpdateResult.Success && relacionamentosUpdateResult.Data != null)
+				? relacionamentosUpdateResult.Data
+					.Select(r => r.Assistido)
+					.Where(a => a != null)
+					.Cast<Assistido>()
+					.GroupBy(a => a.Id)
+					.Select(g => g.First())
+					.Select(a => new AssistidoDto
+					{
+						Id = a.Id,
+						Nome = a.Nome,
+						NomeConvenio = a.Convenio?.Nome,
+						NomeCidade = a.Municipio?.Nome
+					})
+					.ToList()
+				: new List<AssistidoDto>();
 
             // Montar o DTO de resposta
             var responseDto = new AgendamentoResponseDto
@@ -245,29 +279,71 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
     {
         try
         {
-            // Buscar o agendamento usando o método base
-            var agendamentoResult = await base.GetById(id);
-            
-            if (!agendamentoResult.Success || agendamentoResult.Data == null)
-            {
-                return ApiResponse<AgendamentoResponseDto>.ErrorResponse("Agendamento não encontrado");
-            }
+			// Primeiro, buscar relacionamentos e aproveitar embeds para reduzir round-trips
+			var relacionamentosByIdResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
+			{
+				IdAgendamento = id,
+				Status = null
+			});
+
+			Agendamento? agendamentoEntity = relacionamentosByIdResult.Success && relacionamentosByIdResult.Data != null
+				? relacionamentosByIdResult.Data.FirstOrDefault()?.Agendamento
+				: null;
+
+			// Se não veio embed do agendamento (ou não existem assistidos), buscar o agendamento diretamente
+			if (agendamentoEntity == null)
+			{
+				var agendamentoResult = await base.GetById(id);
+				if (!agendamentoResult.Success || agendamentoResult.Data == null)
+				{
+					return ApiResponse<AgendamentoResponseDto>.ErrorResponse("Agendamento não encontrado");
+				}
+				agendamentoEntity = agendamentoResult.Data;
+			}
 
             // Buscar dados completos para o DTO de resposta
-            var profissionalDto = await BuscarProfissionalCompletoAsync(agendamentoResult.Data.IdProfissional);
-            var assistidosDtos = await BuscarAssistidosDoAgendamentoAsync(id);
+			var profissionalDto = agendamentoEntity.Profissional != null
+                ? new UsuarioDto
+                {
+					Id = agendamentoEntity.Profissional.Id,
+					Nome = agendamentoEntity.Profissional.Nome,
+					Email = agendamentoEntity.Profissional.Email,
+					Telefone = agendamentoEntity.Profissional.Telefone,
+					Perfil = agendamentoEntity.Profissional.Perfil,
+					RegistroProfissional = agendamentoEntity.Profissional.RegistroProfissional,
+					Especialidade = agendamentoEntity.Profissional.Especialidade,
+					Observacao = agendamentoEntity.Profissional.Observacao
+                }
+				: new UsuarioDto { Id = agendamentoEntity.IdProfissional };
+
+			var assistidosDtos = (relacionamentosByIdResult.Success && relacionamentosByIdResult.Data != null)
+				? relacionamentosByIdResult.Data
+					.Select(r => r.Assistido)
+					.Where(a => a != null)
+					.Cast<Assistido>()
+					.GroupBy(a => a.Id)
+					.Select(g => g.First())
+					.Select(a => new AssistidoDto
+					{
+						Id = a.Id,
+						Nome = a.Nome,
+						NomeConvenio = a.Convenio?.Nome,
+						NomeCidade = a.Municipio?.Nome
+					})
+					.ToList()
+				: new List<AssistidoDto>();
 
             // Montar o DTO de resposta
             var responseDto = new AgendamentoResponseDto
             {
-                Id = agendamentoResult.Data.Id,
+				Id = agendamentoEntity.Id,
                 Profissional = profissionalDto,
-                TipoRecorrencia = agendamentoResult.Data.TipoRecorrencia,
-                HorarioAgendamento = agendamentoResult.Data.HorarioAgendamento,
-                DataAgendamento = agendamentoResult.Data.DataAgendamento,
-                DiaSemana = agendamentoResult.Data.DiaSemana,
-                Observacao = agendamentoResult.Data.Observacao,
-                Status = agendamentoResult.Data.Status,
+				TipoRecorrencia = agendamentoEntity.TipoRecorrencia,
+				HorarioAgendamento = agendamentoEntity.HorarioAgendamento,
+				DataAgendamento = agendamentoEntity.DataAgendamento,
+				DiaSemana = agendamentoEntity.DiaSemana,
+				Observacao = agendamentoEntity.Observacao,
+				Status = agendamentoEntity.Status,
                 Assistidos = assistidosDtos
             };
 
@@ -294,7 +370,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
                 var filterAssistido = new AgendamentoAssistidoFilterRequest 
                 { 
                     IdAssistido = filtros.IdAssistido,
-                    Status = StatusEntidadeEnum.Ativo
+                    Status = null
                 };
                 var relacionamentosResult = await _agendamentoAssistidoService.GetByFilters(filterAssistido);
                 
@@ -334,13 +410,65 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
                     .Where(a => idsAgendamentosPorAssistido.Contains(a.Id));
             }
 
+            // Bulk: buscar relacionamentos e assistidos em lote para evitar N+1
             var responseDtos = new List<AgendamentoResponseDto>();
 
-            // Para cada agendamento, buscar profissional e assistidos
+            var idsAgendamentos = agendamentosFiltrados.Select(a => a.Id).ToList();
+
+            var relacionamentosTodosResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
+            {
+                IdsAgendamento = idsAgendamentos,
+                Status = null
+            });
+
+            var relacionamentos = (relacionamentosTodosResult.Success && relacionamentosTodosResult.Data != null)
+                ? relacionamentosTodosResult.Data.ToList()
+                : new List<AgendamentoAssistido>();
+
+            var agendamentoParaAssistidos = relacionamentos
+                .GroupBy(r => r.IdAgendamento)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g
+                        .Select(r => r.Assistido)
+                        .Where(a => a != null)
+                        .Cast<Assistido>()
+                        .GroupBy(a => a.Id)
+                        .Select(grp => grp.First())
+                        .ToList()
+                );
+
+            // Para cada agendamento, montar DTO com profissional e assistidos do mapa
+
             foreach (var agendamento in agendamentosFiltrados)
             {
-                var profissionalDto = await BuscarProfissionalCompletoAsync(agendamento.IdProfissional);
-                var assistidosDtos = await BuscarAssistidosDoAgendamentoAsync(agendamento.Id);
+                var profissionalDto = agendamento.Profissional != null
+                    ? new UsuarioDto
+                    {
+                        Id = agendamento.Profissional.Id,
+                        Nome = agendamento.Profissional.Nome,
+                        Email = agendamento.Profissional.Email,
+                        Telefone = agendamento.Profissional.Telefone,
+                        Perfil = agendamento.Profissional.Perfil,
+                        RegistroProfissional = agendamento.Profissional.RegistroProfissional,
+                        Especialidade = agendamento.Profissional.Especialidade,
+                        Observacao = agendamento.Profissional.Observacao
+                    }
+					: new UsuarioDto { Id = agendamento.IdProfissional };
+
+                var assistidosDoAgendamento = agendamentoParaAssistidos.TryGetValue(agendamento.Id, out var listaAssistidos)
+                    ? listaAssistidos
+                    : new List<Assistido>();
+
+                var assistidosDtos = assistidosDoAgendamento
+                    .Select(a => new AssistidoDto
+                    {
+                        Id = a.Id,
+                        Nome = a.Nome,
+                        NomeConvenio = a.Convenio?.Nome,
+                        NomeCidade = a.Municipio?.Nome
+                    })
+                    .ToList();
 
                 responseDtos.Add(new AgendamentoResponseDto
                 {
@@ -397,15 +525,68 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
 
             var responseDtos = new List<AgendamentoResponseDto>();
 
+            // Bulk assistidos para os agendamentos do profissional no dia
+            var idsAgendamentos = agendamentosFiltrados.Select(a => a.Id).ToList();
+
+            var relacionamentosProfResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
+            {
+                IdsAgendamento = idsAgendamentos,
+                Status = null
+            });
+
+            var relacionamentos = (relacionamentosProfResult.Success && relacionamentosProfResult.Data != null)
+                ? relacionamentosProfResult.Data.ToList()
+                : new List<AgendamentoAssistido>();
+
+            var agendamentoParaAssistidos = relacionamentos
+                .GroupBy(r => r.IdAgendamento)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g
+                        .Select(r => r.Assistido)
+                        .Where(a => a != null)
+                        .Cast<Assistido>()
+                        .GroupBy(a => a.Id)
+                        .Select(grp => grp.First())
+                        .ToList()
+                );
+
+            // Buscar atendimentos do dia em lote para todos os agendamentos filtrados
+            var atendimentosPorAgendamento = await _atendimentoService.GetByAgendamentosAndDate(idsAgendamentos, dataBase);
+
             foreach (var agendamento in agendamentosFiltrados)
             {
-                var profissionalDto = await BuscarProfissionalCompletoAsync(agendamento.IdProfissional);
-                var assistidosDtos = await BuscarAssistidosDoAgendamentoAsync(agendamento.Id);
+                var profissionalDto = agendamento.Profissional != null
+                    ? new UsuarioDto
+                    {
+                        Id = agendamento.Profissional.Id,
+                        Nome = agendamento.Profissional.Nome,
+                        Email = agendamento.Profissional.Email,
+                        Telefone = agendamento.Profissional.Telefone,
+                        Perfil = agendamento.Profissional.Perfil,
+                        RegistroProfissional = agendamento.Profissional.RegistroProfissional,
+                        Especialidade = agendamento.Profissional.Especialidade,
+                        Observacao = agendamento.Profissional.Observacao
+                    }
+					: new UsuarioDto { Id = agendamento.IdProfissional };
 
-                // Buscar atendimentos do dia
-                var atendimentosDoDiaResult = await _atendimentoService.GetByAgendamentoAndDate(agendamento.Id, dataBase);
-                var atendimentosDoDia = atendimentosDoDiaResult.Success && atendimentosDoDiaResult.Data != null 
-                    ? atendimentosDoDiaResult.Data.ToList() 
+                var assistidosDoAgendamento = agendamentoParaAssistidos.TryGetValue(agendamento.Id, out var listaAssistidos)
+                    ? listaAssistidos
+                    : new List<Assistido>();
+
+                var assistidosDtos = assistidosDoAgendamento
+                    .Select(a => new AssistidoDto
+                    {
+                        Id = a.Id,
+                        Nome = a.Nome,
+                        NomeConvenio = a.Convenio?.Nome,
+                        NomeCidade = a.Municipio?.Nome
+                    })
+                    .ToList();
+
+                // Atendimentos do dia (bulk resolvido acima)
+                var atendimentosDoDia = atendimentosPorAgendamento.TryGetValue(agendamento.Id, out var listaAtendimentos)
+                    ? listaAtendimentos
                     : new List<AtendimentoDto>();
 
                 responseDtos.Add(new AgendamentoResponseDto
@@ -566,62 +747,6 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
                 _logger.LogWarning($"Erro ao criar relacionamento entre agendamento {idAgendamento} e assistido {idAssistido}");
             }
         }
-    }
-
-    /// <summary>
-    /// Busca dados completos do profissional
-    /// </summary>
-    private async Task<UsuarioDto> BuscarProfissionalCompletoAsync(Guid idProfissional)
-    {
-        var profissionalCompleto = await _usuarioService.GetById(idProfissional);
-        
-        if (profissionalCompleto.Success && profissionalCompleto.Data != null)
-        {
-            return new UsuarioDto
-            {
-                Id = profissionalCompleto.Data.Id,
-                Nome = profissionalCompleto.Data.Nome,
-                Email = profissionalCompleto.Data.Email,
-                Telefone = profissionalCompleto.Data.Telefone,
-                Perfil = profissionalCompleto.Data.Perfil,
-                RegistroProfissional = profissionalCompleto.Data.RegistroProfissional,
-                Especialidade = profissionalCompleto.Data.Especialidade,
-                Observacao = profissionalCompleto.Data.Observacao
-            };
-        }
-
-        return new UsuarioDto { Id = idProfissional, Nome = "Profissional não encontrado" };
-    }
-
-    /// <summary>
-    /// Busca dados completos dos assistidos de um agendamento
-    /// </summary>
-    private async Task<List<AssistidoDto>> BuscarAssistidosDoAgendamentoAsync(Guid idAgendamento)
-    {
-        var filter = new AgendamentoAssistidoFilterRequest 
-        { 
-            IdAgendamento = idAgendamento
-        };
-        var relacionamentosResult = await _agendamentoAssistidoService.GetByFilters(filter);
-        
-        var assistidosDtos = new List<AssistidoDto>();
-        if (relacionamentosResult.Success && relacionamentosResult.Data != null)
-        {
-            foreach (var rel in relacionamentosResult.Data)
-            {
-                var assistidoCompleto = await _assistidoService.GetById(rel.IdAssistido);
-                if (assistidoCompleto.Success && assistidoCompleto.Data != null)
-                {
-                    assistidosDtos.Add(new AssistidoDto
-                    {
-                        Id = assistidoCompleto.Data.Id,
-                        Nome = assistidoCompleto.Data.Nome
-                    });
-                }
-            }
-        }
-
-        return assistidosDtos;
     }
 
     #endregion

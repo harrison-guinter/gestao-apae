@@ -9,6 +9,11 @@ namespace SistemaApae.Api.Models.Appointment;
 public class AtendimentoFilterRequest : BaseFilter
 {
     /// <summary>
+    /// Lista de IDs de agendamentos para busca em lote
+    /// </summary>
+    public List<Guid>? IdsAgendamento { get; set; }
+
+    /// <summary>
     /// ID do agendamento
     /// </summary>
     public Guid IdAgendamento { get; set; } = Guid.Empty;

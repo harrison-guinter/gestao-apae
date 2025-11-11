@@ -134,6 +134,61 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
     }
 
     /// <summary>
+    /// Busca atendimentos por uma lista de agendamentos em uma data específica (bulk)
+    /// </summary>
+    /// <param name="idsAgendamento">IDs dos agendamentos</param>
+    /// <param name="data">Data do atendimento</param>
+    /// <returns>Dicionário mapeando IdAgendamento -> lista de atendimentos</returns>
+    public async Task<Dictionary<Guid, List<AtendimentoDto>>> GetByAgendamentosAndDate(
+        IEnumerable<Guid> idsAgendamento,
+        DateOnly data)
+    {
+        var ids = idsAgendamento?.Distinct().ToList() ?? new List<Guid>();
+        if (ids.Count == 0)
+            return new Dictionary<Guid, List<AtendimentoDto>>();
+
+        try
+        {
+            var dataInicio = data.ToDateTime(TimeOnly.MinValue);
+            var dataFim = data.ToDateTime(TimeOnly.MaxValue);
+
+            var filtros = new AtendimentoFilterRequest
+            {
+                IdsAgendamento = ids,
+                DataInicioAtendimento = dataInicio,
+                DataFimAtendimento = dataFim
+            };
+
+            var result = await base.GetByFilters(filtros);
+            var vazia = new Dictionary<Guid, List<AtendimentoDto>>();
+
+            if (!result.Success || result.Data == null)
+                return vazia;
+
+            return result.Data
+                .GroupBy(a => a.IdAgendamento)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(a => new AtendimentoDto
+                    {
+                        Id = a.Id,
+                        IdAgendamento = a.IdAgendamento,
+                        IdAssistido = a.IdAssistido,
+                        DataAtendimento = a.DataAtendimento,
+                        Presenca = a.Presenca,
+                        Avaliacao = a.Avaliacao,
+                        Observacao = a.Observacao
+                    }).ToList()
+                );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar atendimentos em lote por data");
+            return new Dictionary<Guid, List<AtendimentoDto>>();
+        }
+    }
+
+    /// <summary>
     /// Valida se agendamento existe
     /// </summary>
     private async Task<bool> SchedulingExistsAsync(Guid id)
