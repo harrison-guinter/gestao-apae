@@ -1,6 +1,5 @@
 using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Enums;
-using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 using Supabase.Postgrest.Attributes;
@@ -28,18 +27,6 @@ public class Atendimento : ApiBaseModel
     [Required]
     [Column("id_assistido")]
     public Guid IdAssistido { get; set; }
-
-    /// <summary>
-    /// Navegação do agendamento (embed via PostgREST)
-    /// </summary>
-    [Reference(typeof(Agendamento), includeInQuery: true)]
-    public Agendamento? Agendamento { get; set; }
-
-    /// <summary>
-    /// Navegação do assistido (embed via PostgREST)
-    /// </summary>
-    [Reference(typeof(Assistido), includeInQuery: true)]
-    public Assistido? Assistido { get; set; }
 
     /// <summary>
     /// Data e hora do atendimento

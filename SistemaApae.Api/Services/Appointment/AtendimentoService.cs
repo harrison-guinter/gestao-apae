@@ -242,7 +242,6 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                     {
                         Id = a.Id,
                         IdAgendamento = a.IdAgendamento,
-                        IdAssistido = a.IdAssistido,
                         DataAtendimento = a.DataAtendimento,
                         Presenca = a.Presenca,
                         Avaliacao = a.Avaliacao,
