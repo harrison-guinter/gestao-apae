@@ -71,7 +71,7 @@ export class AgendamentosComponent implements OnInit {
     )
   );
 
-    assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
+  assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
     map((assistidos) =>
       assistidos.map((assistido) => ({
         value: assistido,
@@ -90,7 +90,7 @@ export class AgendamentosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar convênios do sistema');
+    this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar agendamentos do sistema');
 
     this.initFiltrosForm();
   }

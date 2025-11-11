@@ -1,17 +1,18 @@
 import { Status } from '../core/enum/status.enum';
 import { Assistido } from '../assistidos/assistido';
 import { Agendamento } from '../agendamentos/agendamento';
+import { Usuario } from '../usuarios/usuario';
 
 export enum StatusAtendimentoEnum {
-  PRESENTE = 0,
-  FALTA = 1,
-  FALTA_JUSTIFICADA = 2,
+  PRESENTE = 'PRESENCA',
+  FALTA = 'FALTA',
+  FALTA_JUSTIFICADA = 'JUSTIFICADA',
 }
 
 export class Atendimento {
   id: string;
-  idAgendamento: string;
-  idAssistido: string;
+  profissional: Usuario;
+  assistido: Assistido;
   dataAtendimento?: Date;
   presenca?: StatusAtendimentoEnum;
   avaliacao?: string;
@@ -20,14 +21,10 @@ export class Atendimento {
   createdAt?: Date;
   updatedAt?: Date;
 
-  // Propriedades de relacionamento para exibição
-  assistido?: Assistido;
-  agendamento?: Agendamento;
-
   constructor(data: any = {}) {
     this.id = data.id || '';
-    this.idAgendamento = data.idAgendamento || data.id_agendamento || '';
-    this.idAssistido = data.idAssistido || data.id_assistido || '';
+    this.profissional = data.profissional || data.profissional || '';
+    this.assistido = data.assistido || data.assistido || '';
     this.dataAtendimento = data.dataAtendimento
       ? new Date(data.dataAtendimento)
       : data.data_atendimento
@@ -50,7 +47,7 @@ export class Atendimento {
 
     // Relacionamentos
     this.assistido = data.assistido || undefined;
-    this.agendamento = data.agendamento || undefined;
+    this.profissional = data.profissional || undefined;
   }
 
   get presencaTexto(): string {

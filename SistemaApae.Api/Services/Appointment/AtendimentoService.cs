@@ -32,6 +32,76 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
     }
 
     /// <summary>
+    /// Lista atendimentos por filtros de pesquisa
+    /// </summary>
+    public async Task<ApiResponse<IEnumerable<AtendimentoDto>>> GetByFilters(AtendimentoFilterRequest filters)
+    {
+        try
+        {
+            var result = await base.GetByFilters(filters);
+
+            if (!result.Success || result.Data == null)
+            {
+                return ApiResponse<IEnumerable<AtendimentoDto>>.ErrorResponse("Registros não foram encontrados");
+            }
+
+            var response = result.Data.Select(atendimento => new AtendimentoDto
+            {
+                Id = atendimento.Id,
+                IdAgendamento = atendimento.IdAgendamento,
+                Assistido = new AssistidoAtendimentoDto(atendimento.Assistido!.Id, atendimento.Assistido.Nome),
+                Profissional = new ProfissionalAtendimentoDto(atendimento.Profissional!.Id, atendimento.Profissional.Nome),
+                DataAtendimento = atendimento.DataAtendimento,
+                Presenca = atendimento.Presenca,
+                Avaliacao = atendimento.Avaliacao,
+                Observacao = atendimento.Observacao
+            }).ToList();
+
+            return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro interno ao buscar atendimentos por filtros");
+            return ApiResponse<IEnumerable<AtendimentoDto>>.ErrorResponse("Erro interno ao buscar atendimentos por filtros");
+        }
+    }
+
+    /// <summary>
+    /// Buscar um atendimento por id
+    /// </summary>
+    public async Task<ApiResponse<AtendimentoDto>> GetById(Guid id)
+    {
+        try
+        {
+            var result = await base.GetById(id);
+
+            if (!result.Success || result.Data == null)
+            {
+                return ApiResponse<AtendimentoDto>.ErrorResponse("Registro não foi encontrado");
+            }
+
+            var response = new AtendimentoDto
+            {
+                Id = result.Data.Id,
+                IdAgendamento = result.Data.IdAgendamento,
+                Assistido = new AssistidoAtendimentoDto(result.Data.Assistido!.Id, result.Data.Assistido.Nome),
+                Profissional = new ProfissionalAtendimentoDto(result.Data.Profissional!.Id, result.Data.Profissional.Nome),
+                DataAtendimento = result.Data.DataAtendimento,
+                Presenca = result.Data.Presenca,
+                Avaliacao = result.Data.Avaliacao,
+                Observacao = result.Data.Observacao
+            };
+
+            return ApiResponse<AtendimentoDto>.SuccessResponse(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro interno ao buscar atendimento por id");
+            return ApiResponse<AtendimentoDto>.ErrorResponse("Erro interno ao buscar atendimento por id");
+        }
+    }
+
+    /// <summary>
     /// Cria um atendimento
     /// </summary>
     public async Task<ApiResponse<Atendimento>> Create(Atendimento appointment)
@@ -112,19 +182,18 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 );
             }
 
-            // Converter para DTO
-            var atendimentosDto = result.Data.Select(a => new AtendimentoDto
+            var response = result.Data.Select(atendimento => new AtendimentoDto
             {
-                Id = a.Id,
-                IdAgendamento = a.IdAgendamento,
-                IdAssistido = a.IdAssistido,
-                DataAtendimento = a.DataAtendimento,
-                Presenca = a.Presenca,
-                Avaliacao = a.Avaliacao,
-                Observacao = a.Observacao
+                Id = atendimento.Id,
+                IdAgendamento = atendimento.IdAgendamento,
+                Assistido = new AssistidoAtendimentoDto(atendimento.Assistido!.Id, atendimento.Assistido.Nome),
+                DataAtendimento = atendimento.DataAtendimento,
+                Presenca = atendimento.Presenca,
+                Avaliacao = atendimento.Avaliacao,
+                Observacao = atendimento.Observacao
             }).ToList();
 
-            return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(atendimentosDto);
+            return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(response);
         }
         catch (Exception ex)
         {

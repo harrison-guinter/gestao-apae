@@ -8,7 +8,6 @@ namespace SistemaApae.Api.Services.Users;
 public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
 {
     private readonly ILogger<UsuarioService> _logger;
-    private readonly IService<Usuario, UsuarioFilterRequest> _service;
     private readonly IAuthService _authService;
     private readonly IEmailService _emailService;
 
@@ -18,13 +17,11 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
     public UsuarioService(
         IRepository<Usuario, UsuarioFilterRequest> repository,
         ILogger<UsuarioService> logger,
-        IService<Usuario, UsuarioFilterRequest> service,
         IAuthService authService, 
         IEmailService emailService
     ) : base(repository, logger)
     {
         _logger = logger;
-        _service = service;
         _authService = authService;
         _emailService = emailService;
     }
@@ -159,7 +156,7 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
     {
         try
         {
-            user.Senha = (await _service.GetById(user.Id)).Data!.Senha;
+            user.Senha = (await base.GetById(user.Id)).Data!.Senha;
 
             var result = await base.Update(user);
 

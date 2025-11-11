@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Appointment;
 using SistemaApae.Api.Models.Auth;
-using SistemaApae.Api.Services;
 using SistemaApae.Api.Services.Appointment;
 
 namespace SistemaApae.Api.Controllers;

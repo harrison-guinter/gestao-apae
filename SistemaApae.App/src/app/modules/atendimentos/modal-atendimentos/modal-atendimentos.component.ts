@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -22,6 +22,10 @@ import { AssistidoService } from '../../assistidos/assistido.service';
 import { Agendamento } from '../../agendamentos/agendamento';
 import { AgendamentoService } from '../../agendamentos/agendamento.service';
 import { Observable, map } from 'rxjs';
+import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
+import { UsuarioService } from '../../usuarios/usuario.service';
+import { Roles } from '../../auth/roles.enum';
+import { Usuario } from '../../usuarios/usuario';
 
 export interface ModalAtendimentosData {
   isEdit: boolean;
@@ -41,6 +45,7 @@ export interface ModalAtendimentosData {
     MatDatepickerModule,
     MatDialogModule,
     SelectComponent,
+    DatepickerComponent,
   ],
   templateUrl: './modal-atendimentos.component.html',
   styleUrls: ['./modal-atendimentos.component.less'],
@@ -51,8 +56,13 @@ export class ModalAtendimentosComponent implements OnInit {
   isVisualizacao: boolean = false;
   atendimento?: Atendimento;
 
-  assistidoOptions: Observable<SelectOption[]>;
-  agendamentoOptions: Observable<SelectOption[]>;
+  private usuarioService = inject(UsuarioService);
+
+  private assistidoService: AssistidoService = inject(AssistidoService);
+
+  protected assistidosOptions$: any;
+
+  protected profissionalOptions$: any;
 
   presencaOptions: SelectOption[] = [
     { value: StatusAtendimentoEnum.PRESENTE, label: 'Presente' },
@@ -68,47 +78,51 @@ export class ModalAtendimentosComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private atendimentoService: AtendimentoService,
-    private assistidoService: AssistidoService,
-    private agendamentoService: AgendamentoService,
     private dialogRef: MatDialogRef<ModalAtendimentosComponent>,
+    private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.isEdit = data?.isEdit || false;
     this.isVisualizacao = data?.isVisualizacao || false;
     this.atendimento = data?.element;
 
-    this.assistidoOptions = this.assistidoService.listarAssistidos({}).pipe(
+    this.assistidosOptions$ = this.assistidoService.listarAssistidos({}).pipe(
       map((assistidos) =>
         assistidos.map((assistido) => ({
-          value: assistido.id!,
-          label: assistido.nome!,
+          value: assistido.id,
+          label: assistido.nome,
         }))
       )
     );
 
-    this.agendamentoOptions = this.agendamentoService.listarAgendamentos({} as any).pipe(
-      map((agendamentos) =>
-        agendamentos.map((agendamento) => ({
-          value: agendamento.id,
-          label: `${agendamento.nome} - ${agendamento.dataAgendamento.toLocaleDateString()} ${
-            agendamento.horarioAgendamento
-          }`,
+    this.profissionalOptions$ = this.buscarProfissionais().pipe(
+      map((users) =>
+        users.map((user) => ({
+          value: user.id,
+          label: user.nome,
         }))
       )
     );
+  }
+
+  private buscarProfissionais(): Observable<Usuario[]> {
+    return this.usuarioService
+      .filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo })
+      .pipe(
+        map((users) => {
+          return users.map((u) => new Usuario(u));
+        })
+      );
   }
 
   ngOnInit() {
     this.initForm();
-    if (this.atendimento) {
-      this.preencherForm();
-    }
   }
 
   initForm() {
     this.form = this.formBuilder.group({
-      idAgendamento: ['', Validators.required],
-      idAssistido: ['', Validators.required],
+      profissional: ['', Validators.required],
+      assistido: ['', Validators.required],
       dataAtendimento: ['', Validators.required],
       presenca: ['', Validators.required],
       avaliacao: [''],
@@ -119,19 +133,24 @@ export class ModalAtendimentosComponent implements OnInit {
     if (this.isVisualizacao) {
       this.form.disable();
     }
+    this.preencherForm();
   }
 
   preencherForm() {
+    console.log('assistido:', this.atendimento?.assistido);
+    console.log(this.atendimento?.presenca);
     if (this.atendimento) {
-      this.form.patchValue({
-        idAgendamento: this.atendimento.idAgendamento,
-        idAssistido: this.atendimento.idAssistido,
-        dataAtendimento: this.atendimento.dataAtendimento,
-        presenca: this.atendimento.presenca,
-        avaliacao: this.atendimento.avaliacao,
-        observacao: this.atendimento.observacao,
-        status: this.atendimento.status,
-      });
+      this.form.get('profissional')?.setValue(this.atendimento!.profissional, { emitEvent: false });
+
+      this.form.get('assistido')?.setValue(this.atendimento!.assistido.id, { emitEvent: false });
+
+      this.form
+        .get('dataAtendimento')
+        ?.setValue(this.atendimento!.dataAtendimento, { emitEvent: false });
+      this.form.get('presenca')?.setValue(this.atendimento!.presenca, { emitEvent: false });
+      this.form.get('avaliacao')?.setValue(this.atendimento!.avaliacao, { emitEvent: false });
+      this.form.get('observacao')?.setValue(this.atendimento!.observacao, { emitEvent: false });
+      this.form.get('status')?.setValue(this.atendimento!.status, { emitEvent: false });
     }
   }
 
@@ -140,7 +159,6 @@ export class ModalAtendimentosComponent implements OnInit {
       const formValue = this.form.value;
 
       if (this.isEdit && this.atendimento) {
-        // Editar atendimento existente
         const atendimentoAtualizado = new Atendimento({
           ...this.atendimento,
           ...formValue,

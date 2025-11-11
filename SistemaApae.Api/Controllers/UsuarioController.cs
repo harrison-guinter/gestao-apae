@@ -34,7 +34,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<Usuario>>> GetByFilters([FromQuery] UsuarioFilterRequest filters)
+    public async Task<ActionResult<ApiResponse<Usuario>>> GetUserByFilters([FromQuery] UsuarioFilterRequest filters)
     {
         var result = await _service.GetByFilters(filters);
 
@@ -58,7 +58,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetById([FromRoute] Guid id)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> GetUserById([FromRoute] Guid id)
     {
         if (id == Guid.Empty)
             return BadRequest(ApiResponse<object>.ErrorResponse("Dados de entrada inválidos"));
@@ -85,7 +85,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> Create([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> CreateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {
@@ -121,7 +121,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<UsuarioDto>>> Update([FromBody] Usuario user)
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> UpdateUser([FromBody] Usuario user)
     {
         if (!ModelState.IsValid)
         {

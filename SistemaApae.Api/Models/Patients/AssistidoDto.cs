@@ -4,11 +4,11 @@ namespace SistemaApae.Api.Models.Patients;
 
 public class AssistidoDto
 {
-
     /// <summary>
     /// ID único da entidade
     /// </summary>
     public Guid Id { get; set; }
+
     /// <summary>
     /// Nome do assistido
     /// </summary>

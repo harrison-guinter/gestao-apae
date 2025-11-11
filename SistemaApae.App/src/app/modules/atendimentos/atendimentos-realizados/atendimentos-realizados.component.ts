@@ -22,6 +22,9 @@ import { AssistidoService } from '../../assistidos/assistido.service';
 import { AgendamentoService } from '../../agendamentos/agendamento.service';
 import { map, Observable } from 'rxjs';
 import { DatepickerComponent as DateComponent } from '../../core/date/datepicker/datepicker.component';
+import { UsuarioService } from '../../usuarios/usuario.service';
+import { Roles } from '../../auth/roles.enum';
+import { Usuario } from '../../usuarios/usuario';
 
 @Component({
   selector: 'app-atendimentos',
@@ -47,38 +50,50 @@ export class AtendimentosRealizadosComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
 
   private atendimentoService = inject(AtendimentoService);
-  private assistidoService = inject(AssistidoService);
-  private agendamentoService = inject(AgendamentoService);
+
+  private usuarioService = inject(UsuarioService);
+
+  private assistidoService: AssistidoService = inject(AssistidoService);
+
+  protected assistidosOptions$: any;
+
+  protected profissionalOptions$: any;
 
   protected atendimentos: Atendimento[] = [];
-
-  assistidoOptions: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
-    map((assistidos) =>
-      assistidos.map((assistido) => ({
-        value: assistido.id,
-        label: assistido.nome,
-      }))
-    )
-  );
-
-  agendamentoOptions: Observable<SelectOption[]> = this.agendamentoService
-    .listarAgendamentos({} as any)
-    .pipe(
-      map((agendamentos) =>
-        agendamentos.map((agendamento) => ({
-          value: agendamento.id,
-          label: `${agendamento.nome} - ${agendamento.dataAgendamento.toLocaleDateString()} ${
-            agendamento.horarioAgendamento
-          }`,
-        }))
-      )
-    );
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     private pageInfoService: PageInfoService,
     private modalService: ModalService
-  ) {}
+  ) {
+    this.assistidosOptions$ = this.assistidoService.listarAssistidos({}).pipe(
+      map((assistidos) =>
+        assistidos.map((assistido) => ({
+          value: assistido.id,
+          label: assistido.nome,
+        }))
+      )
+    );
+
+    this.profissionalOptions$ = this.buscarProfissionais().pipe(
+      map((users) =>
+        users.map((user) => ({
+          value: user.id,
+          label: user.nome,
+        }))
+      )
+    );
+  }
+
+  private buscarProfissionais(): Observable<Usuario[]> {
+    return this.usuarioService
+      .filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo })
+      .pipe(
+        map((users) => {
+          return users.map((u) => new Usuario(u));
+        })
+      );
+  }
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Atendimentos', 'Gerenciar atendimentos do sistema');
@@ -89,8 +104,8 @@ export class AtendimentosRealizadosComponent implements OnInit {
 
   pesquisarAtendimentos() {
     const filtros: AtendimentoFiltro = {
-      idAssistido: this.filtrosForm.value.assistido || undefined,
-      idAgendamento: this.filtrosForm.value.agendamento || undefined,
+      assistido: this.filtrosForm.value.assistido || undefined,
+      profissional: this.filtrosForm.value.profissional || undefined,
       dataInicioAtendimento: this.filtrosForm.value.dataInicio || undefined,
       dataFimAtendimento: this.filtrosForm.value.dataFim || undefined,
       presenca:
@@ -167,11 +182,11 @@ export class AtendimentosRealizadosComponent implements OnInit {
       getCellValue: (row) => row.assistido?.nome || 'Não informado',
     },
     {
-      key: 'agendamento',
-      label: 'Agendamento',
+      key: 'profissional',
+      label: 'Profissional',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => row.agendamento?.nome || 'Não informado',
+      getCellValue: (row) => row.profissional?.nome || 'Não informado',
     },
     {
       key: 'presenca',
@@ -203,12 +218,6 @@ export class AtendimentosRealizadosComponent implements OnInit {
 
   tableActions: TableAction[] = [
     {
-      icon: 'edit',
-      tooltip: 'Editar',
-      color: 'primary',
-      action: (row) => this.editarAtendimento(row),
-    },
-    {
       icon: 'visibility',
       tooltip: 'Visualizar',
       color: 'primary',
@@ -225,19 +234,6 @@ export class AtendimentosRealizadosComponent implements OnInit {
         disableClose: true,
         data: { isEdit: false },
         element: null,
-      })
-      .subscribe(() => this.pesquisarAtendimentos());
-  }
-
-  editarAtendimento(element: Atendimento) {
-    this.modalService
-      .openModal({
-        component: ModalAtendimentosComponent,
-        width: '80%',
-        height: 'auto',
-        disableClose: true,
-        data: { isEdit: true },
-        element: element,
       })
       .subscribe(() => this.pesquisarAtendimentos());
   }
