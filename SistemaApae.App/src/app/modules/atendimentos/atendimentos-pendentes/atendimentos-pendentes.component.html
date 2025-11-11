@@ -1,66 +1,20 @@
-<div class="atendimentos-container">
+<div class="atendimentos-pendentes-container">
   <app-filters-container
     [formGroup]="filtrosForm"
-    (clear)="onClear()"
     [showAddButton]="false"
-    (search)="pesquisarAtendimentos()"
-    title="Lista de Atendimentos Pendentes"
+    (clear)="onClear()"
+    (search)="pesquisarAgendamentos()"
+    title="Lista de Agendamentos"
   >
-    <app-select
-      label="Assistido"
-      [control]="$any(filtrosForm.get('assistido'))"
-      [options]="(assistidoOptions | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um assistido"
-    >
-    </app-select>
-
-    <app-select
-      label="Agendamento"
-      [control]="$any(filtrosForm.get('agendamento'))"
-      [options]="(agendamentoOptions | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um agendamento"
-    >
-    </app-select>
-
     <app-date
-      label="Data Início"
-      placeholder="dd/MM/yyyy"
-      [control]="$any(filtrosForm.get('dataInicio'))"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-date>
-
-    <app-date
-      label="Data Fim"
-      placeholder="dd/MM/yyyy"
-      [control]="$any(filtrosForm.get('dataFim'))"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-date>
-
-    <app-select
-      label="Presença"
-      [control]="$any(filtrosForm.get('presenca'))"
-      [options]="presencaOptions"
+      label="Data"
+      [control]="$any(filtrosForm.get('dataAgendamento'))"
+      placeholder="DD/MM/AAAA"
       appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione a presença"
-    >
-    </app-select>
+      [clearable]="true"
+      cssClass="padding-right mat-spacing-sm field-md"
+    ></app-date>
 
-    <app-select
-      label="Status"
-      [control]="$any(filtrosForm.get('status'))"
-      [options]="statusOptions"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione o status"
-    >
-    </app-select>
   </app-filters-container>
   <div class="table-section">
     <app-table
@@ -68,7 +22,7 @@
       [data]="atendimentosPendentes"
       [actions]="tableActions"
       [showActions]="true"
-      tableClass="atendimentos-table"
+      tableClass="atendimentos-pendentes-table"
     >
     </app-table>
   </div>
