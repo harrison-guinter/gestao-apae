@@ -24,16 +24,16 @@ export class AtendimentoService {
 
   constructor(private http: HttpClient) {}
 
-  listarAtendimentos(filtro: AtendimentoFiltro = {}): Observable<Atendimento[]> {
+  listarAtendimentos(filtro: any = {}): Observable<Atendimento[]> {
     // Preparar parâmetros para a API
     const params: any = {};
 
-    if (filtro.profissional?.id) {
-      params.idProfissional = filtro.profissional.id;
+    if (filtro.profissionalId) {
+      params.idProfissional = filtro.profissionalId;
     }
 
-    if (filtro.assistido?.id) {
-      params.idAssistido = filtro.assistido.id;
+    if (filtro.assistidoId) {
+      params.idAssistido = filtro.assistidoId;
     }
 
     if (filtro.dataInicioAtendimento) {

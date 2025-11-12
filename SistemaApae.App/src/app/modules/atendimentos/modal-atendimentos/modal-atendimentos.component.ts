@@ -137,8 +137,6 @@ export class ModalAtendimentosComponent implements OnInit {
   }
 
   preencherForm() {
-    console.log('assistido:', this.atendimento?.assistido);
-    console.log(this.atendimento?.presenca);
     if (this.atendimento) {
       this.form.get('profissional')?.setValue(this.atendimento!.profissional, { emitEvent: false });
 
@@ -164,31 +162,18 @@ export class ModalAtendimentosComponent implements OnInit {
           ...formValue,
         });
 
-        this.atendimentoService.editar(atendimentoAtualizado).subscribe({
-          next: (response) => {
-            console.log('Atendimento atualizado:', response);
-            this.dialogRef.close(true);
-          },
-          error: (error) => {
-            console.error('Erro ao atualizar atendimento:', error);
-          },
+        this.atendimentoService.editar(atendimentoAtualizado).subscribe(() => {
+          this.dialogRef.close(true);
         });
       } else {
         // Criar novo atendimento
         const novoAtendimento = new Atendimento(formValue);
 
-        this.atendimentoService.salvar(novoAtendimento).subscribe({
-          next: (response) => {
-            console.log('Atendimento criado:', response);
-            this.dialogRef.close(true);
-          },
-          error: (error) => {
-            console.error('Erro ao criar atendimento:', error);
-          },
+        this.atendimentoService.salvar(novoAtendimento).subscribe(() => {
+          this.dialogRef.close(true);
         });
       }
     } else {
-      console.log('Formulário inválido');
       this.markFormGroupTouched();
     }
   }
