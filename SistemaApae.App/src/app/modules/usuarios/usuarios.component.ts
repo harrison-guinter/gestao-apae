@@ -103,7 +103,6 @@ export class UsuariosComponent implements OnInit {
     };
 
     this.usuarioService.filtrarUsuarios(filtros).subscribe((usuarios) => {
-      console.log(usuarios);
       this.usuarios = usuarios;
       if (usuarios.length === 0) {
         this.notificationService.showInfo('Nenhum usuário encontrado com os filtros aplicados');

@@ -27,7 +27,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent, resolve: { DashboardResolver } },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        // resolve: { DashboardResolver }
+      },
       { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
       { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
       {
