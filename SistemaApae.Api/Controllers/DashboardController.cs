@@ -26,16 +26,18 @@ public class DashboardController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém as estatísticas do dashboard
+	/// Obtém as estatísticas mensais do dashboard
     /// </summary>
+	/// <param name="year">Ano alvo (opcional, padrão: ano atual)</param>
+	/// <param name="month">Mês alvo 1-12 (opcional, padrão: mês atual)</param>
     /// <returns>Estatísticas do dashboard incluindo totais de assistidos, atendimentos, usuários e agendamentos</returns>
     [HttpGet("stats")]
     [ProducesResponseType(typeof(ApiResponse<DashboardStatsDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<DashboardStatsDto>>> GetDashboardStats()
+	public async Task<ActionResult<ApiResponse<DashboardStatsDto>>> GetDashboardStats([FromQuery] int? year, [FromQuery] int? month)
     {
-        var result = await _dashboardService.GetDashboardStats();
+		var result = await _dashboardService.GetDashboardStats(year, month);
         
         if (!result.Success)
         {
