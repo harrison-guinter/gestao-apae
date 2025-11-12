@@ -64,10 +64,4 @@ public class Atendimento : ApiBaseModel
     /// </summary>
     [Reference(typeof(Agendamento), includeInQuery: true)]
     public Agendamento? Agendamento { get; set; }
-
-    /// <summary>
-    /// Navegação do profissional (embed via PostgREST)
-    /// </summary>
-    [Reference(typeof(Usuario), includeInQuery: true)]
-    public Usuario? Profissional { get; set; }
 }
