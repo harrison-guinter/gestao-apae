@@ -1,7 +1,9 @@
 ﻿using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Appointment;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Repositories;
 
 namespace SistemaApae.Api.Services.Appointment;
@@ -283,5 +285,60 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
 
         return patient != null;
     }
+
+	/// <summary>
+	/// Gera o relatório de faltas por paciente com filtros opcionais
+	/// </summary>
+	public async Task<ApiResponse<IEnumerable<FaltaReportItemDto>>> GetRelatorioFaltas(FaltaReportFilterRequest filtrosRelatorio)
+	{
+		try
+		{
+			// Mapeia o filtro específico do relatório para o filtro genérico de atendimento
+			var filtros = new AtendimentoFilterRequest
+			{
+				DataInicioAtendimento = filtrosRelatorio.DataInicio,
+				DataFimAtendimento = filtrosRelatorio.DataFim,
+				IdProfissional = filtrosRelatorio.IdProfissional,
+				IdMunicipio = filtrosRelatorio.IdMunicipio,
+				IdAssistido = filtrosRelatorio.IdAssistido,
+				Presencas = new List<StatusAtendimentoEnum>
+				{
+					StatusAtendimentoEnum.FALTA,
+					StatusAtendimentoEnum.JUSTIFICADA
+				},
+				Limit = filtrosRelatorio.Limit,
+				Skip = filtrosRelatorio.Skip
+			};
+
+			var result = await base.GetByFilters(filtros);
+
+			if (!result.Success || result.Data == null)
+				return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(Enumerable.Empty<FaltaReportItemDto>());
+
+			var itens = result.Data.Select(at =>
+			{
+				var municipio = at.Assistido?.Municipio;
+				return new FaltaReportItemDto
+				{
+					IdAtendimento = at.Id,
+					DataAtendimento = at.DataAtendimento,
+					StatusFrequencia = at.Presenca,
+					IdAssistido = at.Assistido?.Id ?? Guid.Empty,
+					NomeAssistido = at.Assistido?.Nome,
+					IdMunicipio = municipio?.Id,
+					NomeMunicipio = municipio?.Nome,
+					IdProfissional = at.Agendamento.Profissional?.Id ?? at.Agendamento?.IdProfissional ?? Guid.Empty,
+					NomeProfissional = at.Agendamento.Profissional?.Nome
+				};
+			}).ToList();
+
+			return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(itens);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Erro ao gerar relatório de faltas");
+			return ApiResponse<IEnumerable<FaltaReportItemDto>>.ErrorResponse("Erro interno ao gerar relatório de faltas");
+		}
+	}
 }
 
