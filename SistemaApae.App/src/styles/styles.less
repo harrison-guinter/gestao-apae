@@ -8,3 +8,64 @@
   margin: 0;
   padding: 0;
 }
+
+/* ========================================
+   ESTILOS GLOBAIS PARA CAMPOS DESABILITADOS
+   ======================================== */
+
+/* Melhorar contraste de campos Material desabilitados */
+.mat-mdc-form-field.mat-form-field-disabled {
+  /* Cor do texto do label */
+  .mdc-floating-label {
+    color: var(--mat-disabled-text) !important;
+  }
+
+  /* Cor da borda */
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--mat-disabled-border) !important;
+  }
+
+  /* Cor do texto do input */
+  .mat-mdc-input-element:disabled {
+    color: var(--mat-disabled-text) !important;
+    -webkit-text-fill-color: var(--mat-disabled-text) !important;
+  }
+
+  /* Cor dos ícones */
+  mat-icon {
+    color: var(--mat-disabled-text) !important;
+  }
+}
+
+/* Estilos para mat-select desabilitado */
+.mat-mdc-select.mat-mdc-select-disabled {
+  .mat-mdc-select-value {
+    color: var(--mat-disabled-text) !important;
+  }
+
+  .mat-mdc-select-arrow {
+    color: var(--mat-disabled-text) !important;
+  }
+}
+
+/* Estilos para textarea desabilitado */
+textarea.mat-mdc-input-element:disabled {
+  color: var(--mat-disabled-text) !important;
+  -webkit-text-fill-color: var(--mat-disabled-text) !important;
+  background-color: var(--mat-disabled-background) !important;
+}
+
+/* Estilos para autocomplete desabilitado */
+.mat-mdc-autocomplete-trigger:disabled {
+  color: var(--mat-disabled-text) !important;
+  -webkit-text-fill-color: var(--mat-disabled-text) !important;
+}
+
+/* Estilos para datepicker desabilitado */
+.mat-datepicker-toggle-disabled {
+  mat-icon {
+    color: var(--mat-disabled-text) !important;
+  }
+}

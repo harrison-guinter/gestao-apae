@@ -30,7 +30,7 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        // resolve: { DashboardResolver }
+        resolve: { DashboardResolver },
       },
       { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
       { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
