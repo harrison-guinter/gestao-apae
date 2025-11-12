@@ -22,7 +22,7 @@ public interface IBaseFilter
 /// </summary>
 public class BaseFilter : IBaseFilter
 {
-    public int? Limit { get; set; } = 50;
+    public int? Limit { get; set; }
     public int? Skip { get; set; }
 
 }

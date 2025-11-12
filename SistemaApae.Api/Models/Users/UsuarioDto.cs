@@ -13,19 +13,16 @@ public class UsuarioDto
     /// <summary>
     /// Nome do usuário
     /// </summary>
-    [MaxLength(150)]
-    public string Nome { get; set; } = string.Empty;
+    public string? Nome { get; set; } = string.Empty;
 
     /// <summary>
     /// Email do usuário (único)
     /// </summary>
-    [MaxLength(150)]
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; } = string.Empty;
 
     /// <summary>
     /// Telefone do usuário
     /// </summary>
-    [MaxLength(20)]
     public string? Telefone { get; set; }
 
     /// <summary>
@@ -36,13 +33,11 @@ public class UsuarioDto
     /// <summary>
     /// Registro profissional
     /// </summary>
-    [MaxLength(50)]
     public string? RegistroProfissional { get; set; }
 
     /// <summary>
     /// Especialidade do profissional
     /// </summary>
-    [MaxLength(50)]
     public string? Especialidade { get; set; }
 
     /// <summary>

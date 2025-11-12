@@ -23,6 +23,8 @@ public class AgendamentoFilter : IRepositoryFilter<Agendamento, AgendamentoFilte
             query = query.Where(a => a.IdProfissional! == filtros.IdProfissional);
         }
 
+        query = query.Filter(u => u.Status, Constants.Operator.Equals, (int)filtros.Status);
+
         // Nota: NÃO aplicamos filtro de data aqui no banco de dados
         // porque agendamentos recorrentes não têm DataAgendamento preenchida.
         // O filtro de data será aplicado em memória no método FilterRecurrentAppointments

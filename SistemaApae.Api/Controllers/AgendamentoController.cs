@@ -45,7 +45,7 @@ public class AgendamentoController : ControllerBase
         return Ok(result);
     }
 
-        /// <summary>
+    /// <summary>
     /// Lista Agendamentos por filtros de pesquisa (paginado) com assistidos
     /// </summary>
     [HttpGet("profissional/{idProfissional}")]
@@ -53,8 +53,8 @@ public class AgendamentoController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-     public async Task<ActionResult<ApiResponse<IEnumerable<AgendamentoResponseDto>>>> GetByProfissional([FromRoute] Guid idProfissional, [FromQuery] DateOnly? data)
-     {
+    public async Task<ActionResult<ApiResponse<IEnumerable<AgendamentoResponseDto>>>> GetByProfissional([FromRoute] Guid idProfissional, [FromQuery] DateOnly? data)
+    {
         var result = await _service.GetByProfissional(idProfissional, data);
         if (!result.Success)
             return StatusCode(500, result);

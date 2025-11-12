@@ -1,4 +1,5 @@
 using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Users;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +18,12 @@ public class Agendamento : ApiBaseModel
     [Required]
     [Column("id_profissional")]
     public Guid IdProfissional { get; set; }
+
+    /// <summary>
+    /// Navegação do profissional (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Usuario), includeInQuery: true)]
+    public Usuario? Profissional { get; set; }
 
     /// <summary>
     /// Tipo de recorrência do agendamento

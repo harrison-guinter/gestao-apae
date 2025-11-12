@@ -1,4 +1,5 @@
-﻿using SistemaApae.Api.Models.Filters;
+﻿using SistemaApae.Api.Models.Enums;
+using SistemaApae.Api.Models.Filters;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 
@@ -28,6 +29,11 @@ public class AgendamentoFilterRequest : BaseFilter
     /// ID do Profissional para filtrar
     /// </summary>
     public Guid IdProfissional { get; set; } = Guid.Empty;
+
+    /// <summary>
+    /// Status do Agendamento (ativo/inativo)
+    /// </summary>
+    public StatusEntidadeEnum Status { get; set; } = StatusEntidadeEnum.Ativo;
 
 }
 

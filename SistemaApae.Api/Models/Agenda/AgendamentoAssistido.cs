@@ -1,5 +1,6 @@
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
+using SistemaApae.Api.Models.Patients;
 
 namespace SistemaApae.Api.Models.Agenda;
 
@@ -23,5 +24,17 @@ public class AgendamentoAssistido : ApiBaseModel
     [Required]
     [Column("id_assistido")]
     public Guid IdAssistido { get; set; }
+
+    /// <summary>
+    /// Navegação do agendamento (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Agendamento), includeInQuery: true)]
+    public Agendamento? Agendamento { get; set; }
+
+    /// <summary>
+    /// Navegação do assistido (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Assistido), includeInQuery: true)]
+    public Assistido? Assistido { get; set; }
 
 }

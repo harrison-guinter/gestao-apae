@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SistemaApae.Api.Models.Administrative;
 using SistemaApae.Api.Models.Enums;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,12 @@ public class Convenio : ApiBaseModel
     /// </summary>
     [Column("id_municipio")]
     public Guid? IdMunicipio { get; set; }
+
+    /// <summary>
+    /// Navegação de município (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Municipio), includeInQuery: true)]
+    public Municipio? Municipio { get; set; }
 
     /// <summary>
     /// Nome do convênio

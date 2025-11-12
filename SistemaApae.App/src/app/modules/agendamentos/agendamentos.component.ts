@@ -90,7 +90,7 @@ export class AgendamentosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar convênios do sistema');
+    this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar agendamentos do sistema');
 
     this.initFiltrosForm();
   }

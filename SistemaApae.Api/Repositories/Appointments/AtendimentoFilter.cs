@@ -11,11 +11,15 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
 {
     public IPostgrestTable<Atendimento> Apply(IPostgrestTable<Atendimento> query, AtendimentoFilterRequest filtros)
     {
-        if (filtros.IdAgendamento != Guid.Empty)
+        // Filtro por lista de agendamentos (busca em lote)
+        if (filtros.IdsAgendamento != null && filtros.IdsAgendamento.Count > 0)
+            query = query.Filter(a => a.IdAgendamento, Constants.Operator.In, filtros.IdsAgendamento);
+        // Filtro por agendamento único
+        else if (filtros.IdAgendamento != Guid.Empty)
             query = query.Filter(a => a.IdAgendamento, Constants.Operator.Equals, filtros.IdAgendamento);
 
         if (filtros.IdAssistido != Guid.Empty)
-            query = query.Filter(a => a.IdAgendamento, Constants.Operator.Equals, filtros.IdAssistido);
+            query = query.Filter(a => a.IdAssistido, Constants.Operator.Equals, filtros.IdAssistido);
 
         if (filtros.DataInicioAtendimento.HasValue && filtros.DataFimAtendimento.HasValue)
         {
