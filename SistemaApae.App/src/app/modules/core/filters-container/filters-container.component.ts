@@ -27,6 +27,7 @@ export class FiltersContainerComponent {
   @Input() clearTooltip: string = 'Limpar filtros';
   @Input() addTooltip: string = 'Novo';
   @Input() title: string = 'Lista';
+  @Input() isRelatorio: boolean = false;
 
   @Output() clear = new EventEmitter<void>();
   @Output() add = new EventEmitter<void>();

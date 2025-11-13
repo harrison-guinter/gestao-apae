@@ -1,0 +1,55 @@
+<div class="relatorio-container">
+  <app-filters-container
+    [formGroup]="filtrosForm"
+    (add)="gerarRelatorio()"
+    [isRelatorio]="true"
+    (clear)="limparFiltros()"
+    (search)="pesquisar()"
+    title="Relatório de Assistidos Atendidos"
+    searchButtonText="Atualizar Preview"
+  >
+    <app-select
+      label="Dia da Semana"
+      [control]="$any(filtrosForm.get('diaSemana'))"
+      [options]="diasSemanaOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-select>
+
+    <app-select
+      label="Profissional"
+      [control]="$any(filtrosForm.get('profissional'))"
+      [options]="profissionaisOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-select>
+
+    <app-input
+      label="Data Início"
+      [control]="$any(filtrosForm.get('dataInicio'))"
+      type="date"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-input>
+
+    <app-input
+      label="Data Fim"
+      [control]="$any(filtrosForm.get('dataFim'))"
+      type="date"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-input>
+  </app-filters-container>
+
+  <app-table
+    [columns]="tableColumns"
+    [data]="relatorioData"
+    [showActions]="false"
+    tableClass="relatorio-table"
+  >
+  </app-table>
+</div>

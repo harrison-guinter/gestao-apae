@@ -11,8 +11,8 @@
         [disabled]="disabled"
         *ngIf="showAddButton"
       >
-        <mat-icon>add</mat-icon>
-        <span>Novo</span>
+        <mat-icon *ngIf="!isRelatorio">add</mat-icon>
+        <span>{{ isRelatorio ? 'Gerar Relatório' : 'Novo' }}</span>
       </button>
     </div>
   </div>

@@ -1,0 +1,33 @@
+.relatorio-container {
+  height: calc(100vh - 150px);
+
+  .preview-section {
+    margin-top: 20px;
+    background-color: var(--mat-surface);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--elevation-1);
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--mat-text-primary);
+      }
+
+      .gerar-button {
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
