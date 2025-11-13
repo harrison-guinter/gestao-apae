@@ -1,5 +1,6 @@
 ﻿using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Appointment;
+using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
@@ -106,15 +107,25 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
     /// <summary>
     /// Cria um atendimento
     /// </summary>
-    public async Task<ApiResponse<Atendimento>> Create(Atendimento appointment)
+    public async Task<ApiResponse<Atendimento>> Create(AtendimentoCreateDto dto)
     {
         try
         {
-            if (!await SchedulingExistsAsync(appointment.IdAgendamento))
+            if (!await SchedulingExistsAsync(dto.Agendamento.Id))
                 return ApiResponse<Atendimento>.ErrorResponse("Id do Agendamento não existe");
 
-            if (!await PatientsExistsAsync(appointment.IdAssistido))
+            if (!await PatientsExistsAsync(dto.Assistido.Id))
                 return ApiResponse<Atendimento>.ErrorResponse("Id do Assistido não existe");
+
+            var appointment = new Atendimento
+            {
+                IdAgendamento = dto.Agendamento.Id,
+                IdAssistido = dto.Assistido.Id,
+                DataAtendimento = dto.DataAtendimento,
+                Presenca = dto.Presenca,
+                Avaliacao = dto.Avaliacao,
+                Observacao = dto.Observacao
+            };
 
             var result = await base.Create(appointment);
 

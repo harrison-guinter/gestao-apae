@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Appointment;
+using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Services.Appointment;
@@ -104,7 +105,7 @@ public class AtendimentoController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<object>>> CreateAppointment([FromBody] Atendimento appointment)
+    public async Task<ActionResult<ApiResponse<object>>> CreateAppointment([FromBody] AtendimentoCreateDto appointment)
     {
         if (!ModelState.IsValid)
         {
