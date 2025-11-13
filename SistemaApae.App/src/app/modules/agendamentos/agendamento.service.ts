@@ -42,6 +42,6 @@ export class AgendamentoService {
   }
 
   listarAgendamentosPorProfissional(idProfissional: string, dataAgendamento: string): Observable<Agendamento[]> {
-    return this.http.get<{ data: Agendamento[] }>(`${this.baseUrl}Agendamento/profissional/${idProfissional}`).pipe(map((r) => r.data)) || of([]);
+    return this.http.get<{ data: Agendamento[] }>(`${this.baseUrl}Agendamento/profissional/${idProfissional}`, { params: {data: dataAgendamento}}).pipe(map((r) => r.data)) || of([]);
   }
 }

@@ -16,6 +16,7 @@ import { FiltersContainerComponent } from '../core/filters-container/filters-con
 import { Assistido, StatusAssistidoEnum } from './assistido';
 import { AssistidoService, AssistidoFiltro } from './assistido.service';
 import { NotificationService } from '../core/notification/notification.service';
+import { DateUtils } from '../core/date/date-utils';
 
 @Component({
   selector: 'app-assistidos',
@@ -111,7 +112,7 @@ export class AssistidosComponent implements OnInit {
       width: 'medium',
       align: 'center',
       getCellValue: (row) =>
-        row.dataNascimento ? new Date(row.dataNascimento).toLocaleDateString('pt-BR') : '-',
+        row.dataNascimento ? DateUtils.fromDbToDisplay(row.dataNascimento) : '-',
     },
     {
       key: 'status',

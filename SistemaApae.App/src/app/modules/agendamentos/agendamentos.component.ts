@@ -28,6 +28,7 @@ import { DatepickerComponent } from '../core/date/datepicker/datepicker.componen
 import { RangePickerComponent } from '../core/date/rangepicker/rangepicker.component';
 import { NotificationService } from '../core/notification/notification.service';
 import { AssistidoService } from '../assistidos/assistido.service';
+import { DateUtils } from '../core/date/date-utils';
 
 @Component({
   selector: 'app-agendamentos',
@@ -160,7 +161,7 @@ export class AgendamentosComponent implements OnInit {
       label: 'Data',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => row.tipoRecorrencia == TipoRecorrencia.NENHUM ? new Date(row.dataAgendamento).toLocaleDateString() : '-',
+      getCellValue: (row) => row.tipoRecorrencia == TipoRecorrencia.NENHUM ? DateUtils.fromDbToDisplay(row.dataAgendamento) : '-',
     },
     { key: 'hora', label: 'Horário', width: 'large', align: 'left', getCellValue: (row) => row.horarioAgendamento.slice(0, 5), },
     {
@@ -271,8 +272,8 @@ export class AgendamentosComponent implements OnInit {
     const filtros = this.filtrosForm.value;
     console.log(filtros);
 
-    if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = new Date(filtros.dataAgendamentoFim).toISOString().slice(0, 10)
-    if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = new Date(filtros.dataAgendamentoInicio).toISOString().slice(0, 10)
+    if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = DateUtils.fromFieldToDb(filtros.dataAgendamentoFim)
+    if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = DateUtils.fromFieldToDb(filtros.dataAgendamentoInicio)
     if (filtros.idAssistido) filtros.idAssistido = filtros.idAssistido.value.id
     if (filtros.idProfissional) filtros.idProfissional = filtros.idProfissional.value.id
 

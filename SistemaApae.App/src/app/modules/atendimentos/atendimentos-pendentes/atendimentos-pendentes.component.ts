@@ -20,14 +20,7 @@ import { PageInfoService } from '../../core/services/page-info.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ModalAtendimentosComponent } from '../modal-atendimentos/modal-atendimentos.component';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
-
-interface AtendimentoPendente {
-  assistido: Assistido;
-  dataAgendamento: Date;
-  horarioAgendamento: string;
-  tipoRecorrencia: TipoRecorrencia;
-  profissional: Usuario;
-}
+import { AtendimentoPendente } from './atendimento-pendente.interface';
 
 @Component({
   selector: 'app-atendimentos-pendentes',
@@ -83,13 +76,18 @@ export class AtendimentosPendentesComponent implements OnInit {
     this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar convênios do sistema');
 
     this.initFiltrosForm();
+    this.pesquisarAgendamentos();
   }
 
 
   pesquisarAgendamentos() {
+    if (!this.filtrosForm.valid) { 
+      this.notificationService.showWarning(this.notificationService.camposObrigatorios);
+      return
+    }
+
     const filtros = this.valueFromForm();
 
-    console.log(filtros);
     this.agendamentoService.listarAgendamentosPorProfissional(filtros.idProfissional, filtros.dataAgendamento).subscribe({
       next: (response) => {
         this.atendimentosPendentes = []
@@ -101,6 +99,7 @@ export class AtendimentosPendentesComponent implements OnInit {
               horarioAgendamento: agendamento.horarioAgendamento,
               profissional: agendamento.profissional,
               tipoRecorrencia: agendamento.tipoRecorrencia,
+              agendamento: agendamento
             });
         })
         })
@@ -134,7 +133,9 @@ export class AtendimentosPendentesComponent implements OnInit {
       label: 'Data',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => row.tipoRecorrencia == TipoRecorrencia.NENHUM ? new Date(row.dataAgendamento).toLocaleDateString() : '-',
+      getCellValue: (row) => { 
+        return row.tipoRecorrencia == TipoRecorrencia.NENHUM ? new Date(row.dataAgendamento).toLocaleDateString() : '-'
+      },
     },
     { key: 'hora', label: 'Horário', width: 'large', align: 'left', getCellValue: (row) => row.horarioAgendamento.slice(0, 5), },
     {
@@ -187,7 +188,7 @@ export class AtendimentosPendentesComponent implements OnInit {
         width: '60%',
         height: 'auto',
         disableClose: true,
-        data: { isEdit: true },
+        data: { isVisualizacao: true },
         element: element,
       })
       .subscribe((atualizar) => atualizar ?? this.pesquisarAgendamentos());
@@ -196,7 +197,9 @@ export class AtendimentosPendentesComponent implements OnInit {
   valueFromForm(): { dataAgendamento: string; idProfissional: string } {
     const filtros = this.filtrosForm.value;
 
-    if (filtros.dataAgendamento) filtros.dataAgendamento = new Date(filtros.dataAgendamento).toISOString().slice(0, 10)
+    const data = new Date(filtros.dataAgendamento);
+
+    filtros.dataAgendamento = new Date(data.getFullYear(), data.getMonth(), data.getDate()).toISOString().split('T')[0];
 
     filtros.idProfissional = Usuario.getCurrentUser().id;
 

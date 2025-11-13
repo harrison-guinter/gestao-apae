@@ -33,6 +33,7 @@ import { CidadesService } from '../../cidades/cidades.service';
 import { ConvenioService } from '../../convenios/convenio.service';
 import { map } from 'rxjs/internal/operators/map';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
+import { DateUtils } from '../../core/date/date-utils';
 
 @Component({
   selector: 'app-cadastro-assistido',
@@ -150,16 +151,12 @@ export class CadastroAssistidoComponent implements OnInit {
   }
 
   private preencherFormulario(assistido: Assistido): void {
-    let dataNasc: number[] = [];
-    if (assistido.dataNascimento) {
-      dataNasc = assistido.dataNascimento.split('-').map((part) => parseInt(part));
-    }
 
     this.formCadastro.patchValue({
       // Dados Pessoais
       nome: assistido.nome,
       dataNascimento:
-        dataNasc.length > 0 ? new Date(dataNasc[0], dataNasc[1] - 1, dataNasc[2]) : null,
+        assistido.dataNascimento ? DateUtils.fromDbToField(assistido.dataNascimento) : null,
       cpf: assistido.cpf,
       sexo: assistido.sexo,
       naturalidade: assistido.naturalidade,

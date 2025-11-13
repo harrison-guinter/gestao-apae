@@ -21,6 +21,7 @@ import { UsuarioService } from '../../usuarios/usuario.service';
 import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
+import { DateUtils } from '../../core/date/date-utils';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -128,7 +129,7 @@ export class ModalAgendamentosComponent implements OnInit {
       ],
       dataAgendamento: [
         {
-          value: object?.dataAgendamento,
+          value: object?.dataAgendamento ? DateUtils.fromDbToField(object?.dataAgendamento as any) : '', 
           disabled: object && object?.tipoRecorrencia != TipoRecorrencia.NENHUM,
         },
         object?.tipoRecorrencia == TipoRecorrencia.NENHUM || !object ? Validators.required : [],
