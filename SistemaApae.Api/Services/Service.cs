@@ -37,13 +37,13 @@ public class Service<TEntity, TFilter> : IService<TEntity, TFilter>
 
             if (filtros is IBaseFilter paged)
             {
-                resp.Limit = paged.Limit ?? 50;
-                resp.Skip = paged.Skip ?? 0;
+                resp.Limit = paged.Limit;
+                resp.Skip = paged.Skip;
             }
             else
             {
-                resp.Limit = 50;
-                resp.Skip = 0;
+                resp.Limit = null;
+                resp.Skip = null;
             }
 
             return resp;

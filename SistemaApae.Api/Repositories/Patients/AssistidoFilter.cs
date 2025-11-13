@@ -11,6 +11,11 @@ public class AssistidoFilter : IRepositoryFilter<Assistido, AssistidoFilterReque
 {
     public IPostgrestTable<Assistido> Apply(IPostgrestTable<Assistido> query, AssistidoFilterRequest filtros)
     {
+        if (filtros.Ids != null && filtros.Ids.Count > 0)
+        {
+            query = query.Filter(a => a.Id, Constants.Operator.In, filtros.Ids);
+        }
+
         if (!string.IsNullOrWhiteSpace(filtros.Nome))
         {
             query = query.Filter(a => a.Nome, Constants.Operator.ILike, $"%{filtros.Nome}%");
@@ -26,7 +31,10 @@ public class AssistidoFilter : IRepositoryFilter<Assistido, AssistidoFilterReque
             }
         }
 
-        query = query.Filter(u => u.Status, Constants.Operator.Equals, (int)filtros.Status);
+        if (!filtros.IgnorarStatus)
+        {
+            query = query.Filter(u => u.Status, Constants.Operator.Equals, (int)filtros.Status);
+        }
 
         return query;
     }

@@ -99,39 +99,33 @@ export class AtendimentosRealizadosComponent implements OnInit {
     this.pageInfoService.updatePageInfo('Atendimentos', 'Gerenciar atendimentos do sistema');
 
     this.initFiltrosForm();
-    this.pesquisarAtendimentos();
   }
 
   pesquisarAtendimentos() {
-    const filtros: AtendimentoFiltro = {
-      assistido: this.filtrosForm.value.assistido || undefined,
-      profissional: this.filtrosForm.value.profissional || undefined,
+    console.log('value', this.filtrosForm.value);
+    const filtros: any = {
+      idAssistido: this.filtrosForm.value.assistido || undefined,
+      idProfissional: this.filtrosForm.value.profissional || undefined,
       dataInicioAtendimento: this.filtrosForm.value.dataInicio || undefined,
       dataFimAtendimento: this.filtrosForm.value.dataFim || undefined,
-      presenca:
-        this.filtrosForm.value.presenca !== '' ? this.filtrosForm.value.presenca : undefined,
-      status: this.filtrosForm.value.status !== '' ? this.filtrosForm.value.status : undefined,
+      presenca: this.filtrosForm.value?.presenca ? this.filtrosForm.value.presenca : undefined,
     };
-
-    this.atendimentoService.listarAtendimentos(filtros).subscribe({
-      next: (response) => {
-        this.atendimentos = response;
-      },
-      error: (error) => {
-        console.error('Erro ao pesquisar atendimentos:', error);
-      },
-    });
+    console.log('filtros:', filtros);
+    this.atendimentoService
+      .listarAtendimentos(filtros)
+      .subscribe((response) => (this.atendimentos = response));
   }
 
   initFiltrosForm() {
     this.filtrosForm = this.formBuilder.group({
-      assistido: [''],
-      agendamento: [''],
-      dataInicio: [''],
-      dataFim: [''],
-      presenca: [''],
-      status: [''],
+      assistido: null,
+      agendamento: null,
+      dataInicio: null,
+      dataFim: null,
+      presenca: null,
+      status: null,
     });
+    this.pesquisarAtendimentos();
   }
 
   limparFiltros() {

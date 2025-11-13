@@ -11,11 +11,6 @@ public class DashboardStatsDto
     public int TotalAssistidos { get; set; }
 
     /// <summary>
-    /// Número de atendimentos realizados hoje
-    /// </summary>
-    public int AtendimentosHoje { get; set; }
-
-    /// <summary>
     /// Número de usuários ativos no sistema
     /// </summary>
     public int UsuariosAtivos { get; set; }
@@ -24,11 +19,6 @@ public class DashboardStatsDto
     /// Número de agendamentos pendentes
     /// </summary>
     public int AgendamentosPendentes { get; set; }
-
-    /// <summary>
-    /// Número de atendimentos desta semana
-    /// </summary>
-    public int AtendimentosSemana { get; set; }
 
     /// <summary>
     /// Número de atendimentos deste mês

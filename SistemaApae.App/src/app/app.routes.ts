@@ -16,6 +16,10 @@ import { CadastroAssistidoComponent } from './modules/assistidos/cadastro-assist
 import { AtendimentosRealizadosComponent } from './modules/atendimentos/atendimentos-realizados/atendimentos-realizados.component';
 import { DashboardResolver } from './modules/dashboard/dashboard.resolver';
 import { AtendimentosPendentesComponent } from './modules/atendimentos/atendimentos-pendentes/atendimentos-pendentes.component';
+import { RelatorioFaltasComponent } from './modules/relatorios/relatorio-faltas/relatorio-faltas.component';
+import { RelatorioIndividualComponent } from './modules/relatorios/relatorio-individual/relatorio-individual.component';
+import { RelatorioPresencaComponent } from './modules/relatorios/relatorio-presenca/relatorio-presenca.component';
+import { RelatorioAtendimentosComponent } from './modules/relatorios/relatorio-atendimentos/relatorio-atendimentos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -27,7 +31,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent, resolve: { DashboardResolver } },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        resolve: { DashboardResolver },
+      },
       { path: 'usuarios', canActivate: [CoordenadorGuard], component: UsuariosComponent },
       { path: 'assistidos', canActivate: [CoordenadorGuard], component: AssistidosComponent },
       {
@@ -51,6 +59,26 @@ export const routes: Routes = [
         path: 'atendimentos-realizados',
         canActivate: [CoordenadorGuard],
         component: AtendimentosRealizadosComponent,
+      },
+      {
+        path: 'relatorios/faltas',
+        canActivate: [CoordenadorGuard],
+        component: RelatorioFaltasComponent,
+      },
+      {
+        path: 'relatorios/individual',
+        canActivate: [CoordenadorGuard],
+        component: RelatorioIndividualComponent,
+      },
+      {
+        path: 'relatorios/presencas',
+        canActivate: [CoordenadorGuard],
+        component: RelatorioPresencaComponent,
+      },
+      {
+        path: 'relatorios/atendimentos',
+        canActivate: [CoordenadorGuard],
+        component: RelatorioAtendimentosComponent,
       },
     ],
   },

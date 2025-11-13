@@ -9,6 +9,11 @@ namespace SistemaApae.Api.Models.Appointment;
 public class AtendimentoFilterRequest : BaseFilter
 {
     /// <summary>
+    /// Lista de IDs de agendamentos para busca em lote
+    /// </summary>
+    public List<Guid>? IdsAgendamento { get; set; }
+
+    /// <summary>
     /// ID do agendamento
     /// </summary>
     public Guid IdAgendamento { get; set; } = Guid.Empty;
@@ -32,4 +37,19 @@ public class AtendimentoFilterRequest : BaseFilter
     /// Status do atendimento (presença/falta/justificada)
     /// </summary>
     public StatusAtendimentoEnum? Presenca { get; set; }
+
+    /// <summary>
+    /// Lista de status de presença para filtro (permite múltiplos valores)
+    /// </summary>
+    public List<StatusAtendimentoEnum>? Presencas { get; set; }
+
+    /// <summary>
+    /// ID do profissional (filtra via relacionamento do agendamento)
+    /// </summary>
+    public Guid IdProfissional { get; set; } = Guid.Empty;
+
+    /// <summary>
+    /// ID do município (filtra via relacionamento do assistido)
+    /// </summary>
+    public Guid IdMunicipio { get; set; } = Guid.Empty;
 }

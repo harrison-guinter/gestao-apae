@@ -1,8 +1,8 @@
 # Use the official .NET runtime as base image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 
-# Configurar timezone para horário de Brasília (America/Sao_Paulo)
-ENV TZ=America/Sao_Paulo
+# Configurar timezone para GMT+3 (Etc/GMT-3)
+ENV TZ=Etc/GMT-3
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
@@ -29,6 +29,6 @@ RUN adduser --disabled-password --gecos '' appuser && chown -R appuser /app
 USER appuser
 
 # Configurar timezone via variável de ambiente para a aplicação .NET
-ENV TZ=America/Sao_Paulo
+ENV TZ=Etc/GMT-3
 
 ENTRYPOINT ["dotnet", "SistemaApae.Api.dll"]

@@ -45,6 +45,12 @@ public class Assistido : ApiBaseModel
     public Guid? IdConvenio { get; set; }
 
     /// <summary>
+    /// Navegação de convênio (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Convenio), includeInQuery: true)]
+    public Convenio? Convenio { get; set; }
+
+    /// <summary>
     /// Data de cadastro do assistido
     /// </summary>
     [Column("data_cadastro")]
@@ -115,6 +121,12 @@ public class Assistido : ApiBaseModel
     /// </summary>
     [Column("id_municipio")]
     public Guid? IdMunicipio { get; set; }
+
+    /// <summary>
+    /// Navegação de município (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Municipio), includeInQuery: true)]
+    public Municipio? Municipio { get; set; }
 
     /// <summary>
     /// CEP do endereço

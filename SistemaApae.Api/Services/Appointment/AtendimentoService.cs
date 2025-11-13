@@ -1,7 +1,10 @@
 ﻿using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Appointment;
+using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Repositories;
 
 namespace SistemaApae.Api.Services.Appointment;
@@ -50,11 +53,11 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 Id = atendimento.Id,
                 IdAgendamento = atendimento.IdAgendamento,
                 Assistido = new AssistidoAtendimentoDto(atendimento.Assistido!.Id, atendimento.Assistido.Nome),
+                Profissional = new ProfissionalAtendimentoDto(atendimento.Agendamento.Profissional.Id, atendimento.Agendamento.Profissional.Nome),
                 DataAtendimento = atendimento.DataAtendimento,
                 Presenca = atendimento.Presenca,
                 Avaliacao = atendimento.Avaliacao,
-                Observacao = atendimento.Observacao,
-
+                Observacao = atendimento.Observacao
             }).ToList();
 
             return ApiResponse<IEnumerable<AtendimentoDto>>.SuccessResponse(response);
@@ -85,6 +88,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 Id = result.Data.Id,
                 IdAgendamento = result.Data.IdAgendamento,
                 Assistido = new AssistidoAtendimentoDto(result.Data.Assistido!.Id, result.Data.Assistido.Nome),
+                Profissional = new ProfissionalAtendimentoDto(result.Data.Agendamento.Profissional!.Id, result.Data.Agendamento.Profissional!.Nome),
                 DataAtendimento = result.Data.DataAtendimento,
                 Presenca = result.Data.Presenca,
                 Avaliacao = result.Data.Avaliacao,
@@ -103,15 +107,25 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
     /// <summary>
     /// Cria um atendimento
     /// </summary>
-    public async Task<ApiResponse<Atendimento>> Create(Atendimento appointment)
+    public async Task<ApiResponse<Atendimento>> Create(AtendimentoCreateDto dto)
     {
         try
         {
-            if (!await SchedulingExistsAsync(appointment.IdAgendamento))
+            if (!await SchedulingExistsAsync(dto.Agendamento.Id))
                 return ApiResponse<Atendimento>.ErrorResponse("Id do Agendamento não existe");
 
-            if (!await PatientsExistsAsync(appointment.IdAssistido))
+            if (!await PatientsExistsAsync(dto.Assistido.Id))
                 return ApiResponse<Atendimento>.ErrorResponse("Id do Assistido não existe");
+
+            var appointment = new Atendimento
+            {
+                IdAgendamento = dto.Agendamento.Id,
+                IdAssistido = dto.Assistido.Id,
+                DataAtendimento = dto.DataAtendimento,
+                Presenca = dto.Presenca,
+                Avaliacao = dto.Avaliacao,
+                Observacao = dto.Observacao
+            };
 
             var result = await base.Create(appointment);
 
@@ -202,6 +216,60 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
     }
 
     /// <summary>
+    /// Busca atendimentos por uma lista de agendamentos em uma data específica (bulk)
+    /// </summary>
+    /// <param name="idsAgendamento">IDs dos agendamentos</param>
+    /// <param name="data">Data do atendimento</param>
+    /// <returns>Dicionário mapeando IdAgendamento -> lista de atendimentos</returns>
+    public async Task<Dictionary<Guid, List<AtendimentoDto>>> GetByAgendamentosAndDate(
+        IEnumerable<Guid> idsAgendamento,
+        DateOnly data)
+    {
+        var ids = idsAgendamento?.Distinct().ToList() ?? new List<Guid>();
+        if (ids.Count == 0)
+            return new Dictionary<Guid, List<AtendimentoDto>>();
+
+        try
+        {
+            var dataInicio = data.ToDateTime(TimeOnly.MinValue);
+            var dataFim = data.ToDateTime(TimeOnly.MaxValue);
+
+            var filtros = new AtendimentoFilterRequest
+            {
+                IdsAgendamento = ids,
+                DataInicioAtendimento = dataInicio,
+                DataFimAtendimento = dataFim
+            };
+
+            var result = await base.GetByFilters(filtros);
+            var vazia = new Dictionary<Guid, List<AtendimentoDto>>();
+
+            if (!result.Success || result.Data == null)
+                return vazia;
+
+            return result.Data
+                .GroupBy(a => a.IdAgendamento)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(a => new AtendimentoDto
+                    {
+                        Id = a.Id,
+                        IdAgendamento = a.IdAgendamento,
+                        DataAtendimento = a.DataAtendimento,
+                        Presenca = a.Presenca,
+                        Avaliacao = a.Avaliacao,
+                        Observacao = a.Observacao
+                    }).ToList()
+                );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar atendimentos em lote por data");
+            return new Dictionary<Guid, List<AtendimentoDto>>();
+        }
+    }
+
+    /// <summary>
     /// Valida se agendamento existe
     /// </summary>
     private async Task<bool> SchedulingExistsAsync(Guid id)
@@ -228,5 +296,60 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
 
         return patient != null;
     }
+
+	/// <summary>
+	/// Gera o relatório de faltas por paciente com filtros opcionais
+	/// </summary>
+	public async Task<ApiResponse<IEnumerable<FaltaReportItemDto>>> GetRelatorioFaltas(FaltaReportFilterRequest filtrosRelatorio)
+	{
+		try
+		{
+			// Mapeia o filtro específico do relatório para o filtro genérico de atendimento
+			var filtros = new AtendimentoFilterRequest
+			{
+				DataInicioAtendimento = filtrosRelatorio.DataInicio,
+				DataFimAtendimento = filtrosRelatorio.DataFim,
+				IdProfissional = filtrosRelatorio.IdProfissional,
+				IdMunicipio = filtrosRelatorio.IdMunicipio,
+				IdAssistido = filtrosRelatorio.IdAssistido,
+				Presencas = new List<StatusAtendimentoEnum>
+				{
+					StatusAtendimentoEnum.FALTA,
+					StatusAtendimentoEnum.JUSTIFICADA
+				},
+				Limit = filtrosRelatorio.Limit,
+				Skip = filtrosRelatorio.Skip
+			};
+
+			var result = await base.GetByFilters(filtros);
+
+			if (!result.Success || result.Data == null)
+				return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(Enumerable.Empty<FaltaReportItemDto>());
+
+			var itens = result.Data.Select(at =>
+			{
+				var municipio = at.Assistido?.Municipio;
+				return new FaltaReportItemDto
+				{
+					IdAtendimento = at.Id,
+					DataAtendimento = at.DataAtendimento,
+					StatusFrequencia = at.Presenca,
+					IdAssistido = at.Assistido?.Id ?? Guid.Empty,
+					NomeAssistido = at.Assistido?.Nome,
+					IdMunicipio = municipio?.Id,
+					NomeMunicipio = municipio?.Nome,
+					IdProfissional = at.Agendamento.Profissional?.Id ?? at.Agendamento?.IdProfissional ?? Guid.Empty,
+					NomeProfissional = at.Agendamento.Profissional?.Nome
+				};
+			}).ToList();
+
+			return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(itens);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Erro ao gerar relatório de faltas");
+			return ApiResponse<IEnumerable<FaltaReportItemDto>>.ErrorResponse("Erro interno ao gerar relatório de faltas");
+		}
+	}
 }
 

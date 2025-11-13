@@ -11,11 +11,26 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
 {
     public IPostgrestTable<Atendimento> Apply(IPostgrestTable<Atendimento> query, AtendimentoFilterRequest filtros)
     {
-        if (filtros.IdAgendamento != Guid.Empty)
-            query = query.Filter(a => a.IdAgendamento, Constants.Operator.Equals, filtros.IdAgendamento);
+        // Filtro por lista de agendamentos (busca em lote)
+        if (filtros.IdsAgendamento != null && filtros.IdsAgendamento.Count > 0)
+        {
+            var idsAgendamento = filtros.IdsAgendamento.Select(id => id.ToString()).ToList();
+            query = query.Filter(a => a.IdAgendamento, Constants.Operator.In, idsAgendamento);
+        }
+        // Filtro por agendamento único
+        else if (filtros.IdAgendamento != Guid.Empty)
+            query = query.Filter(a => a.IdAgendamento, Constants.Operator.Equals, filtros.IdAgendamento.ToString());
 
         if (filtros.IdAssistido != Guid.Empty)
-            query = query.Filter(a => a.IdAgendamento, Constants.Operator.Equals, filtros.IdAssistido);
+            query = query.Filter(a => a.IdAssistido, Constants.Operator.Equals, filtros.IdAssistido.ToString());
+
+        // Filtro por profissional (via relacionamento do agendamento)
+        if (filtros.IdProfissional != Guid.Empty)
+            query = query.Filter("agendamento.id_profissional", Constants.Operator.Equals, filtros.IdProfissional.ToString());
+
+        // Filtro por município (via relacionamento do assistido)
+        if (filtros.IdMunicipio != Guid.Empty)
+            query = query.Filter("assistido.id_municipio", Constants.Operator.Equals, filtros.IdMunicipio.ToString());
 
         if (filtros.DataInicioAtendimento.HasValue && filtros.DataFimAtendimento.HasValue)
         {
@@ -31,8 +46,16 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
             query = query.Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, filtros.DataFimAtendimento.Value);
         }
 
-        if (filtros.Presenca != null)
-            query = query.Filter(a => a.Status!, Constants.Operator.Equals, (int)filtros.Presenca);
+        // Filtro por presença/ausência
+        if (filtros.Presencas != null && filtros.Presencas.Count > 0)
+        {
+            var valores = filtros.Presencas.Select(p => (int)p).ToList();
+            query = query.Filter(a => a.Presenca!, Constants.Operator.In, valores);
+        }
+        else if (filtros.Presenca != null)
+        {
+            query = query.Filter(a => a.Presenca!, Constants.Operator.Equals, (int)filtros.Presenca);
+        }
 
         return query;
     }

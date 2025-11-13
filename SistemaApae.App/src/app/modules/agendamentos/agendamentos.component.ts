@@ -47,7 +47,7 @@ import { DateUtils } from '../core/date/date-utils';
     InputComponent,
     FiltersContainerComponent,
     AutocompleteComponent,
-    RangePickerComponent
+    RangePickerComponent,
   ],
   templateUrl: './agendamentos.component.html',
   styleUrls: ['./agendamentos.component.less'],
@@ -66,7 +66,7 @@ export class AgendamentosComponent implements OnInit {
   profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
     map((users) =>
       users.map((user) => ({
-        value: user, 
+        value: user,
         label: user.nome,
       }))
     )
@@ -88,7 +88,7 @@ export class AgendamentosComponent implements OnInit {
     private pageInfoService: PageInfoService,
     private notificationService: NotificationService,
     private modalService: ModalService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo('Agendamentos', 'Gerenciar agendamentos do sistema');
@@ -106,9 +106,8 @@ export class AgendamentosComponent implements OnInit {
       error: (error) => {
         this.notificationService.fail('Erro ao pesquisar agendamentos');
         console.error(error);
-      }
+      },
     });
-
   }
 
   initFiltrosForm() {
@@ -163,7 +162,6 @@ export class AgendamentosComponent implements OnInit {
       align: 'left',
       getCellValue: (row) => row.tipoRecorrencia == TipoRecorrencia.NENHUM ? DateUtils.fromDbToDisplay(row.dataAgendamento) : '-',
     },
-    { key: 'hora', label: 'Horário', width: 'large', align: 'left', getCellValue: (row) => row.horarioAgendamento.slice(0, 5), },
     {
       key: 'profissional',
       label: 'Profissional',
@@ -192,7 +190,9 @@ export class AgendamentosComponent implements OnInit {
       width: 'large',
       align: 'left',
       getCellValue: (row) =>
-         row.tipoRecorrencia == TipoRecorrencia.SEMANAL ? this.diaDaSemanaOptions.find((item) => item.value == row.diaSemana)?.label :  '-',
+        row.tipoRecorrencia == TipoRecorrencia.SEMANAL
+          ? this.diaDaSemanaOptions.find((item) => item.value == row.diaSemana)?.label
+          : '-',
     },
     {
       key: 'status',
@@ -259,18 +259,17 @@ export class AgendamentosComponent implements OnInit {
   }
 
   private buscarProfissionais(): Observable<Usuario[]> {
-    return this.usuarioService.filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo }).pipe(
-      map((users) => {
-        return users
-          .map((u) => new Usuario(u))
-      })
-    );
+    return this.usuarioService
+      .filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo })
+      .pipe(
+        map((users) => {
+          return users.map((u) => new Usuario(u));
+        })
+      );
   }
-
 
   valueFromForm(): AgendamentoFiltro {
     const filtros = this.filtrosForm.value;
-    console.log(filtros);
 
     if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = DateUtils.fromFieldToDb(filtros.dataAgendamentoFim)
     if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = DateUtils.fromFieldToDb(filtros.dataAgendamentoInicio)
@@ -279,6 +278,4 @@ export class AgendamentosComponent implements OnInit {
 
     return { ...filtros };
   }
-
-
 }

@@ -11,142 +11,117 @@ namespace SistemaApae.Api.Services;
 /// </summary>
 public class DashboardService
 {
-    private readonly ISupabaseService _supabaseService;
-    private readonly ILogger<DashboardService> _logger;
+	private readonly ISupabaseService _supabaseService;
+	private readonly ILogger<DashboardService> _logger;
 
-    /// <summary>
-    /// Inicializa uma nova instância do serviço de dashboard
-    /// </summary>
-    public DashboardService(ISupabaseService supabaseService, ILogger<DashboardService> logger)
-    {
-        _supabaseService = supabaseService;
-        _logger = logger;
-    }
+	/// <summary>
+	/// Inicializa uma nova instância do serviço de dashboard
+	/// </summary>
+	public DashboardService(ISupabaseService supabaseService, ILogger<DashboardService> logger)
+	{
+		_supabaseService = supabaseService;
+		_logger = logger;
+	}
 
-    /// <summary>
-    /// Obtém as estatísticas do dashboard
-    /// </summary>
-    /// <returns>Resposta com as estatísticas do dashboard</returns>
-    public async Task<ApiResponse<DashboardStatsDto>> GetDashboardStats()
-    {
-        try
-        {
-            var hoje = DateOnly.FromDateTime(DateTime.Now);
-            var inicioSemana = hoje.AddDays(-(int)DateTime.Now.DayOfWeek);
-            var inicioMes = new DateOnly(hoje.Year, hoje.Month, 1);
+	/// <summary>
+	/// Obtém as estatísticas do dashboard (somente informações mensais)
+	/// </summary>
+	/// <param name="year">Ano alvo (opcional, padrão: ano atual)</param>
+	/// <param name="month">Mês alvo 1-12 (opcional, padrão: mês atual)</param>
+	/// <returns>Resposta com as estatísticas do dashboard</returns>
+	public async Task<ApiResponse<DashboardStatsDto>> GetDashboardStats(int? year = null, int? month = null)
+	{
+		try
+		{
+			var now = DateTime.Now;
+			var targetYear = year ?? now.Year;
+			var targetMonth = month ?? now.Month;
 
-            // Faixas de tempo em DateTime para facilitar filtros (evita métodos dentro do Where)
-            var inicioHoje = hoje.ToDateTime(TimeOnly.MinValue);
-            var inicioAmanha = hoje.AddDays(1).ToDateTime(TimeOnly.MinValue);
-            var inicioSemanaDateTime = inicioSemana.ToDateTime(TimeOnly.MinValue);
-            var inicioMesDateTime = inicioMes.ToDateTime(TimeOnly.MinValue);
+			var inicioMes = new DateOnly(targetYear, targetMonth, 1);
+			var fimMes = inicioMes.AddMonths(1);
 
-            // Converte datas para strings compatíveis com PostgREST
-            string inicioHojeStr = inicioHoje.ToString("yyyy-MM-dd HH:mm:ss");
-            string inicioAmanhaStr = inicioAmanha.ToString("yyyy-MM-dd HH:mm:ss");
-            string inicioSemanaStr = inicioSemanaDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+			// Faixas de tempo em DateTime/DateOnly para filtros
+			var inicioMesDateTime = inicioMes.ToDateTime(TimeOnly.MinValue);
+			var fimMesDateTime = fimMes.ToDateTime(TimeOnly.MinValue);
+
+			// Converte datas para strings compatíveis com PostgREST (timestamp sem 'Z')
             string inicioMesStr = inicioMesDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-            string hojeDateStr = hoje.ToString("yyyy-MM-dd");
+            string fimMesStr = fimMesDateTime.ToString("yyyy-MM-dd HH:mm:ss");
             string inicioMesDateStr = inicioMes.ToString("yyyy-MM-dd");
+			string fimMesDateStr = fimMes.ToString("yyyy-MM-dd");
 
-            var countType = Supabase.Postgrest.Constants.CountType.Exact;
+			var countType = Supabase.Postgrest.Constants.CountType.Exact;
 
-            // Dispara todas as contagens em paralelo para reduzir latência
-            var totalAssistidosTask = _supabaseService.Client
-                .From<Models.Patients.Assistido>()
-                .Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
-                .Count(countType);
+			// Consultas sequenciais (sem Task.WhenAll)
+			var totalAssistidos = await _supabaseService.Client
+				.From<Models.Patients.Assistido>()
+				.Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+				.Count(countType);
 
-            var atendimentosHojeTask = _supabaseService.Client
-                .From<Models.Appointment.Atendimento>()
-                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioHojeStr)
-                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, inicioAmanhaStr)
-                .Count(countType);
+			var usuariosAtivos = await _supabaseService.Client
+				.From<Models.Users.Usuario>()
+				.Filter(u => u.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+				.Count(countType);
 
-            var usuariosAtivosTask = _supabaseService.Client
-                .From<Models.Users.Usuario>()
-                .Filter(u => u.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
-                .Count(countType);
+			// Agendamentos ativos dentro do mês
+			var agendamentosPendentes = await _supabaseService.Client
+				.From<Models.Agenda.Agendamento>()
+				.Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+				.Filter(a => a.DataAgendamento!, Constants.Operator.GreaterThanOrEqual, inicioMesDateStr)
+				.Filter(a => a.DataAgendamento!, Constants.Operator.LessThan, fimMesDateStr)
+				.Count(countType);
 
-            var agendamentosPendentesTask = _supabaseService.Client
-                .From<Models.Agenda.Agendamento>()
-                .Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
-                .Filter(a => a.DataAgendamento!, Constants.Operator.GreaterThanOrEqual, hojeDateStr)
-                .Count(countType);
-
-            var atendimentosSemanaTask = _supabaseService.Client
-                .From<Models.Appointment.Atendimento>()
-                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioSemanaStr)
-                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, inicioAmanhaStr)
-                .Count(countType);
-
-            var atendimentosMesTask = _supabaseService.Client
-                .From<Models.Appointment.Atendimento>()
+			// Atendimentos dentro do mês
+			var atendimentosMes = await _supabaseService.Client
+				.From<Models.Appointment.Atendimento>()
                 .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioMesStr)
-                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, inicioAmanhaStr)
+                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, fimMesDateStr)
                 .Count(countType);
 
-            var novosAssistidosMesTask = _supabaseService.Client
-                .From<Models.Patients.Assistido>()
-                .Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
-                .Filter(a => a.DataCadastro!, Constants.Operator.GreaterThanOrEqual, inicioMesDateStr)
-                .Count(countType);
+			// Novos assistidos cadastrados no mês
+			var novosAssistidosMes = await _supabaseService.Client
+				.From<Models.Patients.Assistido>()
+				.Filter(a => a.Status, Constants.Operator.Equals, (int)StatusEntidadeEnum.Ativo)
+				.Filter(a => a.DataCadastro!, Constants.Operator.GreaterThanOrEqual, inicioMesDateStr)
+				.Filter(a => a.DataCadastro!, Constants.Operator.LessThan, fimMesDateStr)
+				.Count(countType);
 
-            var atendimentosComPresencaTask = _supabaseService.Client
-                .From<Models.Appointment.Atendimento>()
+			// Atendimentos com presença no mês
+			var atendimentosComPresenca = await _supabaseService.Client
+				.From<Models.Appointment.Atendimento>()
+                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioMesStr)
+                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, fimMesDateStr)
                 .Filter(a => a.Presenca!, Constants.Operator.Equals, (int)StatusAtendimentoEnum.PRESENCA)
-                .Count(countType);
+				.Count(countType);
 
-            // total de atendimentos com status definido (qualquer que seja) -> Presenca >= 1
-            var totalAtendimentosTask = _supabaseService.Client
-                .From<Models.Appointment.Atendimento>()
+			// Total de atendimentos com status definido no mês (denominador da taxa)
+			var totalAtendimentos = await _supabaseService.Client
+				.From<Models.Appointment.Atendimento>()
+                .Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, inicioMesStr)
+                .Filter(a => a.DataAtendimento!, Constants.Operator.LessThan, fimMesDateStr)
                 .Filter(a => a.Presenca!, Constants.Operator.GreaterThanOrEqual, (int)StatusAtendimentoEnum.PRESENCA)
-                .Count(countType);
+				.Count(countType);
 
-            await Task.WhenAll(
-                totalAssistidosTask,
-                atendimentosHojeTask,
-                usuariosAtivosTask,
-                agendamentosPendentesTask,
-                atendimentosSemanaTask,
-                atendimentosMesTask,
-                novosAssistidosMesTask,
-                atendimentosComPresencaTask,
-                totalAtendimentosTask
-            );
+			var taxaPresenca = totalAtendimentos > 0
+				? Math.Round((decimal)atendimentosComPresenca / totalAtendimentos * 100, 2)
+				: 0;
 
-            var totalAssistidos = totalAssistidosTask.Result;
-            var atendimentosHoje = atendimentosHojeTask.Result;
-            var usuariosAtivos = usuariosAtivosTask.Result;
-            var agendamentosPendentes = agendamentosPendentesTask.Result;
-            var atendimentosSemana = atendimentosSemanaTask.Result;
-            var atendimentosMes = atendimentosMesTask.Result;
-            var novosAssistidosMes = novosAssistidosMesTask.Result;
-            var atendimentosComPresenca = atendimentosComPresencaTask.Result;
-            var totalAtendimentos = totalAtendimentosTask.Result;
+			var stats = new DashboardStatsDto
+			{
+				TotalAssistidos = totalAssistidos,
+				UsuariosAtivos = usuariosAtivos,
+				AgendamentosPendentes = agendamentosPendentes,
+				AtendimentosMes = atendimentosMes,
+				NovosAssistidosMes = novosAssistidosMes,
+				TaxaPresenca = taxaPresenca
+			};
 
-            var taxaPresenca = totalAtendimentos > 0 
-                ? Math.Round((decimal)atendimentosComPresenca / totalAtendimentos * 100, 2)
-                : 0;
-
-            var stats = new DashboardStatsDto
-            {
-                TotalAssistidos = totalAssistidos,
-                AtendimentosHoje = atendimentosHoje,
-                UsuariosAtivos = usuariosAtivos,
-                AgendamentosPendentes = agendamentosPendentes,
-                AtendimentosSemana = atendimentosSemana,
-                AtendimentosMes = atendimentosMes,
-                NovosAssistidosMes = novosAssistidosMes,
-                TaxaPresenca = taxaPresenca
-            };
-
-            return ApiResponse<DashboardStatsDto>.SuccessResponse(stats);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao buscar estatísticas do dashboard");
-            return ApiResponse<DashboardStatsDto>.ErrorResponse("Erro interno ao buscar estatísticas do dashboard");
-        }
-    }
+			return ApiResponse<DashboardStatsDto>.SuccessResponse(stats);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Erro ao buscar estatísticas do dashboard");
+			return ApiResponse<DashboardStatsDto>.ErrorResponse("Erro interno ao buscar estatísticas do dashboard");
+		}
+	}
 }

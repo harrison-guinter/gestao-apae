@@ -1,5 +1,7 @@
+using SistemaApae.Api.Models.Agenda;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
+using SistemaApae.Api.Models.Users;
 using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -56,4 +58,10 @@ public class Atendimento : ApiBaseModel
     [Reference(typeof(Assistido), includeInQuery: true)]
     public Assistido? Assistido { get; set; }
 
+
+    /// <summary>
+    /// Navegação do agendamento (embed via PostgREST)
+    /// </summary>
+    [Reference(typeof(Agendamento), includeInQuery: true)]
+    public Agendamento? Agendamento { get; set; }
 }

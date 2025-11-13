@@ -16,7 +16,12 @@ public class AtendimentoDto
     /// <summary>
     /// Dados do Assistido associado
     /// </summary>
-    public AssistidoAtendimentoDto Assistido { get; set; }
+    public AssistidoAtendimentoDto? Assistido { get; set; }
+
+    /// <summary>
+    /// Dados do Profissional associado
+    /// </summary>
+    public ProfissionalAtendimentoDto? Profissional { get; set; }
 
     /// <summary>
     /// Data e hora do atendimento
@@ -54,6 +59,25 @@ public class AssistidoAtendimentoDto
 
     /// <summary>
     /// Nome do assistido
+    /// </summary>
+    public string? Nome { get; set; } = string.Empty;
+}
+
+public class ProfissionalAtendimentoDto
+{
+    public ProfissionalAtendimentoDto(Guid id, string nome)
+    {
+        Id = id;
+        Nome = nome;
+    }
+
+    /// <summary>
+    /// ID do profissional associado
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Nome do profissional
     /// </summary>
     public string? Nome { get; set; } = string.Empty;
 }
