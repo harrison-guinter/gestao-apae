@@ -32,6 +32,11 @@ public class FaltaReportFilterRequest : BaseFilter
 	/// Município do assistido
 	/// </summary>
 	public Guid IdMunicipio { get; set; } = Guid.Empty;
+
+    /// <summary>
+    /// Convênio do assistido
+    /// </summary>
+    public Guid IdConvenio { get; set; } = Guid.Empty;
 }
 
 

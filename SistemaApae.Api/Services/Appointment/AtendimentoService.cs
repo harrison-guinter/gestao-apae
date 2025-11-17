@@ -312,6 +312,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
 				IdProfissional = filtrosRelatorio.IdProfissional,
 				IdMunicipio = filtrosRelatorio.IdMunicipio,
 				IdAssistido = filtrosRelatorio.IdAssistido,
+                IdConvenio = filtrosRelatorio.IdConvenio,
 				Presencas = new List<StatusAtendimentoEnum>
 				{
 					StatusAtendimentoEnum.FALTA,
