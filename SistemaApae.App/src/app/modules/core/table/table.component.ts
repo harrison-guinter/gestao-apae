@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Roles } from '../../auth/roles.enum';
 
 export interface TableColumn {
   key: string;
@@ -14,6 +13,7 @@ export interface TableColumn {
   align?: 'left' | 'center' | 'right';
   getClass?: (row: any) => string;
   getCellValue?: (row: any) => any;
+  type?: 'date' | 'datetime' | 'text';
 }
 
 export interface TableAction {
@@ -61,7 +61,44 @@ export class TableComponent {
   }
 
   getCellValue(row: any, column: TableColumn): any {
-    return this.getNestedProperty(row, column.key);
+    const value = this.getNestedProperty(row, column.key);
+
+    if (column.type === 'date' && value) {
+      return this.formatDate(value, false);
+    }
+
+    if (column.type === 'datetime' && value) {
+      return this.formatDate(value, true);
+    }
+
+    return value;
+  }
+
+  private formatDate(value: any, includeTime: boolean = false): string {
+    try {
+      const date = new Date(value);
+
+      if (isNaN(date.getTime())) {
+        return value;
+      }
+
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+
+      const dateStr = `${day}/${month}/${year}`;
+
+      if (includeTime) {
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${dateStr} ${hours}:${minutes}:${seconds}`;
+      }
+
+      return dateStr;
+    } catch {
+      return value;
+    }
   }
 
   getColumnClass(column: TableColumn): string {

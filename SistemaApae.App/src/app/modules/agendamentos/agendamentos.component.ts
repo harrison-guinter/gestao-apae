@@ -160,7 +160,10 @@ export class AgendamentosComponent implements OnInit {
       label: 'Data',
       width: 'large',
       align: 'left',
-      getCellValue: (row) => row.tipoRecorrencia == TipoRecorrencia.NENHUM ? DateUtils.fromDbToDisplay(row.dataAgendamento) : '-',
+      getCellValue: (row) =>
+        row.tipoRecorrencia == TipoRecorrencia.NENHUM
+          ? DateUtils.fromDbToDisplay(row.dataAgendamento)
+          : '-',
     },
     {
       key: 'profissional',
@@ -271,10 +274,12 @@ export class AgendamentosComponent implements OnInit {
   valueFromForm(): AgendamentoFiltro {
     const filtros = this.filtrosForm.value;
 
-    if (filtros.dataAgendamentoFim) filtros.dataAgendamentoFim = DateUtils.fromFieldToDb(filtros.dataAgendamentoFim)
-    if (filtros.dataAgendamentoInicio) filtros.dataAgendamentoInicio = DateUtils.fromFieldToDb(filtros.dataAgendamentoInicio)
-    if (filtros.idAssistido) filtros.idAssistido = filtros.idAssistido.value.id
-    if (filtros.idProfissional) filtros.idProfissional = filtros.idProfissional.value.id
+    if (filtros.dataAgendamentoFim)
+      filtros.dataAgendamentoFim = DateUtils.fromFieldToDb(filtros.dataAgendamentoFim);
+    if (filtros.dataAgendamentoInicio)
+      filtros.dataAgendamentoInicio = DateUtils.fromFieldToDb(filtros.dataAgendamentoInicio);
+    if (filtros.idAssistido) filtros.idAssistido = filtros.idAssistido.value.id;
+    if (filtros.idProfissional) filtros.idProfissional = filtros.idProfissional.value.id;
 
     return { ...filtros };
   }

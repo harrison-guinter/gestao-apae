@@ -9,36 +9,47 @@
     searchButtonText="Atualizar Preview"
   >
     <app-select
-      label="Profissional"
-      [control]="$any(filtrosForm.get('profissional'))"
-      [options]="profissionaisOptions"
+      label="Assistido"
+      [control]="$any(filtrosForm.get('assistido'))"
+      [options]="(assistidosOptions$ | async) || []"
       appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione um assistido"
     >
     </app-select>
 
-    <app-input
+    <app-select
+      label="Profissional"
+      [control]="$any(filtrosForm.get('profissional'))"
+      [options]="(profissionalOptions$ | async) || []"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione um profissional"
+    >
+    </app-select>
+
+    <app-date
       label="Data Início"
       [control]="$any(filtrosForm.get('dataInicio'))"
-      type="date"
+      placeholder="DD/MM/AAAA"
       appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
+      cssClass=" mat-spacing-sm field-md"
+      [clearable]="true"
+    ></app-date>
 
-    <app-input
+    <app-date
       label="Data Fim"
       [control]="$any(filtrosForm.get('dataFim'))"
-      type="date"
+      placeholder="DD/MM/AAAA"
       appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
+      cssClass=" mat-spacing-sm field-md"
+      [clearable]="true"
+    ></app-date>
 
     <app-select
       label="Município"
       [control]="$any(filtrosForm.get('municipio'))"
-      [options]="municipiosOptions"
+      [options]="(cidades$ | async) || []"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
     >
