@@ -12,7 +12,7 @@
         <app-select
           label="Profissional"
           [control]="$any(form.get('profissional'))"
-          [options]="(profissionalOptions$ | async) || []"
+          [options]="profissionalOptions"
           placeholder="Selecione um profissional"
         >
         </app-select>
@@ -20,7 +20,7 @@
         <app-select
           label="Assistido"
           [control]="$any(form.get('assistido'))"
-          [options]="(assistidosOptions$ | async) || []"
+          [options]="assistidosOptions"
           placeholder="Selecione um assistido"
         >
         </app-select>
@@ -92,6 +92,6 @@
     [disabled]="form.invalid"
     *ngIf="!isVisualizacao"
   >
-    {{ isEdit ? 'Salvar' : 'Criar' }}
+    Salvar
   </button>
 </mat-dialog-actions>

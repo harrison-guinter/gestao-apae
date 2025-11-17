@@ -1,0 +1,56 @@
+<div class="relatorio-container">
+  <app-filters-container
+    [formGroup]="filtrosForm"
+    [isRelatorio]="true"
+    (add)="gerarRelatorio()"
+    (clear)="limparFiltros()"
+    (search)="pesquisar()"
+    title="Relatório Individual"
+    searchButtonText="Atualizar Preview"
+  >
+    <app-input
+      label="Assistido"
+      [control]="$any(filtrosForm.get('assistido'))"
+      placeholder="Buscar por assistido"
+      suffixIcon="search"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-lg"
+    >
+    </app-input>
+
+    <app-input
+      label="Data Início"
+      [control]="$any(filtrosForm.get('dataInicio'))"
+      type="date"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-input>
+
+    <app-input
+      label="Data Fim"
+      [control]="$any(filtrosForm.get('dataFim'))"
+      type="date"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-input>
+
+    <app-select
+      label="Município"
+      [control]="$any(filtrosForm.get('municipio'))"
+      [options]="municipiosOptions"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-select>
+  </app-filters-container>
+
+  <app-table
+    [columns]="tableColumns"
+    [data]="relatorioData"
+    [showActions]="false"
+    tableClass="relatorio-table"
+  >
+  </app-table>
+</div>

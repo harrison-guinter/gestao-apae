@@ -15,6 +15,7 @@ export class Atendimento {
   assistido: Assistido;
   dataAtendimento?: Date;
   presenca?: StatusAtendimentoEnum;
+  // agendamento: Agendamento;
   avaliacao?: string;
   observacao?: string;
   status: Status;
@@ -22,8 +23,9 @@ export class Atendimento {
   updatedAt?: Date;
 
   constructor(data: any = {}) {
-    this.id = data.id || '';
-    this.profissional = data.profissional || data.profissional || '';
+    console.log(data)
+    this.id = data.id;
+    this.profissional = data.profissional || '';
     this.assistido = data.assistido || data.assistido || '';
     this.dataAtendimento = data.dataAtendimento
       ? new Date(data.dataAtendimento)
@@ -48,6 +50,7 @@ export class Atendimento {
     // Relacionamentos
     this.assistido = data.assistido || undefined;
     this.profissional = data.profissional || undefined;
+    // this.agendamento = data.agendamento || '';
   }
 
   get presencaTexto(): string {

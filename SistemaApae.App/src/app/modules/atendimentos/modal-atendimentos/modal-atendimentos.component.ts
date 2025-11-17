@@ -1,4 +1,4 @@
-import { Component, inject, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, Inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -17,15 +17,8 @@ import { SelectComponent, SelectOption } from '../../core/select/select.componen
 import { Atendimento, StatusAtendimentoEnum } from '../atendimento';
 import { AtendimentoService } from '../atendimento.service';
 import { Status } from '../../core/enum/status.enum';
-import { Assistido } from '../../assistidos/assistido';
-import { AssistidoService } from '../../assistidos/assistido.service';
-import { Agendamento } from '../../agendamentos/agendamento';
-import { AgendamentoService } from '../../agendamentos/agendamento.service';
-import { Observable, map } from 'rxjs';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
-import { UsuarioService } from '../../usuarios/usuario.service';
-import { Roles } from '../../auth/roles.enum';
-import { Usuario } from '../../usuarios/usuario';
+import { AtendimentoPendente } from '../atendimentos-pendentes/atendimento-pendente.interface';
 
 export interface ModalAtendimentosData {
   isEdit: boolean;
@@ -50,19 +43,12 @@ export interface ModalAtendimentosData {
   templateUrl: './modal-atendimentos.component.html',
   styleUrls: ['./modal-atendimentos.component.less'],
 })
-export class ModalAtendimentosComponent implements OnInit {
+export class ModalAtendimentosComponent {
   form!: UntypedFormGroup;
-  isEdit: boolean = false;
   isVisualizacao: boolean = false;
-  atendimento?: Atendimento;
 
-  private usuarioService = inject(UsuarioService);
-
-  private assistidoService: AssistidoService = inject(AssistidoService);
-
-  protected assistidosOptions$: any;
-
-  protected profissionalOptions$: any;
+  assistidosOptions: SelectOption[] = [];
+  profissionalOptions: SelectOption[] = [];
 
   presencaOptions: SelectOption[] = [
     { value: StatusAtendimentoEnum.PRESENTE, label: 'Presente' },
@@ -82,97 +68,93 @@ export class ModalAtendimentosComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.isEdit = data?.isEdit || false;
     this.isVisualizacao = data?.isVisualizacao || false;
-    this.atendimento = data?.element;
 
-    this.assistidosOptions$ = this.assistidoService.listarAssistidos({}).pipe(
-      map((assistidos) =>
-        assistidos.map((assistido) => ({
-          value: assistido.id,
-          label: assistido.nome,
-        }))
-      )
-    );
+    if (this.isVisualizacao) {
+      this.initFormRealizado(data.element);
+    } else {
+      this.initFormPendente(data.element);
+    }
 
-    this.profissionalOptions$ = this.buscarProfissionais().pipe(
-      map((users) =>
-        users.map((user) => ({
-          value: user.id,
-          label: user.nome,
-        }))
-      )
-    );
+    this.profissionalOptions = [
+      { value: data.element.profissional.id, label: data.element.profissional.nome },
+    ];
+    this.assistidosOptions = [
+      { value: data.element.assistido.id, label: data.element.assistido.nome },
+    ];
   }
 
-  private buscarProfissionais(): Observable<Usuario[]> {
-    return this.usuarioService
-      .filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo })
-      .pipe(
-        map((users) => {
-          return users.map((u) => new Usuario(u));
-        })
-      );
-  }
-
-  ngOnInit() {
-    this.initForm();
-  }
-
-  initForm() {
+  initFormPendente(atendimentoPendente: AtendimentoPendente) {
     this.form = this.formBuilder.group({
-      profissional: ['', Validators.required],
-      assistido: ['', Validators.required],
-      dataAtendimento: ['', Validators.required],
+      profissional: [
+        {
+          value: {
+            value: atendimentoPendente?.profissional.id,
+            label: atendimentoPendente.profissional.nome,
+          },
+          disabled: true,
+        },
+        Validators.required,
+      ],
+      assistido: [
+        {
+          value: {
+            value: atendimentoPendente?.assistido.id,
+            label: atendimentoPendente.assistido.nome,
+          },
+          disabled: true,
+        },
+        Validators.required,
+      ],
+      dataAtendimento: [{ value: new Date(), disabled: true }, Validators.required],
       presenca: ['', Validators.required],
       avaliacao: [''],
       observacao: [''],
-      status: [Status.Ativo, Validators.required],
+      status: [{ value: Status.Ativo, disabled: true }, Validators.required],
+      agendamento: [{ value: atendimentoPendente.agendamento, disabled: true }],
     });
 
     if (this.isVisualizacao) {
       this.form.disable();
     }
-    this.preencherForm();
   }
 
-  preencherForm() {
-    if (this.atendimento) {
-      this.form.get('profissional')?.setValue(this.atendimento!.profissional, { emitEvent: false });
+  initFormRealizado(atendimento: Atendimento) {
+    this.form = this.formBuilder.group({
+      profissional: [
+        { value: atendimento?.profissional.id, label: atendimento?.profissional.nome },
+      ],
+      assistido: [{ value: atendimento?.assistido.id, label: atendimento?.assistido.nome }],
+      dataAtendimento: [atendimento?.dataAtendimento],
+      presenca: [atendimento.presenca],
+      avaliacao: [atendimento.avaliacao],
+      observacao: [atendimento.observacao],
+      status: [atendimento.status],
+      // agendamento: [atendimento.agendamento],
+    });
 
-      this.form.get('assistido')?.setValue(this.atendimento!.assistido.id, { emitEvent: false });
-
-      this.form
-        .get('dataAtendimento')
-        ?.setValue(this.atendimento!.dataAtendimento, { emitEvent: false });
-      this.form.get('presenca')?.setValue(this.atendimento!.presenca, { emitEvent: false });
-      this.form.get('avaliacao')?.setValue(this.atendimento!.avaliacao, { emitEvent: false });
-      this.form.get('observacao')?.setValue(this.atendimento!.observacao, { emitEvent: false });
-      this.form.get('status')?.setValue(this.atendimento!.status, { emitEvent: false });
+    if (this.isVisualizacao) {
+      this.form.disable();
     }
   }
 
   salvar() {
     if (this.form.valid) {
-      const formValue = this.form.value;
+      const formValue = this.form.getRawValue();
 
-      if (this.isEdit && this.atendimento) {
-        const atendimentoAtualizado = new Atendimento({
-          ...this.atendimento,
-          ...formValue,
-        });
+      formValue.profissional = { id: formValue.profissional.value, nome: formValue.profissional.label };
+      formValue.assistido = { id: formValue.assistido.value, nome: formValue.assistido.label };
 
-        this.atendimentoService.editar(atendimentoAtualizado).subscribe(() => {
+      const novoAtendimento = new Atendimento(formValue);
+
+      this.atendimentoService.salvar(novoAtendimento).subscribe({
+        next: (response) => {
           this.dialogRef.close(true);
-        });
-      } else {
-        // Criar novo atendimento
-        const novoAtendimento = new Atendimento(formValue);
-
-        this.atendimentoService.salvar(novoAtendimento).subscribe(() => {
-          this.dialogRef.close(true);
-        });
-      }
+        },
+        error: (error) => {
+          console.error('Erro ao criar atendimento:', error);
+        },
+      });
     } else {
       this.markFormGroupTouched();
     }
@@ -186,7 +168,7 @@ export class ModalAtendimentosComponent implements OnInit {
     if (this.isVisualizacao) {
       return 'Visualizar Atendimento';
     }
-    return this.isEdit ? 'Editar Atendimento' : 'Novo Atendimento';
+    return 'Realizar Atendimento';
   }
 
   private markFormGroupTouched() {
