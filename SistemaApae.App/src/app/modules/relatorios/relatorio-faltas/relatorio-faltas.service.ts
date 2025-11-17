@@ -11,6 +11,7 @@ export interface FaltasFiltro {
   idAssistido?: string;
   idProfissional?: string;
   idMunicipio: string;
+  idConvenio?: string;
 }
 
 @Injectable({
@@ -26,7 +27,7 @@ export class RelatorioFaltasService {
     const params = Object.entries(filtro)
       .filter(([_, value]) => value !== null && value !== undefined && value !== '')
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-
+    console.log(1);
     return (
       this.http
         .get<{ data: RelatorioFaltas[] }>(`${this.baseUrl}Atendimento/reports/faltas`, {

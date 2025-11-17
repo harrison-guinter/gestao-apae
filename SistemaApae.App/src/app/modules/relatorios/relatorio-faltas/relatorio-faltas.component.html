@@ -54,6 +54,15 @@
       cssClass="mat-spacing-sm field-md"
     >
     </app-select>
+
+    <app-select
+      label="Convênio"
+      [control]="$any(filtrosForm.get('convenio'))"
+      [options]="(convenios$ | async) || []"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-select>
   </app-filters-container>
 
   <app-table
