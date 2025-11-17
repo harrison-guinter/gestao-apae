@@ -52,4 +52,9 @@ public class AtendimentoFilterRequest : BaseFilter
     /// ID do município (filtra via relacionamento do assistido)
     /// </summary>
     public Guid IdMunicipio { get; set; } = Guid.Empty;
+
+    /// <summary>
+    /// ID do Convênio (filtra via relacionamento do assistido)
+    /// </summary>
+    public Guid IdConvenio { get; set; } = Guid.Empty;
 }
