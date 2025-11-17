@@ -38,16 +38,20 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
 
         if (filtros.DataInicioAtendimento.HasValue && filtros.DataFimAtendimento.HasValue)
         {
-            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, filtros.DataInicioAtendimento.Value)
-                         .Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, filtros.DataFimAtendimento.Value);
+            string dataInicioStr = filtros.DataInicioAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            string dataFimsStr = filtros.DataFimAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, dataInicioStr)
+                         .Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, dataFimsStr);
         }
         else if (filtros.DataInicioAtendimento.HasValue)
         {
-            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, filtros.DataInicioAtendimento.Value);
+            string dataInicioStr = filtros.DataInicioAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, dataInicioStr);
         }
         else if (filtros.DataFimAtendimento.HasValue)
         {
-            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, filtros.DataFimAtendimento.Value);
+            string dataFimsStr = filtros.DataFimAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, dataFimsStr);
         }
 
         // Filtro por presença/ausência
