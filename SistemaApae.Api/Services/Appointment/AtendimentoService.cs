@@ -312,6 +312,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
 				IdProfissional = filtrosRelatorio.IdProfissional,
 				IdMunicipio = filtrosRelatorio.IdMunicipio,
 				IdAssistido = filtrosRelatorio.IdAssistido,
+                IdConvenio = filtrosRelatorio.IdConvenio,
 				Presencas = new List<StatusAtendimentoEnum>
 				{
 					StatusAtendimentoEnum.FALTA,
@@ -328,19 +329,17 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
 
 			var itens = result.Data.Select(at =>
 			{
-				var municipio = at.Assistido?.Municipio;
+				var municipio = at.Assistido?.Convenio?.Municipio;
 				return new FaltaReportItemDto
 				{
-					IdAtendimento = at.Id,
 					DataAtendimento = at.DataAtendimento,
 					StatusFrequencia = at.Presenca,
-					IdAssistido = at.Assistido?.Id ?? Guid.Empty,
 					NomeAssistido = at.Assistido?.Nome,
-					IdMunicipio = municipio?.Id,
 					NomeMunicipio = municipio?.Nome,
-					IdProfissional = at.Agendamento.Profissional?.Id ?? at.Agendamento?.IdProfissional ?? Guid.Empty,
-					NomeProfissional = at.Agendamento.Profissional?.Nome
-				};
+					NomeProfissional = at.Agendamento?.Profissional?.Nome,
+					NomeConvenio = at.Assistido?.Convenio?.Nome,
+                    ObservacaoAtendimento = at.Observacao
+                };
 			}).ToList();
 
 			return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(itens);
