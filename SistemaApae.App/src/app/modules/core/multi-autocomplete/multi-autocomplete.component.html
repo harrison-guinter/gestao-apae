@@ -9,7 +9,7 @@
       <mat-chip-row *ngFor="let option of control?.value || []" (removed)="remove(option)">
 
         {{ option.label }}
-        <button matChipRemove [attr.aria-label]="'Remover ' + option.label">
+        <button  [disabled]="control?.disabled || false" matChipRemove [attr.aria-label]="'Remover ' + option.label">
           <mat-icon>cancel</mat-icon>
         </button>
       </mat-chip-row>
