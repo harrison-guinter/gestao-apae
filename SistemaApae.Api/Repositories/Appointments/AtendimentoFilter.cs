@@ -39,9 +39,10 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
         if (filtros.DataInicioAtendimento.HasValue && filtros.DataFimAtendimento.HasValue)
         {
             string dataInicioStr = filtros.DataInicioAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
-            string dataFimsStr = filtros.DataFimAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            var dataFimEndOfDay = filtros.DataFimAtendimento.Value.Date.AddDays(1).AddSeconds(-1);
+            string dataFimStr = dataFimEndOfDay.ToString("yyyy-MM-dd HH:mm:ss");
             query = query.Filter(a => a.DataAtendimento!, Constants.Operator.GreaterThanOrEqual, dataInicioStr)
-                         .Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, dataFimsStr);
+                         .Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, dataFimStr);
         }
         else if (filtros.DataInicioAtendimento.HasValue)
         {
@@ -50,8 +51,9 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
         }
         else if (filtros.DataFimAtendimento.HasValue)
         {
-            string dataFimsStr = filtros.DataFimAtendimento.Value.ToString("yyyy-MM-dd HH:mm:ss");
-            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, dataFimsStr);
+            var dataFimEndOfDay = filtros.DataFimAtendimento.Value.Date.AddDays(1).AddSeconds(-1);
+            string dataFimStr = dataFimEndOfDay.ToString("yyyy-MM-dd HH:mm:ss");
+            query = query.Filter(a => a.DataAtendimento!, Constants.Operator.LessThanOrEqual, dataFimStr);
         }
 
         // Filtro por presença/ausência
