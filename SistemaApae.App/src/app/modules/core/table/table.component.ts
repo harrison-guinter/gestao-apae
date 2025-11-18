@@ -36,6 +36,7 @@ export class TableComponent {
   @Input() actions: TableAction[] = [];
   @Input() showActions: boolean = true;
   @Input() tableClass: string = '';
+  @Input() showFooter: boolean = true;
 
   @Output() rowClick = new EventEmitter<any>();
   @Output() actionClick = new EventEmitter<{ action: string; row: any }>();
@@ -121,5 +122,9 @@ export class TableComponent {
 
   private getNestedProperty(obj: any, path: string): any {
     return path.split('.').reduce((o, p) => o && o[p], obj);
+  }
+
+  get totalRecords(): number {
+    return this.data?.length || 0;
   }
 }

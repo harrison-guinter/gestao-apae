@@ -11,7 +11,7 @@
     overflow: auto;
     background-color: var(--mat-surface);
     box-shadow: var(--elevation-1);
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
@@ -200,6 +200,27 @@
     th[title],
     td[title] {
       cursor: help;
+    }
+  }
+
+  .table-footer {
+    padding: 12px 16px;
+    background-color: var(--mat-surface);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: var(--elevation-1);
+
+    .footer-text {
+      font-size: 14px;
+      color: var(--mat-on-surface);
+      font-family: var(--mat-font-family);
+      strong {
+        font-weight: 600;
+        color: var(--mat-primary-700);
+      }
     }
   }
 }
