@@ -29,6 +29,7 @@ import { Usuario } from '../../usuarios/usuario';
 import { RelatorioFaltas } from './relatorio-faltas.interface';
 import { CidadesService } from '../../cidades/cidades.service';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
+import { ConvenioService } from '../../convenios/convenio.service';
 
 @Component({
   selector: 'app-relatorio-faltas',
@@ -59,6 +60,7 @@ export class RelatorioFaltasComponent implements OnInit {
   private assistidoService = inject(AssistidoService);
   private usuarioService = inject(UsuarioService);
   private municipioService = inject(CidadesService);
+  private convenioService: ConvenioService = inject(ConvenioService);
 
   profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
     map((users) =>
@@ -81,6 +83,14 @@ export class RelatorioFaltasComponent implements OnInit {
   cidades$ = this.municipioService
     .listarCidades()
     .pipe(map((cidades) => cidades.map((cidade) => ({ value: cidade.id, label: cidade.nome }))));
+
+  convenios$ = this.convenioService
+    .listarConvenios({} as any)
+    .pipe(
+      map((convenios) =>
+        convenios.map((convenio) => ({ value: convenio.id, label: convenio.nome }))
+      )
+    );
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -117,6 +127,7 @@ export class RelatorioFaltasComponent implements OnInit {
       dataInicio: [primeiroDia],
       dataFim: [ultimoDia],
       municipio: [''],
+      convenio: [''],
     });
     this.pesquisar();
   }
@@ -127,6 +138,7 @@ export class RelatorioFaltasComponent implements OnInit {
   }
 
   pesquisar() {
+    console.log(3);
     this.relatorioFaltasService
       .listarFaltas(this.valueFromForm(this.filtrosForm.value))
       .subscribe((data) => {
@@ -135,13 +147,14 @@ export class RelatorioFaltasComponent implements OnInit {
   }
 
   valueFromForm(formValue: any): FaltasFiltro {
-    console.log(typeof formValue.dataInicio);
+    console.log(2);
     return {
-      dataInicio: formValue.dataInicio.toISOString().split('T')[0],
-      dataFim: formValue.dataFim.toISOString().split('T')[0],
-      idAssistido: formValue.assistido.id,
-      idProfissional: formValue.profissional.id,
-      idMunicipio: formValue.municipio.id,
+      dataInicio: formValue.dataInicio?.toISOString().split('T')[0],
+      dataFim: formValue.dataFim?.toISOString().split('T')[0],
+      idAssistido: formValue.assistido?.id,
+      idProfissional: formValue.profissional?.id,
+      idMunicipio: formValue.municipio?.id,
+      idConvenio: formValue.convenio,
     };
   }
 

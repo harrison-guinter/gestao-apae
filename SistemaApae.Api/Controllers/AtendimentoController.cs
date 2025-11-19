@@ -4,6 +4,7 @@ using SistemaApae.Api.Models.Appointment;
 using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Reports.Faltas;
+using SistemaApae.Api.Models.Reports.PatientsAttendance;
 using SistemaApae.Api.Services.Appointment;
 
 namespace SistemaApae.Api.Controllers;
@@ -63,6 +64,27 @@ public class AtendimentoController : ControllerBase
     public async Task<ActionResult<ApiResponse<IEnumerable<FaltaReportItemDto>>>> GetAbsencesReport([FromQuery] FaltaReportFilterRequest filtros)
     {
         var result = await _atendimentoService.GetRelatorioFaltas(filtros);
+
+        if (!result.Success && !string.IsNullOrWhiteSpace(result.Message))
+            return StatusCode(500, result);
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Relatório de assistidos atendidos
+    /// </summary>
+    /// <remarks>
+    /// Filtra por assistido, profissional, data (início/fim) e município.
+    /// </remarks>
+    [HttpGet("reports/assistidos")]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>>> GetPatientsAttendanceReport(
+        [FromQuery] AssistidosAtendidosReportFilterRequest filtros
+    )
+    {
+        var result = await _atendimentoService.GetPatientsAttendanceReport(filtros);
 
         if (!result.Success && !string.IsNullOrWhiteSpace(result.Message))
             return StatusCode(500, result);

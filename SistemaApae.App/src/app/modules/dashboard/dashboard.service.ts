@@ -23,7 +23,6 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   buscarDadosDashboard(): Observable<DashboardData> {
-    return null as any
     return this.http.get<any>(`${this.baseUrl}Dashboard/stats`);
   }
 }

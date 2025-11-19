@@ -31,4 +31,10 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onRowClick(row)"></tr>
     </table>
   </div>
+
+  <div class="table-footer" *ngIf="showFooter">
+    <span class="footer-text"
+      >Total de registros: <strong>{{ totalRecords }}</strong></span
+    >
+  </div>
 </div>
