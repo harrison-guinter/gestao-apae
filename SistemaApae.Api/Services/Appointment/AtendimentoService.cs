@@ -5,7 +5,9 @@ using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Reports.Faltas;
+using SistemaApae.Api.Models.Reports.PatientsAttendance;
 using SistemaApae.Api.Repositories;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SistemaApae.Api.Services.Appointment;
 
@@ -88,7 +90,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                 Id = result.Data.Id,
                 IdAgendamento = result.Data.IdAgendamento,
                 Assistido = new AssistidoAtendimentoDto(result.Data.Assistido!.Id, result.Data.Assistido.Nome),
-                Profissional = new ProfissionalAtendimentoDto(result.Data.Agendamento.Profissional!.Id, result.Data.Agendamento.Profissional!.Nome),
+                Profissional = new ProfissionalAtendimentoDto(result.Data.Agendamento.Profissional.Id, result.Data.Agendamento.Profissional.Nome),
                 DataAtendimento = result.Data.DataAtendimento,
                 Presenca = result.Data.Presenca,
                 Avaliacao = result.Data.Avaliacao,
@@ -297,58 +299,101 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
         return patient != null;
     }
 
-	/// <summary>
-	/// Gera o relatório de faltas por paciente com filtros opcionais
-	/// </summary>
-	public async Task<ApiResponse<IEnumerable<FaltaReportItemDto>>> GetRelatorioFaltas(FaltaReportFilterRequest filtrosRelatorio)
-	{
-		try
-		{
-			// Mapeia o filtro específico do relatório para o filtro genérico de atendimento
-			var filtros = new AtendimentoFilterRequest
-			{
-				DataInicioAtendimento = filtrosRelatorio.DataInicio,
-				DataFimAtendimento = filtrosRelatorio.DataFim,
-				IdProfissional = filtrosRelatorio.IdProfissional,
-				IdMunicipio = filtrosRelatorio.IdMunicipio,
-				IdAssistido = filtrosRelatorio.IdAssistido,
+    /// <summary>
+    /// Gera o relatório de faltas por paciente com filtros opcionais
+    /// </summary>
+    public async Task<ApiResponse<IEnumerable<FaltaReportItemDto>>> GetRelatorioFaltas(FaltaReportFilterRequest filtrosRelatorio)
+    {
+        try
+        {
+            // Mapeia o filtro específico do relatório para o filtro genérico de atendimento
+            var filtros = new AtendimentoFilterRequest
+            {
+                DataInicioAtendimento = filtrosRelatorio.DataInicio,
+                DataFimAtendimento = filtrosRelatorio.DataFim,
+                IdProfissional = filtrosRelatorio.IdProfissional,
+                IdMunicipio = filtrosRelatorio.IdMunicipio,
+                IdAssistido = filtrosRelatorio.IdAssistido,
                 IdConvenio = filtrosRelatorio.IdConvenio,
-				Presencas = new List<StatusAtendimentoEnum>
-				{
-					StatusAtendimentoEnum.FALTA,
-					StatusAtendimentoEnum.JUSTIFICADA
-				},
-				Limit = filtrosRelatorio.Limit,
-				Skip = filtrosRelatorio.Skip
-			};
+                Presencas = new List<StatusAtendimentoEnum>
+                {
+                    StatusAtendimentoEnum.FALTA,
+                    StatusAtendimentoEnum.JUSTIFICADA
+                },
+                Limit = filtrosRelatorio.Limit,
+                Skip = filtrosRelatorio.Skip
+            };
 
-			var result = await base.GetByFilters(filtros);
+            var result = await base.GetByFilters(filtros);
 
-			if (!result.Success || result.Data == null)
-				return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(Enumerable.Empty<FaltaReportItemDto>());
+            if (!result.Success || result.Data == null)
+                return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(Enumerable.Empty<FaltaReportItemDto>());
 
-			var itens = result.Data.Select(at =>
-			{
-				var municipio = at.Assistido?.Convenio?.Municipio;
-				return new FaltaReportItemDto
-				{
-					DataAtendimento = at.DataAtendimento,
-					StatusFrequencia = at.Presenca,
-					NomeAssistido = at.Assistido?.Nome,
-					NomeMunicipio = municipio?.Nome,
-					NomeProfissional = at.Agendamento?.Profissional?.Nome,
-					NomeConvenio = at.Assistido?.Convenio?.Nome,
+            var itens = result.Data.Select(at =>
+            {
+                var municipio = at.Assistido?.Convenio?.Municipio;
+                return new FaltaReportItemDto
+                {
+                    DataAtendimento = at.DataAtendimento,
+                    StatusFrequencia = at.Presenca,
+                    NomeAssistido = at.Assistido?.Nome,
+                    NomeMunicipio = municipio?.Nome,
+                    NomeProfissional = at.Agendamento?.Profissional?.Nome,
+                    NomeConvenio = at.Assistido?.Convenio?.Nome,
                     ObservacaoAtendimento = at.Observacao
                 };
-			}).ToList();
+            }).ToList();
 
-			return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(itens);
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, "Erro ao gerar relatório de faltas");
-			return ApiResponse<IEnumerable<FaltaReportItemDto>>.ErrorResponse("Erro interno ao gerar relatório de faltas");
-		}
-	}
+            return ApiResponse<IEnumerable<FaltaReportItemDto>>.SuccessResponse(itens);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao gerar relatório de faltas");
+            return ApiResponse<IEnumerable<FaltaReportItemDto>>.ErrorResponse("Erro interno ao gerar relatório de faltas");
+        }
+    }
+
+    /// <summary>
+    /// Gerar o relatório de assistidos atendidos por filtros opcionais
+    /// </summary>
+    public async Task<ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>> GetPatientsAttendanceReport(
+        AssistidosAtendidosReportFilterRequest filterRequest
+    )
+    {
+        try
+        {
+            var filters = new AtendimentoFilterRequest
+            {
+                DataInicioAtendimento = filterRequest.DataInicio,
+                DataFimAtendimento = filterRequest.DataFim,
+                IdProfissional = filterRequest.IdProfissional,
+                IdMunicipio = filterRequest.IdMunicipio,
+                IdAssistido = filterRequest.IdAssistido
+            };
+
+            var result = await base.GetByFilters(filters);
+
+            if (!result.Success || result.Data == null)
+                return ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>.SuccessResponse(Enumerable.Empty<AssistidosAtendidosReportDto>());
+
+            var appointments = result.Data.Select(a =>
+            {
+                return new AssistidosAtendidosReportDto
+                {
+                    Atendimento = new AtendimentoAssistidoDto(a.Id, a.DataAtendimento),
+                    Profissional = new ProfissionalAtendimentoDto(a.Agendamento.Profissional.Id, a.Agendamento.Profissional.Nome),
+                    Assistido = new AssistidoAtendimentoDto(a.Assistido.Id, a.Assistido.Nome),
+                    Municipio = new MunicipioAssistidoDto(a.Assistido.Convenio.Municipio.Id, a.Assistido.Convenio.Municipio.Nome)
+                };
+            }).ToList();
+
+            return ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>.SuccessResponse(appointments);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao gerar relatório de assistidos atendidos");
+            return ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>.ErrorResponse("Erro interno ao gerar relatório de assistidos atendidos");
+        }
+    }
 }
 

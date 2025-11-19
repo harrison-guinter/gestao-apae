@@ -13,7 +13,6 @@ namespace SistemaApae.Api.Models.Appointment;
 [Table("atendimento")]
 public class Atendimento : ApiBaseModel
 {
-
     /// <summary>
     /// ID do agendamento associado
     /// </summary>
@@ -57,7 +56,6 @@ public class Atendimento : ApiBaseModel
     /// </summary>
     [Reference(typeof(Assistido), includeInQuery: true)]
     public Assistido? Assistido { get; set; }
-
 
     /// <summary>
     /// Navegação do agendamento (embed via PostgREST)
