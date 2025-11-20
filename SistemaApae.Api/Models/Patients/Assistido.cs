@@ -368,4 +368,23 @@ public class Assistido : ApiBaseModel
     [Column("consentimento_imagem")]
     public bool? ConsentimentoImagem { get; set; }
 
+    /// <summary>
+    /// Nome da Turma da Apae
+    /// </summary>
+    [Column("nome_turma_apae")]
+    public string? NomeTurmaApae { get; set; }
+
+    /// <summary>
+    /// Turno que frequenta a turma da Apae
+    /// </summary>
+    [Column("turno_turma_apae")]
+    public TurnoEscolaEnum? TurnoTurmaApae { get; set; }
+
+
+    /// <summary>
+    /// Dias que frequenta a turma da Apae
+    /// </summary>
+    [Column("dias_turma_apae")]
+    public string? DiasTurmaApae { get; set; }
+
 }
