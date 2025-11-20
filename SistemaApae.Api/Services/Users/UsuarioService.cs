@@ -112,7 +112,7 @@ public class UsuarioService : Service<Usuario, UsuarioFilterRequest>
         {
             var newPassword = _authService.GenerateRandomPassword();
 
-            user.UpdatedAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.Now;
             user.Senha = BCrypt.Net.BCrypt.HashPassword(newPassword);
 
             var result = await base.Create(user);

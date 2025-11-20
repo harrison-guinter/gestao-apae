@@ -72,5 +72,5 @@ public class Usuario : ApiBaseModel
     /// Data da última atualização
     /// </summary>
     [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }
