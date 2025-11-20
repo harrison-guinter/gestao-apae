@@ -7,6 +7,8 @@ using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Models.Reports.PatientsAttendance;
 using SistemaApae.Api.Models.Reports.Presencas;
 using SistemaApae.Api.Services.Appointment;
+using SistemaApae.Api.Services.Excel;
+using System.Globalization;
 
 namespace SistemaApae.Api.Controllers;
 
@@ -60,11 +62,27 @@ public class AtendimentoController : ControllerBase
     /// Filtra por data (início/fim), IdProfissional, IdMunicipio, IdConvenio.
     /// </remarks>
     [HttpGet("reports/presencas")]
-    [ProducesResponseType(typeof(ApiResponse<IEnumerable<PresencaListaItemDto>>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ApiResponse<IEnumerable<PresencaListaItemDto>>>> GetPresencasLista([FromQuery] PresencaReportFilterRequest filtros)
+    [ProducesResponseType(typeof(ApiResponse<PresencaListaReportDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<PresencaListaReportDto>>> GetPresencasLista([FromQuery] PresencaReportFilterRequest filtros)
     {
         var result = await _atendimentoService.GetRelatorioPresencasLista(filtros);
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Exporta o relatório de presenças em Excel
+    /// </summary>
+    [HttpGet("reports/presencas/excel")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportPresencasExcel([FromQuery] PresencaReportFilterRequest filtros)
+    {
+        var detailed = await _atendimentoService.GetRelatorioPresencasLista(filtros);
+        if (!detailed.Success || detailed.Data == null)
+            return StatusCode(500, ApiResponse<object>.ErrorResponse("Falha ao obter dados para exportação."));
+
+        var bytes = ExcelExportService.Export(detailed.Data.Itens, detailed.Data, "Presenças");
+        var fileName = $"presencas_{DateTime.Now:yyyyMMddHHmm}.xlsx";
+        return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
 
     /// <summary>
