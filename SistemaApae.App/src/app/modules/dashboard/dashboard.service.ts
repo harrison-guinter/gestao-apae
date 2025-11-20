@@ -5,10 +5,8 @@ import { map, Observable } from 'rxjs';
 
 export interface DashboardData {
   totalAssistidos: number;
-  atendimentosHoje: number;
   usuariosAtivos: number;
   agendamentosPendentes: number;
-  atendimentosSemana: number;
   atendimentosMes: number;
   novosAssistidosMes: number;
   taxaPresenca: number;

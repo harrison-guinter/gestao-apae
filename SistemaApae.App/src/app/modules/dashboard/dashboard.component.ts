@@ -11,7 +11,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   DateAdapter,
   MatNativeDateModule,
-  MAT_DATE_LOCALE,
   MAT_DATE_FORMATS,
   NativeDateAdapter,
 } from '@angular/material/core';
