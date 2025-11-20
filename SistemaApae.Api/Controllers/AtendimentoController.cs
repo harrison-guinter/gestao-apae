@@ -5,6 +5,7 @@ using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
 using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Models.Reports.PatientsAttendance;
+using SistemaApae.Api.Models.Reports.Presencas;
 using SistemaApae.Api.Services.Appointment;
 
 namespace SistemaApae.Api.Controllers;
@@ -49,6 +50,20 @@ public class AtendimentoController : ControllerBase
             return StatusCode(500, result);
         }
 
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Relatório de presenças para entrega aos municípios
+    /// </summary>
+    /// <remarks>
+    /// Filtra por data (início/fim), IdProfissional, IdMunicipio, IdConvenio.
+    /// </remarks>
+    [HttpGet("reports/presencas")]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<PresencaListaItemDto>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<IEnumerable<PresencaListaItemDto>>>> GetPresencasLista([FromQuery] PresencaReportFilterRequest filtros)
+    {
+        var result = await _atendimentoService.GetRelatorioPresencasLista(filtros);
         return Ok(result);
     }
 

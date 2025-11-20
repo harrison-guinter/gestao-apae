@@ -33,8 +33,8 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
             query = query.Filter("assistido.convenio.id_municipio", Constants.Operator.Equals, filtros.IdMunicipio.ToString());
 
         // Filtro por Convênio (via relacionamento do assistido)
-        if (filtros.IdMunicipio != Guid.Empty)
-            query = query.Filter("assistido.convenio.id", Constants.Operator.Equals, filtros.IdMunicipio.ToString());
+        if (filtros.IdConvenio != Guid.Empty)
+            query = query.Filter("assistido.convenio.id", Constants.Operator.Equals, filtros.IdConvenio.ToString());
 
         if (filtros.DataInicioAtendimento.HasValue && filtros.DataFimAtendimento.HasValue)
         {

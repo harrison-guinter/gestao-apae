@@ -6,8 +6,8 @@ using SistemaApae.Api.Models.Enums;
 using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Models.Reports.PatientsAttendance;
+using SistemaApae.Api.Models.Reports.Presencas;
 using SistemaApae.Api.Repositories;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SistemaApae.Api.Services.Appointment;
 
@@ -394,6 +394,122 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
             _logger.LogError(ex, "Erro ao gerar relatório de assistidos atendidos");
             return ApiResponse<IEnumerable<AssistidosAtendidosReportDto>>.ErrorResponse("Erro interno ao gerar relatório de assistidos atendidos");
         }
+    }
+
+    /// <summary>
+    /// Relatório de Presença (agregado por Assistido) - visualização JSON
+    /// </summary>
+    public async Task<ApiResponse<IEnumerable<PresencaListaItemDto>>> GetRelatorioPresencasLista(PresencaReportFilterRequest filtros)
+    {
+        try
+        {
+            var filtrosAt = new AtendimentoFilterRequest
+            {
+                DataInicioAtendimento = filtros.DataInicio,
+                DataFimAtendimento = filtros.DataFim,
+                IdProfissional = filtros.IdProfissional,
+                IdMunicipio = filtros.IdMunicipio,
+                IdConvenio = filtros.IdConvenio,
+                Presenca = StatusAtendimentoEnum.PRESENCA
+            };
+
+            var result = await base.GetByFilters(filtrosAt);
+            var atendimentos = result.Success && result.Data != null ? result.Data : Enumerable.Empty<Atendimento>();
+
+            var rows = atendimentos
+                .GroupBy(a => a.Assistido?.Id ?? Guid.Empty)
+                .Where(g => g.Key != Guid.Empty)
+                .Select(g =>
+                {
+                    var any = g.First();
+                    var assistido = any.Assistido!;
+                    var turma = assistido.NomeTurmaApae;
+                    var especialidades = g.Select(x => x.Agendamento?.Profissional?.Especialidade)
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .ToList();
+
+                    var tipoAtendimentoParts = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(turma))
+                        tipoAtendimentoParts.Add(turma!);
+                    if (especialidades.Count > 0)
+                        tipoAtendimentoParts.Add(string.Join(", ", especialidades));
+                    var tipoAtendimento = tipoAtendimentoParts.Count > 0 ? string.Join(" , ", tipoAtendimentoParts) : string.Empty;
+
+                    // Dias das terapias por dia da semana:
+                    // Domingo=1º, Segunda=2º, Terça=3º, ... Sábado=7º
+                    var diasOrdinais = g
+                        .Select(x => x.DataAtendimento?.DayOfWeek)
+                        .Where(d => d.HasValue)
+                        .Select(d => GetOrdinalFromDayOfWeek(d!.Value))
+                        .Distinct()
+                        .OrderBy(d => d)
+                        .Select(d => $"{d}º")
+                        .ToList();
+
+                    string? turno = assistido.TurnoTurmaApae.HasValue
+                        ? MapTurnoToSigla(assistido.TurnoTurmaApae.Value)
+                        : string.Empty;
+
+                    return new
+                    {
+                        Assistido = assistido,
+                        TipoAtendimento = tipoAtendimento,
+                        DiaTerapias = diasOrdinais.Count > 0 ? string.Join(", ", diasOrdinais) : string.Empty,
+                        DiaSemana = assistido.DiasTurmaApae ?? string.Empty,
+                        Turno = turno
+                    };
+                })
+                .OrderBy(r => r.Assistido.Nome, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var final = rows
+                .Select((r, idx) => new PresencaListaItemDto
+                {
+                    Numero = idx + 1,
+                    Nome = r.Assistido.Nome,
+                    Endereco = r.Assistido.Endereco ?? string.Empty,
+                    TipoAtendimento = r.TipoAtendimento,
+                    DiaTerapias = r.DiaTerapias,
+                    DiaSemana = r.DiaSemana,
+                    Turno = r.Turno
+                })
+                .ToList();
+
+            return ApiResponse<IEnumerable<PresencaListaItemDto>>.SuccessResponse(final);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao montar relatório de presenças (lista)");
+            return ApiResponse<IEnumerable<PresencaListaItemDto>>.ErrorResponse("Erro interno ao montar relatório de presenças");
+        }
+    }
+
+    private static string MapTurnoToSigla(TurnoEscolaEnum turno)
+    {
+        return turno switch
+        {
+            TurnoEscolaEnum.MANHA => "M",
+            TurnoEscolaEnum.TARDE => "T",
+            TurnoEscolaEnum.NOITE => "N",
+            TurnoEscolaEnum.INTEGRAL => "I",
+            _ => string.Empty
+        };
+    }
+
+    private static int GetOrdinalFromDayOfWeek(DayOfWeek day)
+    {
+        return day switch
+        {
+            DayOfWeek.Sunday => 1,
+            DayOfWeek.Monday => 2,
+            DayOfWeek.Tuesday => 3,
+            DayOfWeek.Wednesday => 4,
+            DayOfWeek.Thursday => 5,
+            DayOfWeek.Friday => 6,
+            DayOfWeek.Saturday => 7,
+            _ => 0
+        };
     }
 }
 
