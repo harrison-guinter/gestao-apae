@@ -22,7 +22,11 @@ export class DashboardService {
 
   constructor(private http: HttpClient) {}
 
-  buscarDadosDashboard(): Observable<DashboardData> {
-    return this.http.get<any>(`${this.baseUrl}Dashboard/stats`);
+  buscarDadosDashboard(year?: number, month?: number): Observable<DashboardData> {
+    const params: any = {};
+    if (year) params.year = year;
+    if (month) params.month = month;
+
+    return this.http.get<any>(`${this.baseUrl}Dashboard/stats`, { params });
   }
 }

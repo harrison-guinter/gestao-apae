@@ -43,10 +43,28 @@
 
   <!-- Seção de Estatísticas -->
   <div class="stats-section">
-    <h3 class="section-title">
-      <mat-icon>analytics</mat-icon>
-      Estatísticas do Sistema
-    </h3>
+    <div class="stats-header">
+      <h3 class="section-title">
+        <mat-icon>analytics</mat-icon>
+        Estatísticas do Sistema
+      </h3>
+
+      <form [formGroup]="filtrosForm" class="month-year-filter">
+        <mat-form-field appearance="outline" class="month-year-field">
+          <mat-label>Mês/Ano</mat-label>
+          <input matInput [matDatepicker]="dp" formControlName="periodoReferencia" readonly />
+          <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker
+            #dp
+            startView="multi-year"
+            (yearSelected)="chosenYearHandler($event)"
+            (monthSelected)="chosenMonthHandler($event, dp)"
+            panelClass="month-year-picker"
+          >
+          </mat-datepicker>
+        </mat-form-field>
+      </form>
+    </div>
 
     <!-- Grid de estatísticas -->
     <div *ngIf="dashboardData" class="stats-grid">
