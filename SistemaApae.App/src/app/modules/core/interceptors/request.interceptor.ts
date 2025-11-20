@@ -45,6 +45,7 @@ export class RequestInterceptor implements HttpInterceptor {
 
     // 🔹 Normalizar body de requisições POST/PUT
     if ((authReq.method === 'POST' || authReq.method === 'PUT') && authReq.body) {
+ 
       const normalizedBody = this.normalizeKeysForBackend(authReq.body);
 
       authReq = authReq.clone({
@@ -79,7 +80,7 @@ export class RequestInterceptor implements HttpInterceptor {
         .filter((item) => item !== undefined);
     }
 
-    if (typeof obj === 'object' && obj.constructor === Object) {
+    if (typeof obj === 'object' && obj.constructor != Date) {
       const normalized: any = {};
 
       for (const key in obj) {
