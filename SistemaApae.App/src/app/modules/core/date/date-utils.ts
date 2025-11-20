@@ -15,7 +15,7 @@ export class DateUtils {
 
   static fromDateToDb(date: Date): string {
     return (
-      date.getFullYear +
+      date.getFullYear() +
       '-' +
       String(date.getMonth() + 1).padStart(2, '0') +
       '-' +

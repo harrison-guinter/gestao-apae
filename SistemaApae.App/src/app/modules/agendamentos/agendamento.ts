@@ -1,4 +1,5 @@
 import { Assistido } from '../assistidos/assistido';
+import { Atendimento } from '../atendimentos/atendimento';
 import { Status } from '../core/enum/status.enum';
 import { Usuario } from '../usuarios/usuario';
 
@@ -12,7 +13,8 @@ export class Agendamento {
   tipoRecorrencia: TipoRecorrencia;
   dataAgendamento: Date;
   horarioAgendamento: string;
-  diaSemana?: DiaDaSemana;
+  diaSemana: DiaDaSemana;
+  atendimentos: Atendimento[]
 
     constructor(
         id: string,
@@ -24,7 +26,8 @@ export class Agendamento {
         tipoRecorrencia: TipoRecorrencia,
         dataAgendamento: Date,
         horarioAgendamento: string,
-        diaSemana?: DiaDaSemana
+        diaSemana: DiaDaSemana,
+        atendimentos: Atendimento[]
     ) {
         this.id = id;
         this.nome = nome;
@@ -36,6 +39,7 @@ export class Agendamento {
         this.dataAgendamento = new Date(dataAgendamento);
         this.horarioAgendamento = horarioAgendamento;
         this.diaSemana = diaSemana;
+        this.atendimentos = atendimentos;
     }
 }
 

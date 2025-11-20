@@ -39,7 +39,7 @@ public class ApiResponse<T>
     /// <summary>
     /// Timestamp da resposta
     /// </summary>
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    public DateTime Timestamp { get; set; } = DateTime.Now;
 
     /// <summary>
     /// Cria uma resposta de sucesso

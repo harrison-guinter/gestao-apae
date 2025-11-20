@@ -28,13 +28,12 @@ public class AtendimentoFilter : IRepositoryFilter<Atendimento, AtendimentoFilte
         if (filtros.IdProfissional != Guid.Empty)
             query = query.Filter("agendamento.id_profissional", Constants.Operator.Equals, filtros.IdProfissional.ToString());
 
-        // Filtro por município (via relacionamento do assistido)
-        if (filtros.IdMunicipio != Guid.Empty)
-            query = query.Filter("assistido.convenio.id_municipio", Constants.Operator.Equals, filtros.IdMunicipio.ToString());
-
         // Filtro por Convênio (via relacionamento do assistido)
-        if (filtros.IdMunicipio != Guid.Empty)
-            query = query.Filter("assistido.convenio.id", Constants.Operator.Equals, filtros.IdMunicipio.ToString());
+        if (filtros.IdConvenio != Guid.Empty)
+            query = query.Filter("assistido.convenio.id", Constants.Operator.Equals, filtros.IdConvenio.ToString());
+        // Filtro por município (via relacionamento do assistido)
+        else if (filtros.IdMunicipio != Guid.Empty)
+            query = query.Filter("assistido.convenio.id_municipio", Constants.Operator.Equals, filtros.IdMunicipio.ToString());
 
         if (filtros.DataInicioAtendimento.HasValue && filtros.DataFimAtendimento.HasValue)
         {

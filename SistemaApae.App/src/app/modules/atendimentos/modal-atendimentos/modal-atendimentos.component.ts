@@ -19,6 +19,7 @@ import { AtendimentoService } from '../atendimento.service';
 import { Status } from '../../core/enum/status.enum';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 import { AtendimentoPendente } from '../atendimentos-pendentes/atendimento-pendente.interface';
+import { DateUtils } from '../../core/date/date-utils';
 
 export interface ModalAtendimentosData {
   isEdit: boolean;
@@ -85,6 +86,7 @@ export class ModalAtendimentosComponent {
   }
 
   initFormPendente(atendimentoPendente: AtendimentoPendente) {
+
     this.form = this.formBuilder.group({
       profissional: [
         {
@@ -106,7 +108,7 @@ export class ModalAtendimentosComponent {
         },
         Validators.required,
       ],
-      dataAtendimento: [{ value: new Date(), disabled: true }, Validators.required],
+      dataAtendimento: [{value: atendimentoPendente.dataAgendamento, disabled: true }, Validators.required],
       presenca: ['', Validators.required],
       avaliacao: [''],
       observacao: [''],
@@ -130,7 +132,7 @@ export class ModalAtendimentosComponent {
       avaliacao: [atendimento.avaliacao],
       observacao: [atendimento.observacao],
       status: [atendimento.status],
-      // agendamento: [atendimento.agendamento],
+      agendamento: [atendimento.agendamento],
     });
 
     if (this.isVisualizacao) {
@@ -146,6 +148,7 @@ export class ModalAtendimentosComponent {
       formValue.assistido = { id: formValue.assistido.value, nome: formValue.assistido.label };
 
       const novoAtendimento = new Atendimento(formValue);
+      novoAtendimento.dataAtendimento = DateUtils.fromDateToDb(novoAtendimento.dataAtendimento as Date) as any;
 
       this.atendimentoService.salvar(novoAtendimento).subscribe({
         next: (response) => {
@@ -156,7 +159,7 @@ export class ModalAtendimentosComponent {
         },
       });
     } else {
-      this.markFormGroupTouched();
+      this.form.markAllAsTouched();
     }
   }
 
@@ -169,12 +172,5 @@ export class ModalAtendimentosComponent {
       return 'Visualizar Atendimento';
     }
     return 'Realizar Atendimento';
-  }
-
-  private markFormGroupTouched() {
-    Object.keys(this.form.controls).forEach((key) => {
-      const control = this.form.get(key);
-      control?.markAsTouched();
-    });
   }
 }

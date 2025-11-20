@@ -65,6 +65,7 @@ export class AtendimentoService {
   }
 
   salvar(atendimento: Atendimento): Observable<void> {
+    console.log('atendimento service', atendimento);
     return this.http.post<void>(`${this.baseUrl}Atendimento`, atendimento);
   }
 

@@ -102,7 +102,7 @@ export class AtendimentosRealizadosComponent implements OnInit {
   }
 
   pesquisarAtendimentos() {
-    console.log('value', this.filtrosForm.value);
+    
     const filtros: any = {
       idAssistido: this.filtrosForm.value.assistido || undefined,
       idProfissional: this.filtrosForm.value.profissional || undefined,
@@ -110,7 +110,7 @@ export class AtendimentosRealizadosComponent implements OnInit {
       dataFimAtendimento: this.filtrosForm.value.dataFim || undefined,
       presenca: this.filtrosForm.value?.presenca ? this.filtrosForm.value.presenca : undefined,
     };
-    console.log('filtros:', filtros);
+   
     this.atendimentoService
       .listarAtendimentos(filtros)
       .subscribe((response) => (this.atendimentos = response));

@@ -15,7 +15,7 @@ export class Atendimento {
   assistido: Assistido;
   dataAtendimento?: Date;
   presenca?: StatusAtendimentoEnum;
-  // agendamento: Agendamento;
+  agendamento: Agendamento;
   avaliacao?: string;
   observacao?: string;
   status: Status;
@@ -50,7 +50,7 @@ export class Atendimento {
     // Relacionamentos
     this.assistido = data.assistido || undefined;
     this.profissional = data.profissional || undefined;
-    // this.agendamento = data.agendamento || '';
+    this.agendamento = data.agendamento || '';
   }
 
   get presencaTexto(): string {
