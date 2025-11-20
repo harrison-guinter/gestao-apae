@@ -1,8 +1,8 @@
 # Use the official .NET runtime as base image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 
-# Configurar timezone para GMT+3 (Etc/GMT-3)
-ENV TZ=Etc/GMT-3
+# Configurar timezone correto (Brasil - UTC-3)
+ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
@@ -12,7 +12,9 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["SistemaApae.Api.csproj", "."]
+
 RUN dotnet restore "./SistemaApae.Api.csproj"
+
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "SistemaApae.Api.csproj" -c Release -o /app/build
@@ -24,11 +26,11 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Create a non-root user (antes de configurar o timezone para ter permissões)
+# Criar usuário não-root
 RUN adduser --disabled-password --gecos '' appuser && chown -R appuser /app
 USER appuser
 
-# Configurar timezone via variável de ambiente para a aplicação .NET
-ENV TZ=Etc/GMT-3
+# Garantir timezone dentro da aplicação .NET
+ENV TZ=America/Sao_Paulo
 
 ENTRYPOINT ["dotnet", "SistemaApae.Api.dll"]
