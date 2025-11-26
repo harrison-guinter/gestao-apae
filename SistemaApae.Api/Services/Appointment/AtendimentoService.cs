@@ -258,6 +258,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                     {
                         Id = a.Id,
                         IdAgendamento = a.IdAgendamento,
+                        Assistido = new AssistidoAtendimentoDto(a.IdAssistido, a.Assistido!.Nome),
                         DataAtendimento = a.DataAtendimento,
                         Presenca = a.Presenca,
                         Avaliacao = a.Avaliacao,
