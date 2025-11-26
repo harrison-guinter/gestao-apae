@@ -97,6 +97,43 @@
 
   // Seção de Estatísticas
   .stats-section {
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--mat-spacing-lg);
+      gap: var(--mat-spacing-md);
+
+      .section-title {
+        margin: 0;
+      }
+
+      .month-year-filter {
+        .month-year-field {
+          width: 180px;
+          margin: 0;
+
+          ::ng-deep {
+            .mat-mdc-text-field-wrapper {
+              padding: 0 !important;
+            }
+
+            .mat-mdc-form-field-flex {
+              height: 48px;
+            }
+
+            .mat-mdc-form-field-infix {
+              padding: 12px 0 !important;
+            }
+
+            input {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

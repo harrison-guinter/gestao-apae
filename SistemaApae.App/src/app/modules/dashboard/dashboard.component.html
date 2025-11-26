@@ -43,10 +43,28 @@
 
   <!-- Seção de Estatísticas -->
   <div class="stats-section">
-    <h3 class="section-title">
-      <mat-icon>analytics</mat-icon>
-      Estatísticas do Sistema
-    </h3>
+    <div class="stats-header">
+      <h3 class="section-title">
+        <mat-icon>analytics</mat-icon>
+        Estatísticas do Sistema
+      </h3>
+
+      <form [formGroup]="filtrosForm" class="month-year-filter">
+        <mat-form-field appearance="outline" class="month-year-field">
+          <mat-label>Mês/Ano</mat-label>
+          <input matInput [matDatepicker]="dp" formControlName="periodoReferencia" readonly />
+          <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker
+            #dp
+            startView="multi-year"
+            (yearSelected)="chosenYearHandler($event)"
+            (monthSelected)="chosenMonthHandler($event, dp)"
+            panelClass="month-year-picker"
+          >
+          </mat-datepicker>
+        </mat-form-field>
+      </form>
+    </div>
 
     <!-- Grid de estatísticas -->
     <div *ngIf="dashboardData" class="stats-grid">
@@ -56,16 +74,6 @@
           <div class="stat-info">
             <span class="stat-number">{{ dashboardData.totalAssistidos }}</span>
             <h4 class="stat-label">Total de Assistidos</h4>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card">
-        <mat-card-content class="stat-content">
-          <mat-icon class="stat-icon">today</mat-icon>
-          <div class="stat-info">
-            <span class="stat-number">{{ dashboardData.atendimentosHoje }}</span>
-            <h4 class="stat-label">Atendimentos Hoje</h4>
           </div>
         </mat-card-content>
       </mat-card>
@@ -86,16 +94,6 @@
           <div class="stat-info">
             <span class="stat-number">{{ dashboardData.agendamentosPendentes }}</span>
             <h4 class="stat-label">Agendamentos Pendentes</h4>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card">
-        <mat-card-content class="stat-content">
-          <mat-icon class="stat-icon">trending_up</mat-icon>
-          <div class="stat-info">
-            <span class="stat-number">{{ dashboardData.atendimentosSemana }}</span>
-            <h4 class="stat-label">Atendimentos esta Semana</h4>
           </div>
         </mat-card-content>
       </mat-card>
