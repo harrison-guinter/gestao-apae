@@ -25,6 +25,7 @@ import { DatepickerComponent as DateComponent } from '../../core/date/datepicker
 import { UsuarioService } from '../../usuarios/usuario.service';
 import { Roles } from '../../auth/roles.enum';
 import { Usuario } from '../../usuarios/usuario';
+import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.component';
 
 @Component({
   selector: 'app-atendimentos',
@@ -42,6 +43,7 @@ import { Usuario } from '../../usuarios/usuario';
     SelectComponent,
     FiltersContainerComponent,
     DateComponent,
+    AutocompleteComponent,
   ],
   templateUrl: './atendimentos-realizados.component.html',
   styleUrls: ['./atendimentos-realizados.component.less'],
@@ -109,7 +111,7 @@ export class AtendimentosRealizadosComponent implements OnInit {
       dataFimAtendimento: this.filtrosForm.value.dataFim || undefined,
       presenca: this.filtrosForm.value?.presenca ? this.filtrosForm.value.presenca : undefined,
     };
-    console.log('aqui', filtros);
+
     this.atendimentoService
       .listarAtendimentos(filtros)
       .subscribe((response) => (this.atendimentos = response));

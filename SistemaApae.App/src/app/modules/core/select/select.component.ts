@@ -36,6 +36,7 @@ export class SelectComponent {
   @Input() cssClass: string = '';
   @Input() prefixIcon: string = '';
   @Input() suffixIcon: string = '';
+  @Input() multiple: boolean = false;
   @Input() control!: FormControl;
 
   @Output() selectionChange = new EventEmitter<any>();
@@ -68,7 +69,7 @@ export class SelectComponent {
 
   onClear(): void {
     if (this.control) {
-      this.control.setValue(null);
+      this.control.setValue(this.multiple ? [] : null);
     }
     this.clear.emit();
   }
@@ -80,6 +81,9 @@ export class SelectComponent {
   hasValue(): boolean {
     if (!this.control) return false;
     const value = this.control.value;
+    if (this.multiple) {
+      return Array.isArray(value) && value.length > 0;
+    }
     return value !== '' && value !== null && value !== undefined;
   }
 

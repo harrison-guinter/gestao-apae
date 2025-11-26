@@ -51,6 +51,9 @@ export interface Assistido {
   atrasoLocomocao?: boolean;
   atrasoComunicacao?: boolean;
   acompanhamentoEspecializado?: boolean;
+  nomeTurmaApae?: string;
+  turnoTurmaApae?: TurnoEscolaEnum;
+  diasTurmaApae?: string[];
   nomeEscola?: string;
   anoEscola?: string;
   turnoEscola?: TurnoEscolaEnum;
@@ -86,8 +89,8 @@ export enum PlanoSaudeEnum {
 }
 
 export enum TurnoEscolaEnum {
-  MATUTINO = 1,
-  VESPERTINO = 2,
-  NOTURNO = 3,
-  INTEGRAL = 4,
+  MANHA = 'MANHA',
+  TARDE = 'TARDE',
+  NOITE = 'NOITE',
+  INTEGRAL = 'INTEGRAL',
 }
