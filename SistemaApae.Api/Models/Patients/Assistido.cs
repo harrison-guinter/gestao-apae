@@ -41,6 +41,7 @@ public class Assistido : ApiBaseModel
     /// <summary>
     /// ID do convênio associado
     /// </summary>
+    [Required]
     [Column("id_convenio")]
     public Guid? IdConvenio { get; set; }
 
@@ -119,6 +120,7 @@ public class Assistido : ApiBaseModel
     /// <summary>
     /// ID do município
     /// </summary>
+    [Required]
     [Column("id_municipio")]
     public Guid? IdMunicipio { get; set; }
 
