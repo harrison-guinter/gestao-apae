@@ -158,12 +158,6 @@ export class RelatorioFaltasComponent implements OnInit {
     };
   }
 
-  gerarRelatorio() {
-    this.notificationService.showSuccess('Relatório de Faltas gerado com sucesso!');
-    // Aqui seria implementada a lógica real de geração do relatório
-    console.log('Gerar relatório com filtros aplicados:', this.filtrosForm.value);
-  }
-
   tableColumns: TableColumn[] = [
     { key: 'nomeAssistido', label: 'Assistido', width: 'large', align: 'left' },
     { key: 'nomeProfissional', label: 'Profissional', width: 'large', align: 'left' },

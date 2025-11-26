@@ -19,7 +19,6 @@ import { AtendimentosPendentesComponent } from './modules/atendimentos/atendimen
 import { RelatorioFaltasComponent } from './modules/relatorios/relatorio-faltas/relatorio-faltas.component';
 import { RelatorioIndividualComponent } from './modules/relatorios/relatorio-individual/relatorio-individual.component';
 import { RelatorioPresencaComponent } from './modules/relatorios/relatorio-presenca/relatorio-presenca.component';
-import { RelatorioAtendimentosComponent } from './modules/relatorios/relatorio-atendimentos/relatorio-atendimentos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -74,11 +73,6 @@ export const routes: Routes = [
         path: 'relatorios/presencas',
         canActivate: [CoordenadorGuard],
         component: RelatorioPresencaComponent,
-      },
-      {
-        path: 'relatorios/atendimentos',
-        canActivate: [CoordenadorGuard],
-        component: RelatorioAtendimentosComponent,
       },
     ],
   },

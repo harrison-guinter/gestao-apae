@@ -2,11 +2,10 @@
   <app-filters-container
     [formGroup]="filtrosForm"
     (clear)="limparFiltros()"
-    (add)="gerarRelatorio()"
-    [isRelatorio]="true"
     (search)="pesquisar()"
     title="Relatório de Faltas"
     searchButtonText="Atualizar Preview"
+    [showAddButton]="false"
   >
     <app-select
       label="Assistido"

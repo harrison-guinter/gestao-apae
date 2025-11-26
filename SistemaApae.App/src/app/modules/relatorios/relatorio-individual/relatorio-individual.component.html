@@ -1,12 +1,11 @@
 <div class="relatorio-container">
   <app-filters-container
     [formGroup]="filtrosForm"
-    [isRelatorio]="true"
-    (add)="gerarRelatorio()"
     (clear)="limparFiltros()"
     (search)="pesquisar()"
     title="Relatório Individual"
     searchButtonText="Atualizar Preview"
+    [showAddButton]="false"
   >
     <app-input
       label="Assistido"
