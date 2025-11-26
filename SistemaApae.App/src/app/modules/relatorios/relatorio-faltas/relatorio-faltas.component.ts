@@ -161,7 +161,7 @@ export class RelatorioFaltasComponent implements OnInit {
   tableColumns: TableColumn[] = [
     { key: 'nomeAssistido', label: 'Assistido', width: 'large', align: 'left' },
     { key: 'nomeProfissional', label: 'Profissional', width: 'large', align: 'left' },
-    { key: 'dataAtendimento', label: 'Data', width: 'medium', align: 'center', type: 'datetime' },
+    { key: 'dataAtendimento', label: 'Data', width: 'large', align: 'left', type: 'datetime' },
     { key: 'nomeMunicipio', label: 'Município', width: 'medium', align: 'left' },
     { key: 'nomeConvenio', label: 'Convênio', width: 'medium', align: 'left' },
     { key: 'observacaoAtendimento', label: 'Observação', width: 'large', align: 'left' },
