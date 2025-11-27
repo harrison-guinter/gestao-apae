@@ -20,6 +20,7 @@ import { Status } from '../../core/enum/status.enum';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 import { AtendimentoPendente } from '../atendimentos-pendentes/atendimento-pendente.interface';
 import { DateUtils } from '../../core/date/date-utils';
+import { NotificationService } from '../../core/notification/notification.service';
 
 export interface ModalAtendimentosData {
   isEdit: boolean;
@@ -67,6 +68,7 @@ export class ModalAtendimentosComponent {
     private atendimentoService: AtendimentoService,
     private dialogRef: MatDialogRef<ModalAtendimentosComponent>,
     private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.isVisualizacao = data?.isVisualizacao || false;
@@ -108,7 +110,7 @@ export class ModalAtendimentosComponent {
         },
         Validators.required,
       ],
-      dataAtendimento: [{value: atendimentoPendente.dataAgendamento, disabled: true }, Validators.required],
+      dataAtendimento: [{value: DateUtils.fromDbToField(atendimentoPendente.dataAgendamento as any), disabled: true }, Validators.required],
       presenca: ['', Validators.required],
       avaliacao: [''],
       observacao: [''],
@@ -148,10 +150,11 @@ export class ModalAtendimentosComponent {
       formValue.assistido = { id: formValue.assistido.value, nome: formValue.assistido.label };
 
       const novoAtendimento = new Atendimento(formValue);
-      novoAtendimento.dataAtendimento = DateUtils.fromDateToDb(novoAtendimento.dataAtendimento as Date) as any;
+      novoAtendimento.dataAtendimento = new Date();
 
       this.atendimentoService.salvar(novoAtendimento).subscribe({
         next: (response) => {
+          this.notificationService.showSuccess('Atendimento realizado com sucesso!');
           this.dialogRef.close(true);
         },
         error: (error) => {

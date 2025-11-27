@@ -244,7 +244,7 @@ export class AgendamentosComponent implements OnInit {
         data: { isEdit: true },
         element: element,
       })
-      .subscribe((atualizar) => atualizar ?? this.pesquisarAgendamentos());
+         .subscribe(() => this.pesquisarAgendamentos());
   }
 
   visualizarAgendamento(element: Agendamento) {
@@ -258,7 +258,7 @@ export class AgendamentosComponent implements OnInit {
         element: element,
         isVisualizacao: true,
       })
-      .subscribe();
+      .subscribe(() => this.pesquisarAgendamentos());
   }
 
   private buscarProfissionais(): Observable<Usuario[]> {

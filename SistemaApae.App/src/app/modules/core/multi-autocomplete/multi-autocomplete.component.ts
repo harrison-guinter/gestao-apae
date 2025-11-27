@@ -152,6 +152,7 @@ export class AutocompleteMultipleComponent<T = any>
     if (index >= 0) list.splice(index, 1);
     this.announcer.announce(`Removido ${option.label}`);
     this.control?.setValue([...list]);
+  
     this._updateValue();
   }
 

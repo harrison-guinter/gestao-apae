@@ -26,6 +26,7 @@ import { ModalService } from '../../core/services/modal.service';
 import { ModalAtendimentosComponent } from '../modal-atendimentos/modal-atendimentos.component';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 import { AtendimentoPendente } from './atendimento-pendente.interface';
+import { DateUtils } from '../../core/date/date-utils';
 
 @Component({
   selector: 'app-atendimentos-pendentes',
@@ -101,7 +102,8 @@ export class AtendimentosPendentesComponent implements OnInit {
             agendamento.assistidos.forEach((assistido) => {
               if (
                 agendamento.atendimentos.some(
-                  (atendimento) => atendimento.assistido?.id === assistido.id
+                  (atendimento) => 
+                     atendimento.assistido?.id === assistido.id
                 )
               ) {
                 return;
@@ -151,7 +153,7 @@ export class AtendimentosPendentesComponent implements OnInit {
       align: 'left',
       getCellValue: (row) => {
         return row.tipoRecorrencia == TipoRecorrencia.NENHUM
-          ? new Date(row.dataAgendamento).toLocaleDateString()
+          ? DateUtils.fromDbToDisplay(row.dataAgendamento)
           : '-';
       },
     },

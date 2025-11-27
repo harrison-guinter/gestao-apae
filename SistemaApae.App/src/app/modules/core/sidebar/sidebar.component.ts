@@ -62,11 +62,6 @@ export class SidebarComponent implements OnInit {
           icon: 'bar_chart',
           label: 'Relatórios',
           children: [
-            {
-              icon: 'assignment',
-              label: 'Atendimentos',
-              route: '/home/relatorios/atendimentos',
-            },
             { icon: 'event_busy', label: 'Faltas', route: '/home/relatorios/faltas' },
             { icon: 'person', label: 'Individual', route: '/home/relatorios/individual' },
             {

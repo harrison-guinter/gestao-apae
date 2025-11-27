@@ -2,45 +2,65 @@
   <app-filters-container
     [formGroup]="filtrosForm"
     (clear)="limparFiltros()"
-    (search)="pesquisar()"
     (add)="gerarRelatorio()"
     [isRelatorio]="true"
-    title="Relatório de Presença"
+    (search)="pesquisar()"
+    title="Relatório de Presenças"
     searchButtonText="Atualizar Preview"
   >
     <app-select
-      label="Município"
-      [control]="$any(filtrosForm.get('municipio'))"
-      [options]="municipiosOptions"
+      label="Assistido"
+      [control]="$any(filtrosForm.get('assistido'))"
+      [options]="(assistidosOptions$ | async) || []"
       appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione um assistido"
     >
     </app-select>
-
-    <app-input
-      label="Data Início"
-      [control]="$any(filtrosForm.get('dataInicio'))"
-      type="date"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
-
-    <app-input
-      label="Data Fim"
-      [control]="$any(filtrosForm.get('dataFim'))"
-      type="date"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
 
     <app-select
       label="Profissional"
       [control]="$any(filtrosForm.get('profissional'))"
-      [options]="profissionaisOptions"
+      [options]="(profissionalOptions$ | async) || []"
       appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      cssClass="mat-spacing-sm field-md"
+      placeholder="Selecione um profissional"
+    >
+    </app-select>
+
+    <app-date
+      label="Data Início"
+      [control]="$any(filtrosForm.get('dataInicio'))"
+      placeholder="DD/MM/AAAA"
+      appearance="outline"
+      cssClass=" mat-spacing-sm field-md"
+      [clearable]="true"
+    ></app-date>
+
+    <app-date
+      label="Data Fim"
+      [control]="$any(filtrosForm.get('dataFim'))"
+      placeholder="DD/MM/AAAA"
+      appearance="outline"
+      cssClass=" mat-spacing-sm field-md"
+      [clearable]="true"
+    ></app-date>
+
+    <app-select
+      label="Município"
+      [control]="$any(filtrosForm.get('municipio'))"
+      [options]="(cidades$ | async) || []"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
+    >
+    </app-select>
+
+    <app-select
+      label="Convênio"
+      [control]="$any(filtrosForm.get('convenio'))"
+      [options]="(convenios$ | async) || []"
+      appearance="outline"
+      cssClass="mat-spacing-sm field-md"
     >
     </app-select>
   </app-filters-container>
