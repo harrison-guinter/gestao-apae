@@ -23,11 +23,10 @@ export class RelatorioFaltasService {
   constructor(private http: HttpClient) {}
 
   listarFaltas(filtro: FaltasFiltro): Observable<RelatorioFaltas[]> {
-    // Remove propriedades null ou undefined
     const params = Object.entries(filtro)
       .filter(([_, value]) => value !== null && value !== undefined && value !== '')
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-    console.log(1);
+
     return (
       this.http
         .get<{ data: RelatorioFaltas[] }>(`${this.baseUrl}Atendimento/reports/faltas`, {
