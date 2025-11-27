@@ -229,7 +229,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
 			var relacionamentosUpdateResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
 			{
 				IdAgendamento = dto.Id,
-				Status = null
+				Status = StatusEntidadeEnum.Ativo
 			});
 
 			var assistidosDtos = (relacionamentosUpdateResult.Success && relacionamentosUpdateResult.Data != null)
@@ -283,7 +283,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
 			var relacionamentosByIdResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
 			{
 				IdAgendamento = id,
-				Status = null
+				Status = StatusEntidadeEnum.Ativo
 			});
 
 			Agendamento? agendamentoEntity = relacionamentosByIdResult.Success && relacionamentosByIdResult.Data != null
@@ -370,7 +370,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
                 var filterAssistido = new AgendamentoAssistidoFilterRequest 
                 { 
                     IdAssistido = filtros.IdAssistido,
-                    Status = null
+					Status = StatusEntidadeEnum.Ativo
                 };
                 var relacionamentosResult = await _agendamentoAssistidoService.GetByFilters(filterAssistido);
                 
@@ -418,7 +418,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
             var relacionamentosTodosResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
             {
                 IdsAgendamento = idsAgendamentos,
-                Status = null
+				Status = StatusEntidadeEnum.Ativo
             });
 
             var relacionamentos = (relacionamentosTodosResult.Success && relacionamentosTodosResult.Data != null)
@@ -531,7 +531,7 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
             var relacionamentosProfResult = await _agendamentoAssistidoService.GetByFilters(new AgendamentoAssistidoFilterRequest
             {
                 IdsAgendamento = idsAgendamentos,
-                Status = null
+				Status = StatusEntidadeEnum.Ativo
             });
 
             var relacionamentos = (relacionamentosProfResult.Success && relacionamentosProfResult.Data != null)
