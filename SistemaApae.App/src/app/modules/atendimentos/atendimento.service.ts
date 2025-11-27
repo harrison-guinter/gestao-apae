@@ -47,7 +47,7 @@ export class AtendimentoService {
     if (filtro.presenca !== undefined) {
       params.presenca = filtro.presenca;
     }
-    console.log('params atendimento service', params);
+
     return this.http.get<{ data: any[] }>(`${this.baseUrl}Atendimento/filter`, { params }).pipe(
       map((response) => response.data.map((item) => new Atendimento(item))),
       map((atendimentos) => atendimentos)
@@ -65,7 +65,6 @@ export class AtendimentoService {
   }
 
   salvar(atendimento: Atendimento): Observable<void> {
-    console.log('atendimento service', atendimento);
     return this.http.post<void>(`${this.baseUrl}Atendimento`, atendimento);
   }
 

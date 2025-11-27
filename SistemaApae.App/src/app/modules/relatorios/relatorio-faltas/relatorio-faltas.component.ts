@@ -30,6 +30,7 @@ import { RelatorioFaltas } from './relatorio-faltas.interface';
 import { CidadesService } from '../../cidades/cidades.service';
 import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
 import { ConvenioService } from '../../convenios/convenio.service';
+import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.component';
 
 @Component({
   selector: 'app-relatorio-faltas',
@@ -48,6 +49,7 @@ import { ConvenioService } from '../../convenios/convenio.service';
     InputComponent,
     FiltersContainerComponent,
     DatepickerComponent,
+    AutocompleteComponent,
   ],
   templateUrl: './relatorio-faltas.component.html',
   styleUrls: ['./relatorio-faltas.component.less'],
@@ -138,7 +140,6 @@ export class RelatorioFaltasComponent implements OnInit {
   }
 
   pesquisar() {
-    console.log(3);
     this.relatorioFaltasService
       .listarFaltas(this.valueFromForm(this.filtrosForm.value))
       .subscribe((data) => {
@@ -147,12 +148,11 @@ export class RelatorioFaltasComponent implements OnInit {
   }
 
   valueFromForm(formValue: any): FaltasFiltro {
-    console.log(2);
     return {
       dataInicio: formValue.dataInicio?.toISOString().split('T')[0],
       dataFim: formValue.dataFim?.toISOString().split('T')[0],
-      idAssistido: formValue.assistido?.id,
-      idProfissional: formValue.profissional?.id,
+      idAssistido: formValue.assistido?.value?.id,
+      idProfissional: formValue.profissional?.value?.id,
       idMunicipio: formValue.municipio?.id,
       idConvenio: formValue.convenio,
     };
