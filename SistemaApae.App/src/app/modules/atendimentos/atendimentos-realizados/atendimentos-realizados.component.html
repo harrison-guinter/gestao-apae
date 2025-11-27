@@ -6,25 +6,27 @@
     (search)="pesquisarAtendimentos()"
     title="Lista de Atendimentos Realizados"
   >
-    <app-select
+    <app-autocomplete
       label="Assistido"
-      [control]="$any(filtrosForm.get('assistido'))"
+      placeholder="Digite para buscar..."
       [options]="(assistidosOptions$ | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um assistido"
+      [control]="$any(filtrosForm.get('assistido'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
     >
-    </app-select>
+    </app-autocomplete>
 
-    <app-select
+    <app-autocomplete
       label="Profissional"
-      [control]="$any(filtrosForm.get('profissional'))"
+      placeholder="Digite para buscar..."
       [options]="(profissionalOptions$ | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um profissional"
+      [control]="$any(filtrosForm.get('profissional'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
     >
-    </app-select>
+    </app-autocomplete>
 
     <app-date
       label="Data Início"

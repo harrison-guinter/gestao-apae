@@ -109,12 +109,6 @@ export class RelatorioIndividualComponent implements OnInit {
     ];
   }
 
-  gerarRelatorio() {
-    this.notificationService.showSuccess('Relatório Individual gerado com sucesso!');
-    // Aqui seria implementada a lógica real de geração do relatório
-    console.log('Filtros aplicados:', this.filtrosForm.value);
-  }
-
   municipiosOptions: SelectOption[] = [
     { value: '', label: 'Todos' },
     { value: '1', label: 'Feliz' },

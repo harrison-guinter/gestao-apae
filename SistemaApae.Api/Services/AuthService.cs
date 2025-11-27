@@ -63,7 +63,7 @@ public class AuthService : IAuthService
             }
 
             // Atualiza último login
-            user.UpdatedAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.Now;
 
             await _repository.UpdateAsync(user);
 
@@ -118,7 +118,7 @@ public class AuthService : IAuthService
                 
                 // Atualiza a senha no banco de dados
                 user.Senha = hashedPassword;
-                user.UpdatedAt = DateTime.UtcNow;
+                user.UpdatedAt = DateTime.Now;
 
                 await _repository.UpdateAsync(user);
 
@@ -179,7 +179,7 @@ public class AuthService : IAuthService
             issuer: jwtIssuer,
             audience: jwtIssuer,
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: credentials
         );
 

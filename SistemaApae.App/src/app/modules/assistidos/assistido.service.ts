@@ -119,6 +119,8 @@ export class AssistidoService {
       'usoMedicacaoMae',
       'descricaoDemanda',
       'observacao',
+      'nomeTurmaApae',
+      'diasTurmaApae',
     ];
 
     // Campos booleanos
@@ -153,6 +155,7 @@ export class AssistidoService {
       'turnoEscola',
       'gestacaoSemanas',
       'idConvenio',
+      'turnoTurmaApae',
     ];
 
     // Processar campos de string (com trim)

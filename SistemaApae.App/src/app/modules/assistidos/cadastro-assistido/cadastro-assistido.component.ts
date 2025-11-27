@@ -92,10 +92,18 @@ export class CadastroAssistidoComponent implements OnInit {
   ];
 
   turnoEscolaOptions: SelectOption[] = [
-    { value: TurnoEscolaEnum.MATUTINO, label: 'Matutino' },
-    { value: TurnoEscolaEnum.VESPERTINO, label: 'Vespertino' },
-    { value: TurnoEscolaEnum.NOTURNO, label: 'Noturno' },
+    { value: TurnoEscolaEnum.MANHA, label: 'Manhã' },
+    { value: TurnoEscolaEnum.TARDE, label: 'Tarde' },
+    { value: TurnoEscolaEnum.NOITE, label: 'Noite' },
     { value: TurnoEscolaEnum.INTEGRAL, label: 'Integral' },
+  ];
+
+  diasSemanaOptions: SelectOption[] = [
+    { value: '2ª', label: '2ª' },
+    { value: '3ª', label: '3ª' },
+    { value: '4ª', label: '4ª' },
+    { value: '5ª', label: '5ª' },
+    { value: '6ª', label: '6ª' },
   ];
 
   cidades$ = this.cidadesService
@@ -151,12 +159,12 @@ export class CadastroAssistidoComponent implements OnInit {
   }
 
   private preencherFormulario(assistido: Assistido): void {
-
     this.formCadastro.patchValue({
       // Dados Pessoais
       nome: assistido.nome,
-      dataNascimento:
-        assistido.dataNascimento ? DateUtils.fromDbToField(assistido.dataNascimento) : null,
+      dataNascimento: assistido.dataNascimento
+        ? DateUtils.fromDbToField(assistido.dataNascimento)
+        : null,
       cpf: assistido.cpf,
       sexo: assistido.sexo,
       naturalidade: assistido.naturalidade,
@@ -187,6 +195,11 @@ export class CadastroAssistidoComponent implements OnInit {
       anoEscola: assistido.anoEscola,
       turnoEscola: assistido.turnoEscola,
       acompanhamentoEspecializado: assistido.acompanhamentoEspecializado,
+
+      // Vínculo APAE
+      nomeTurmaApae: assistido.nomeTurmaApae,
+      turnoTurmaApae: assistido.turnoTurmaApae,
+      diasTurmaApae: (assistido.diasTurmaApae as any)?.split(',') || [],
 
       // Benefícios Sociais
       bpc: assistido.bpc,
@@ -265,6 +278,11 @@ export class CadastroAssistidoComponent implements OnInit {
       medicamentosQuais: [''],
       planoSaude: [null],
 
+      // Vínculo APAE
+      nomeTurmaApae: [''],
+      turnoTurmaApae: [null],
+      diasTurmaApae: [[]],
+
       // Escolaridade
       nomeEscola: [''],
       anoEscola: [''],
@@ -332,6 +350,7 @@ export class CadastroAssistidoComponent implements OnInit {
     const assistidoData: Assistido = {
       ...this.formCadastro.value,
       id: this.assistidoId,
+      diasTurmaApae: (this.formCadastro.value.diasTurmaApae as any)?.join(',') || '',
       dataNascimento: this.formCadastro.value.dataNascimento
         ? this.formCadastro.value.dataNascimento.toISOString().split('T')[0]
         : null,

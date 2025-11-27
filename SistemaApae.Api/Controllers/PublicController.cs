@@ -46,7 +46,7 @@ public class PublicController : ControllerBase
         {
             Status = "OK",
             Message = "Sistema APAE API está funcionando",
-            Timestamp = DateTime.UtcNow
+            Timestamp = DateTime.Now
         });
     }
 
@@ -97,7 +97,7 @@ public class PublicController : ControllerBase
             { 
                 Connected = isConnected,
                 Message = isConnected ? "Conexão com Supabase funcionando" : "Erro na conexão com Supabase",
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.Now
             });
         }
         catch (Exception ex)
@@ -108,7 +108,7 @@ public class PublicController : ControllerBase
                 Connected = false,
                 Message = "Erro interno ao verificar conexão com Supabase",
                 Error = ex.Message,
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.Now
             });
         }
     }

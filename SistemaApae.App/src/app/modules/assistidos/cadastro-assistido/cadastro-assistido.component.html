@@ -197,6 +197,40 @@
         </div>
       </div>
 
+      <!-- Vínculo APAE -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>diversity_3</mat-icon>
+          Vínculo APAE
+        </h3>
+
+        <div class="form-row">
+          <div class="form-row-thirds">
+            <app-input
+              label="Nome Turma APAE"
+              [control]="$any(formCadastro.get('nomeTurmaApae'))"
+              placeholder="Digite o nome da turma"
+              appearance="outline"
+            ></app-input>
+
+            <app-select
+              label="Turno Turma APAE"
+              [control]="$any(formCadastro.get('turnoTurmaApae'))"
+              [options]="turnoEscolaOptions"
+              appearance="outline"
+            ></app-select>
+
+            <app-select
+              label="Dias Turma APAE"
+              [control]="$any(formCadastro.get('diasTurmaApae'))"
+              [options]="diasSemanaOptions"
+              [multiple]="true"
+              appearance="outline"
+            ></app-select>
+          </div>
+        </div>
+      </div>
+
       <!-- Escolaridade -->
       <div class="form-section">
         <h3 class="section-title">
