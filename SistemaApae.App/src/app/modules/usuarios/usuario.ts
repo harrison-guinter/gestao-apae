@@ -79,9 +79,7 @@ export class Usuario {
   }
 }
 
-//apae@apae
-//paulo1234
-
+// Usuário Profissional
 // Login: mipedi7767@dwakm.com
 // Senha: swVIX&aTvO3y
 

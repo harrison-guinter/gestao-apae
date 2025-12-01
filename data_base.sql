@@ -136,4 +136,6 @@ CREATE TABLE public.usuario (
   CONSTRAINT usuario_pkey PRIMARY KEY (id)
 );
 
+INSERT INTO "public"."usuario" ("id", "nome", "email", "telefone", "senha", "perfil", "observacao", "updated_at", "registro_profissional", "especialidade", "status") VALUES ('79b64d20-15df-4205-9058-ef273b34d932', 'Administrador APAE', 'damohew142@docsfy.com', null, '$2a$11$c0SDOQeGYQAztriLF9gwcOUzTwYjnM1geVTxSCM0WUV./5/OQkO0S', '1', null, '2025-12-01 23:22:07.139307+00', null, null, '1');
+
 
