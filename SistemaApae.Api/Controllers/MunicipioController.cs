@@ -64,7 +64,8 @@ public class MunicipioController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("não foram encontrados") || result.Message.Contains("não foi encontrado"))
-                return NotFound(result);
+                return Ok(Enumerable.Empty<Assistido>());
+
             return StatusCode(500, result);
         }
         return Ok(result);
