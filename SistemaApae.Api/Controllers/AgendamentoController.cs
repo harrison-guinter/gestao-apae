@@ -11,7 +11,7 @@ namespace SistemaApae.Api.Controllers;
 /// Controller com endpoints de CRUD da entidade Agendamento
 /// </summary>
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AgendamentoController : ControllerBase

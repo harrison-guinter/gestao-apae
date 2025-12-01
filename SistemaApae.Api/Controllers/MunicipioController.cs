@@ -12,7 +12,7 @@ namespace SistemaApae.Api.Controllers.Administrative;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class MunicipioController : ControllerBase
 {
