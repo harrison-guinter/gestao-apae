@@ -201,7 +201,7 @@ export class RelatorioPresencaComponent implements OnInit {
       const a = document.createElement('a');
       a.href = url;
 
-      a.download = 'relatorio_presencas' + new Date().toISOString() + '.xlsx';
+      a.download = 'relatorio_presencas_' + new Date().toISOString() + '.xlsx';
 
       a.click();
       window.URL.revokeObjectURL(url);
@@ -216,7 +216,7 @@ export class RelatorioPresencaComponent implements OnInit {
       label: 'Data nascimento',
       width: 'medium',
       align: 'center',
-      type: 'datetime',
+      type: 'date',
     },
     { key: 'tipoAtendimento', label: 'Tipo de atendimento', width: 'medium', align: 'left' },
     { key: 'endereco', label: 'Endereço', width: 'medium', align: 'left' },
