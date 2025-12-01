@@ -55,7 +55,6 @@ export class Usuario {
   }
 
   hasRole(role: Roles): boolean {
-    return true;
     return this.perfil === role;
   }
 
@@ -85,3 +84,7 @@ export class Usuario {
 
 // Login: mipedi7767@dwakm.com
 // Senha: swVIX&aTvO3y
+
+// Administrador APAE
+// Login: damohew142@docsfy.com
+// Senha: JDbggsev3Ogv
