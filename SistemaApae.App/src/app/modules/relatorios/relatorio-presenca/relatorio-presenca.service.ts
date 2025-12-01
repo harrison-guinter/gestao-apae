@@ -35,4 +35,17 @@ export class RelatorioPresencasService {
         .pipe(map((r) => r.data)) || of([])
     );
   }
+
+ gerarRelatorio(filtro: PresencaFiltro): Observable<Blob> {
+  const params = Object.entries(filtro)
+    .filter(([_, value]) => value !== null && value !== undefined && value !== '')
+    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+  return this.http.get(`${this.baseUrl}Atendimento/reports/presencas/excel`, {
+    params: params as any,
+    responseType: 'blob' 
+  });
+}
+
+
 }

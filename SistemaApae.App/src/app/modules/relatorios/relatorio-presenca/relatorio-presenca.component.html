@@ -8,61 +8,52 @@
     title="Relatório de Presenças"
     searchButtonText="Atualizar Preview"
   >
-    <app-select
-      label="Assistido"
-      [control]="$any(filtrosForm.get('assistido'))"
-      [options]="(assistidosOptions$ | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um assistido"
-    >
-    </app-select>
-
-    <app-select
+    <app-autocomplete
       label="Profissional"
-      [control]="$any(filtrosForm.get('profissional'))"
+      placeholder="Digite para buscar..."
       [options]="(profissionalOptions$ | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-      placeholder="Selecione um profissional"
+      [control]="$any(filtrosForm.get('profissional'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
     >
-    </app-select>
+    </app-autocomplete>
 
-    <app-date
-      label="Data Início"
-      [control]="$any(filtrosForm.get('dataInicio'))"
-      placeholder="DD/MM/AAAA"
-      appearance="outline"
-      cssClass=" mat-spacing-sm field-md"
-      [clearable]="true"
-    ></app-date>
+    <mat-form-field appearance="outline" class="month-year-field mat-spacing-sm">
+      <mat-label>Mês/Ano</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="periodoReferencia" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker
+        #dp
+        startView="multi-year"
+        (yearSelected)="chosenYearHandler($event)"
+        (monthSelected)="chosenMonthHandler($event, dp)"
+        panelClass="month-year-picker"
+      >
+      </mat-datepicker>
+    </mat-form-field>
 
-    <app-date
-      label="Data Fim"
-      [control]="$any(filtrosForm.get('dataFim'))"
-      placeholder="DD/MM/AAAA"
-      appearance="outline"
-      cssClass=" mat-spacing-sm field-md"
-      [clearable]="true"
-    ></app-date>
-
-    <app-select
+    <app-autocomplete
       label="Município"
-      [control]="$any(filtrosForm.get('municipio'))"
+      placeholder="Digite para buscar..."
       [options]="(cidades$ | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
+      [control]="$any(filtrosForm.get('municipio'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass=""
     >
-    </app-select>
+    </app-autocomplete>
 
-    <app-select
+    <app-autocomplete
       label="Convênio"
-      [control]="$any(filtrosForm.get('convenio'))"
+      placeholder="Digite para buscar..."
       [options]="(convenios$ | async) || []"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
+      [control]="$any(filtrosForm.get('convenio'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-left padding-right"
     >
-    </app-select>
+    </app-autocomplete>
   </app-filters-container>
 
   <app-table

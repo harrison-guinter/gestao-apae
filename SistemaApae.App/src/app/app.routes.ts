@@ -73,12 +73,8 @@ export const routes: Routes = [
         path: 'relatorios/presencas',
         canActivate: [CoordenadorGuard],
         component: RelatorioPresencaComponent,
-<<<<<<< HEAD
       }
     
-=======
-      },
->>>>>>> dd8783cfc9f2df09d9344af99220a0f0ef901924
     ],
   },
   { path: '**', redirectTo: 'login' },
