@@ -7,38 +7,50 @@
     searchButtonText="Atualizar Preview"
     [showAddButton]="false"
   >
-    <app-input
+    <app-autocomplete
       label="Assistido"
+      placeholder="Digite para buscar..."
+      [options]="(assistidosOptions$ | async) || []"
       [control]="$any(filtrosForm.get('assistido'))"
-      placeholder="Buscar por assistido"
-      suffixIcon="search"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
     >
-    </app-input>
+    </app-autocomplete>
 
-    <app-input
+    <app-autocomplete
+      label="Profissional"
+      placeholder="Digite para buscar..."
+      [options]="(profissionalOptions$ | async) || []"
+      [control]="$any(filtrosForm.get('profissional'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
+    >
+    </app-autocomplete>
+
+    <app-date
       label="Data Início"
       [control]="$any(filtrosForm.get('dataInicio'))"
-      type="date"
+      placeholder="DD/MM/AAAA"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
+      [clearable]="true"
+    ></app-date>
 
-    <app-input
+    <app-date
       label="Data Fim"
       [control]="$any(filtrosForm.get('dataFim'))"
-      type="date"
+      placeholder="DD/MM/AAAA"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
+      [clearable]="true"
+    ></app-date>
 
     <app-select
       label="Município"
       [control]="$any(filtrosForm.get('municipio'))"
-      [options]="municipiosOptions"
+      [options]="(cidades$ | async) || []"
       appearance="outline"
       cssClass="mat-spacing-sm field-md"
     >
