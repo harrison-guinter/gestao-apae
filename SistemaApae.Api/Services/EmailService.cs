@@ -106,7 +106,7 @@ public class EmailService : IEmailService
     {
         string date = @$"{DateTime.Now.Day} de {DateTime.Now.ToString("MMMM", new CultureInfo("pt-br"))} de {DateTime.Now.Year}";
 
-        string link = "link do sistema apae";
+        string image = "../Images/apae-logo.png";
 
         string content = $@"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
                             <html xmlns='http://www.w3.org/1999/xhtml'>
@@ -176,19 +176,17 @@ public class EmailService : IEmailService
                                   <div
                                     style='
                                       width: 100%;
-                                      height: 22px;
+                                      height: 50px;
                                       background-color: #003087;
                                       display: block;
                                       margin-top: 15px;
                                     '
                                   >
                                     <p style='text-align: center'>
-                                      <a
-                                        style='text-decoration: none; color: white'
-                                        href='{link}'
-                                        target='_blank'
-                                        >sistema apae</a
-                                      >
+                                      <img
+                                        style='height:45px'
+                                        src='{image}'
+                                        />
                                     </p>
                                   </div>
                                 </div>
