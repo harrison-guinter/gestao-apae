@@ -43,11 +43,11 @@ public class PresencaListaItemDto
     [ExcelColumn("Tipo de Atendimento", Order = 5)]
     public string? TipoAtendimento { get; set; }
 
-    [ExcelColumn("Dia Terapias", Order = 6)]
-    public string? DiaTerapias { get; set; }
-
-    [ExcelColumn("Dia Semana", Order = 7)]
+    [ExcelColumn("Dia Semana", Order = 6)]
     public string? DiaSemana { get; set; }
+
+    [ExcelColumn("Dia Terapias", Order = 7)]
+    public string? DiaTerapias { get; set; }
 
     [ExcelColumn("Turno", Order = 8)]
     public string? Turno { get; set; }

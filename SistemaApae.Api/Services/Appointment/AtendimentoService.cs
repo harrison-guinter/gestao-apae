@@ -457,7 +457,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                         Assistido = assistido,
                         TipoAtendimento = tipoAtendimento,
                         DiaTerapias = diasOrdinais.Count > 0 ? string.Join(", ", diasOrdinais) : string.Empty,
-                        DiaSemana = assistido.DiasTurmaApae ?? string.Empty,
+                        DiaEscolaApae = assistido.DiasTurmaApae ?? string.Empty,
                         Turno = turno
                     };
                 })
@@ -473,7 +473,7 @@ public class AtendimentoService : Service<Atendimento, AtendimentoFilterRequest>
                     Endereco = r.Assistido.Endereco ?? string.Empty,
                     TipoAtendimento = r.TipoAtendimento,
                     DiaTerapias = r.DiaTerapias,
-                    DiaSemana = r.DiaSemana,
+                    DiaEscolaApae = r.DiaEscolaApae,
                     Turno = r.Turno
                 })
                 .ToList();
