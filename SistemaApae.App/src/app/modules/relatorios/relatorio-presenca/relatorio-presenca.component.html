@@ -2,47 +2,58 @@
   <app-filters-container
     [formGroup]="filtrosForm"
     (clear)="limparFiltros()"
-    (search)="pesquisar()"
     (add)="gerarRelatorio()"
     [isRelatorio]="true"
-    title="Relatório de Presença"
+    (search)="pesquisar()"
+    title="Relatório de Presenças"
     searchButtonText="Atualizar Preview"
   >
-    <app-select
-      label="Município"
-      [control]="$any(filtrosForm.get('municipio'))"
-      [options]="municipiosOptions"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
-    >
-    </app-select>
-
-    <app-input
-      label="Data Início"
-      [control]="$any(filtrosForm.get('dataInicio'))"
-      type="date"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
-
-    <app-input
-      label="Data Fim"
-      [control]="$any(filtrosForm.get('dataFim'))"
-      type="date"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-md"
-    >
-    </app-input>
-
-    <app-select
+    <app-autocomplete
       label="Profissional"
+      placeholder="Digite para buscar..."
+      [options]="(profissionalOptions$ | async) || []"
       [control]="$any(filtrosForm.get('profissional'))"
-      [options]="profissionaisOptions"
-      appearance="outline"
-      cssClass="mat-spacing-sm field-lg"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-right mat-spacing-sm field-md"
     >
-    </app-select>
+    </app-autocomplete>
+
+    <mat-form-field appearance="outline" class="month-year-field mat-spacing-sm">
+      <mat-label>Mês/Ano</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="periodoReferencia" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker
+        #dp
+        startView="multi-year"
+        (yearSelected)="chosenYearHandler($event)"
+        (monthSelected)="chosenMonthHandler($event, dp)"
+        panelClass="month-year-picker"
+      >
+      </mat-datepicker>
+    </mat-form-field>
+
+    <app-autocomplete
+      label="Município"
+      placeholder="Digite para buscar..."
+      [options]="(cidades$ | async) || []"
+      [control]="$any(filtrosForm.get('municipio'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass=""
+    >
+    </app-autocomplete>
+
+    <app-autocomplete
+      label="Convênio"
+      placeholder="Digite para buscar..."
+      [options]="(convenios$ | async) || []"
+      [control]="$any(filtrosForm.get('convenio'))"
+      [clearable]="true"
+      prefixIcon="person"
+      cssClass="padding-left padding-right"
+    >
+    </app-autocomplete>
   </app-filters-container>
 
   <app-table

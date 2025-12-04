@@ -23,7 +23,6 @@ export class Atendimento {
   updatedAt?: Date;
 
   constructor(data: any = {}) {
-    console.log(data)
     this.id = data.id;
     this.profissional = data.profissional || '';
     this.assistido = data.assistido || data.assistido || '';

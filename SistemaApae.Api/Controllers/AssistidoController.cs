@@ -10,7 +10,7 @@ namespace SistemaApae.Api.Controllers.Patients;
 /// Controller com endpoints de CRUD da entidade Assistido
 /// </summary>
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AssistidoController : ControllerBase
@@ -39,7 +39,8 @@ public class AssistidoController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("não foram encontrados") || result.Message.Contains("não foi encontrado"))
-                return NotFound(result);
+                return Ok(Enumerable.Empty<Assistido>());
+
             return StatusCode(500, result);
         }
         return Ok(result);

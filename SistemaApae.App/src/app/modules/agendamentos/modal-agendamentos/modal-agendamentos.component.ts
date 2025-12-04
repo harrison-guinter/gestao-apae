@@ -162,8 +162,9 @@ export class ModalAgendamentosComponent implements OnInit {
   }
 
   valueFromForm(): Agendamento {
-    const valor = this.formCadastro.value;
+    const valor = this.formCadastro.getRawValue();
 
+    console.log(valor);
     if (valor.dataAgendamento)
       valor.dataAgendamento = new Date(valor.dataAgendamento).toISOString().slice(0, 10);
 

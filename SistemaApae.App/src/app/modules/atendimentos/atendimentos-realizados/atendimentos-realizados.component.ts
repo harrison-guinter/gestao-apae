@@ -105,8 +105,8 @@ export class AtendimentosRealizadosComponent implements OnInit {
 
   pesquisarAtendimentos() {
     const filtros: any = {
-      idAssistido: this.filtrosForm.value.assistido || undefined,
-      idProfissional: this.filtrosForm.value.profissional || undefined,
+      idAssistido: this.filtrosForm.value.assistido?.value || undefined,
+      idProfissional: this.filtrosForm.value.profissional?.value || undefined,
       dataInicioAtendimento: this.filtrosForm.value.dataInicio || undefined,
       dataFimAtendimento: this.filtrosForm.value.dataFim || undefined,
       presenca: this.filtrosForm.value?.presenca ? this.filtrosForm.value.presenca : undefined,

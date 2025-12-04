@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,18 +9,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TableComponent, TableColumn } from '../../core/table/table.component';
 import { SelectComponent, SelectOption } from '../../core/select/select.component';
-import { InputComponent } from '../../core/input/input.component';
 import { PageInfoService } from '../../core/services/page-info.service';
 import { FiltersContainerComponent } from '../../core/filters-container/filters-container.component';
-import { NotificationService } from '../../core/notification/notification.service';
-
-interface RelatorioIndividual {
-  data: string;
-  profissional: string;
-  municipio: string;
-  tipoAtendimento: string;
-  observacao: string;
-}
+import {
+  RelatorioIndividualFiltro,
+  RelatorioIndividualService,
+} from './relatorio-individual.service';
+import { AssistidoService } from '../../assistidos/assistido.service';
+import { UsuarioService } from '../../usuarios/usuario.service';
+import { map, Observable } from 'rxjs';
+import { Roles } from '../../auth/roles.enum';
+import { Status } from '../../core/enum/status.enum';
+import { Usuario } from '../../usuarios/usuario';
+import { CidadesService } from '../../cidades/cidades.service';
+import { DatepickerComponent } from '../../core/date/datepicker/datepicker.component';
+import { AutocompleteComponent } from '../../core/autocomplete/autocomplete.component';
 
 @Component({
   selector: 'app-relatorio-individual',
@@ -36,21 +39,45 @@ interface RelatorioIndividual {
     MatSelectModule,
     TableComponent,
     SelectComponent,
-    InputComponent,
     FiltersContainerComponent,
+    DatepickerComponent,
+    AutocompleteComponent,
   ],
   templateUrl: './relatorio-individual.component.html',
   styleUrls: ['./relatorio-individual.component.less'],
 })
 export class RelatorioIndividualComponent implements OnInit {
   protected filtrosForm!: UntypedFormGroup;
-  relatorioData: RelatorioIndividual[] = [];
+  relatorioData: any[] = [];
 
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private pageInfoService: PageInfoService,
-    private notificationService: NotificationService
-  ) {}
+  private relatorioIndividualService = inject(RelatorioIndividualService);
+  private assistidoService = inject(AssistidoService);
+  private usuarioService = inject(UsuarioService);
+  private municipioService = inject(CidadesService);
+
+  profissionalOptions$: Observable<SelectOption[]> = this.buscarProfissionais().pipe(
+    map((users) =>
+      users.map((user) => ({
+        value: user,
+        label: user.nome,
+      }))
+    )
+  );
+
+  assistidosOptions$: Observable<SelectOption[]> = this.assistidoService.listarAssistidos({}).pipe(
+    map((assistidos) =>
+      assistidos.map((assistido) => ({
+        value: assistido,
+        label: assistido.nome,
+      }))
+    )
+  );
+
+  cidades$ = this.municipioService
+    .listarCidades()
+    .pipe(map((cidades) => cidades.map((cidade) => ({ value: cidade.id, label: cidade.nome }))));
+
+  constructor(private formBuilder: UntypedFormBuilder, private pageInfoService: PageInfoService) {}
 
   ngOnInit() {
     this.pageInfoService.updatePageInfo(
@@ -60,11 +87,26 @@ export class RelatorioIndividualComponent implements OnInit {
     this.initFiltrosForm();
   }
 
+  private buscarProfissionais(): Observable<Usuario[]> {
+    return this.usuarioService
+      .filtrarUsuarios({ perfil: Roles.PROFISSIONAL, status: Status.Ativo })
+      .pipe(
+        map((users) => {
+          return users.map((u) => new Usuario(u));
+        })
+      );
+  }
+
   initFiltrosForm() {
+    const hoje = new Date();
+    const primeiroDia: Date = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const ultimoDia: Date = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+
     this.filtrosForm = this.formBuilder.group({
+      profissional: [''],
       assistido: [''],
-      dataInicio: [''],
-      dataFim: [''],
+      dataInicio: [primeiroDia],
+      dataFim: [ultimoDia],
       municipio: [''],
     });
     this.pesquisar();
@@ -76,51 +118,37 @@ export class RelatorioIndividualComponent implements OnInit {
   }
 
   pesquisar() {
-    // Mock de dados para preview
-    this.relatorioData = [
-      {
-        data: '2024-10-15',
-        profissional: 'Dr. Maria Santos',
-        municipio: 'Feliz',
-        tipoAtendimento: 'Fisioterapia',
-        observacao: 'Assistido apresentou melhora significativa',
-      },
-      {
-        data: '2024-10-22',
-        profissional: 'Dra. Julia Ferreira',
-        municipio: 'Feliz',
-        tipoAtendimento: 'Psicologia',
-        observacao: 'Sessão de acompanhamento psicológico',
-      },
-      {
-        data: '2024-11-05',
-        profissional: 'Dr. Pedro Lima',
-        municipio: 'Vale Real',
-        tipoAtendimento: 'Fonoaudiologia',
-        observacao: 'Exercícios de fala aplicados',
-      },
-      {
-        data: '2024-11-12',
-        profissional: 'Dr. Maria Santos',
-        municipio: 'Feliz',
-        tipoAtendimento: 'Fisioterapia',
-        observacao: 'Continuidade do tratamento',
-      },
-    ];
+    this.relatorioIndividualService
+      .listarAtendimentos(this.valueFromForm(this.filtrosForm.value))
+      .subscribe((data) => {
+        this.relatorioData = data.map((item) => ({
+          data: new Date(item.atendimento.data).toLocaleDateString('pt-BR'),
+          profissional: item.profissional.nome,
+          municipio: item.municipio.nome,
+          assistido: item.assistido.nome,
+        }));
+      });
   }
 
-  municipiosOptions: SelectOption[] = [
-    { value: '', label: 'Todos' },
-    { value: '1', label: 'Feliz' },
-    { value: '2', label: 'Vale Real' },
-    { value: '3', label: 'Linha Nova' },
-  ];
+  valueFromForm(formValue: any): RelatorioIndividualFiltro {
+    console.log(formValue);
+    return {
+      dataInicio: formValue?.dataInicio
+        ? new Date(formValue?.dataInicio).toISOString().split('T')[0]
+        : undefined,
+      dataFim: formValue?.dataFim
+        ? new Date(formValue?.dataFim).toISOString().split('T')[0]
+        : undefined,
+      idAssistido: formValue.assistido?.value?.id,
+      idProfissional: formValue.profissional?.value?.id,
+      idMunicipio: formValue?.municipio,
+    };
+  }
 
   tableColumns: TableColumn[] = [
-    { key: 'data', label: 'Data', width: 'medium', align: 'center' },
+    { key: 'data', label: 'Data', width: 'medium', align: 'left' },
     { key: 'profissional', label: 'Profissional', width: 'large', align: 'left' },
-    { key: 'municipio', label: 'Município/Prefeitura/CAS', width: 'large', align: 'left' },
-    { key: 'tipoAtendimento', label: 'Tipo de Atendimento', width: 'medium', align: 'left' },
-    { key: 'observacao', label: 'Observação', width: 'xlarge', align: 'left' },
+    { key: 'assistido', label: 'Assistido', width: 'large', align: 'left' },
+    { key: 'municipio', label: 'Município', width: 'large', align: 'left' },
   ];
 }

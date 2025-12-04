@@ -1,4 +1,0 @@
-# Script para instalar dependências necessárias
-# Execute este comando antes de rodar o conversor
-
-pip install pandas openpyxl xlrd

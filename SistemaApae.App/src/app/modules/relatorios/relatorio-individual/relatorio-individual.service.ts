@@ -1,35 +1,35 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { RelatorioFaltas } from './relatorio-faltas.interface';
+import { RelatorioIndividual } from './relatorio-individual.interface';
 
-export interface FaltasFiltro {
+export interface RelatorioIndividualFiltro {
   dataInicio?: string;
   dataFim?: string;
   idAssistido?: string;
   idProfissional?: string;
-  idMunicipio: string;
-  idConvenio?: string;
+  idMunicipio?: string;
+  limit?: number;
+  skip?: number;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class RelatorioFaltasService {
+export class RelatorioIndividualService {
   private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-  listarFaltas(filtro: FaltasFiltro): Observable<RelatorioFaltas[]> {
+  listarAtendimentos(filtro: RelatorioIndividualFiltro): Observable<RelatorioIndividual[]> {
     const params = Object.entries(filtro)
       .filter(([_, value]) => value !== null && value !== undefined && value !== '')
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
     return (
       this.http
-        .get<{ data: RelatorioFaltas[] }>(`${this.baseUrl}Atendimento/reports/faltas`, {
+        .get<{ data: RelatorioIndividual[] }>(`${this.baseUrl}Atendimento/reports/assistidos`, {
           params: params as any,
         })
         .pipe(map((r) => r.data)) || of([])

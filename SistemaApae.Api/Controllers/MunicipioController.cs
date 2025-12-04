@@ -12,7 +12,7 @@ namespace SistemaApae.Api.Controllers.Administrative;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class MunicipioController : ControllerBase
 {
@@ -64,7 +64,8 @@ public class MunicipioController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("não foram encontrados") || result.Message.Contains("não foi encontrado"))
-                return NotFound(result);
+                return Ok(Enumerable.Empty<Assistido>());
+
             return StatusCode(500, result);
         }
         return Ok(result);

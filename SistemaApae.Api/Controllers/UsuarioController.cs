@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Users;
 using SistemaApae.Api.Services.Users;
 
@@ -11,7 +12,7 @@ namespace SistemaApae.Api.Controllers.Users;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 public class UsuarioController : ControllerBase
 {
@@ -41,7 +42,7 @@ public class UsuarioController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("Registros não foram encontrados"))
-                return NotFound();
+                return Ok(Enumerable.Empty<Assistido>());
 
             return StatusCode(500, result);
         }

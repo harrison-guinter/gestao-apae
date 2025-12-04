@@ -48,7 +48,7 @@ export const routes: Routes = [
         component: CadastroAssistidoComponent,
       },
       { path: 'convenios', canActivate: [CoordenadorGuard], component: ConveniosComponent },
-      { path: 'agendamentos', canActivate: [ProfissionalGuard], component: AgendamentosComponent },
+      { path: 'agendamentos', canActivate: [CoordenadorGuard], component: AgendamentosComponent },
       {
         path: 'atendimentos-pendentes',
         canActivate: [ProfissionalGuard],

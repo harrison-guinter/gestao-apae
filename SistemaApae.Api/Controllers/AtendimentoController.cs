@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaApae.Api.Models.Appointment;
 using SistemaApae.Api.Models.Appointments;
 using SistemaApae.Api.Models.Auth;
+using SistemaApae.Api.Models.Patients;
 using SistemaApae.Api.Models.Reports.Faltas;
 using SistemaApae.Api.Models.Reports.PatientsAttendance;
 using SistemaApae.Api.Models.Reports.Presencas;
@@ -16,7 +17,7 @@ namespace SistemaApae.Api.Controllers;
 /// Controller com endpoints de CRUD da entidade Atendimento
 /// </summary>
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/[controller]")]
 [Produces("application/json")]
 public class AtendimentoController : ControllerBase
@@ -47,7 +48,7 @@ public class AtendimentoController : ControllerBase
         if (!result.Success)
         {
             if (result.Message.Contains("Registros não foram encontrados"))
-                return NotFound();
+                return Ok(Enumerable.Empty<Assistido>());
 
             return StatusCode(500, result);
         }
