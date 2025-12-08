@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: 'https://gestao-apae-api.onrender.com/api/'
+  production: true,
+  apiUrl: 'http://91.98.165.46:8080/api/', //ip da maquina fornecido pelo professor
 };
