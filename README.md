@@ -202,7 +202,7 @@ ng lint
    - **anon/public key** (Supabase:Key)
 4. Execute os scripts SQL fornecidos na pasta raiz do projeto para criar as tabelas e popular o banco de dados:
 
-   - `data_base.sql` - Cria a base de dados e adiciona o usuario administrador (email: damohew142@docsfy.com, senha: JDbggsev3Ogv)
+   - `data_base.sql` - Cria a base de dados e adiciona o usuario administrador (email: admin@apae, senha: JDbggsev3Ogv)
    - `inserir_cidades_municipios.sql` - Insere os municípios
    - `assistidos_da_planilha.sql` - Insere os assistidos
 
