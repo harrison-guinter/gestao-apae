@@ -1,0 +1,55 @@
+services:
+#  sistemaapae-db:
+#    image: postgres:15
+#    container_name: sistemaapae-db
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_DB: apae
+#      POSTGRES_USER: apae
+#      POSTGRES_PASSWORD: apae123
+#    volumes:
+#      - ./postgres-data:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"
+
+  sistemaapae-api:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    container_name: sistemaapae-api
+    working_dir: /src
+    volumes:
+      - ./SistemaApae.Api:/src
+    command: ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:8080"]
+#    depends_on:
+#      - sistemaapae-db
+    environment:
+#      ConnectionStrings__DefaultConnection: "Host=sistemaapae-db;Port=5432;Database=apae;Username=apae;Password=apae123"
+      ASPNETCORE_ENVIRONMENT: Production
+      JWT_ISSUER: SistemaApae.Api
+      # EXEMPLO - substitua pelos seus valores:
+      JWT_KEY: SUA_CHAVE_SECRETA_JWT_MIN_32_CARACTERES
+      PASSWORD_EMAIL: SUA_SENHA_SMTP_BREVO
+      PORT: 8080
+      PORT_EMAIL: 2525
+      SENDER_EMAIL: no-reply@seudominio.com
+      SENDER_NAME_EMAIL: "Sistema APAE"
+      SMTP_SERVER_EMAIL: smtp-relay.brevo.com
+      SUPABASE_ANON_KEY: SUA_CHAVE_ANONIMA_DO_SUPABASE
+      # Opcional: use apenas se precisar de operações privilegiadas no servidor
+      SUPABASE_SERVICE_ROLE_KEY: SUA_SERVICE_ROLE_KEY
+      SUPABASE_URL: https://SEU_PROJETO.supabase.co
+      USERNAME_EMAIL: SEU_USUARIO_SMTP_BREVO # ex.: xxxxxxxx@smtp-brevo.com
+      USE_SSL_EMAIL: true
+    ports:
+      - "8080:8080"
+
+  sistemaapae-app:
+    image: gestao-apae-dev
+    container_name: sistemaapae-app
+    working_dir: /app
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./SistemaApae.App:/app
+      - /app/node_modules
+    depends_on:
+      - sistemaapae-api
