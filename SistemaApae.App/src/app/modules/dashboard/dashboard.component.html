@@ -42,7 +42,7 @@
   </div>
 
   <!-- Seção de Estatísticas -->
-  <div class="stats-section">
+  <div *ngIf="!getIsProfissional()" class="stats-section">
     <div class="stats-header">
       <h3 class="section-title">
         <mat-icon>analytics</mat-icon>

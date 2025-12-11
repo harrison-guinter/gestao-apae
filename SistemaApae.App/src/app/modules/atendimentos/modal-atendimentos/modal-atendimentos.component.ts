@@ -110,7 +110,7 @@ export class ModalAtendimentosComponent {
         },
         Validators.required,
       ],
-      dataAtendimento: [{value: DateUtils.fromDbToField(atendimentoPendente.dataAgendamento as any), disabled: true }, Validators.required],
+      dataAtendimento: [{value: new Date(), disabled: true }, Validators.required],
       presenca: ['', Validators.required],
       avaliacao: [''],
       observacao: [''],
