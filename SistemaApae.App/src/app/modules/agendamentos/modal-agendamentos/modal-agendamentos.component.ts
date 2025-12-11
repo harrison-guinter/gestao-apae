@@ -129,7 +129,7 @@ export class ModalAgendamentosComponent implements OnInit {
       ],
       dataAgendamento: [
         {
-          value: object?.dataAgendamento ? DateUtils.fromDbToField(object?.dataAgendamento as any) : '', 
+          value: object?.dataAgendamento && object && object?.tipoRecorrencia != TipoRecorrencia.SEMANAL ? DateUtils.fromDbToField(object?.dataAgendamento as any) : '', 
           disabled: object && object?.tipoRecorrencia != TipoRecorrencia.NENHUM,
         },
         object?.tipoRecorrencia == TipoRecorrencia.NENHUM || !object ? Validators.required : [],
