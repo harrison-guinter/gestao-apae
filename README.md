@@ -109,9 +109,9 @@ dotnet restore
 dotnet run
 ```
 
-O backend estará disponível em: `http://localhost:5000` ou `https://localhost:5001`
+O backend estará disponível em: `http://localhost:8080` ou `https://localhost:8080`
 
-Para verificar a API, acesse o Swagger: `https://localhost:5001/swagger`
+Para verificar a API, acesse o Swagger: `https://localhost:8080/docs`
 
 ---
 

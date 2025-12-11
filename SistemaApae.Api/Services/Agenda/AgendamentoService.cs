@@ -393,7 +393,8 @@ public class AgendamentoService : Service<Agendamento, AgendamentoFilterRequest>
             
             if (!agendamentosResult.Success || agendamentosResult.Data == null)
             {
-                return ApiResponse<IEnumerable<AgendamentoResponseDto>>.ErrorResponse("Agendamentos não encontrados");
+                // Se não encontrar relacionamentos, retornar lista vazia
+                return ApiResponse<IEnumerable<AgendamentoResponseDto>>.SuccessResponse(new List<AgendamentoResponseDto>());
             }
 
             // Aplicar filtro adicional para agendamentos recorrentes baseado no dia da semana
